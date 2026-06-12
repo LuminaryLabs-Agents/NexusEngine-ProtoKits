@@ -15,13 +15,18 @@
     "./racer-contact-kit": "./protokits/racer-contact-kit/index.js",
     "./race-pacing-kit": "./protokits/race-pacing-kit/index.js",
     "./course-director-kit": "./protokits/course-director-kit/index.js",
-    "./arcade-race-visual-kit": "./protokits/arcade-race-visual-kit/index.js"
+    "./arcade-race-visual-kit": "./protokits/arcade-race-visual-kit/index.js",
+    "./blackwake-kit-registry": "./protokits/blackwake-kit-registry/index.js",
+    "./blackwake-gameplay": "./protokits/blackwake-gameplay/index.js",
+    "./blackwake-game-isles": "./protokits/blackwake-game-isles/index.js",
+    "./blackwake-game-stormline-rescue": "./protokits/blackwake-game-stormline-rescue/index.js"
   },
   "files": [
-    "protokits"
+    "protokits",
+    "apps"
   ],
   "scripts": {
-    "check": "node --check protokits/ocean-boat-kit/index.js && node --check protokits/arcade-race-core/index.js && node --check protokits/downhill-race-kit/index.js && node --check protokits/slope-traversal-kit/index.js && node --check protokits/racer-ai-kit/index.js && node --check protokits/difficulty-curve-kit/index.js && node --check protokits/race-hazard-kit/index.js && node --check protokits/boost-path-kit/index.js && node --check protokits/racer-contact-kit/index.js && node --check protokits/race-pacing-kit/index.js && node --check protokits/course-director-kit/index.js && node --check protokits/arcade-race-visual-kit/index.js"
+    "check:blackwake": "node --check protokits/blackwake-kit-registry/index.js && node --check protokits/blackwake-gameplay/index.js && node --check protokits/blackwake-game-isles/index.js && node --check protokits/blackwake-game-stormline-rescue/index.js"
   },
   "license": "MIT"
 }
