@@ -19,16 +19,34 @@
     "./blackwake-kit-registry": "./protokits/blackwake-kit-registry/index.js",
     "./blackwake-gameplay": "./protokits/blackwake-gameplay/index.js",
     "./blackwake-game-isles": "./protokits/blackwake-game-isles/index.js",
-    "./blackwake-game-stormline-rescue": "./protokits/blackwake-game-stormline-rescue/index.js"
+    "./blackwake-game-stormline-rescue": "./protokits/blackwake-game-stormline-rescue/index.js",
+    "./foundation-kit": "./protokits/foundation-kit/index.js",
+    "./input-kit": "./protokits/input-kit/index.js",
+    "./first-person-camera-kit": "./protokits/first-person-camera-kit/index.js",
+    "./raycaster-render-kit": "./protokits/raycaster-render-kit/index.js",
+    "./floor-casting-kit": "./protokits/floor-casting-kit/index.js",
+    "./procedural-texture-kit": "./protokits/procedural-texture-kit/index.js",
+    "./surface-material-kit": "./protokits/surface-material-kit/index.js",
+    "./decal-kit": "./protokits/decal-kit/index.js",
+    "./scatter-object-kit": "./protokits/scatter-object-kit/index.js",
+    "./raycast-placement-kit": "./protokits/raycast-placement-kit/index.js",
+    "./billboard-prop-kit": "./protokits/billboard-prop-kit/index.js",
+    "./depth-fog-kit": "./protokits/depth-fog-kit/index.js",
+    "./lighting-mood-kit": "./protokits/lighting-mood-kit/index.js",
+    "./scene-recipe-kit": "./protokits/scene-recipe-kit/index.js",
+    "./interaction-kit": "./protokits/interaction-kit/index.js",
+    "./objective-flow-kit": "./protokits/objective-flow-kit/index.js",
+    "./debug-overlay-kit": "./protokits/debug-overlay-kit/index.js"
   },
   "files": [
     "protokits",
     "apps"
   ],
   "scripts": {
-    "check": "npm run check:arcade && npm run check:blackwake",
+    "check": "npm run check:arcade && npm run check:blackwake && npm run check:generic",
     "check:arcade": "node --check protokits/ocean-boat-kit/index.js && node --check protokits/arcade-race-core/index.js && node --check protokits/downhill-race-kit/index.js && node --check protokits/slope-traversal-kit/index.js && node --check protokits/racer-ai-kit/index.js && node --check protokits/difficulty-curve-kit/index.js && node --check protokits/race-hazard-kit/index.js && node --check protokits/boost-path-kit/index.js && node --check protokits/racer-contact-kit/index.js && node --check protokits/race-pacing-kit/index.js && node --check protokits/course-director-kit/index.js && node --check protokits/arcade-race-visual-kit/index.js",
-    "check:blackwake": "node --check protokits/blackwake-kit-registry/index.js && node --check protokits/blackwake-gameplay/random.js && node --check protokits/blackwake-gameplay/world.js && node --check protokits/blackwake-gameplay/input.js && node --check protokits/blackwake-gameplay/hud.js && node --check protokits/blackwake-gameplay/simulation.js && node --check protokits/blackwake-gameplay/renderer.js && node --check protokits/blackwake-gameplay/three-renderer.js && node --check protokits/blackwake-gameplay/runtime.js && node --check protokits/blackwake-gameplay/index.js && node --check protokits/blackwake-game-isles/index.js && node --check protokits/blackwake-game-stormline-rescue/index.js"
+    "check:blackwake": "node --check protokits/blackwake-kit-registry/index.js && node --check protokits/blackwake-gameplay/random.js && node --check protokits/blackwake-gameplay/world.js && node --check protokits/blackwake-gameplay/input.js && node --check protokits/blackwake-gameplay/hud.js && node --check protokits/blackwake-gameplay/simulation.js && node --check protokits/blackwake-gameplay/renderer.js && node --check protokits/blackwake-gameplay/three-renderer.js && node --check protokits/blackwake-gameplay/runtime.js && node --check protokits/blackwake-gameplay/index.js && node --check protokits/blackwake-game-isles/index.js && node --check protokits/blackwake-game-stormline-rescue/index.js",
+    "check:generic": "node --check protokits/foundation-kit/index.js && node --check protokits/input-kit/index.js && node --check protokits/first-person-camera-kit/index.js && node --check protokits/raycast-placement-kit/index.js && node --check protokits/raycaster-render-kit/index.js && node --check protokits/floor-casting-kit/index.js && node --check protokits/procedural-texture-kit/index.js && node --check protokits/surface-material-kit/index.js && node --check protokits/decal-kit/index.js && node --check protokits/scatter-object-kit/index.js && node --check protokits/billboard-prop-kit/index.js && node --check protokits/depth-fog-kit/index.js && node --check protokits/lighting-mood-kit/index.js && node --check protokits/scene-recipe-kit/index.js && node --check protokits/interaction-kit/index.js && node --check protokits/objective-flow-kit/index.js && node --check protokits/debug-overlay-kit/index.js"
   },
   "license": "MIT"
 }
