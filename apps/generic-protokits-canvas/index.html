@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Generic ProtoKits Canvas Smoke App</title>
+    <style>
+      :root { color-scheme: dark; background: #07111f; color: #ecfbff; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+      main, canvas { width: 100vw; height: 100vh; }
+      canvas { display: block; background: radial-gradient(circle at 50% 0%, #164a70 0%, #071625 46%, #020814 100%); }
+      aside { position: fixed; left: 16px; top: 16px; width: min(620px, calc(100vw - 32px)); padding: 14px 16px; border: 1px solid rgba(177,229,255,.24); border-radius: 14px; background: rgba(2,8,18,.68); box-shadow: 0 24px 88px rgba(0,0,0,.42); backdrop-filter: blur(16px); pointer-events: none; }
+      h1 { margin: 0 0 8px; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; }
+      p { margin: 0 0 10px; color: rgba(236,251,255,.72); font-size: 13px; line-height: 1.4; }
+      dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; }
+      .metric { padding: 8px; border: 1px solid rgba(177,229,255,.14); border-radius: 10px; background: rgba(255,255,255,.055); }
+      dt { font-size: 10px; color: rgba(236,251,255,.56); text-transform: uppercase; letter-spacing: .07em; }
+      dd { margin: 3px 0 0; font-size: 14px; font-variant-numeric: tabular-nums; }
+      #errorPanel { position: fixed; left: 16px; right: 16px; bottom: 16px; padding: 12px 14px; border: 1px solid rgba(255,140,100,.5); border-radius: 12px; background: rgba(20,5,2,.86); color: #fff3e8; white-space: pre-wrap; font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+      #errorPanel[hidden] { display: none; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <canvas id="game" aria-label="Generic NexusRealtime ProtoKits canvas smoke app"></canvas>
+      <aside aria-label="Generic ProtoKit status">
+        <h1>Generic ProtoKits Canvas Smoke App</h1>
+        <p>This host imports the aggregate generic ProtoKit stack, installs every factory into NexusRealtime, drives real kit APIs, ticks the runtime, and renders the resulting kit state.</p>
+        <dl>
+          <div class="metric"><dt>Factories</dt><dd id="factoryCount">0</dd></div>
+          <div class="metric"><dt>Installed</dt><dd id="installedCount">0</dd></div>
+          <div class="metric"><dt>Frame</dt><dd id="frameCount">0</dd></div>
+          <div class="metric"><dt>Status</dt><dd id="statusText">boot</dd></div>
+        </dl>
+      </aside>
+      <section id="errorPanel" role="alert" hidden></section>
+    </main>
+
+    <script type="module">
+      const canvas = document.getElementById("game");
+      const ctx = canvas.getContext("2d");
+      const errorPanel = document.getElementById("errorPanel");
+      const factoryCount = document.getElementById("factoryCount");
+      const installedCount = document.getElementById("installedCount");
+      const frameCount = document.getElementById("frameCount");
+      const statusText = document.getElementById("statusText");
+
+      function showError(error) {
+        errorPanel.hidden = false;
+        errorPanel.textContent = String(error?.stack || error?.message || error);
+        statusText.textContent = "error";
+      }
+
+      function resize() {
+        const dpr = Math.min(devicePixelRatio || 1, 2);
+        canvas.width = Math.floor(innerWidth * dpr);
+        canvas.height = Math.floor(innerHeight * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function draw(engine, frame) {
+        resize();
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        const apis = Object.values(engine.genericProtoKits || {});
+        const t = frame / 60;
+        const gradient = ctx.createLinearGradient(0, 0, 0, innerHeight);
+        gradient.addColorStop(0, "#123e62");
+        gradient.addColorStop(0.58, "#06233e");
+        gradient.addColorStop(1, "#020814");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, innerWidth, innerHeight);
+
+        const surface = engine.genericSurfaceField?.sampleSurface?.(Math.sin(t) * 120, Math.cos(t) * 120, t);
+        ctx.strokeStyle = "rgba(190,238,255,.16)";
+        ctx.lineWidth = 1;
+        for (let y = 90; y < innerHeight + 30; y += 26) {
+          ctx.beginPath();
+          for (let x = -20; x < innerWidth + 20; x += 24) {
+            const h = Math.sin(x * 0.018 + y * 0.011 + t) * 8 + (surface?.height || 0) * 4;
+            if (x < 0) ctx.moveTo(x, y + h); else ctx.lineTo(x, y + h);
+          }
+          ctx.stroke();
+        }
+
+        const centerX = innerWidth * 0.5;
+        const centerY = innerHeight * 0.58;
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(Math.sin(t * 0.4) * 0.12);
+        ctx.fillStyle = "rgba(226,238,232,.95)";
+        ctx.strokeStyle = "#142b38";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, -44);
+        ctx.quadraticCurveTo(24, -10, 16, 36);
+        ctx.quadraticCurveTo(0, 50, -16, 36);
+        ctx.quadraticCurveTo(-24, -10, 0, -44);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(255,238,170,.9)";
+        ctx.beginPath();
+        ctx.moveTo(0, -26);
+        ctx.lineTo(22 * Math.sin(t), 16);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, monospace";
+        ctx.fillStyle = "rgba(236,251,255,.82)";
+        const rows = apis.slice(0, 28).map((api) => {
+          const state = api.getState?.();
+          return `${state?.status || "?"}  ${api.id}`;
+        });
+        rows.forEach((line, index) => ctx.fillText(line, 20, 170 + index * 16));
+
+        ctx.fillStyle = "rgba(236,251,255,.62)";
+        ctx.fillText(`Sample surface height: ${(surface?.height || 0).toFixed(2)}   Generic APIs: ${apis.length}`, 20, innerHeight - 28);
+      }
+
+      async function boot() {
+        const nexusUrl = "https://cdn.jsdelivr.net/gh/" + "LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+        const [NexusRealtime, GenericKits] = await Promise.all([
+          import(nexusUrl),
+          import("../../protokits/generic-kits/index.js")
+        ]);
+
+        const factories = Object.entries(GenericKits)
+          .filter(([name, value]) => name.startsWith("create") && name !== "createGenericProtoKit" && typeof value === "function")
+          .sort(([a], [b]) => a.localeCompare(b));
+
+        const seed = new URLSearchParams(location.search).get("seed") || "generic-protokit-smoke";
+        const kits = factories.map(([name, factory]) => factory(NexusRealtime, {
+          seed,
+          currency: 250,
+          preset: { app: "generic-protokits-canvas", factory: name }
+        }));
+
+        const engine = NexusRealtime.createRealtimeGame({ kits });
+        window.GenericProtoKitHost = {
+          engine,
+          factories: factories.map(([name]) => name),
+          getStates: () => Object.fromEntries(Object.entries(engine.genericProtoKits || {}).map(([id, api]) => [id, api.getState?.()]))
+        };
+
+        engine.genericVehicleState?.spawnVehicle?.({ id: "demo-boat", x: 0, z: 0, heading: 0, velocity: 4 });
+        engine.genericWatercraftPhysics?.spawnVehicle?.({ id: "demo-boat", x: 0, z: 0, heading: 0, velocity: 4 });
+        engine.genericPoiPlacement?.addPoi?.({ id: "demo-wreck", type: "recovery-site", x: 120, z: -80 });
+        engine.genericInteractable?.registerInteractable?.({ id: "demo-wreck", type: "recovery-site", radius: 12, prompt: "Recover" });
+        engine.genericCargo?.addCargo?.({ id: "starter-crate", weight: 2, value: 40 });
+        engine.genericCurrency?.addCurrency?.(100);
+        engine.genericObjective?.addObjective?.({ id: "smoke", label: "All generic ProtoKits installed and ticking." });
+        engine.genericCameraState?.setCamera?.({ mode: "chase", x: 0, y: 14, z: 28 });
+        engine.genericRenderDescriptor?.addDescriptor?.({ id: "demo-boat", type: "vehicle" });
+        engine.genericBrowserSmokeTest?.check?.({ id: "boot", ok: true, frameTarget: 120 });
+
+        factoryCount.textContent = String(factories.length);
+        installedCount.textContent = String(Object.keys(engine.genericProtoKits || {}).length);
+        statusText.textContent = "running";
+
+        let last = performance.now();
+        let frame = 0;
+        function loop(now) {
+          const dt = Math.min(1 / 30, (now - last) / 1000 || 1 / 60);
+          last = now;
+          frame += 1;
+          engine.genericInputActions?.input?.({ forward: Math.sin(frame / 90), turn: Math.cos(frame / 140) * 0.5 });
+          engine.genericWatercraftPhysics?.controlVehicle?.({ id: "demo-boat", throttle: 0.6 + Math.sin(frame / 80) * 0.2, steer: Math.cos(frame / 110) * 0.3 });
+          engine.tick(dt);
+          draw(engine, frame);
+          frameCount.textContent = String(frame);
+          requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+      }
+
+      addEventListener("resize", resize);
+      resize();
+      boot().catch(showError);
+    </script>
+  </body>
+</html>
