@@ -48,6 +48,36 @@ const game = createBlackwakeIslesGame(NexusRealtime, {
 game.start();
 ```
 
+### Playable Blackwake runtime
+
+`protokits/blackwake-gameplay/index.js` now contains the first playable vertical-slice runtime. It still composes the hierarchical ProtoKit registry, then appends a real NexusRealtime gameplay runtime kit that owns state, events, and the simulation system.
+
+Current gameplay includes:
+
+- deterministic procedural islands from a seed
+- ports, wrecks, reefs, currents, waves, storm escalation, and lightning
+- sailing with wind angle, sail trim, rudder handling, anchor, reef damage, and wake
+- deck / helm / swim / dive player modes
+- underwater oxygen, bubbles, salvage, and cargo carry-back
+- selling salvage at ports
+- ship upgrades for sails, hull, rudder, and diving gear
+- chase, map, and first-person-ish camera modes
+- generated HUD and objective tracker from the ProtoKit runtime
+
+Controls:
+
+```txt
+WASD / arrows  sail, steer, swim
+Shift          boost / dive
+Space          anchor / surface
+F              leave helm / jump overboard
+E or P         interact / port sell
+1-4            buy upgrades at port
+C              camera mode
+M              map
+R              reset run
+```
+
 Registry:
 
 ```txt
@@ -61,7 +91,7 @@ protokits/blackwake-game-isles/index.js
 protokits/blackwake-game-stormline-rescue/index.js
 ```
 
-Composition demo:
+Playable demo:
 
 ```txt
 protokits/blackwake-game-isles/demo.html
@@ -78,6 +108,8 @@ protokits/
   blackwake-kit-registry/
     index.js
     README.md
+  blackwake-gameplay/
+    index.js
   blackwake-game-isles/
     index.js
     demo.html
