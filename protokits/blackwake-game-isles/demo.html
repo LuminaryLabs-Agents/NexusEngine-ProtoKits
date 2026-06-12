@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Blackwake Isles ProtoKit Composition Demo</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #06111f;
+        color: #ecfbff;
+      }
+
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+        background:
+          radial-gradient(circle at 50% 10%, rgba(68, 140, 185, 0.36), transparent 42%),
+          linear-gradient(#071d34, #03101d 58%, #01050a);
+      }
+
+      aside {
+        position: fixed;
+        left: 16px;
+        top: 16px;
+        width: min(520px, calc(100vw - 32px));
+        padding: 14px 16px;
+        border: 1px solid rgba(177, 229, 255, 0.24);
+        border-radius: 14px;
+        background: rgba(2, 8, 18, 0.62);
+        box-shadow: 0 20px 80px rgba(0, 0, 0, 0.42);
+        backdrop-filter: blur(14px);
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 15px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      p,
+      code {
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      p {
+        margin: 0 0 10px;
+        color: rgba(236, 251, 255, 0.74);
+      }
+
+      code {
+        color: #b9f4ff;
+      }
+
+      dl {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin: 12px 0 0;
+      }
+
+      .metric {
+        padding: 8px;
+        border: 1px solid rgba(177, 229, 255, 0.16);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.055);
+      }
+
+      dt {
+        font-size: 10px;
+        color: rgba(236, 251, 255, 0.56);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+      }
+
+      dd {
+        margin: 3px 0 0;
+        font-size: 14px;
+        font-variant-numeric: tabular-nums;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="game" aria-label="Blackwake Isles ProtoKit composition demo"></canvas>
+    <aside>
+      <h1>Blackwake Isles ProtoKit Composition</h1>
+      <p>
+        This page intentionally contains no gameplay systems. It imports NexusRealtime plus the top-level
+        <code>blackwake-game-isles</code> ProtoKit, which composes atomic, domain, mode, and game kits.
+      </p>
+      <dl>
+        <div class="metric"><dt>Runtime kits</dt><dd id="kit-count">0</dd></div>
+        <div class="metric"><dt>Frame</dt><dd id="frame">0</dd></div>
+        <div class="metric"><dt>Status</dt><dd>scaffold</dd></div>
+      </dl>
+    </aside>
+
+    <script type="module">
+      import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+      import { createBlackwakeIslesGame } from "./index.js";
+
+      const kitCount = document.getElementById("kit-count");
+      const frame = document.getElementById("frame");
+
+      const game = createBlackwakeIslesGame(NexusRealtime, {
+        canvas: document.getElementById("game"),
+        onTick({ engine, protoKit }) {
+          kitCount.textContent = String(protoKit.kits.length);
+          frame.textContent = String(engine.clock?.frame ?? 0);
+        }
+      });
+
+      kitCount.textContent = String(game.protoKit.kits.length);
+      game.start();
+    </script>
+  </body>
+</html>
