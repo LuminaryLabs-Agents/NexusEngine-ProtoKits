@@ -1,12 +1,14 @@
 import { createInput } from "./input.js";
 import { createErrorOverlay, createBlackwakeHud, updateBlackwakeHud } from "./hud.js";
 import { createBlackwakeRenderer } from "./renderer.js";
+import { canUseBlackwakeThreeRenderer, createBlackwakeThreeRenderer } from "./three-renderer.js";
 import { createBlackwakeState, updateBlackwakeState } from "./simulation.js";
 import { createBlackwakeProtoKit } from "../blackwake-kit-registry/index.js";
 
-export const BLACKWAKE_GAMEPLAY_VERSION = "0.2.0";
+export const BLACKWAKE_GAMEPLAY_VERSION = "0.3.0";
 
-export function createBlackwakeHealthReport(NexusRealtime, canvas) {
+export function createBlackwakeHealthReport(NexusRealtime, canvas, options = {}) {
+  const wantsThree = options.renderer === "three" || Boolean(options.three || options.THREE);
   const checks = [
     ["NexusRealtime object", Boolean(NexusRealtime)],
     ["defineRuntimeKit", typeof NexusRealtime?.defineRuntimeKit === "function"],
@@ -14,7 +16,8 @@ export function createBlackwakeHealthReport(NexusRealtime, canvas) {
     ["defineEvent", typeof NexusRealtime?.defineEvent === "function"],
     ["createRealtimeGame", typeof NexusRealtime?.createRealtimeGame === "function"],
     ["canvas", Boolean(canvas)],
-    ["2D context", Boolean(canvas?.getContext?.("2d"))]
+    [wantsThree ? "WebGL context" : "2D context", Boolean(canvas?.getContext?.(wantsThree ? "webgl" : "2d"))],
+    ["Three renderer module", wantsThree ? canUseBlackwakeThreeRenderer(options) : true]
   ];
   const failed = checks.filter(([, ok]) => !ok).map(([name]) => name);
   return Object.freeze({ ok: failed.length === 0, failed, checks: Object.freeze(checks.map(([name, ok]) => ({ name, ok }))) });
@@ -57,16 +60,23 @@ function createGameplayRuntimeKit(NexusRealtime, runtime, id) {
   });
 }
 
+function makeRenderer(canvas, state, options) {
+  if ((options.renderer === "three" || options.three || options.THREE) && canUseBlackwakeThreeRenderer(options)) {
+    return createBlackwakeThreeRenderer(canvas, state, options);
+  }
+  return createBlackwakeRenderer(canvas, state, options);
+}
+
 export function createBlackwakePlayableGame(NexusRealtime, gameId = "blackwake-game-isles", options = {}) {
   const canvas = options.canvas;
   if (!canvas) throw new Error("createBlackwakePlayableGame requires a canvas.");
-  const health = createBlackwakeHealthReport(NexusRealtime, canvas);
+  const health = createBlackwakeHealthReport(NexusRealtime, canvas, options);
   if (!health.ok && options.showHealthOverlay !== false && typeof document !== "undefined") {
     createErrorOverlay(options.overlayRoot || document.body, "Blackwake startup warning", `Missing: ${health.failed.join(", ")}\nThe game will use available fallbacks where possible.`);
   }
   const input = options.input || createInput(options.inputTarget || globalThis);
   const state = createBlackwakeState(options);
-  const renderer = createBlackwakeRenderer(canvas, state);
+  const renderer = makeRenderer(canvas, state, options);
   const hud = options.hud === false ? null : createBlackwakeHud(options.hudRoot || document.body);
   const runtime = {
     state,
@@ -74,11 +84,11 @@ export function createBlackwakePlayableGame(NexusRealtime, gameId = "blackwake-g
     update(delta, time) {
       updateBlackwakeState(state, input, delta, time);
       updateBlackwakeHud(hud, state);
-      options.onUpdate?.({ state, delta, time });
+      options.onUpdate?.({ state, delta, time, renderer });
     },
     render() {
       renderer.render();
-      options.onRender?.({ state });
+      options.onRender?.({ state, renderer });
     },
     destroy() {
       input.destroy?.();
@@ -121,6 +131,7 @@ export function createBlackwakePlayableGame(NexusRealtime, gameId = "blackwake-g
     engine,
     state,
     runtime,
+    renderer,
     start() {
       if (running) return;
       running = true;
