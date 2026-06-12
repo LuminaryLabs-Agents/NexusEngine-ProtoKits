@@ -26,6 +26,8 @@
     "apps"
   ],
   "scripts": {
+    "check": "npm run check:arcade && npm run check:blackwake",
+    "check:arcade": "node --check protokits/ocean-boat-kit/index.js && node --check protokits/arcade-race-core/index.js && node --check protokits/downhill-race-kit/index.js && node --check protokits/slope-traversal-kit/index.js && node --check protokits/racer-ai-kit/index.js && node --check protokits/difficulty-curve-kit/index.js && node --check protokits/race-hazard-kit/index.js && node --check protokits/boost-path-kit/index.js && node --check protokits/racer-contact-kit/index.js && node --check protokits/race-pacing-kit/index.js && node --check protokits/course-director-kit/index.js && node --check protokits/arcade-race-visual-kit/index.js",
     "check:blackwake": "node --check protokits/blackwake-kit-registry/index.js && node --check protokits/blackwake-gameplay/index.js && node --check protokits/blackwake-game-isles/index.js && node --check protokits/blackwake-game-stormline-rescue/index.js"
   },
   "license": "MIT"
