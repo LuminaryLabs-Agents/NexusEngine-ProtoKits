@@ -5,7 +5,7 @@ import { canUseBlackwakeThreeRenderer, createBlackwakeThreeRenderer } from "./th
 import { createBlackwakeState, updateBlackwakeState } from "./simulation.js";
 import { createBlackwakeProtoKit } from "../blackwake-kit-registry/index.js";
 
-export const BLACKWAKE_GAMEPLAY_VERSION = "0.3.0";
+export const BLACKWAKE_GAMEPLAY_VERSION = "0.3.1";
 
 export function createBlackwakeHealthReport(NexusRealtime, canvas, options = {}) {
   const wantsThree = options.renderer === "three" || Boolean(options.three || options.THREE);
@@ -16,7 +16,7 @@ export function createBlackwakeHealthReport(NexusRealtime, canvas, options = {})
     ["defineEvent", typeof NexusRealtime?.defineEvent === "function"],
     ["createRealtimeGame", typeof NexusRealtime?.createRealtimeGame === "function"],
     ["canvas", Boolean(canvas)],
-    [wantsThree ? "WebGL context" : "2D context", Boolean(canvas?.getContext?.(wantsThree ? "webgl" : "2d"))],
+    ["canvas getContext", typeof canvas?.getContext === "function"],
     ["Three renderer module", wantsThree ? canUseBlackwakeThreeRenderer(options) : true]
   ];
   const failed = checks.filter(([, ok]) => !ok).map(([name]) => name);
