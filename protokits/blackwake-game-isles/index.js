@@ -1,6 +1,10 @@
 import {
   createBlackwakeIslesGame,
   createBlackwakeIslesProtoKit,
+  createBlackwakePlayableGame
+} from "../blackwake-gameplay/index.js";
+
+import {
   createBlackwakeProtoKit,
   createBlackwakeRuntimeKits,
   listBlackwakeProtoKits
@@ -9,6 +13,7 @@ import {
 export {
   createBlackwakeIslesGame,
   createBlackwakeIslesProtoKit,
+  createBlackwakePlayableGame,
   createBlackwakeProtoKit,
   createBlackwakeRuntimeKits,
   listBlackwakeProtoKits
