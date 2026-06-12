@@ -1,6 +1,10 @@
 import {
   createStormlineRescueGame,
   createStormlineRescueProtoKit,
+  createBlackwakePlayableGame
+} from "../blackwake-gameplay/index.js";
+
+import {
   createBlackwakeProtoKit,
   createBlackwakeRuntimeKits,
   listBlackwakeProtoKits
@@ -9,6 +13,7 @@ import {
 export {
   createStormlineRescueGame,
   createStormlineRescueProtoKit,
+  createBlackwakePlayableGame,
   createBlackwakeProtoKit,
   createBlackwakeRuntimeKits,
   listBlackwakeProtoKits
