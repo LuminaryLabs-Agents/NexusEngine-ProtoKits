@@ -124,18 +124,15 @@ function bindingName(id) {
   return id.replace(/[^a-zA-Z0-9]+(.)/g, (_, next) => next.toUpperCase()).replace(/^[A-Z]/, (value) => value.toLowerCase());
 }
 
+function makeDefinition({ id, tier, category, provides, requires = [], imports = [] }) {
+  return Object.freeze({ id, tier, category, provides: Object.freeze([...provides]), requires: Object.freeze([...requires]), imports: Object.freeze([...imports]) });
+}
+
 function atomicDefinitions() {
   const out = [];
   for (const [category, prefix, slotPrefix, list] of ATOMIC_GROUPS) {
     for (const slug of words(list)) {
-      out.push(Object.freeze({
-        id: `${prefix}${slug}`,
-        tier: "atomic",
-        category,
-        provides: Object.freeze([`${slotPrefix}:${slug}`]),
-        requires: Object.freeze([]),
-        imports: Object.freeze([])
-      }));
+      out.push(makeDefinition({ id: `${prefix}${slug}`, tier: "atomic", category, provides: [`${slotPrefix}:${slug}`] }));
     }
   }
   return out;
@@ -143,75 +140,45 @@ function atomicDefinitions() {
 
 const ATOMICS = atomicDefinitions();
 const ATOMICS_BY_CATEGORY = new Map();
+let BY_ID = new Map(ATOMICS.map((definition) => [definition.id, definition]));
+
 for (const definition of ATOMICS) {
   if (!ATOMICS_BY_CATEGORY.has(definition.category)) ATOMICS_BY_CATEGORY.set(definition.category, []);
   ATOMICS_BY_CATEGORY.get(definition.category).push(definition);
 }
 
-function domainDefinitions() {
-  return Object.entries(DOMAIN_GROUPS).map(([id, categories]) => {
-    const imports = categories.flatMap((category) => ATOMICS_BY_CATEGORY.get(category)?.map((definition) => definition.id) ?? []);
-    const requires = imports.flatMap((importedId) => getDefinition(importedId).provides);
-    return Object.freeze({
-      id,
-      tier: "domain",
-      category: id.replace("blackwake-domain-", "domain-"),
-      provides: Object.freeze([`domain:${id.replace("blackwake-domain-", "")}`]),
-      requires: Object.freeze(unique(requires)),
-      imports: Object.freeze(imports)
-    });
-  });
-}
-
-function modeDefinitions() {
-  return Object.entries(MODE_IMPORTS).map(([id, domainSlugs]) => {
-    const imports = words(domainSlugs).map((slug) => `blackwake-domain-${slug}`);
-    const requires = imports.flatMap((importedId) => getDefinition(importedId).provides);
-    return Object.freeze({
-      id,
-      tier: "mode",
-      category: "mode",
-      provides: Object.freeze([`mode:${id.replace("blackwake-mode-", "")}`]),
-      requires: Object.freeze(unique(requires)),
-      imports: Object.freeze(imports)
-    });
-  });
-}
-
-function gameDefinitions() {
-  return Object.entries(GAME_IMPORTS).map(([id, modeSlugs]) => {
-    const imports = words(modeSlugs).map((slug) => `blackwake-mode-${slug}`);
-    const requires = imports.flatMap((importedId) => getDefinition(importedId).provides);
-    return Object.freeze({
-      id,
-      tier: "game",
-      category: "game",
-      provides: Object.freeze([`game:${id.replace("blackwake-game-", "")}`]),
-      requires: Object.freeze(unique(requires)),
-      imports: Object.freeze(imports)
-    });
-  });
-}
-
-const PARTIAL_DEFINITIONS = [...ATOMICS];
-const PARTIAL_BY_ID = new Map(PARTIAL_DEFINITIONS.map((definition) => [definition.id, definition]));
 function getDefinition(id) {
-  const direct = DEFINITIONS_BY_ID.get(id) ?? PARTIAL_BY_ID.get(id);
-  if (!direct) throw new Error(`Unknown Blackwake ProtoKit: ${id}`);
-  return direct;
+  const definition = BY_ID.get(id);
+  if (!definition) throw new Error(`Unknown Blackwake ProtoKit: ${id}`);
+  return definition;
 }
 
-const DOMAINS = domainDefinitions();
-for (const definition of DOMAINS) PARTIAL_BY_ID.set(definition.id, definition);
-const MODES = modeDefinitions();
-for (const definition of MODES) PARTIAL_BY_ID.set(definition.id, definition);
-const GAMES = gameDefinitions();
+function providedBy(imports) {
+  return unique(imports.flatMap((id) => getDefinition(id).provides));
+}
+
+const DOMAINS = Object.entries(DOMAIN_GROUPS).map(([id, categories]) => {
+  const imports = categories.flatMap((category) => ATOMICS_BY_CATEGORY.get(category)?.map((definition) => definition.id) ?? []);
+  return makeDefinition({ id, tier: "domain", category: id.replace("blackwake-domain-", "domain-"), provides: [`domain:${id.replace("blackwake-domain-", "")}`], requires: providedBy(imports), imports });
+});
+for (const definition of DOMAINS) BY_ID.set(definition.id, definition);
+
+const MODES = Object.entries(MODE_IMPORTS).map(([id, domainSlugs]) => {
+  const imports = words(domainSlugs).map((slug) => `blackwake-domain-${slug}`);
+  return makeDefinition({ id, tier: "mode", category: "mode", provides: [`mode:${id.replace("blackwake-mode-", "")}`], requires: providedBy(imports), imports });
+});
+for (const definition of MODES) BY_ID.set(definition.id, definition);
+
+const GAMES = Object.entries(GAME_IMPORTS).map(([id, modeSlugs]) => {
+  const imports = words(modeSlugs).map((slug) => `blackwake-mode-${slug}`);
+  return makeDefinition({ id, tier: "game", category: "game", provides: [`game:${id.replace("blackwake-game-", "")}`], requires: providedBy(imports), imports });
+});
 
 export const BLACKWAKE_PROTO_KIT_DEFINITIONS = Object.freeze([...ATOMICS, ...DOMAINS, ...MODES, ...GAMES]);
 export const BLACKWAKE_PROTO_KIT_IDS = Object.freeze(BLACKWAKE_PROTO_KIT_DEFINITIONS.map((definition) => definition.id));
 export const BLACKWAKE_PROTO_KIT_COUNT = BLACKWAKE_PROTO_KIT_DEFINITIONS.length;
 
-const DEFINITIONS_BY_ID = new Map(BLACKWAKE_PROTO_KIT_DEFINITIONS.map((definition) => [definition.id, definition]));
+BY_ID = new Map(BLACKWAKE_PROTO_KIT_DEFINITIONS.map((definition) => [definition.id, definition]));
 
 export function getBlackwakeProtoKitDefinition(id) {
   return getDefinition(id);
@@ -221,14 +188,7 @@ export function listBlackwakeProtoKits(filter = {}) {
   return BLACKWAKE_PROTO_KIT_DEFINITIONS
     .filter((definition) => !filter.tier || definition.tier === filter.tier)
     .filter((definition) => !filter.category || definition.category === filter.category)
-    .map((definition) => ({
-      id: definition.id,
-      tier: definition.tier,
-      category: definition.category,
-      provides: [...definition.provides],
-      requires: [...definition.requires],
-      imports: [...definition.imports]
-    }));
+    .map((definition) => ({ id: definition.id, tier: definition.tier, category: definition.category, provides: [...definition.provides], requires: [...definition.requires], imports: [...definition.imports] }));
 }
 
 export function expandBlackwakeProtoKitIds(ids, options = {}) {
@@ -262,25 +222,13 @@ export function validateBlackwakeProtoKitGraph(ids = ["blackwake-game-isles"]) {
     provided.add(definition.id);
     for (const slot of definition.provides) provided.add(slot);
   }
-  return Object.freeze({
-    ok: missing.length === 0,
-    missing: Object.freeze(missing),
-    installOrder: Object.freeze(definitions.map((definition) => definition.id)),
-    provides: Object.freeze([...provided])
-  });
+  return Object.freeze({ ok: missing.length === 0, missing: Object.freeze(missing), installOrder: Object.freeze(definitions.map((definition) => definition.id)), provides: Object.freeze([...provided]) });
 }
 
 export function createBlackwakeRuntimeKit(NexusRealtime, definitionOrId, options = {}) {
   const definition = typeof definitionOrId === "string" ? getDefinition(definitionOrId) : definitionOrId;
   const defineRuntimeKit = NexusRealtime?.defineRuntimeKit ?? fallbackDefineRuntimeKit;
-  const metadata = Object.freeze({
-    protoKit: definition.id,
-    tier: definition.tier,
-    category: definition.category,
-    imports: [...definition.imports],
-    source: "NexusRealtime-ProtoKits/blackwake-kit-registry",
-    status: options.status ?? "scaffold"
-  });
+  const metadata = Object.freeze({ protoKit: definition.id, tier: definition.tier, category: definition.category, imports: [...definition.imports], source: "NexusRealtime-ProtoKits/blackwake-kit-registry", status: options.status ?? "scaffold" });
   return defineRuntimeKit({
     id: definition.id,
     provides: [...definition.provides],
@@ -293,15 +241,7 @@ export function createBlackwakeRuntimeKit(NexusRealtime, definitionOrId, options
     materials: [],
     sequences: [],
     subscriptions: [],
-    bindings: {
-      [bindingName(definition.id)]: Object.freeze({
-        id: definition.id,
-        tier: definition.tier,
-        category: definition.category,
-        provides: [...definition.provides],
-        requires: [...definition.requires]
-      })
-    },
+    bindings: { [bindingName(definition.id)]: Object.freeze({ id: definition.id, tier: definition.tier, category: definition.category, provides: [...definition.provides], requires: [...definition.requires] }) },
     metadata,
     install({ engine }) {
       if (!engine.blackwakeProtoKits) engine.blackwakeProtoKits = [];
@@ -314,34 +254,14 @@ export function createBlackwakeProtoKit(NexusRealtime, id = "blackwake-game-isle
   const definitions = expandBlackwakeProtoKitDefinitions(id);
   const kits = definitions.map((definition) => createBlackwakeRuntimeKit(NexusRealtime, definition, options));
   const root = getDefinition(id);
-  return Object.freeze({
-    id: root.id,
-    version: BLACKWAKE_PROTO_KIT_VERSION,
-    tier: root.tier,
-    category: root.category,
-    definitions: Object.freeze(definitions),
-    kits: Object.freeze(kits),
-    provides: Object.freeze(unique(definitions.flatMap((definition) => definition.provides))),
-    requires: Object.freeze(unique(definitions.flatMap((definition) => definition.requires))),
-    installOrder: Object.freeze(definitions.map((definition) => definition.id)),
-    validation: validateBlackwakeProtoKitGraph(id)
-  });
+  return Object.freeze({ id: root.id, version: BLACKWAKE_PROTO_KIT_VERSION, tier: root.tier, category: root.category, definitions: Object.freeze(definitions), kits: Object.freeze(kits), provides: Object.freeze(unique(definitions.flatMap((definition) => definition.provides))), requires: Object.freeze(unique(definitions.flatMap((definition) => definition.requires))), installOrder: Object.freeze(definitions.map((definition) => definition.id)), validation: validateBlackwakeProtoKitGraph(id) });
 }
 
 export function createBlackwakeProtoKits(NexusRealtime, ids = ["blackwake-game-isles"], options = {}) {
   const ordered = unique((Array.isArray(ids) ? ids : [ids]).flatMap((id) => expandBlackwakeProtoKitIds(id)));
   const definitions = ordered.map(getDefinition);
   const kits = definitions.map((definition) => createBlackwakeRuntimeKit(NexusRealtime, definition, options));
-  return Object.freeze({
-    id: "blackwake-protokit-bundle",
-    version: BLACKWAKE_PROTO_KIT_VERSION,
-    definitions: Object.freeze(definitions),
-    kits: Object.freeze(kits),
-    provides: Object.freeze(unique(definitions.flatMap((definition) => definition.provides))),
-    requires: Object.freeze(unique(definitions.flatMap((definition) => definition.requires))),
-    installOrder: Object.freeze(ordered),
-    validation: validateBlackwakeProtoKitGraph(ordered)
-  });
+  return Object.freeze({ id: "blackwake-protokit-bundle", version: BLACKWAKE_PROTO_KIT_VERSION, definitions: Object.freeze(definitions), kits: Object.freeze(kits), provides: Object.freeze(unique(definitions.flatMap((definition) => definition.provides))), requires: Object.freeze(unique(definitions.flatMap((definition) => definition.requires))), installOrder: Object.freeze(ordered), validation: validateBlackwakeProtoKitGraph(ordered) });
 }
 
 export function createAllBlackwakeProtoKits(NexusRealtime, options = {}) {
@@ -355,22 +275,8 @@ export function createBlackwakeRuntimeKits(NexusRealtime, id = "blackwake-game-i
 export function createBlackwakeGameRuntime(NexusRealtime, id = "blackwake-game-isles", options = {}) {
   const protoKit = createBlackwakeProtoKit(NexusRealtime, id, options);
   const engine = typeof NexusRealtime?.createRealtimeGame === "function"
-    ? NexusRealtime.createRealtimeGame({
-        ...(options.engine ?? {}),
-        canvas: options.canvas ?? options.engine?.canvas ?? null,
-        root: options.root ?? options.engine?.root ?? null,
-        kits: protoKit.kits
-      })
-    : {
-        kits: protoKit.kits,
-        clock: { delta: 1 / 60, elapsed: 0, frame: 0 },
-        tick(delta = 1 / 60) {
-          this.clock.delta = delta;
-          this.clock.elapsed += delta;
-          this.clock.frame += 1;
-          return this;
-        }
-      };
+    ? NexusRealtime.createRealtimeGame({ ...(options.engine ?? {}), canvas: options.canvas ?? options.engine?.canvas ?? null, root: options.root ?? options.engine?.root ?? null, kits: protoKit.kits })
+    : { kits: protoKit.kits, clock: { delta: 1 / 60, elapsed: 0, frame: 0 }, tick(delta = 1 / 60) { this.clock.delta = delta; this.clock.elapsed += delta; this.clock.frame += 1; return this; } };
   let running = false;
   let last = 0;
   function frame(now) {
@@ -381,23 +287,7 @@ export function createBlackwakeGameRuntime(NexusRealtime, id = "blackwake-game-i
     options.onTick?.({ engine, protoKit, delta, now });
     globalThis.requestAnimationFrame?.(frame);
   }
-  return Object.freeze({
-    id,
-    protoKit,
-    engine,
-    start() {
-      if (running) return;
-      running = true;
-      last = globalThis.performance?.now?.() ?? 0;
-      globalThis.requestAnimationFrame?.(frame);
-    },
-    stop() {
-      running = false;
-    },
-    tick(delta = 1 / 60) {
-      return engine.tick?.(delta);
-    }
-  });
+  return Object.freeze({ id, protoKit, engine, start() { if (running) return; running = true; last = globalThis.performance?.now?.() ?? 0; globalThis.requestAnimationFrame?.(frame); }, stop() { running = false; }, tick(delta = 1 / 60) { return engine.tick?.(delta); } });
 }
 
 export function createBlackwakeIslesProtoKit(NexusRealtime, options = {}) {
