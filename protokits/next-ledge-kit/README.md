@@ -2,24 +2,57 @@
 
 Composable click-to-climb and rope-swing rules for NexusRealtime games.
 
-This kit is a prototype gameplay kit for a 2.5D climbing game where the player clicks the next reachable ledge, catches ropes, builds horizontal momentum with A/D, manages stamina, and climbs toward a summit.
+`next-ledge-kit` remains the high-level coordinator for the climb loop. The surrounding vertical-climb ProtoKits provide content palettes, layered objects, route graphs, simple swing, endless ascent, cloud zones, input routing, camera state, risk evaluation, and no-overlay diegetic feedback.
 
-## Import
+## One-call cloud climb preset
 
 ```js
 import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
 import {
-  createNextLedgeKit,
-  createDefaultNextLedgeLevel
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/next-ledge-kit/index.js";
+  createNextLedgeCloudClimb
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/next-ledge-kit/cloud-climb-preset.js";
 
-const level = createDefaultNextLedgeLevel();
-const nextLedgeKit = createNextLedgeKit(NexusRealtime, { level });
+const game = createNextLedgeCloudClimb(NexusRealtime, {
+  seed: "clouds-forever-001",
+  overlayUi: false,
+  mode: "hybrid"
+});
 ```
 
-## Surface
+## Advanced composition
 
-`createNextLedgeKit(NexusRealtime, options)` installs `engine.nextLedge`:
+```js
+import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+import {
+  createNextLedgeCloudClimbKits
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/next-ledge-kit/cloud-climb-preset.js";
+
+const game = NexusRealtime.createRealtimeGame({
+  kits: createNextLedgeCloudClimbKits(NexusRealtime, {
+    seed: "clouds-forever-001",
+    overlayUi: false
+  })
+});
+```
+
+## Preset kit stack
+
+```txt
+content-palette-kit
+layered-object-kit
+vertical-climb-core
+ledge-route-kit
+simple-swing-kit
+endless-ascent-kit
+cloud-zone-kit
+climb-input-kit
+climb-risk-kit
+climb-camera-kit
+diegetic-feedback-kit
+next-ledge-kit
+```
+
+## Existing `engine.nextLedge` surface
 
 ```js
 engine.nextLedge.choose(targetId);
@@ -32,7 +65,7 @@ engine.nextLedge.getState();
 engine.nextLedge.getEnabledTargets();
 ```
 
-## State Modes
+## State modes
 
 ```txt
 ready     waiting for a ledge click
@@ -42,29 +75,15 @@ falling   stamina failed or grip lost
 complete  summit reached
 ```
 
-## Intended Composition
+## Design notes
 
-Use this kit with the smallest NexusRealtime stack:
-
-```js
-const engine = NexusRealtime.createRealtimeGame({
-  kits: [
-    NexusRealtime.createRenderDescriptorKit(level),
-    NexusRealtime.createInteractionTargetKit({ sceneRecipe: level.sceneRecipe }),
-    NexusRealtime.createObjectiveFlowKit({ id: "next-ledge", steps: level.steps }),
-    NexusRealtime.createMicroPlatformerKit({ avatar: { id: "climber", lane: 0 } }),
-    createNextLedgeKit(NexusRealtime, { level })
-  ]
-});
-```
-
-## Design Notes
-
-- The kit owns game rules only: reach, stamina, rope swing, fall, restart, and completion.
-- The renderer should only draw `engine.nextLedge.getState()`.
-- A/D input is ignored unless the state mode is exactly `swinging`.
-- Click handling should pick a target id and call `engine.nextLedge.choose(targetId)`.
+- The renderer should draw snapshots; it should not decide gameplay reachability.
+- `ledge-route-kit` decides whether targets are reachable.
+- `simple-swing-kit` owns A/D momentum and ignores A/D while not attached.
+- `layered-object-kit` handles large parent objects with smaller socketed objects.
+- `content-palette-kit` lets a game use exact rocks, seeded random rocks, or hybrid overrides.
+- `diegetic-feedback-kit` supports `overlayUi: false` for world-space feedback.
 
 ## Version
 
-Current prototype version: `0.1.0`.
+Current prototype version: `0.1.0` for the core `next-ledge-kit`, with `0.0.1` cloud climb preset composition.
