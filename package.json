@@ -4,13 +4,24 @@
   "type": "module",
   "description": "Prototype kits for NexusRealtime games.",
   "exports": {
-    "./ocean-boat-kit": "./protokits/ocean-boat-kit/index.js"
+    "./ocean-boat-kit": "./protokits/ocean-boat-kit/index.js",
+    "./arcade-race-core": "./protokits/arcade-race-core/index.js",
+    "./downhill-race-kit": "./protokits/downhill-race-kit/index.js",
+    "./slope-traversal-kit": "./protokits/slope-traversal-kit/index.js",
+    "./racer-ai-kit": "./protokits/racer-ai-kit/index.js",
+    "./difficulty-curve-kit": "./protokits/difficulty-curve-kit/index.js",
+    "./race-hazard-kit": "./protokits/race-hazard-kit/index.js",
+    "./boost-path-kit": "./protokits/boost-path-kit/index.js",
+    "./racer-contact-kit": "./protokits/racer-contact-kit/index.js",
+    "./race-pacing-kit": "./protokits/race-pacing-kit/index.js",
+    "./course-director-kit": "./protokits/course-director-kit/index.js",
+    "./arcade-race-visual-kit": "./protokits/arcade-race-visual-kit/index.js"
   },
   "files": [
     "protokits"
   ],
   "scripts": {
-    "check": "node --check protokits/ocean-boat-kit/index.js"
+    "check": "node --check protokits/ocean-boat-kit/index.js && node --check protokits/arcade-race-core/index.js && node --check protokits/downhill-race-kit/index.js && node --check protokits/slope-traversal-kit/index.js && node --check protokits/racer-ai-kit/index.js && node --check protokits/difficulty-curve-kit/index.js && node --check protokits/race-hazard-kit/index.js && node --check protokits/boost-path-kit/index.js && node --check protokits/racer-contact-kit/index.js && node --check protokits/race-pacing-kit/index.js && node --check protokits/course-director-kit/index.js && node --check protokits/arcade-race-visual-kit/index.js"
   },
   "license": "MIT"
 }
