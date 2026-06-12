@@ -14,3 +14,10 @@ import { createBlackwakePlayableGame } from "./runtime.js";
 export function createBlackwakeIslesGame(NexusRealtime, options = {}) {
   return createBlackwakePlayableGame(NexusRealtime, "blackwake-game-isles", options);
 }
+
+export function createStormlineRescueGame(NexusRealtime, options = {}) {
+  return createBlackwakePlayableGame(NexusRealtime, "blackwake-game-stormline-rescue", {
+    seed: "stormline-rescue-vertical-slice",
+    ...options
+  });
+}
