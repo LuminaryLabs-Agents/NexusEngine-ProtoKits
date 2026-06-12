@@ -69,6 +69,41 @@ const game = createRealtimeGame({
 - `createArcadeRaceVisualKit` — low-poly render descriptors, trail effects, crash effects, boost effects, gates, signs, finish arch.
 - `arcade-race-core` — shared definitions and helpers for the race kits.
 
+## Vertical Climb / Next Ledge Kits
+
+Composable ECS kits for endless 2.5D climb games with static, seeded, or hybrid content. These are designed so a game can stay close to `import + configure + run` while complexity is added by installing another kit instead of writing more app code.
+
+```js
+import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+import {
+  createNextLedgeCloudClimb
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/next-ledge-kit/cloud-climb-preset.js";
+
+const game = createNextLedgeCloudClimb(NexusRealtime, {
+  seed: "clouds-forever-001",
+  overlayUi: false,
+  mode: "hybrid"
+});
+```
+
+Advanced hosts can import `createNextLedgeCloudClimbKits()` from the same preset file and pass the returned kit list into `NexusRealtime.createRealtimeGame()`.
+
+### Vertical Climb Kit List
+
+- `protokit-core` — shared deterministic helpers, seeded random, runtime-kit injection fallback, resource helpers.
+- `content-palette-kit` — static/seeded/hybrid content palette picking for rocks, ledges, clouds, and attachments.
+- `layered-object-kit` — generic layered objects, sockets, attachments, interactive objects, pruning, and batching descriptors.
+- `vertical-climb-core` — shared climb components, resources, events, base state, and `engine.verticalClimb` surface.
+- `ledge-route-kit` — route graph, reachability, target windows, chunk registration, and pruning.
+- `simple-swing-kit` — simple A/D rope swing momentum that only affects state while attached.
+- `endless-ascent-kit` — seeded vertical chunk generation, ahead/behind chunk windows, and materialization hooks.
+- `cloud-zone-kit` — height-based fog, wind, theme, and cloud-band state.
+- `climb-input-kit` — renderer-agnostic click, hover, restart, and swing intent routing.
+- `climb-camera-kit` — side-on vertical camera descriptor state for follow, swing, fall, and cloud reveal modes.
+- `diegetic-feedback-kit` — no-overlay world feedback signals for target glow, rope tension, cloud cues, and stamina pressure.
+- `climb-risk-kit` — reach, stamina cost, momentum, and risk evaluation without forcing a HUD.
+- `next-ledge-kit` — high-level click-to-climb and rope-swing game coordinator.
+
 ## Structure
 
 ```txt
@@ -99,4 +134,32 @@ protokits/
     index.js
   arcade-race-visual-kit/
     index.js
+  protokit-core/
+    index.js
+  content-palette-kit/
+    index.js
+  layered-object-kit/
+    index.js
+  vertical-climb-core/
+    index.js
+  ledge-route-kit/
+    index.js
+  simple-swing-kit/
+    index.js
+  endless-ascent-kit/
+    index.js
+  cloud-zone-kit/
+    index.js
+  climb-input-kit/
+    index.js
+  climb-camera-kit/
+    index.js
+  diegetic-feedback-kit/
+    index.js
+  climb-risk-kit/
+    index.js
+  next-ledge-kit/
+    index.js
+    cloud-climb-preset.js
+    README.md
 ```
