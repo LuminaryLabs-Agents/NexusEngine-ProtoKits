@@ -4,13 +4,21 @@
   "type": "module",
   "description": "Prototype kits for NexusRealtime games.",
   "exports": {
-    "./ocean-boat-kit": "./protokits/ocean-boat-kit/index.js"
+    "./ocean-boat-kit": "./protokits/ocean-boat-kit/index.js",
+    "./survival-round-kit": "./protokits/survival-round-kit/index.js",
+    "./horde-director-kit": "./protokits/horde-director-kit/index.js",
+    "./orchard-biome-kit": "./protokits/orchard-biome-kit/index.js",
+    "./found-weapon-kit": "./protokits/found-weapon-kit/index.js",
+    "./monster-roster-kit": "./protokits/monster-roster-kit/index.js",
+    "./zombie-orchard": "./protokits/zombie-orchard/index.js"
   },
   "files": [
-    "protokits"
+    "protokits",
+    "tests"
   ],
   "scripts": {
-    "check": "node --check protokits/ocean-boat-kit/index.js"
+    "check": "node --check protokits/ocean-boat-kit/index.js && node --check protokits/survival-round-kit/index.js && node --check protokits/horde-director-kit/index.js && node --check protokits/orchard-biome-kit/index.js && node --check protokits/found-weapon-kit/index.js && node --check protokits/monster-roster-kit/index.js && node --check protokits/zombie-orchard/index.js && node --check tests/zombie-orchard-smoke.mjs",
+    "test": "node tests/zombie-orchard-smoke.mjs"
   },
   "license": "MIT"
 }
