@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Blackwake Isles Playable ProtoKit Demo</title>
+    <title>Blackwake Isles Three.js ProtoKit Demo</title>
     <style>
       :root { color-scheme: dark; background: #020814; }
       html, body { margin: 0; height: 100%; overflow: hidden; }
@@ -11,13 +11,19 @@
     </style>
   </head>
   <body>
-    <canvas id="game" aria-label="Blackwake Isles playable ProtoKit demo"></canvas>
+    <canvas id="game" aria-label="Blackwake Isles Three.js ProtoKit demo"></canvas>
     <script type="module">
       const nexusUrl = "https://cdn.jsdelivr.net/gh/" + "LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
-      const NexusRealtime = await import(nexusUrl);
-      const { createBlackwakeIslesGame } = await import("./index.js");
-      const game = createBlackwakeIslesGame(NexusRealtime, {
+      const threeUrl = "https://cdn.jsdelivr.net/npm/" + "three@0.160.0/build/three.module.js";
+      const [NexusRealtime, THREE, mod] = await Promise.all([
+        import(nexusUrl),
+        import(threeUrl),
+        import("./index.js")
+      ]);
+      const game = mod.createBlackwakeIslesGame(NexusRealtime, {
         canvas: document.getElementById("game"),
+        renderer: "three",
+        three: THREE,
         seed: new URLSearchParams(location.search).get("seed") || "blackwake-public-demo-001"
       });
       game.start();
