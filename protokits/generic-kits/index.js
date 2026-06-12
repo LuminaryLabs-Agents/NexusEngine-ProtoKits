@@ -25,6 +25,7 @@ export { createGenericCurrentFieldKit, GENERIC_CURRENT_FIELD_KIT_DEFINITION } fr
 export { createGenericFoamFieldKit, GENERIC_FOAM_FIELD_KIT_DEFINITION } from "../generic-foam-field-kit/index.js";
 export { createGenericBuoyancyKit, GENERIC_BUOYANCY_KIT_DEFINITION } from "../generic-buoyancy-kit/index.js";
 export { createGenericSurfaceImpactKit, GENERIC_SURFACE_IMPACT_KIT_DEFINITION } from "../generic-surface-impact-kit/index.js";
+export { createGenericWeatherWindKit, GENERIC_WEATHER_WIND_KIT_DEFINITION } from "../generic-weather-wind-kit/index.js";
 
 export { createGenericVehicleStateKit, GENERIC_VEHICLE_STATE_KIT_DEFINITION } from "../generic-vehicle-state-kit/index.js";
 export { createGenericVehicleControlKit, GENERIC_VEHICLE_CONTROL_KIT_DEFINITION } from "../generic-vehicle-control-kit/index.js";
