@@ -58,6 +58,24 @@
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
 
+      function factoryNameForDefinition(definition) {
+        return "create" + definition.id.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join("");
+      }
+
+      function dependencyOrderedDefinitions(GenericKits) {
+        const definitions = Object.values(GenericKits).filter((value) => value && typeof value === "object" && typeof value.id === "string" && Array.isArray(value.provides));
+        const remaining = [...definitions].sort((a, b) => a.id.localeCompare(b.id));
+        const provided = new Set();
+        const ordered = [];
+        while (remaining.length) {
+          const index = remaining.findIndex((definition) => (definition.requires || []).every((slot) => provided.has(slot) || !definitions.some((candidate) => (candidate.provides || []).includes(slot))));
+          const [definition] = remaining.splice(index >= 0 ? index : 0, 1);
+          ordered.push(definition);
+          for (const slot of definition.provides || []) provided.add(slot);
+        }
+        return ordered;
+      }
+
       function draw(engine, frame) {
         resize();
         ctx.clearRect(0, 0, innerWidth, innerHeight);
@@ -124,9 +142,13 @@
           import("../../protokits/generic-kits/index.js")
         ]);
 
-        const factories = Object.entries(GenericKits)
-          .filter(([name, value]) => name.startsWith("create") && name !== "createGenericProtoKit" && typeof value === "function")
-          .sort(([a], [b]) => a.localeCompare(b));
+        const definitions = dependencyOrderedDefinitions(GenericKits);
+        const factories = definitions.map((definition) => {
+          const name = factoryNameForDefinition(definition);
+          const factory = GenericKits[name];
+          if (typeof factory !== "function") throw new Error(`Missing factory ${name} for ${definition.id}`);
+          return [name, factory, definition];
+        });
 
         const seed = new URLSearchParams(location.search).get("seed") || "generic-protokit-smoke";
         const kits = factories.map(([name, factory]) => factory(NexusRealtime, {
@@ -139,6 +161,7 @@
         window.GenericProtoKitHost = {
           engine,
           factories: factories.map(([name]) => name),
+          definitions,
           getStates: () => Object.fromEntries(Object.entries(engine.genericProtoKits || {}).map(([id, api]) => [id, api.getState?.()]))
         };
 
