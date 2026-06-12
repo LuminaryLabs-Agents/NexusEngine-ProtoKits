@@ -6,6 +6,7 @@
   "exports": {
     "./ocean-boat-kit": "./protokits/ocean-boat-kit/index.js",
     "./blackwake-kit-registry": "./protokits/blackwake-kit-registry/index.js",
+    "./blackwake-gameplay": "./protokits/blackwake-gameplay/index.js",
     "./blackwake-game-isles": "./protokits/blackwake-game-isles/index.js",
     "./blackwake-game-stormline-rescue": "./protokits/blackwake-game-stormline-rescue/index.js"
   },
@@ -13,7 +14,7 @@
     "protokits"
   ],
   "scripts": {
-    "check": "node --check protokits/ocean-boat-kit/index.js && node --check protokits/blackwake-kit-registry/index.js && node --check protokits/blackwake-game-isles/index.js && node --check protokits/blackwake-game-stormline-rescue/index.js"
+    "check": "node --check protokits/ocean-boat-kit/index.js && node --check protokits/blackwake-kit-registry/index.js && node --check protokits/blackwake-gameplay/index.js && node --check protokits/blackwake-game-isles/index.js && node --check protokits/blackwake-game-stormline-rescue/index.js"
   },
   "license": "MIT"
 }
