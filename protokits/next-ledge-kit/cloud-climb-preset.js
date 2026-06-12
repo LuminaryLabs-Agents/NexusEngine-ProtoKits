@@ -13,12 +13,21 @@ import { createDefaultNextLedgeLevel, createNextLedgeKit } from "./index.js";
 
 export const NEXT_LEDGE_CLOUD_CLIMB_PRESET_VERSION = "0.0.1";
 
+function routeObjectsFromLevel(level = {}) {
+  return (level.sceneRecipe?.objects ?? []).filter((object) =>
+    object.kit === "interaction-target" ||
+    object.interaction ||
+    ["ledge", "rope", "rest", "finish", "risky"].includes(object.archetype ?? object.kind ?? object.metadata?.type)
+  );
+}
+
 export function createNextLedgeCloudClimbKits(NexusRealtime = {}, options = {}) {
   const level = options.level ?? createDefaultNextLedgeLevel();
   const shared = {
     ...options,
     level,
-    nodes: options.nodes ?? level.nodes ?? level.sceneRecipe?.objects ?? [],
+    nodes: options.nodes ?? level.nodes ?? routeObjectsFromLevel(level),
+    sceneRecipe: options.sceneRecipe ?? level.sceneRecipe,
     layers: options.layers ?? level.layers ?? [
       { id: "back", depth: -4, role: "background", parallax: 0.35 },
       { id: "mid", depth: 0, role: "gameplay", parallax: 1 },
