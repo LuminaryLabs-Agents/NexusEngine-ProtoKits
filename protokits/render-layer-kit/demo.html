@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NexusRealtime Render Layer Kit Demo</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #071019; color: #dff7ff; font: 14px/1.4 system-ui, sans-serif; }
+    main { min-height: 100%; display: grid; place-items: center; padding: 24px; box-sizing: border-box; }
+    pre { max-width: 920px; white-space: pre-wrap; background: #0d1a24; border: 1px solid #244354; border-radius: 16px; padding: 18px; }
+  </style>
+</head>
+<body>
+<main>
+  <pre id="out">Booting…</pre>
+</main>
+<script type="module">
+import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@0.0.1/src/index.js";
+import {
+  createRenderLayerKit,
+  createFoglineVisualPreset
+} from "./index.js";
+
+const level = {
+  id: "render-layer-demo",
+  sceneRecipe: {
+    id: "render-layer-demo",
+    objects: [
+      { id: "ground", archetype: "terrain", transform: { x: 0, y: 0, z: 0 }, visual: { layer: "terrain", material: "fogline-ground", mesh: "plane" } },
+      { id: "relay-01", kit: "interaction-target", archetype: "relay", transform: { x: -2, y: 0, z: 6 }, visual: { layer: "interactive", material: "relay-emissive", mesh: "relay-pylon", emissive: "#77f3ff" } },
+      { id: "mist", archetype: "fog-volume", transform: { x: 0, y: 0, z: 8 }, visual: { layer: "transparent-fog", material: "mist-volume", radius: 14, density: 0.2 } }
+    ]
+  },
+  visualDataset: {
+    materials: []
+  }
+};
+
+const realismKit = NexusRealtime.createRealismKit({
+  preset: createFoglineVisualPreset(),
+  quality: "medium"
+});
+
+const engine = NexusRealtime.createRealtimeGame({
+  kits: [
+    NexusRealtime.createRenderDescriptorKit(level),
+    realismKit,
+    createRenderLayerKit(NexusRealtime, {
+      renderDescriptorResource: NexusRealtime.RenderDescriptorState,
+      realismSnapshotResource: realismKit.definitions.resources.RealismSnapshot,
+      preset: createFoglineVisualPreset()
+    })
+  ]
+});
+
+engine.visualPipeline.setViewer({ x: 0, y: 1.6, z: 0 });
+engine.tick(1 / 60);
+
+document.querySelector("#out").textContent = JSON.stringify(engine.visualPipeline.snapshot(), null, 2);
+</script>
+</body>
+</html>
