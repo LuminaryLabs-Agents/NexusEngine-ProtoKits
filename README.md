@@ -4,6 +4,36 @@ Prototype game kits for NexusRealtime.
 
 These kits are intentionally separate from the core NexusRealtime package. They are used to prove game features before promoting stable surfaces into the main engine.
 
+## Action Input Kit
+
+Contextual action routing for browser hosts and subscribed gameplay kits. The host captures platform input, calls the `engine.actionInput` API, and this ProtoKit emits semantic action events only when held state, axis, aim, or button edges change.
+
+```js
+import { createActionInputKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/action-input-kit/index.js";
+
+const engine = NexusRealtime.createRealtimeGame({
+  kits: [
+    createActionInputKit(NexusRealtime, {
+      context: "next-ledge-grapple",
+      bindings: {
+        left: ["a", "arrowleft"],
+        right: ["d", "arrowright"],
+        primary: [" ", "space", "pointer0"],
+        restart: ["r"]
+      }
+    })
+  ]
+});
+```
+
+Events include `actionInput.pressed`, `actionInput.released`, `actionInput.axisChanged`, `actionInput.aimChanged`, and `actionInput.cleared`. Hosts can subscribe those actions together and route them into game-specific kit APIs without putting gameplay rules in the HTML.
+
+Demo:
+
+```txt
+protokits/action-input-kit/demo.html
+```
+
 ## Ocean Boat Kit
 
 ```js
@@ -177,96 +207,3 @@ Advanced hosts can import `createSoraFlightKits()` and compose the kit list manu
 - `sora-flight-preset` — example preset/data composition that turns the generic stack into a sunlit bird flight game.
 
 ## Structure
-
-```txt
-protokits/
-  ocean-boat-kit/
-    index.js
-    demo.html
-    README.md
-  render-layer-kit/
-    index.js
-    demo.html
-    README.md
-  arcade-race-core/
-    index.js
-  downhill-race-kit/
-    index.js
-  slope-traversal-kit/
-    index.js
-  racer-ai-kit/
-    index.js
-  difficulty-curve-kit/
-    index.js
-  race-hazard-kit/
-    index.js
-  boost-path-kit/
-    index.js
-  racer-contact-kit/
-    index.js
-  race-pacing-kit/
-    index.js
-  course-director-kit/
-    index.js
-  arcade-race-visual-kit/
-    index.js
-  protokit-core/
-    index.js
-  content-palette-kit/
-    index.js
-  layered-object-kit/
-    index.js
-  vertical-climb-core/
-    index.js
-  ledge-route-kit/
-    index.js
-  simple-swing-kit/
-    index.js
-  endless-ascent-kit/
-    index.js
-  cloud-zone-kit/
-    index.js
-  climb-input-kit/
-    index.js
-  climb-camera-kit/
-    index.js
-  diegetic-feedback-kit/
-    index.js
-  climb-risk-kit/
-    index.js
-  next-ledge-kit/
-    index.js
-    cloud-climb-preset.js
-    README.md
-  data-registry-kit/
-    index.js
-  performance-budget-kit/
-    index.js
-  sky-atmosphere-kit/
-    index.js
-  lighting-descriptor-kit/
-    index.js
-  material-palette-kit/
-    index.js
-  terrain-sampler-kit/
-    index.js
-  world-patch-kit/
-    index.js
-  scatter-placement-kit/
-    index.js
-  instanced-render-kit/
-    index.js
-  flight-motion-kit/
-    index.js
-  actor-render-kit/
-    index.js
-  flock-agent-kit/
-    index.js
-  updraft-volume-kit/
-    index.js
-  checkpoint-volume-kit/
-    index.js
-  sora-flight-preset/
-    index.js
-    sora-data.js
-```
