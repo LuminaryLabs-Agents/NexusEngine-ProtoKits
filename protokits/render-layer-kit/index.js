@@ -45,20 +45,66 @@ export const foglineVisualPreset = Object.freeze({
   id: "fogline-forest",
   quality: "adaptive",
   layerOrder: DEFAULT_RENDER_LAYER_ORDER,
+  renderer: {
+    toneMapping: "aces",
+    exposure: 0.96,
+    outputColorSpace: "srgb",
+    physicallyCorrectLights: true
+  },
+  lighting: {
+    sun: { elevation: 29, azimuth: -36, intensity: 1.3, color: "#b9dcff" },
+    hemisphere: { sky: "#274b67", ground: "#142116", intensity: 0.72 },
+    exposure: 0.96,
+    toneMapping: "aces",
+    shadows: { enabled: true, mapSize: 1024, distance: 80 },
+    environment: { type: "fogline-procedural-night", intensity: 0.45 }
+  },
   atmosphere: {
+    preset: "fogline-night-forest",
     fogColor: "#102333",
     horizon: "#172b37",
     zenith: "#07111a",
     haze: 0.052,
     groundMist: 0.34,
-    vignette: 0.18
+    vignette: 0.18,
+    cloudLayers: [
+      { type: "ground-mist", density: 0.44, altitude: 1.2, speed: 0.025, scale: 1.6 },
+      { type: "canopy-haze", density: 0.22, altitude: 9, speed: 0.008, scale: 2.4 }
+    ]
   },
-  lighting: {
-    exposure: 0.96,
-    toneMapping: "aces",
-    moon: { elevation: 29, azimuth: -36, intensity: 1.3, color: "#b9dcff" },
-    hemisphere: { sky: "#274b67", ground: "#142116", intensity: 0.72 }
+  water: {
+    model: "none",
+    transparent: false,
+    clarity: 0,
+    turbidity: 0.8,
+    fresnel: 0,
+    rippleScale: 0,
+    caustics: false,
+    foam: { enabled: false },
+    depthTint: "#102333",
+    shallowTint: "#102333",
+    opacity: 0
   },
+  terrainMaterials: {
+    ground: { albedo: "#182018", roughness: 0.92, ao: 0.86, displacementScale: 0.015 },
+    bark: { albedo: "#182015", roughness: 0.88, ao: 0.78, normalStrength: 0.55 },
+    moss: { albedo: "#1e3a23", roughness: 0.82, ao: 0.72, slopeBlend: 0.5 },
+    stone: { albedo: "#2b3332", roughness: 0.74, ao: 0.82, normalStrength: 0.35 }
+  },
+  scatter: {
+    seed: "fogline-forest",
+    density: 0.75,
+    maxPerChunk: 34,
+    types: [
+      { id: "trunk", material: "fogline-bark", weight: 0.42 },
+      { id: "fern", material: "fogline-leaf", weight: 0.3 },
+      { id: "glow-plant", material: "relay-emissive", weight: 0.08 },
+      { id: "ruin-shard", material: "fogline-stone", weight: 0.2 }
+    ]
+  },
+  wildlife: {},
+  camera: { handheld: 0.018, focusSmoothing: 0.2, fightPulse: 0.08 },
+  post: { vignette: 0.18, bloom: 0.18, colorGrade: "fogline-cyan-amber" },
   defaultMaterials: [
     { id: "fogline-ground", role: "terrain", albedo: "#182018", roughness: 0.92, ao: 0.86, fogReceive: 1 },
     { id: "fogline-bark", role: "static", albedo: "#182015", roughness: 0.88, ao: 0.78, normalStrength: 0.55, fogReceive: 1 },
