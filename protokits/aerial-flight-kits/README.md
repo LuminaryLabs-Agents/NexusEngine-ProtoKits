@@ -9,11 +9,11 @@ These kits are intentionally not branded to one game. A sunlit bird game, wingsu
 The stack keeps NexusRealtime responsibilities separated:
 
 - Runtime: `createRealtimeGame`, deterministic ticks, resources, events, scheduler phases, and kit installation.
-- ProtoKits: flight input, aerial body state, glide physics, boost impulse, checkpoint volumes, lift volumes, flock agents, sky, terrain sampling, world patch windows, challenge state, camera descriptors, VFX descriptors, audio descriptors, and render descriptors.
-- Renderer host: Three.js or Canvas draws descriptor state only, maps browser input into `engine.genericFlightInput.setInput()`, calls `engine.tick(dt)`, and exposes `window.GameHost`.
-- Sequence/design layer: challenge prompts and completion are expressed as resource state and can later be replaced or augmented by true NexusRealtime sequences.
+- ProtoKits: flight input, aerial body state, glide physics, boost impulse, checkpoint volumes, lift volumes, flock agents, sky, terrain sampling, and world patch windows.
+- Renderer host: Three.js or Canvas draws state only, maps browser input into `engine.genericFlightInput.setInput()`, calls `engine.tick(dt)`, and exposes `window.GameHost`.
+- Sequence/design layer: prompts, gates, score, and completion can be layered as sequence kits or mission kits without coupling to rendering.
 
-## Kit plan
+## Implemented kit plan
 
 | Kit | Provides | Purpose |
 |---|---|---|
@@ -26,26 +26,28 @@ The stack keeps NexusRealtime responsibilities separated:
 | `createGenericBoostImpulseKit` | `aerial:boost-impulse` | Cooldown-gated forward impulse for fireworks, dashes, gates, or wind bursts. |
 | `createGenericCheckpointVolumeKit` | `aerial:checkpoint-volume` | Deterministic ring/gate/beacon placement and collection. |
 | `createGenericLiftVolumeKit` | `aerial:lift-volume` | Thermals, vents, fans, and vertical force columns. |
-| `createGenericFlockAgentKit` | `ai:flock-agent` | Companion/ambient flock followers with terrain avoidance. |
-| `createGenericFlightChallengeKit` | `challenge:flight` | Generic score, checkpoint count, prompts, completion, and altitude readout. |
-| `createGenericFlightCameraKit` | `camera:flight-follow` | Chase camera descriptor with speed FOV. |
-| `createGenericFlightVfxKit` | `vfx:flight` | Speed trail, airflow, and boost flash descriptors. |
-| `createGenericFlightAudioKit` | `audio:flight-descriptor` | Wind gain/filter frequency descriptors. |
-| `createGenericAerialRenderDescriptorKit` | `render:aerial-descriptors` | Aggregates all state for a host renderer. |
+| `createGenericFlockAgentKit` | `ai:flock-agent` | Companion/ambient flock followers. |
+
+## Next promotion candidates
+
+These belong as follow-up generic kits rather than renderer code:
+
+- `createGenericFlightChallengeKit` for score and completion.
+- `createGenericFlightCameraKit` for chase camera state.
+- `createGenericFlightVfxKit` for speed trail and boost flash descriptors.
+- `createGenericFlightAudioKit` for wind audio descriptors.
+- `createGenericAerialRenderDescriptorKit` for final renderer-facing snapshots.
 
 ## Import
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@0.0.1/src/index.js";
-import {
-  createGenericAerialAdventureKits
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/aerial-flight-kits/index.js";
+import * as NexusRealtime from 'https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@0.0.1/src/index.js';
+import { createGenericAerialAdventureKits } from 'https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/aerial-flight-kits/index.js';
 
 const engine = NexusRealtime.createRealtimeGame({
   kits: createGenericAerialAdventureKits(NexusRealtime, {
-    seed: "sky-demo",
-    terrain: { heightScale: 180 },
-    challenge: { targetCheckpoints: 12 }
+    seed: 'sky-demo',
+    terrain: { heightScale: 180 }
   })
 });
 ```
@@ -57,7 +59,7 @@ The host should:
 ```js
 engine.genericFlightInput.setInput({ pitch, bank, boost });
 engine.tick(dt);
-renderer.draw(engine.genericAerialRenderDescriptor.getState());
+renderer.draw(engine.genericAerialBody.getState());
 ```
 
-The host should not decide boost cooldowns, ring completion, thermal lift, objective completion, or body collision.
+The host should not decide boost cooldowns, ring completion, thermal lift, or body collision.
