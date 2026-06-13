@@ -1,82 +1,4 @@
-import {
-  clamp,
-  createDefinitions,
-  createRng,
-  dt,
-  ensureState,
-  forwardFromRotation,
-  len3,
-  makeRuntimeKit,
-  mul3,
-  now,
-  num,
-  terrainBiome,
-  terrainHeight,
-  writeState
-} from './core.js';
-
-function rightFromYaw(yaw = 0) {
-  return { x: Math.cos(num(yaw)), y: 0, z: -Math.sin(num(yaw)) };
-}
-
-function addScaled(base = {}, vector = {}, scalar = 1) {
-  return {
-    x: num(base.x) + num(vector.x) * scalar,
-    y: num(base.y) + num(vector.y) * scalar,
-    z: num(base.z) + num(vector.z) * scalar
-  };
-}
-
-function patchCenter(patch = {}, size = 420) {
-  return { x: num(patch.px) * size, z: num(patch.pz) * size };
-}
-
-function terrainSampleGrid(state, patch, config = {}) {
-  const terrain = state.terrain ?? {};
-  const size = num(patch.size, num(terrain.patchSize, 420));
-  const segments = Math.max(4, Math.floor(num(config.sampleSegments ?? terrain.sampleSegments, 14)));
-  const center = patchCenter(patch, size);
-  const samples = [];
-  for (let gz = 0; gz <= segments; gz += 1) {
-    for (let gx = 0; gx <= segments; gx += 1) {
-      const x = center.x - size * 0.5 + (gx / segments) * size;
-      const z = center.z - size * 0.5 + (gz / segments) * size;
-      const y = terrainHeight(terrain, x, z);
-      samples.push({ x, y, z, biome: terrainBiome(terrain, x, z) });
-    }
-  }
-  return { samples, sampleSegments: segments };
-}
-
-function scatterForPatch(state, patch, config = {}) {
-  const terrain = state.terrain ?? {};
-  const size = num(patch.size, num(terrain.patchSize, 420));
-  const density = num(config.scatterDensity ?? terrain.scatterDensity, 0.000075);
-  const originExclusionRadius = num(config.originExclusionRadius ?? terrain.originExclusionRadius, 260);
-  const random = createRng(`${state.seed}:aerial-scatter:${patch.id ?? `${patch.px},${patch.pz}`}`);
-  const center = patchCenter(patch, size);
-  const count = Math.max(0, Math.floor(size * size * density * (0.75 + random() * 0.5)));
-  const scatter = [];
-  for (let index = 0; index < count; index += 1) {
-    const x = center.x + (random() - 0.5) * size;
-    const z = center.z + (random() - 0.5) * size;
-    if (Math.hypot(x, z) < originExclusionRadius) continue;
-    if (terrainBiome(terrain, x, z) !== 'forest') continue;
-    const y = terrainHeight(terrain, x, z);
-    const variation = 0.72 + random() * 0.66;
-    scatter.push({
-      id: `scatter-${patch.id ?? `${patch.px},${patch.pz}`}-${index}`,
-      type: 'conifer',
-      x,
-      y,
-      z,
-      radius: (2.7 + random() * 2.2) * variation,
-      height: (9 + random() * 14) * variation,
-      rotation: random() * Math.PI * 2
-    });
-  }
-  return scatter;
-}
+import { clamp, createDefinitions, ensureState, forwardFromRotation, len3, makeRuntimeKit, now, num, terrainHeight, writeState } from './core.js';
 
 function checkpointVolumes(state) {
   return (state.checkpoints?.items ?? []).map((checkpoint) => ({
@@ -106,6 +28,7 @@ function liftVolumes(state) {
 }
 
 function activeLiftIds(state, volumes = liftVolumes(state)) {
+  if (Array.isArray(state.liftVolumes?.activeIds)) return state.liftVolumes.activeIds.slice();
   const body = state.body ?? {};
   return volumes
     .filter((volume) => {
@@ -118,12 +41,14 @@ function activeLiftIds(state, volumes = liftVolumes(state)) {
 
 function buildBodyDescriptor(state) {
   const body = state.body ?? {};
-  const ground = terrainHeight(state.terrain, num(body.position?.x), num(body.position?.z));
+  const fallbackGround = terrainHeight(state.terrain, num(body.position?.x), num(body.position?.z));
+  const ground = num(body.lastGroundHeight, fallbackGround);
   return {
     ...body,
     position: { ...(body.position ?? {}) },
     velocity: { ...(body.velocity ?? {}) },
     rotation: { ...(body.rotation ?? {}) },
+    forward: forwardFromRotation(body.rotation),
     speed: num(body.speed, len3(body.velocity)),
     altitude: Math.max(0, num(body.position?.y) - ground),
     grounded: Boolean(body.onGround),
@@ -144,12 +69,14 @@ export function createGenericFlightChallengeKit(NexusRealtime, config = {}) {
     id: GENERIC_FLIGHT_CHALLENGE_KIT_DEFINITION.id,
     provides: GENERIC_FLIGHT_CHALLENGE_KIT_DEFINITION.provides,
     requires: GENERIC_FLIGHT_CHALLENGE_KIT_DEFINITION.requires,
+    events: { ChallengeCompleted: definitions.ChallengeCompleted },
     resources: { State: definitions.State },
     systems: [{ phase: 'resolve', name: 'generic-flight-challenge-system', system(world) {
       const state = ensureState(world, definitions, config);
       const checkpoints = state.checkpoints?.collectedIds?.length ?? 0;
       const targetCheckpoints = Math.max(1, Math.floor(num(config.targetCheckpoints, 12)));
       const completed = checkpoints >= targetCheckpoints;
+      if (completed && !state.challenge?.completed) world.emit(definitions.ChallengeCompleted, { checkpoints, targetCheckpoints, score: num(state.checkpoints?.score) });
       const altitude = buildBodyDescriptor(state).altitude;
       state.challenge = {
         ...(state.challenge ?? {}),
@@ -184,15 +111,23 @@ export function createGenericFlightCameraKit(NexusRealtime, config = {}) {
       const state = ensureState(world, definitions, config);
       const body = state.body ?? {};
       const forward = forwardFromRotation(body.rotation);
-      const right = rightFromYaw(body.rotation?.yaw);
-      const followOffset = { x: 0, y: 4.2, z: 17.5, ...(config.followOffset ?? {}) };
-      let position = { ...(body.position ?? {}) };
-      position = addScaled(position, right, followOffset.x);
-      position = addScaled(position, { x: 0, y: 1, z: 0 }, followOffset.y);
-      position = addScaled(position, forward, -followOffset.z);
-      const lookAt = addScaled(body.position, forward, num(config.lookAhead, 20));
+      const follow = { distance: num(config.distance, 18), height: num(config.height, 4.4), lookAhead: num(config.lookAhead, 24) };
       const speedFactor = clamp((len3(body.velocity) - num(config.speedThreshold, 55)) / Math.max(1, num(config.maxSpeed, 155) - num(config.speedThreshold, 55)), 0, 1);
-      state.camera = { position, lookAt, fov: num(config.fov, 65) + speedFactor * num(config.speedFovBoost, 18), mode: 'flight-follow' };
+      state.camera = {
+        position: {
+          x: num(body.position?.x) - forward.x * follow.distance,
+          y: num(body.position?.y) + follow.height - forward.y * num(config.pitchPullback, 3.2),
+          z: num(body.position?.z) - forward.z * follow.distance
+        },
+        lookAt: {
+          x: num(body.position?.x) + forward.x * follow.lookAhead,
+          y: num(body.position?.y) + forward.y * follow.lookAhead,
+          z: num(body.position?.z) + forward.z * follow.lookAhead
+        },
+        fov: num(config.fov, 65) + speedFactor * num(config.speedFovBoost, 18),
+        mode: 'flight-follow',
+        smoothing: num(config.smoothing, 8)
+      };
       writeState(world, definitions, state);
     } }],
     install({ engine, world }) { engine.genericFlightCamera = { getState: () => ensureState(world, definitions, config).camera }; },
@@ -215,15 +150,14 @@ export function createGenericFlightVfxKit(NexusRealtime, config = {}) {
     resources: { State: definitions.State },
     systems: [{ phase: 'resolve', name: 'generic-flight-vfx-system', system(world) {
       const state = ensureState(world, definitions, config);
-      const random = createRng(`${state.seed}:flight-vfx`);
       const count = Math.max(0, Math.floor(num(config.trailCount, 20)));
       const speed = len3(state.body?.velocity);
       const speedFactor = clamp((speed - num(config.trailSpeedThreshold, 55)) / Math.max(1, num(config.maxSpeed, 155) - num(config.trailSpeedThreshold, 55)), 0, 1);
       const trails = Array.from({ length: count }, (_, index) => ({
         id: `trail-${index}`,
-        length: 12 + random() * 18,
-        offset: { x: (random() - 0.5) * 70, y: (random() - 0.5) * 36, z: (random() - 0.5) * 80 },
-        opacity: speedFactor * (0.1 + random() * 0.12)
+        length: 12 + (index % 9) * 2,
+        offset: { x: ((index * 37) % 70) - 35, y: ((index * 19) % 36) - 18, z: ((index * 53) % 80) - 40 },
+        opacity: speedFactor * (0.1 + (index % 5) * 0.02)
       }));
       const lastBoost = num(state.boost?.lastTriggeredAt, -999);
       state.vfx = { trails, speedFactor, boostFlash: clamp(1 - (now(world) - lastBoost) / num(config.boostFlashSeconds, 0.55), 0, 1) };
@@ -266,24 +200,26 @@ export function createGenericFlightAudioKit(NexusRealtime, config = {}) {
 export const GENERIC_AERIAL_RENDER_DESCRIPTOR_KIT_DEFINITION = Object.freeze({
   id: 'generic-aerial-render-descriptor-kit',
   provides: ['render:aerial-descriptors'],
-  requires: ['environment:sky', 'world:patch-window', 'aerial:checkpoint-volume', 'aerial:lift-volume', 'ai:flock-agent', 'challenge:flight', 'camera:flight-follow', 'vfx:flight', 'audio:flight-descriptor'],
+  requires: ['environment:sky', 'world:streaming-descriptors', 'aerial:checkpoint-volume', 'aerial:lift-volume', 'ai:flock-agent', 'challenge:flight', 'camera:flight-follow', 'vfx:flight', 'audio:flight-descriptor'],
   purpose: 'Single renderer-facing descriptor snapshot for aerial hosts.'
 });
 export function createGenericAerialRenderDescriptorKit(NexusRealtime, config = {}) {
   const definitions = createDefinitions(NexusRealtime);
   function buildDescriptor(world, state) {
     const body = buildBodyDescriptor(state);
-    const patches = (state.world?.patches ?? []).map((patch) => {
-      const grid = terrainSampleGrid(state, patch, config.terrain ?? config);
-      return { ...patch, key: patch.id, ...grid, scatter: scatterForPatch(state, patch, config.terrain ?? config) };
-    });
+    const patches = (state.world?.patches ?? []).map((patch) => ({
+      ...patch,
+      key: patch.key ?? patch.id,
+      samples: patch.samples ?? [],
+      scatter: patch.scatter ?? [],
+      sampleSegments: num(patch.sampleSegments, num(state.terrain?.sampleSegments, 28))
+    }));
     const checkpoints = checkpointVolumes(state);
     const lifts = liftVolumes(state);
     const activeIds = activeLiftIds(state, lifts);
     return {
       version: state.version,
       elapsed: now(world),
-      delta: dt(world),
       sky: state.sky ?? {},
       terrain: state.terrain ?? {},
       body,
