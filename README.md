@@ -18,6 +18,38 @@ Demo:
 protokits/ocean-boat-kit/demo.html
 ```
 
+## Render Layer / Visual Pipeline Kit
+
+Renderer-agnostic visual composition kits for mesh layering, material-library state, fog volumes, and cheap volumetric-light descriptors.
+
+These kits do not draw to Canvas, WebGL, or Three.js. They output stable resources that a host renderer can consume.
+
+```js
+import {
+  createRenderLayerKit,
+  createVisualPipelineKit,
+  createFoglineVisualPreset
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/render-layer-kit/index.js";
+
+const realismKit = NexusRealtime.createRealismKit({
+  preset: createFoglineVisualPreset(),
+  quality: "adaptive"
+});
+
+const renderLayerKit = createRenderLayerKit(NexusRealtime, {
+  renderDescriptorResource: NexusRealtime.RenderDescriptorState,
+  realismSnapshotResource: realismKit.definitions.resources.RealismSnapshot,
+  preset: createFoglineVisualPreset()
+});
+```
+
+### Visual Pipeline Kit List
+
+- `createRenderLayerKit` / `createVisualPipelineKit` — stable render buckets, material library, fog-volume state, volumetric-light descriptors, and visual validation.
+- `createFoglineVisualPreset` — a dark forest visual preset for high-fidelity Fogline-style Canvas/WebGL/Three hosts.
+- `createRenderLayerSnapshot` — headless helper for descriptor sorting and bucket inspection.
+- `createMaterialLibrarySnapshot` — headless helper for material-library inspection.
+
 ## Arcade Race Kits
 
 Generic ECS racing kits for downhill arcade racing, kart-like pack pacing, sliding traversal, AI driving, hazards, boosts, contact, procedural course pacing, and renderer-agnostic low-poly descriptors.
@@ -109,6 +141,10 @@ Advanced hosts can import `createNextLedgeCloudClimbKits()` from the same preset
 ```txt
 protokits/
   ocean-boat-kit/
+    index.js
+    demo.html
+    README.md
+  render-layer-kit/
     index.js
     demo.html
     README.md
