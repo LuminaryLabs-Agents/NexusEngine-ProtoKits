@@ -136,6 +136,46 @@ Advanced hosts can import `createNextLedgeCloudClimbKits()` from the same preset
 - `climb-risk-kit` — reach, stamina cost, momentum, and risk evaluation without forcing a HUD.
 - `next-ledge-kit` — high-level click-to-climb and rope-swing game coordinator.
 
+## Generic Open-World / Flight Kits
+
+Composable renderer-agnostic kits for open-world games, flight games, traversal games, and seeded procedural worlds.
+
+These kits are generic by design. A game such as `Sora` should be a preset and data file over the generic kits, not a set of bird-only engine modules.
+
+```js
+import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+import {
+  createSoraFlightGame,
+  createSoraFlightKits
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/sora-flight-preset/index.js";
+
+const game = createSoraFlightGame(NexusRealtime, {
+  seed: "sora-sunlit-v1",
+  mode: "hybrid",
+  quality: "adaptive"
+});
+```
+
+Advanced hosts can import `createSoraFlightKits()` and compose the kit list manually.
+
+### Generic World / Flight Kit List
+
+- `data-registry-kit` — one root static/seeded/hybrid `GameData` registry with scoped seeds, namespaces, overrides, and snapshots.
+- `performance-budget-kit` — adaptive quality tiers, patch radius, instance budgets, shadow budgets, LOD flags, and debug metrics.
+- `sky-atmosphere-kit` — sky dome, sun, fog, haze, and cloud layer descriptors.
+- `lighting-descriptor-kit` — warm sun, hemisphere fill, shadows, fog, tone mapping, and renderer quality descriptors.
+- `material-palette-kit` — reusable material descriptors for terrain, trees, rocks, actors, clouds, rings, and effects.
+- `terrain-sampler-kit` — one canonical terrain height, normal, biome, and patch descriptor query surface.
+- `world-patch-kit` — patch/chunk lifecycle, nearby patch loading, distant patch pruning, and seeded patch descriptors.
+- `scatter-placement-kit` — seeded patch-aware object placement for trees, rocks, clouds, pickups, hazards, and props.
+- `instanced-render-kit` — renderer-facing instanced batch descriptors grouped by layer, kind, archetype, and material.
+- `flight-motion-kit` — generic glider-style pitch, roll, yaw, lift, drag, boost, stall, and terrain collision state.
+- `actor-render-kit` — actor part, socket, pose, bank, speed, wing, and trail descriptors.
+- `flock-agent-kit` — generic companion swarm/follow agents for birds, drones, fish, boats, or cars.
+- `updraft-volume-kit` — generic wind/current/lift force volumes and visual descriptors.
+- `checkpoint-volume-kit` — generic ring, gate, pickup, checkpoint, and boost-trigger volumes.
+- `sora-flight-preset` — example preset/data composition that turns the generic stack into a sunlit bird flight game.
+
 ## Structure
 
 ```txt
@@ -198,4 +238,35 @@ protokits/
     index.js
     cloud-climb-preset.js
     README.md
+  data-registry-kit/
+    index.js
+  performance-budget-kit/
+    index.js
+  sky-atmosphere-kit/
+    index.js
+  lighting-descriptor-kit/
+    index.js
+  material-palette-kit/
+    index.js
+  terrain-sampler-kit/
+    index.js
+  world-patch-kit/
+    index.js
+  scatter-placement-kit/
+    index.js
+  instanced-render-kit/
+    index.js
+  flight-motion-kit/
+    index.js
+  actor-render-kit/
+    index.js
+  flock-agent-kit/
+    index.js
+  updraft-volume-kit/
+    index.js
+  checkpoint-volume-kit/
+    index.js
+  sora-flight-preset/
+    index.js
+    sora-data.js
 ```
