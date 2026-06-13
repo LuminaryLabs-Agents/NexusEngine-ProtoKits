@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Action Input Kit Demo</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #03070b; color: #eff8ff; font-family: system-ui, sans-serif; }
+    main { min-height: 100%; display: grid; place-items: center; padding: 24px; }
+    pre { width: min(760px, 100%); min-height: 260px; padding: 18px; border: 1px solid rgba(0,240,255,.28); border-radius: 18px; background: rgba(4,12,20,.82); white-space: pre-wrap; }
+    .hint { color: #9fb6c8; margin: 0 0 12px; }
+  </style>
+</head>
+<body>
+  <main>
+    <section>
+      <p class="hint">Press A/D/W/S, Space, R, N. Move the pointer to update aim. The host captures platform events; the ProtoKit emits contextual actions.</p>
+      <pre id="out">Loading…</pre>
+    </section>
+  </main>
+  <script type="module">
+    import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+    import { createActionInputKit } from "./index.js";
+
+    const engine = NexusRealtime.createRealtimeGame({
+      kits: [createActionInputKit(NexusRealtime, { context: "demo" })]
+    });
+    const out = document.querySelector("#out");
+
+    addEventListener("keydown", (event) => {
+      engine.actionInput.key(event.key.toLowerCase(), true, { source: "demo-key" });
+      if (event.code === "Space") engine.actionInput.press("primary", { source: "demo-space" });
+    });
+    addEventListener("keyup", (event) => {
+      engine.actionInput.key(event.key.toLowerCase(), false, { source: "demo-key" });
+      if (event.code === "Space") engine.actionInput.release("primary", { source: "demo-space" });
+    });
+    addEventListener("blur", () => engine.actionInput.clear({ source: "blur" }));
+    addEventListener("mousemove", (event) => {
+      engine.actionInput.aim(event.clientX - innerWidth / 2, innerHeight / 2 - event.clientY, { source: "pointer" });
+    });
+
+    let last = performance.now();
+    function frame(now) {
+      const dt = Math.min(1 / 30, (now - last) / 1000 || 1 / 60);
+      last = now;
+      engine.tick(dt);
+      out.textContent = JSON.stringify(engine.actionInput.getState(), null, 2);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    window.ActionInputDemo = { engine, getState: () => engine.actionInput.getState() };
+  </script>
+</body>
+</html>
