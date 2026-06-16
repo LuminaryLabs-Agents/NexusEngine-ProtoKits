@@ -3,6 +3,7 @@ export * from './environment.js';
 export * from './flight.js';
 export * from './world.js';
 export * from './descriptors.js';
+export * from './rig.js';
 
 import { createGenericAtmosphereSkyKit, createGenericFlightInputKit, createGenericTerrainSamplerKit } from './environment.js';
 import { createGenericAerialBodyKit, createGenericBoostImpulseKit, createGenericGlidePhysicsKit } from './flight.js';
@@ -14,12 +15,18 @@ import {
   createGenericFlightChallengeKit,
   createGenericFlightVfxKit
 } from './descriptors.js';
+import {
+  createArticulatedRigDescriptorKit,
+  createFlightPoseDriverKit,
+  createProceduralWingFlapKit,
+  createRigAnimationDescriptorKit
+} from './rig.js';
 
 export const GENERIC_AERIAL_ADVENTURE_STACK_DEFINITION = Object.freeze({
   id: 'generic-aerial-adventure-stack',
   provides: ['preset:aerial-adventure'],
   requires: [],
-  purpose: 'Convenience stack for open-world aerial traversal, lift volumes, companion flocks, gates, camera, VFX, audio, challenge state, and render descriptors.'
+  purpose: 'Convenience stack for open-world aerial traversal, lift volumes, companion flocks, gates, articulated rig animation, camera, VFX, audio, challenge state, and render descriptors.'
 });
 
 export function createDefaultGenericAerialAdventureConfig(config = {}) {
@@ -104,6 +111,20 @@ export function createDefaultGenericAerialAdventureConfig(config = {}) {
       trailSpeedThreshold: 48,
       ...(config.vfx ?? {})
     },
+    rig: {
+      wingSpan: 8.6,
+      innerWingLength: 3.8,
+      outerWingLength: 3.25,
+      baseFlapRate: 3.15,
+      speedFlapRate: 0.012,
+      maxAmplitude: 0.68,
+      tipLag: 0.55,
+      tipFold: 0.72,
+      boostAmplitude: 0.28,
+      climbAmplitude: 0.24,
+      glideFlattening: 0.82,
+      ...(config.rig ?? {})
+    },
     audio: {
       maxGain: 0.22,
       ...(config.audio ?? {})
@@ -134,6 +155,10 @@ export function createGenericAerialAdventureKits(NexusRealtime, config = {}) {
     createGenericFlightChallengeKit(NexusRealtime, shared.challenge),
     createGenericFlightCameraKit(NexusRealtime, shared.camera),
     createGenericFlightVfxKit(NexusRealtime, shared.vfx),
+    createArticulatedRigDescriptorKit(NexusRealtime, shared.rig),
+    createProceduralWingFlapKit(NexusRealtime, shared.rig),
+    createFlightPoseDriverKit(NexusRealtime, shared.rig),
+    createRigAnimationDescriptorKit(NexusRealtime, shared.rig),
     createGenericFlightAudioKit(NexusRealtime, shared.audio),
     createGenericAerialRenderDescriptorKit(NexusRealtime, shared)
   ];
