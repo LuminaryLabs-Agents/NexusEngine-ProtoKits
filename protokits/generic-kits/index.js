@@ -1,4 +1,5 @@
 export { createGenericProtoKit, GENERIC_KIT_UTILS_VERSION } from "../generic-kit-utils/index.js";
+export * from "../domain-service-kits/index.js";
 
 export { createGenericSeedKit, GENERIC_SEED_KIT_DEFINITION } from "../generic-seed-kit/index.js";
 export { createGenericClockKit, GENERIC_CLOCK_KIT_DEFINITION } from "../generic-clock-kit/index.js";
