@@ -230,6 +230,7 @@ export function createGenericAerialRenderDescriptorKit(NexusRealtime, config = {
       challenge: state.challenge ?? {},
       camera: state.camera ?? {},
       vfx: state.vfx ?? {},
+      rig: state.rig ?? {},
       audio: state.audio ?? {}
     };
   }
