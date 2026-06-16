@@ -81,6 +81,8 @@
   },
   "files": [
     "KITS.md",
+    "README-DSM-ADDENDUM.md",
+    "docs",
     "protokits",
     "apps",
     "scripts",
