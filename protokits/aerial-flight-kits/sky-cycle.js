@@ -1,6 +1,6 @@
 import { clamp, createDefinitions, ensureState, makeRuntimeKit, norm3, now, num, writeState } from './core.js';
 
-export const SKY_CYCLE_KIT_VERSION = '0.1.0';
+export const SKY_CYCLE_KIT_VERSION = '0.1.1';
 
 function blend(a, b, t) {
   const k = clamp(t, 0, 1);
@@ -21,24 +21,27 @@ function smooth(value) {
 
 function cycleSky(world, config = {}) {
   const dayLengthSeconds = Math.max(1, num(config.dayLengthSeconds, 600));
-  const timeOfDay = ((now(world) / dayLengthSeconds + num(config.startOffset, 0.18)) % 1 + 1) % 1;
+  const timeOfDay = ((now(world) / dayLengthSeconds + num(config.startOffset, 0.245)) % 1 + 1) % 1;
   const angle = timeOfDay * Math.PI * 2;
   const elevation = Math.sin(angle - Math.PI * 0.5);
   const day = smooth((elevation + 0.08) / 0.36);
   const twilight = clamp(1 - Math.abs(elevation - 0.02) / 0.26, 0, 1);
+  const sunrise = clamp(1 - Math.abs(timeOfDay - 0.255) / 0.075, 0, 1);
+  const sunset = clamp(1 - Math.abs(timeOfDay - 0.745) / 0.075, 0, 1);
+  const horizonGlow = Math.max(sunrise, sunset * 0.74, twilight * 0.55);
   const azimuth = angle + Math.PI * 0.15;
   const topColor = blend(blend(config.nightTopColor ?? '#07111d', config.dayTopColor ?? '#42a5f5', day), config.twilightTopColor ?? '#315d8f', twilight * 0.42);
-  const horizonColor = blend(blend(config.nightHorizonColor ?? '#151b2d', config.dayHorizonColor ?? '#ffdfb3', day), config.twilightHorizonColor ?? '#ff9e64', twilight * 0.68);
+  const horizonColor = blend(blend(config.nightHorizonColor ?? '#151b2d', config.dayHorizonColor ?? '#ffdfb3', day), config.twilightHorizonColor ?? '#ff9e64', horizonGlow * 0.82);
   return {
     topColor,
     horizonColor,
     sunColor: blend(config.nightSunColor ?? '#9fbaff', config.daySunColor ?? '#fff8e1', day),
     ambientColor: blend(config.nightAmbientColor ?? '#263858', config.dayAmbientColor ?? '#b3e5fc', day),
     sunDirection: norm3({ x: Math.cos(azimuth), y: Math.max(-0.22, elevation), z: Math.sin(azimuth) }),
-    sunIntensity: num(config.minSunIntensity, 0.08) + day * (num(config.maxSunIntensity, 3.8) - num(config.minSunIntensity, 0.08)),
-    ambientIntensity: num(config.minAmbientIntensity, 0.08) + day * (num(config.maxAmbientIntensity, 0.55) - num(config.minAmbientIntensity, 0.08)),
-    hazeDensity: num(config.nightHazeDensity, 0.0018) + day * (num(config.dayHazeDensity, 0.0012) - num(config.nightHazeDensity, 0.0018)),
-    cycle: { enabled: true, dayLengthSeconds, timeOfDay, elevation, day, twilight, label: elevation < -0.12 ? 'night' : elevation < 0.12 ? 'twilight' : 'day' }
+    sunIntensity: num(config.minSunIntensity, 0.08) + day * (num(config.maxSunIntensity, 3.8) - num(config.minSunIntensity, 0.08)) + sunrise * num(config.sunriseBoost, 0.55),
+    ambientIntensity: num(config.minAmbientIntensity, 0.08) + day * (num(config.maxAmbientIntensity, 0.55) - num(config.minAmbientIntensity, 0.08)) + sunrise * 0.08,
+    hazeDensity: num(config.nightHazeDensity, 0.0018) + day * (num(config.dayHazeDensity, 0.0012) - num(config.nightHazeDensity, 0.0018)) + sunrise * num(config.sunriseHazeBoost, 0.00065),
+    cycle: { enabled: true, dayLengthSeconds, timeOfDay, elevation, day, twilight, sunrise, sunset, horizonGlow, label: sunrise > 0.35 ? 'sunrise' : sunset > 0.35 ? 'sunset' : elevation < -0.12 ? 'night' : elevation < 0.12 ? 'twilight' : 'day' }
   };
 }
 
