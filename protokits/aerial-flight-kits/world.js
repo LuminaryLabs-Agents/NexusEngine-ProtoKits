@@ -1,5 +1,7 @@
 import { add3, clamp, createDefinitions, createRng, dt, ensureState, forwardFromRotation, hashString, installApi, len3, makeRuntimeKit, mul3, norm3, now, num, terrainHeight, terrainNormal, writeState } from './core.js';
 
+export const TERRAIN_STREAMER_KIT_VERSION = '0.4.0';
+
 function stableUnit(seed) {
   return (hashString(seed) % 1000003) / 1000003;
 }
@@ -41,27 +43,112 @@ function materialAt(world, state, config, x, z) {
   return query?.materialAt?.(x, z) ?? biomeAt(world, state, config, x, z);
 }
 
-function patchId(px, pz) {
-  return `${px},${pz}`;
+function patchId(lod, px, pz) {
+  return `${lod}:${px},${pz}`;
 }
 
-function patchRevisionKey(queryVersion, segments, size) {
-  return `${queryVersion}:${segments}:${size}`;
+function patchRevisionKey(queryVersion, lod, segments, size, qualityTier) {
+  return `${queryVersion}:${lod}:${segments}:${size}:${qualityTier}`;
 }
 
-function activePatchCoordinates(state, config) {
-  const size = num(config.patchSize, num(state.terrain.patchSize, 420));
-  const radius = Math.max(0, Math.floor(num(config.renderDistance ?? config.renderRadius, 2)));
-  const centerX = Math.round(num(state.body?.position?.x) / size);
-  const centerZ = Math.round(num(state.body?.position?.z) / size);
+function qualityTierOf(state, config = {}) {
+  const tier = state.world?.qualityTier ?? config.qualityTier ?? config.quality ?? 'medium';
+  return ['low', 'medium', 'high', 'adaptive'].includes(tier) ? tier : 'medium';
+}
+
+function defaultLodRings(tier = 'medium') {
+  if (tier === 'low') {
+    return [
+      { id: 'near', radius: 1, patchSize: 1100, sampleSegments: 8, collision: true, scatterDensity: 0.000016 },
+      { id: 'mid', radius: 1, patchSize: 2200, sampleSegments: 4, collision: false, scatterDensity: 0.000004 },
+      { id: 'far', radius: 1, patchSize: 4400, sampleSegments: 2, collision: false, scatterDensity: 0 }
+    ];
+  }
+  if (tier === 'high') {
+    return [
+      { id: 'near', radius: 2, patchSize: 800, sampleSegments: 16, collision: true, scatterDensity: 0.000034 },
+      { id: 'mid', radius: 2, patchSize: 1600, sampleSegments: 8, collision: false, scatterDensity: 0.000012 },
+      { id: 'far', radius: 2, patchSize: 3200, sampleSegments: 4, collision: false, scatterDensity: 0 }
+    ];
+  }
+  return [
+    { id: 'near', radius: 1, patchSize: 900, sampleSegments: 14, collision: true, scatterDensity: 0.000026 },
+    { id: 'mid', radius: 2, patchSize: 1800, sampleSegments: 7, collision: false, scatterDensity: 0.000008 },
+    { id: 'far', radius: 2, patchSize: 3600, sampleSegments: 3, collision: false, scatterDensity: 0 }
+  ];
+}
+
+function normalizeLodRings(state, config = {}) {
+  const tier = qualityTierOf(state, config);
+  const explicit = Array.isArray(config.lodRings) && config.lodRings.length ? config.lodRings : defaultLodRings(tier);
+  return explicit.map((ring, index) => ({
+    id: ring.id ?? ['near', 'mid', 'far'][index] ?? `lod-${index}`,
+    index,
+    radius: Math.max(0, Math.floor(num(ring.radius, index === 0 ? 1 : 2))),
+    patchSize: num(ring.patchSize ?? ring.size, num(config.patchSize, num(state.terrain.patchSize, 900 * (index + 1)))),
+    sampleSegments: Math.max(2, Math.floor(num(ring.sampleSegments ?? ring.segments, Math.max(3, 14 - index * 5)))),
+    collision: ring.collision ?? index === 0,
+    scatterDensity: num(ring.scatterDensity, index === 0 ? num(config.scatterDensity, 0.000026) : 0),
+    preloadSeconds: num(ring.preloadSeconds, num(config.preloadSeconds, 4)),
+    forwardBias: num(ring.forwardBias, num(config.forwardPreloadBias, 0.65)),
+    materialScale: num(ring.materialScale, index === 0 ? 1 : index === 1 ? 0.42 : 0.16)
+  }));
+}
+
+function predictedPosition(state, seconds) {
+  const p = state.body?.position ?? {};
+  const v = state.body?.velocity ?? {};
+  return {
+    x: num(p.x) + num(v.x) * seconds,
+    y: num(p.y) + num(v.y) * seconds,
+    z: num(p.z) + num(v.z) * seconds
+  };
+}
+
+function coordsForCenter(center, ring) {
+  const centerX = Math.round(num(center.x) / ring.patchSize);
+  const centerZ = Math.round(num(center.z) / ring.patchSize);
   const coords = [];
-  for (let dz = -radius; dz <= radius; dz += 1) {
-    for (let dx = -radius; dx <= radius; dx += 1) {
-      coords.push({ px: centerX + dx, pz: centerZ + dz, size, priority: Math.abs(dx) + Math.abs(dz) + Math.hypot(dx, dz) * 0.001 });
+  for (let dz = -ring.radius; dz <= ring.radius; dz += 1) {
+    for (let dx = -ring.radius; dx <= ring.radius; dx += 1) {
+      coords.push({
+        lod: ring.id,
+        lodIndex: ring.index,
+        px: centerX + dx,
+        pz: centerZ + dz,
+        size: ring.patchSize,
+        sampleSegments: ring.sampleSegments,
+        collision: Boolean(ring.collision),
+        scatterDensity: ring.scatterDensity,
+        materialScale: ring.materialScale,
+        priority: Math.abs(dx) + Math.abs(dz) + Math.hypot(dx, dz) * 0.001,
+        preload: false
+      });
     }
   }
-  coords.sort((a, b) => a.priority - b.priority || a.px - b.px || a.pz - b.pz);
-  return { centerX, centerZ, size, radius, coords };
+  return coords;
+}
+
+function planLodPatches(state, config) {
+  const rings = normalizeLodRings(state, config);
+  const position = state.body?.position ?? { x: 0, z: 0 };
+  const map = new Map();
+  for (const ring of rings) {
+    for (const coord of coordsForCenter(position, ring)) {
+      map.set(patchId(coord.lod, coord.px, coord.pz), coord);
+    }
+    const predicted = predictedPosition(state, ring.preloadSeconds);
+    for (const coord of coordsForCenter(predicted, ring)) {
+      const id = patchId(coord.lod, coord.px, coord.pz);
+      const previous = map.get(id);
+      const priority = coord.priority * (1 - clamp(ring.forwardBias, 0, 0.9)) + ring.index * 0.75;
+      if (!previous || priority < previous.priority) {
+        map.set(id, { ...coord, preload: true, priority });
+      }
+    }
+  }
+  const coords = Array.from(map.values()).sort((a, b) => a.lodIndex - b.lodIndex || a.priority - b.priority || patchId(a.lod, a.px, a.pz).localeCompare(patchId(b.lod, b.px, b.pz)));
+  return { rings, coords };
 }
 
 function sampleTerrain(world, state, config, query, x, z) {
@@ -72,16 +159,16 @@ function sampleTerrain(world, state, config, query, x, z) {
   return { x, y, z, normal, biome, material: material ?? biome };
 }
 
-function createScatterForPatch(world, state, config, px, pz, size, query = terrainQueryFromConfig(world, config)) {
-  const density = num(config.scatterDensity, 0.000075);
-  const count = Math.max(0, Math.round(size * size * density));
+function createScatterForPatch(world, state, config, coord, query = terrainQueryFromConfig(world, config)) {
+  const density = num(coord.scatterDensity, num(config.scatterDensity, 0.000026));
+  const count = Math.max(0, Math.round(coord.size * coord.size * density));
   const items = [];
-  const key = patchId(px, pz);
-  const centerX = px * size;
-  const centerZ = pz * size;
+  const key = patchId(coord.lod, coord.px, coord.pz);
+  const centerX = coord.px * coord.size;
+  const centerZ = coord.pz * coord.size;
   for (let i = 0; i < count; i += 1) {
-    const x = centerX - size / 2 + stableUnit(`${state.seed}:${key}:tree:${i}:x`) * size;
-    const z = centerZ - size / 2 + stableUnit(`${state.seed}:${key}:tree:${i}:z`) * size;
+    const x = centerX - coord.size / 2 + stableUnit(`${state.seed}:${key}:tree:${i}:x`) * coord.size;
+    const z = centerZ - coord.size / 2 + stableUnit(`${state.seed}:${key}:tree:${i}:z`) * coord.size;
     const sample = sampleTerrain(world, state, config, query, x, z);
     if (sample.biome !== 'forest' || sample.y < num(state.terrain.waterLevel, -42) + 4 || (1 - sample.normal.y) > num(config.maxScatterSlope, 0.34)) continue;
     const scale = 0.75 + stableUnit(`${state.seed}:${key}:tree:${i}:s`) * 0.65;
@@ -90,42 +177,51 @@ function createScatterForPatch(world, state, config, px, pz, size, query = terra
   return items;
 }
 
-function createPatchDescriptor(world, state, config, px, pz, size, options = {}) {
-  const segments = Math.max(4, Math.floor(num(config.sampleSegments, num(state.terrain.sampleSegments, 28))));
+function createPatchDescriptor(world, state, config, coord, options = {}) {
+  const segments = Math.max(2, Math.floor(num(coord.sampleSegments, num(config.sampleSegments, num(state.terrain.sampleSegments, 12)))));
   const query = options.query ?? terrainQueryFromConfig(world, config);
-  const centerX = px * size;
-  const centerZ = pz * size;
+  const centerX = coord.px * coord.size;
+  const centerZ = coord.pz * coord.size;
   const samples = [];
   for (let zIndex = 0; zIndex <= segments; zIndex += 1) {
     for (let xIndex = 0; xIndex <= segments; xIndex += 1) {
-      const x = centerX - size / 2 + (xIndex / segments) * size;
-      const z = centerZ - size / 2 + (zIndex / segments) * size;
+      const x = centerX - coord.size / 2 + (xIndex / segments) * coord.size;
+      const z = centerZ - coord.size / 2 + (zIndex / segments) * coord.size;
       samples.push(sampleTerrain(world, state, config, query, x, z));
     }
   }
-  const id = patchId(px, pz);
+  const id = patchId(coord.lod, coord.px, coord.pz);
   return {
     id,
     key: id,
-    px,
-    pz,
-    size,
+    lod: coord.lod,
+    lodIndex: coord.lodIndex,
+    interactive: coord.collision !== false,
+    visualOnly: coord.collision === false,
+    preload: Boolean(coord.preload),
+    priority: coord.priority,
+    px: coord.px,
+    pz: coord.pz,
+    size: coord.size,
     sampleSegments: segments,
+    materialScale: coord.materialScale,
+    materialDescriptorId: 'terrainStreamer.material',
     samples,
-    scatter: createScatterForPatch(world, state, config, px, pz, size, query),
-    revision: options.revision ?? patchRevisionKey(options.queryVersion ?? 0, segments, size),
+    scatter: createScatterForPatch(world, state, config, coord, query),
+    revision: options.revision ?? patchRevisionKey(options.queryVersion ?? 0, coord.lod, segments, coord.size, qualityTierOf(state, config)),
     status: 'ready',
-    builtAt: options.frame ?? 0
+    builtAt: options.frame ?? 0,
+    estimatedBuildCost: (segments + 1) * (segments + 1)
   };
 }
 
-function queuePatchBuilds(state, coords, revision, desiredSet) {
+function queuePatchBuilds(state, coords, revisions, desiredSet) {
   const current = Array.isArray(state.world?.buildQueue) ? state.world.buildQueue.filter((id) => desiredSet.has(id)) : [];
   const queued = new Set(current);
   for (const coord of coords) {
-    const id = patchId(coord.px, coord.pz);
+    const id = patchId(coord.lod, coord.px, coord.pz);
     const patch = state.world?.patchRegistry?.[id];
-    if (patch?.revision === revision) continue;
+    if (patch?.revision === revisions[id]) continue;
     if (!queued.has(id)) {
       current.push(id);
       queued.add(id);
@@ -134,97 +230,205 @@ function queuePatchBuilds(state, coords, revision, desiredSet) {
   return current;
 }
 
-function reconcileWorldPatchRegistry(world, state, config) {
-  const { centerX, centerZ, size, radius, coords } = activePatchCoordinates(state, config);
+function createTerrainMaterialDescriptor(state, config) {
+  return {
+    id: 'terrainStreamer.material',
+    version: TERRAIN_STREAMER_KIT_VERSION,
+    qualityTier: qualityTierOf(state, config),
+    shader: 'world-space-banded-terrain',
+    detailNoiseScale: num(config.detailNoiseScale, 0.018),
+    macroNoiseScale: num(config.macroNoiseScale, 0.0026),
+    slopeDarkening: num(config.slopeDarkening, 0.32),
+    altitudeBands: config.altitudeBands ?? [
+      { max: -35, color: '#d9ad6a' },
+      { max: 58, color: '#1f4a29' },
+      { max: 135, color: '#3f6f3d' },
+      { max: 10000, color: '#7e8f9c' }
+    ],
+    biomeColors: {
+      shore: '#d9ad6a',
+      forest: '#1f4a29',
+      rock: '#6f7678',
+      alpine: '#a6b0b7',
+      ...(config.biomeColors ?? {})
+    }
+  };
+}
+
+function createFarTerrainDescriptor(state, config, rings) {
+  const far = rings[rings.length - 1] ?? {};
+  const position = state.body?.position ?? {};
+  const radius = num(far.patchSize, 3600) * Math.max(2, num(far.radius, 2));
+  return {
+    id: 'terrainStreamer.farTerrain',
+    enabled: config.farTerrain !== false,
+    center: { x: num(position.x), z: num(position.z) },
+    innerRadius: radius * 0.55,
+    outerRadius: radius * 1.9,
+    sampleSegments: Math.max(2, Math.floor(num(far.sampleSegments, 3))),
+    materialDescriptorId: 'terrainStreamer.material',
+    horizonFade: num(config.horizonFade, 0.72),
+    visualOnly: true
+  };
+}
+
+function createHorizonTerrainDescriptor(state, config) {
+  return {
+    id: 'terrainStreamer.horizonTerrain',
+    enabled: config.horizonTerrain !== false,
+    seed: state.seed,
+    bandCount: Math.max(3, Math.floor(num(config.horizonBandCount, 7))),
+    mountainScale: num(config.horizonMountainScale, 0.18),
+    haze: num(config.horizonHaze, 0.62),
+    colors: config.horizonColors ?? ['#19262b', '#31434a', '#8fa0a6']
+  };
+}
+
+function qualityAdjustedBuilds(state, config, queueLength) {
+  const tier = qualityTierOf(state, config);
+  const configured = Math.max(1, Math.floor(num(config.maxPatchBuildsPerTick, num(config.patchBuildBudget, 1))));
+  if (tier === 'low') return 1;
+  if (tier === 'high') return Math.max(configured, 2);
+  if (tier === 'adaptive' && queueLength > 18) return Math.min(2, Math.max(1, configured + 1));
+  return configured;
+}
+
+function reconcileTerrainStreamer(world, state, config) {
   const query = terrainQueryFromConfig(world, config);
   const queryVersion = query?.queryVersion ?? 0;
-  const segments = Math.max(4, Math.floor(num(config.sampleSegments, num(state.terrain.sampleSegments, 28))));
-  const revision = patchRevisionKey(queryVersion, segments, size);
-  const desiredIds = coords.map((coord) => patchId(coord.px, coord.pz));
-  const desiredSet = new Set(desiredIds);
+  const { rings, coords } = planLodPatches(state, config);
   const previousWorld = state.world ?? {};
   const patchRegistry = {
     ...(previousWorld.patchRegistry ?? Object.fromEntries((previousWorld.patches ?? []).filter(Boolean).map((patch) => [patch.id ?? patch.key, patch])))
   };
-  const priority = Object.fromEntries(coords.map((coord) => [patchId(coord.px, coord.pz), coord.priority]));
-  let buildQueue = queuePatchBuilds({ ...state, world: { ...previousWorld, patchRegistry } }, coords, revision, desiredSet)
+  const desiredIds = coords.map((coord) => patchId(coord.lod, coord.px, coord.pz));
+  const desiredSet = new Set(desiredIds);
+  const coordById = Object.fromEntries(coords.map((coord) => [patchId(coord.lod, coord.px, coord.pz), coord]));
+  const priority = Object.fromEntries(coords.map((coord) => [patchId(coord.lod, coord.px, coord.pz), coord.priority + coord.lodIndex * 10]));
+  const revisions = Object.fromEntries(coords.map((coord) => [patchId(coord.lod, coord.px, coord.pz), patchRevisionKey(queryVersion, coord.lod, coord.sampleSegments, coord.size, qualityTierOf(state, config))]));
+  let buildQueue = queuePatchBuilds({ ...state, world: { ...previousWorld, patchRegistry } }, coords, revisions, desiredSet)
     .sort((a, b) => num(priority[a], 9999) - num(priority[b], 9999) || a.localeCompare(b));
 
   const firstBuild = Object.keys(patchRegistry).length === 0;
-  const maxBuilds = Math.max(1, Math.floor(num(firstBuild ? (config.initialPatchBuilds ?? config.maxPatchBuildsPerTick) : config.maxPatchBuildsPerTick, num(config.patchBuildBudget, 2))));
+  const maxBuilds = Math.max(1, Math.floor(firstBuild ? num(config.initialPatchBuilds, 3) : qualityAdjustedBuilds(state, config, buildQueue.length)));
   const builtIds = [];
+  let estimatedCost = 0;
   for (let index = 0; index < maxBuilds && buildQueue.length > 0; index += 1) {
     const id = buildQueue.shift();
-    const coord = coords.find((entry) => patchId(entry.px, entry.pz) === id);
+    const coord = coordById[id];
     if (!coord) continue;
-    patchRegistry[id] = createPatchDescriptor(world, state, config, coord.px, coord.pz, coord.size, {
+    const patch = createPatchDescriptor(world, state, config, coord, {
       query,
       queryVersion,
-      revision,
+      revision: revisions[id],
       frame: now(world)
     });
+    patchRegistry[id] = patch;
+    estimatedCost += num(patch.estimatedBuildCost);
     builtIds.push(id);
   }
 
-  const maxCached = Math.max(desiredIds.length, Math.floor(num(config.maxCachedPatches, desiredIds.length + maxBuilds * 8)));
+  const maxCached = Math.max(desiredIds.length, Math.floor(num(config.maxCachedPatches, desiredIds.length + maxBuilds * 10)));
   const staleIds = Object.keys(patchRegistry)
     .filter((id) => !desiredSet.has(id))
-    .sort((a, b) => a.localeCompare(b));
+    .sort((a, b) => num(patchRegistry[b]?.builtAt) - num(patchRegistry[a]?.builtAt));
+  let evictedThisTick = 0;
   while (Object.keys(patchRegistry).length > maxCached && staleIds.length > 0) {
-    delete patchRegistry[staleIds.shift()];
+    delete patchRegistry[staleIds.pop()];
+    evictedThisTick += 1;
   }
 
-  const readyPatches = desiredIds.map((id) => patchRegistry[id]).filter((patch) => patch?.revision === revision);
+  const readyPatches = desiredIds.map((id) => patchRegistry[id]).filter((patch) => patch?.revision === revisions[patch.id]);
+  const lodCounts = {};
+  for (const patch of readyPatches) lodCounts[patch.lod] = (lodCounts[patch.lod] ?? 0) + 1;
+  const previousAverage = num(previousWorld.streamingStats?.averageBuildCost, 0);
+  const averageBuildCost = builtIds.length ? (previousAverage * 0.86 + (estimatedCost / builtIds.length) * 0.14) : previousAverage;
+
   state.world = {
     ...previousWorld,
-    center: { px: centerX, pz: centerZ },
-    radius,
-    patchSize: size,
-    sampleSegments: segments,
+    terrainStreamerVersion: TERRAIN_STREAMER_KIT_VERSION,
+    qualityTier: qualityTierOf(state, config),
+    center: { x: num(state.body?.position?.x), z: num(state.body?.position?.z) },
+    lodRings: rings,
     queryVersion,
-    revision,
-    patchCacheKey: `${centerX},${centerZ}:${radius}:${size}:${queryVersion}:${segments}`,
     desiredPatchIds: desiredIds,
     loadedPatchIds: readyPatches.map((patch) => patch.id),
     pendingPatchIds: buildQueue.slice(),
     buildQueue,
     patchRegistry,
     patches: readyPatches,
+    patchCount: readyPatches.length,
+    farTerrain: createFarTerrainDescriptor(state, config, rings),
+    horizonTerrain: createHorizonTerrainDescriptor(state, config),
+    materialDescriptor: createTerrainMaterialDescriptor(state, config),
+    patchCacheKey: `${qualityTierOf(state, config)}:${queryVersion}:${desiredIds.join('|')}`,
     streamingStats: {
       desired: desiredIds.length,
       ready: readyPatches.length,
       pending: buildQueue.length,
       builtThisTick: builtIds.length,
+      evictedThisTick,
       maxBuildsPerTick: maxBuilds,
       cached: Object.keys(patchRegistry).length,
-      revision
+      lodCounts,
+      averageBuildCost,
+      qualityTier: qualityTierOf(state, config)
     }
   };
 
-  return builtIds.length > 0 || buildQueue.length > 0 || previousWorld.patchCacheKey !== state.world.patchCacheKey || (previousWorld.patches?.length ?? 0) !== readyPatches.length;
+  return builtIds.length > 0 || buildQueue.length > 0 || evictedThisTick > 0 || previousWorld.patchCacheKey !== state.world.patchCacheKey || (previousWorld.patches?.length ?? 0) !== readyPatches.length;
 }
 
-export const GENERIC_WORLD_PATCH_KIT_DEFINITION = Object.freeze({ id: 'generic-world-patch-kit', provides: ['world:patch-window', 'world:streaming-descriptors', 'world:patch-registry', 'world:patch-build-queue'], requires: ['terrain:height-sampler', 'aerial:body'], purpose: 'Budgeted deterministic patch registry with terrain, normal, material, and scatter descriptors.' });
-export function createGenericWorldPatchKit(NexusRealtime, config = {}) {
+function installTerrainStreamerApi(engine, world, definitions, config, key) {
+  engine[key] = {
+    getState() {
+      return ensureState(world, definitions, config).world;
+    },
+    getStats() {
+      return ensureState(world, definitions, config).world?.streamingStats ?? null;
+    },
+    getStreamingState() {
+      return ensureState(world, definitions, config).world?.streamingStats ?? null;
+    },
+    setQuality(tier = 'medium') {
+      const state = ensureState(world, definitions, config);
+      state.world = { ...(state.world ?? {}), qualityTier: tier, patchCacheKey: null, buildQueue: [] };
+      writeState(world, definitions, state);
+      return state.world;
+    },
+    forceRebuild() {
+      const state = ensureState(world, definitions, config);
+      state.world = { ...(state.world ?? {}), patchRegistry: {}, buildQueue: [], patches: [], patchCacheKey: null };
+      writeState(world, definitions, state);
+      return state.world;
+    }
+  };
+  return engine[key];
+}
+
+export const TERRAIN_STREAMER_KIT_DEFINITION = Object.freeze({ id: 'terrain-streamer-kit', provides: ['world:patch-window', 'world:streaming-descriptors', 'world:patch-registry', 'world:patch-build-queue', 'world:terrain-lod', 'world:terrain-preload', 'render:terrain-material-descriptor', 'render:far-terrain', 'render:horizon-terrain'], requires: ['terrain:height-sampler', 'aerial:body'], purpose: 'Domain-service terrain streamer with LOD rings, predictive preload, patch registry, build budget, far terrain, horizon terrain, and material descriptors.' });
+export const GENERIC_WORLD_PATCH_KIT_DEFINITION = TERRAIN_STREAMER_KIT_DEFINITION;
+export function createTerrainStreamerKit(NexusRealtime, config = {}) {
   const definitions = createDefinitions(NexusRealtime);
   return makeRuntimeKit(NexusRealtime, {
-    id: GENERIC_WORLD_PATCH_KIT_DEFINITION.id,
-    provides: GENERIC_WORLD_PATCH_KIT_DEFINITION.provides,
-    requires: GENERIC_WORLD_PATCH_KIT_DEFINITION.requires,
+    id: config.kitId ?? TERRAIN_STREAMER_KIT_DEFINITION.id,
+    provides: TERRAIN_STREAMER_KIT_DEFINITION.provides,
+    requires: TERRAIN_STREAMER_KIT_DEFINITION.requires,
     resources: { State: definitions.State },
-    systems: [{ phase: 'simulate', name: 'generic-world-patch-system', system(world) {
+    systems: [{ phase: 'simulate', name: 'terrain-streamer-system', system(world) {
       const state = ensureState(world, definitions, config);
-      if (reconcileWorldPatchRegistry(world, state, config)) writeState(world, definitions, state);
+      if (reconcileTerrainStreamer(world, state, config)) writeState(world, definitions, state);
     } }],
     install({ engine, world }) {
-      installApi(engine, world, definitions, 'genericWorldPatch', config);
-      engine.genericWorldPatch.getStreamingState = () => {
-        const state = ensureState(world, definitions, config);
-        return state.world?.streamingStats ?? null;
-      };
+      installTerrainStreamerApi(engine, world, definitions, config, 'terrainStreamer');
+      installTerrainStreamerApi(engine, world, definitions, config, 'genericWorldPatch');
     },
-    metadata: GENERIC_WORLD_PATCH_KIT_DEFINITION
+    metadata: TERRAIN_STREAMER_KIT_DEFINITION
   });
+}
+
+export function createGenericWorldPatchKit(NexusRealtime, config = {}) {
+  return createTerrainStreamerKit(NexusRealtime, { ...config, kitId: config.kitId ?? 'generic-world-patch-kit' });
 }
 
 function checkpointForPatch(world, state, config, patch, index) {
@@ -256,7 +460,7 @@ export function createGenericCheckpointVolumeKit(NexusRealtime, config = {}) {
       const state = ensureState(world, definitions, config);
       const density = Math.max(0, Math.floor(num(config.density, 2)));
       const collected = new Set(state.checkpoints?.collectedIds ?? []);
-      const patches = state.world?.patches ?? [];
+      const patches = (state.world?.patches ?? []).filter((patch) => patch?.interactive !== false);
       const items = [];
       let hitId = null;
       for (const patch of patches) {
@@ -297,7 +501,7 @@ export function createGenericLiftVolumeKit(NexusRealtime, config = {}) {
       const density = Math.max(0, Math.floor(num(config.density, 1)));
       const items = [];
       const activeIds = [];
-      for (const patch of state.world?.patches ?? []) {
+      for (const patch of (state.world?.patches ?? []).filter((entry) => entry?.interactive !== false)) {
         for (let index = 0; index < density; index += 1) {
           const volume = liftForPatch(world, state, config, patch, index);
           const horizontal = Math.hypot(num(state.body.position.x) - volume.position.x, num(state.body.position.z) - volume.position.z);
