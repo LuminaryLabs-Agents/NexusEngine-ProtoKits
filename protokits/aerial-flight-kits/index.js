@@ -5,6 +5,7 @@ export * from './world.js';
 export * from './descriptors.js';
 export * from './rig.js';
 export * from './weather.js';
+export * from './sky-cycle.js';
 
 import { createGenericAtmosphereSkyKit, createGenericFlightInputKit, createGenericTerrainSamplerKit } from './environment.js';
 import { createGenericAerialBodyKit, createGenericBoostImpulseKit, createGenericGlidePhysicsKit } from './flight.js';
@@ -26,12 +27,13 @@ import {
   createAtmosphericWeatherKit,
   createVolumetricLightingKit
 } from './weather.js';
+import { createSkyCycleKit } from './sky-cycle.js';
 
 export const GENERIC_AERIAL_ADVENTURE_STACK_DEFINITION = Object.freeze({
   id: 'generic-aerial-adventure-stack',
   provides: ['preset:aerial-adventure'],
   requires: [],
-  purpose: 'Convenience stack for open-world aerial traversal, lift volumes, companion flocks, gates, articulated rig animation, atmospheric weather, volumetric lighting, camera, VFX, audio, challenge state, and render descriptors.'
+  purpose: 'Convenience stack for open-world aerial traversal, lift volumes, companion flocks, gates, articulated rig animation, atmospheric weather, volumetric lighting, optional sky cycle, camera, VFX, audio, challenge state, and render descriptors.'
 });
 
 export function createDefaultGenericAerialAdventureConfig(config = {}) {
@@ -161,6 +163,7 @@ export function createGenericAerialAdventureKits(NexusRealtime, config = {}) {
   const shared = createDefaultGenericAerialAdventureConfig(config);
   return [
     createGenericAtmosphereSkyKit(NexusRealtime, { ...shared, ...(shared.sky ?? {}) }),
+    ...((shared.sky?.dayNightCycle || shared.sky?.dayLengthSeconds) ? [createSkyCycleKit(NexusRealtime, shared.sky)] : []),
     createGenericTerrainSamplerKit(NexusRealtime, shared),
     createGenericFlightInputKit(NexusRealtime, shared),
     createGenericAerialBodyKit(NexusRealtime, shared),
