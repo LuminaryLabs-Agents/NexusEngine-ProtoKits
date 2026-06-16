@@ -1,24 +1,37 @@
-# DSM Spec: <Name>
+# DSM Spec: <Kit Name>
 
-Use this template before implementing a new Domain Service Module or materially changing an existing one.
-
-## 1. Module name
+Use this template before implementing a new kit or materially changing an existing one.
 
 ```txt
-<Name>DSM
+DSM = architecture concept
+Kit = implementation unit
 ```
 
-Use reusable domain/service naming. Do not name this after a game unless this is explicitly a bridge or preset.
+## 1. Kit name
+
+```txt
+<domain-name>-kit
+create<DomainName>Kit()
+```
+
+Use reusable domain/service naming. Do not name this after a game unless this is explicitly a bridge, preset, deploy wrapper, demo, or test.
+
+Avoid:
+
+```txt
+<domain-name>-dsm
+create<DomainName>DSM()
+```
 
 ## 2. Domain meaning
 
-What domain does this module define?
+What domain does this kit define?
 
 ```txt
-This DSM defines ...
+This kit defines ...
 ```
 
-A domain is defined by the module that owns it. It is not a free-floating category outside the module.
+A domain is defined by the kit that owns it. It is not a free-floating category outside the module.
 
 ## 3. Services/API
 
@@ -47,8 +60,7 @@ List accepted data:
 ```js
 {
   id: "stable-id",
-  seed: "optional-seed",
-  // fields
+  seed: "optional-seed"
 }
 ```
 
@@ -63,7 +75,7 @@ Document:
 
 ## 5. Resources owned
 
-List state resources this DSM owns:
+List state resources this kit owns:
 
 ```txt
 module.state
@@ -114,20 +126,20 @@ domain:example
 service:example
 ```
 
-## 9. Child DSMs
+## 9. Child kits
 
-List child DSMs composed by this module:
+List child kits composed by this module:
 
 ```txt
-ChildDSM
-ChildDSM
+child-domain-kit
+child-service-kit
 ```
 
 Explain why each is a child module rather than private helper code.
 
 ## 10. Atomic boundary
 
-Why is this DSM the right size?
+Why is this kit the right size?
 
 ```txt
 It should be split if ...
@@ -164,7 +176,7 @@ asset loading unless this is an adapter
 [ ] data contract test
 [ ] headless state transition
 [ ] reset/snapshot test
-[ ] composition test if child DSMs are used
+[ ] composition test if child kits are used
 [ ] renderer boundary check or note
 ```
 
@@ -181,4 +193,4 @@ Stable API ...
 
 ## 14. Known non-goals
 
-List what this DSM explicitly will not own.
+List what this kit explicitly will not own.
