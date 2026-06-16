@@ -19,6 +19,8 @@ export { createGenericBiomeFieldKit, GENERIC_BIOME_FIELD_KIT_DEFINITION } from "
 export { createGenericPoiPlacementKit, GENERIC_POI_PLACEMENT_KIT_DEFINITION } from "../generic-poi-placement-kit/index.js";
 export { createGenericRouteFieldKit, GENERIC_ROUTE_FIELD_KIT_DEFINITION } from "../generic-route-field-kit/index.js";
 export { createGenericDiscoveryKit, GENERIC_DISCOVERY_KIT_DEFINITION } from "../generic-discovery-kit/index.js";
+export { createGenericAnchorDescriptorKit, GENERIC_ANCHOR_DESCRIPTOR_KIT_VERSION, normalizeAnchorDescriptor } from "../generic-anchor-descriptor-kit/index.js";
+export { createGenericModeProjectedRoute, GENERIC_MODE_PROJECTED_ROUTE_VERSION, createProjectedRoute } from "../generic-mode-projected-route/index.js";
 
 export { createGenericSurfaceFieldKit, GENERIC_SURFACE_FIELD_KIT_DEFINITION } from "../generic-surface-field-kit/index.js";
 export { createGenericWaveSpectrumKit, GENERIC_WAVE_SPECTRUM_KIT_DEFINITION } from "../generic-wave-spectrum-kit/index.js";
