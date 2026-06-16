@@ -200,7 +200,7 @@ export function createGenericFlightAudioKit(NexusRealtime, config = {}) {
 export const GENERIC_AERIAL_RENDER_DESCRIPTOR_KIT_DEFINITION = Object.freeze({
   id: 'generic-aerial-render-descriptor-kit',
   provides: ['render:aerial-descriptors'],
-  requires: ['environment:sky', 'world:streaming-descriptors', 'aerial:checkpoint-volume', 'aerial:lift-volume', 'ai:flock-agent', 'challenge:flight', 'camera:flight-follow', 'vfx:flight', 'audio:flight-descriptor'],
+  requires: ['environment:sky', 'world:streaming-descriptors', 'aerial:checkpoint-volume', 'aerial:lift-volume', 'ai:flock-agent', 'challenge:flight', 'camera:flight-follow', 'vfx:flight', 'render:rig-animation-descriptor', 'render:weather-descriptor', 'render:volumetric-lighting-descriptor', 'audio:flight-descriptor'],
   purpose: 'Single renderer-facing descriptor snapshot for aerial hosts.'
 });
 export function createGenericAerialRenderDescriptorKit(NexusRealtime, config = {}) {
@@ -231,6 +231,8 @@ export function createGenericAerialRenderDescriptorKit(NexusRealtime, config = {
       camera: state.camera ?? {},
       vfx: state.vfx ?? {},
       rig: state.rig ?? {},
+      weather: state.weather ?? {},
+      volumetricLighting: state.volumetricLighting ?? {},
       audio: state.audio ?? {}
     };
   }
