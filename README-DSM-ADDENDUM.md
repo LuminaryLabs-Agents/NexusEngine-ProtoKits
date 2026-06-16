@@ -10,21 +10,36 @@ Read `docs/START-HERE.md` before creating, refining, splitting, or promoting Pro
 
 ProtoKits are built around **DSM architecture**: Domain Service Modules.
 
-A DSM is a reusable module that defines a domain and exposes services/API that make that domain happen.
+```txt
+DSM = architecture concept
+Kit = implementation unit
+```
+
+A ProtoKit is the implementation form of a DSM. A kit defines a domain and exposes services/API that make that domain happen.
 
 ```txt
-DSM
+Kit
   Domain: what this module means
   Services: the API that makes the domain happen
   Data: serializable configuration/content/tuning
   Events/resources: runtime communication and state
-  Child DSMs: smaller modules composed recursively
+  Child kits: smaller modules composed recursively
 ```
+
+Implementation names use normal `-kit` naming:
+
+```txt
+tree-kit -> createTreeKit()
+route-kit -> createRouteKit()
+biome-field-kit -> createBiomeFieldKit()
+```
+
+Do not name implementation folders `tree-dsm` or factories `createTreeDSM()`.
 
 ## Key rule
 
 ```txt
-Games compose DSMs through data.
+Games compose kits through data.
 Games should not define reusable architecture directly.
 ```
 
@@ -32,6 +47,7 @@ Games should not define reusable architecture directly.
 
 - `docs/START-HERE.md`
 - `docs/DSM-ARCHITECTURE.md`
+- `docs/DSM-KIT-NAMING.md`
 - `docs/DSM-AUTHORING-GUIDE.md`
 - `docs/DSM-AGENT-WORKFLOW.md`
 - `docs/DSM-SPLIT-RULES.md`
@@ -45,4 +61,4 @@ Games should not define reusable architecture directly.
 
 ## Why this exists
 
-This repo is where experimental game systems become reusable architecture before promotion into NexusRealtime core. DSM docs give future agents and engineers a stable operating model for massive ProtoKit upgrades.
+This repo is where experimental game systems become reusable kit architecture before promotion into NexusRealtime core. DSM docs give future agents and engineers a stable operating model for massive ProtoKit upgrades.
