@@ -1,7 +1,7 @@
 import { clamp, createDefinitions, ensureState, makeRuntimeKit, now, num, writeState } from './core.js';
 
-export const ATMOSPHERIC_WEATHER_KIT_VERSION = '0.1.0';
-export const VOLUMETRIC_LIGHTING_KIT_VERSION = '0.1.0';
+export const ATMOSPHERIC_WEATHER_KIT_VERSION = '0.1.1';
+export const VOLUMETRIC_LIGHTING_KIT_VERSION = '0.1.1';
 
 function weatherConfig(config = {}) {
   return {
@@ -44,33 +44,38 @@ export function createAtmosphericWeatherKit(NexusRealtime, config = {}) {
       const state = ensureState(world, definitions, config);
       const c = weatherConfig(config);
       const elapsed = now(world);
+      const cycle = state.sky?.cycle ?? {};
+      const sunrise = clamp(num(cycle.sunrise, 0), 0, 1);
+      const twilight = clamp(num(cycle.twilight, 0), 0, 1);
       const windDirection = normalize3(c.windDirection);
       const altitude = num(state.body?.position?.y, 0);
       const altitudeHaze = clamp(1 - altitude / num(c.clearAltitude, 2200), 0.18, 1);
+      const morningFog = 1 + sunrise * num(c.sunriseFogBoost, 1.15) + twilight * num(c.twilightFogBoost, 0.28);
       state.weather = {
         version: ATMOSPHERIC_WEATHER_KIT_VERSION,
         blend: clamp(c.weatherBlend, 0, 1),
         wind: {
           direction: windDirection,
           speed: c.windSpeed,
-          turbulence: num(c.turbulence, 0.18),
+          turbulence: num(c.turbulence, 0.18) + sunrise * 0.08,
           gust: Math.sin(elapsed * 0.37) * num(c.gustStrength, 0.16)
         },
         fog: {
           enabled: c.fog !== false,
-          color: c.fogColor,
-          density: c.fogDensity * altitudeHaze,
-          hazeDensity: c.hazeDensity * altitudeHaze,
+          color: sunrise > 0.2 ? (c.sunriseFogColor ?? '#ffd4a3') : c.fogColor,
+          density: c.fogDensity * altitudeHaze * morningFog,
+          hazeDensity: c.hazeDensity * altitudeHaze * (1 + sunrise * 0.72),
           heightFalloff: num(c.fogHeightFalloff, 0.0018),
           noiseScale: num(c.fogNoiseScale, 0.0015),
-          noiseSpeed: num(c.fogNoiseSpeed, 0.025)
+          noiseSpeed: num(c.fogNoiseSpeed, 0.025),
+          sunrise
         },
         cloudLayers: [
           {
             id: 'lower-clouds',
             altitude: num(c.lowerCloudAltitude, 760),
-            thickness: num(c.lowerCloudThickness, 180),
-            opacity: c.cloudOpacity,
+            thickness: num(c.lowerCloudThickness, 180) * (1 + sunrise * 0.18),
+            opacity: c.cloudOpacity * (1 + sunrise * 0.16),
             scale: c.cloudScale,
             drift: { x: windDirection.x * c.cloudSpeed, z: windDirection.z * c.cloudSpeed }
           },
@@ -78,7 +83,7 @@ export function createAtmosphericWeatherKit(NexusRealtime, config = {}) {
             id: 'high-veil',
             altitude: num(c.highCloudAltitude, 1500),
             thickness: num(c.highCloudThickness, 260),
-            opacity: c.cloudOpacity * 0.42,
+            opacity: c.cloudOpacity * (0.42 + sunrise * 0.24),
             scale: c.cloudScale * 0.46,
             drift: { x: windDirection.x * c.cloudSpeed * 0.45, z: windDirection.z * c.cloudSpeed * 0.45 }
           }
@@ -86,6 +91,12 @@ export function createAtmosphericWeatherKit(NexusRealtime, config = {}) {
         precipitation: {
           type: config.precipitationType ?? 'none',
           amount: num(config.precipitationAmount, 0)
+        },
+        morning: {
+          sunrise,
+          twilight,
+          dew: sunrise * num(c.dewStrength, 0.55),
+          groundMist: sunrise * num(c.groundMistStrength, 0.84)
         }
       };
       writeState(world, definitions, state);
@@ -113,34 +124,37 @@ export function createVolumetricLightingKit(NexusRealtime, config = {}) {
     resources: { State: definitions.State },
     systems: [{ phase: 'cleanup', name: 'volumetric-lighting-system', system(world) {
       const state = ensureState(world, definitions, config);
+      const cycle = state.sky?.cycle ?? {};
+      const sunrise = clamp(num(cycle.sunrise, 0), 0, 1);
       const sunDirection = normalize3(state.sky?.sunDirection ?? config.sunDirection ?? { x: 0.18, y: 0.72, z: -0.42 });
       const fog = state.weather?.fog ?? {};
-      const sunPower = num(config.sunPower, 1.15);
+      const sunPower = num(config.sunPower, 1.15) + sunrise * num(config.sunriseSunPowerBoost, 0.52);
       const density = num(fog.density, num(config.fogDensity, 0.001));
       state.volumetricLighting = {
         version: VOLUMETRIC_LIGHTING_KIT_VERSION,
         enabled: config.enabled !== false,
         sunDirection,
-        sunColor: config.sunColor ?? '#fff8e1',
+        sunColor: sunrise > 0.2 ? (config.sunriseSunColor ?? '#ffd18a') : (config.sunColor ?? state.sky?.sunColor ?? '#fff8e1'),
         fogColor: fog.color ?? config.fogColor ?? '#ffdfb3',
         scattering: {
           density,
-          anisotropy: num(config.anisotropy, 0.42),
-          intensity: sunPower * clamp(density * 900, 0.18, 1.4),
-          horizonBoost: num(config.horizonBoost, 0.55),
+          anisotropy: num(config.anisotropy, 0.42) + sunrise * 0.12,
+          intensity: sunPower * clamp(density * (900 + sunrise * 520), 0.18, 1.8),
+          horizonBoost: num(config.horizonBoost, 0.55) + sunrise * 0.34,
           altitudeFalloff: num(fog.heightFalloff, 0.0018)
         },
         aerialPerspective: {
           distanceDensity: num(config.distanceDensity, density * 0.8),
-          colorMix: num(config.colorMix, 0.42),
+          colorMix: num(config.colorMix, 0.42) + sunrise * 0.12,
           maxDistance: num(config.maxDistance, 12000)
         },
         godRays: {
           enabled: config.godRays !== false,
-          exposure: num(config.godRayExposure, 0.22),
+          exposure: num(config.godRayExposure, 0.22) + sunrise * 0.16,
           decay: num(config.godRayDecay, 0.92),
-          weight: num(config.godRayWeight, 0.48)
-        }
+          weight: num(config.godRayWeight, 0.48) + sunrise * 0.18
+        },
+        morning: state.weather?.morning ?? { sunrise }
       };
       writeState(world, definitions, state);
     } }],
