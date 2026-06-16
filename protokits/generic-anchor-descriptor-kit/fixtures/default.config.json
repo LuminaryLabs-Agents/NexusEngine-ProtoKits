@@ -1,0 +1,19 @@
+{
+  "id": "fixture-anchor-descriptor-kit",
+  "anchors": [
+    {
+      "id": "anchor-0",
+      "groupId": "fixture-route",
+      "position": { "x": 0, "y": 0, "z": 0 },
+      "radius": 8,
+      "tags": ["start", "route-node"]
+    },
+    {
+      "id": "anchor-1",
+      "groupId": "fixture-route",
+      "position": { "x": 40, "y": 120, "z": 0 },
+      "radius": 6,
+      "tags": ["route-node"]
+    }
+  ]
+}
