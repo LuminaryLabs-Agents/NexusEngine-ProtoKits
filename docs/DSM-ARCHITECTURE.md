@@ -2,31 +2,52 @@
 
 DSM means **Domain Service Module**.
 
-A DSM is the reusable architecture unit for NexusRealtime ProtoKits. A DSM is not merely a folder or a factory function. It is a module that defines a domain and exposes services that make that domain usable, composable, testable, and data-driven.
+DSM is the architecture concept. A **kit** is the implementation unit in this repository.
+
+```txt
+DSM = architecture concept
+Kit = implementation unit
+```
+
+A ProtoKit is the implementation form of a DSM: it defines a domain and exposes services that make that domain usable, composable, testable, and data-driven.
 
 ## Core definition
 
-A DSM has two inseparable sides:
+A kit has two inseparable DSM sides:
 
-- **Domain:** what the module means. The domain is defined by the module that owns it.
+- **Domain:** what the module means. The domain is defined by the kit that owns it.
 - **Services:** the public API that makes the domain happen and lets other modules compose it.
 
 Key sentence:
 
-> In DSM architecture, a domain is defined by the module that owns it, and services are the API that allows that domain to happen, compose, and be reused.
+> In DSM architecture, a domain is defined by the kit that owns it, and services are the API that allows that domain to happen, compose, and be reused.
+
+## Naming rule
+
+Use DSM language when reasoning about architecture. Use `-kit` names in implementation.
+
+```txt
+Architecture phrase: Tree domain
+Implementation:      tree-kit
+Factory:             createTreeKit()
+```
+
+Do not create implementation folders named `tree-dsm` or factories named `createTreeDSM()`.
+
+See `docs/DSM-KIT-NAMING.md` for the full naming contract.
 
 ## Recursive architecture
 
-A DSM may compose child DSMs. Each child DSM also has domain meaning, services, data contracts, resources, events, and optional child DSMs.
+A kit may compose child kits. Each child kit also has domain meaning, services, data contracts, resources, events, and optional child kits.
 
 ```txt
-Large DSM
+large-kit
   domain
   services
-  child DSM
+  child-kit
     domain
     services
-    child DSM
+    child-kit
       domain
       services
 ```
@@ -37,30 +58,38 @@ A module is atomic when splitting it further would remove useful domain meaning 
 
 ## Games are not architecture units
 
-Games and experiments should compose DSMs through data. They should not define reusable architecture by themselves.
+Games and experiments should compose kits through data. They should not define reusable architecture by themselves.
 
 Good:
 
 ```txt
 Fogline-style experiment
-  uses RouteDSM
-  uses TerrainDSM
-  uses FogDSM
-  uses ScanTargetDSM
-  uses BeaconDSM
-  uses ThreatPressureDSM
+  uses route-kit
+  uses terrain-sampler-kit
+  uses fog-volume-kit
+  uses scan-target-kit
+  uses beacon-kit
+  uses threat-pressure-kit
 ```
 
 Bad:
 
 ```txt
-FoglineEverythingKit
+fogline-everything-kit
   owns route, terrain, trees, scan, fog, enemies, rendering, mission logic
 ```
 
 ## DSM and NexusRealtime runtime kits
 
-A DSM intended to install into NexusRealtime should normally expose a runtime-kit-compatible factory. The runtime-facing surface should follow the NexusRealtime contract:
+A DSM intended to install into NexusRealtime should expose a runtime-kit-compatible factory using normal kit naming:
+
+```txt
+createTreeKit()
+createRouteKit()
+createBiomeFieldKit()
+```
+
+The runtime-facing surface should follow the NexusRealtime contract:
 
 - `defineRuntimeKit`
 - `defineResource`
@@ -74,11 +103,11 @@ A DSM intended to install into NexusRealtime should normally expose a runtime-ki
 - `install`
 - `metadata`
 
-A DSM can also expose pure services that do not install into the engine. Pure services still need deterministic behavior and tests.
+A kit can also expose pure services that do not install into the engine. Pure services still need deterministic behavior and tests.
 
-## What a DSM owns
+## What a kit owns
 
-A DSM can own:
+A kit can own:
 
 - serializable state resources
 - command/input events
@@ -89,19 +118,19 @@ A DSM can own:
 - data validation/defaulting
 - descriptor output for renderers
 
-A DSM must not own:
+A reusable domain/service kit must not own:
 
 - browser input listeners
 - DOM state
 - Canvas/WebGL/Three.js renderer objects
-- game-specific story or level names unless it is a preset/bridge DSM
+- game-specific story or level names unless it is a preset/bridge kit
 - hidden global state
 - unseeded random
 - wall-clock time as gameplay state
 
 ## Domain/service examples
 
-### TreeDSM
+### Tree domain implemented by `tree-kit`
 
 Domain:
 
@@ -118,16 +147,16 @@ getColliderHints()
 getRenderDescriptors()
 ```
 
-Child DSMs:
+Child kits:
 
 ```txt
-TrunkDSM
-CanopyDSM
-LeafDSM
-ScatterPlacementDSM
+trunk-kit
+canopy-kit
+leaf-kit
+scatter-placement-kit
 ```
 
-### LeafDSM
+### Leaf domain implemented by `leaf-kit`
 
 Domain:
 
@@ -144,7 +173,7 @@ getWindOffset()
 getLeafDescriptors()
 ```
 
-### RouteDSM
+### Route domain implemented by `route-kit`
 
 Domain:
 
@@ -165,28 +194,28 @@ makeRouteCorridor(width)
 
 Use these layers as guidance, not rigid folders:
 
-1. **Foundation DSMs:** seeded random, math, timers, clocks, ledger/state utilities.
-2. **Spatial DSMs:** route, terrain, placement, raycast, visibility, volumes.
-3. **Object-domain DSMs:** tree, leaf, branch, gate, beacon, relay, pickup, structure, actor archetype.
-4. **Gameplay DSMs:** scan target, checkpoint, threat pressure, resource pressure, build placement, objective progression.
-5. **Presentation DSMs:** render descriptors, material palettes, fog descriptors, audio cues, camera descriptors.
-6. **Bridge/preset DSMs:** game-specific data wiring and compatibility. These should stay thin.
-7. **Harness DSMs:** replay, scenario QA, GameHost/debug snapshots.
+1. **Foundation kits:** seeded random, math, timers, clocks, ledger/state utilities.
+2. **Spatial kits:** route, terrain, placement, raycast, visibility, volumes.
+3. **Object-domain kits:** tree, leaf, branch, gate, beacon, relay, pickup, structure, actor archetype.
+4. **Gameplay kits:** scan target, checkpoint, threat pressure, resource pressure, build placement, objective progression.
+5. **Presentation descriptor kits:** render descriptors, material palettes, fog descriptors, audio cues, camera descriptors.
+6. **Bridge/preset kits:** game-specific data wiring and compatibility. These should stay thin.
+7. **Harness kits:** replay, scenario QA, GameHost/debug snapshots.
 
 ## Composition rule
 
-A parent DSM should use child DSM services through explicit data and API contracts. It should not reach into child private state.
+A parent kit should use child kit services through explicit data and API contracts. It should not reach into child private state.
 
 ```txt
-Parent DSM
-  configures child DSM through data
+parent-kit
+  configures child kit through data
   calls child services or consumes child events
   emits higher-level domain facts
 ```
 
 ## Reliability rules
 
-Every promoted DSM should be:
+Every promoted kit should be:
 
 - deterministic under fixed input and fixed delta
 - idempotent for repeated install/reset calls where possible
@@ -196,27 +225,27 @@ Every promoted DSM should be:
 - safe in headless tests
 - explicit about `requires` and `provides`
 
-## Naming rule
+## Naming rule summary
 
 Use names that describe reusable domain/service meaning, not the first game that needs it.
 
 Prefer:
 
 ```txt
-ScanTargetDSM
-BeaconDSM
-RouteDSM
-ScatterPlacementDSM
-FogVolumeDSM
-ThreatPressureDSM
+scan-target-kit
+beacon-kit
+route-kit
+scatter-placement-kit
+fog-volume-kit
+threat-pressure-kit
 ```
 
 Avoid:
 
 ```txt
-FoglineScanKit
-SoraGateKit
-HellscapeTreeKit
+fogline-scan-kit
+sora-gate-kit
+hellscape-tree-kit
 ```
 
 Game names belong in presets, bridges, test fixtures, and experiment code.
