@@ -71,6 +71,7 @@ export { createGenericCameraComfortKit, GENERIC_CAMERA_COMFORT_KIT_DEFINITION } 
 export { createGenericCameraSequenceKit, GENERIC_CAMERA_SEQUENCE_KIT_DEFINITION } from "../generic-camera-sequence-kit/index.js";
 
 export { createGenericRenderDescriptorKit, GENERIC_RENDER_DESCRIPTOR_KIT_DEFINITION } from "../generic-render-descriptor-kit/index.js";
+export { createGenericParticleBackgroundKit, GENERIC_PARTICLE_BACKGROUND_KIT_VERSION, createParticleBackgroundDescriptor, particleBackgroundPresets } from "../generic-particle-background-kit/index.js";
 export { createGenericThreeRendererKit, GENERIC_THREE_RENDERER_KIT_DEFINITION } from "../generic-three-renderer-kit/index.js";
 export { createGenericWaterThreeKit, GENERIC_WATER_THREE_KIT_DEFINITION } from "../generic-water-three-kit/index.js";
 export { createGenericVehicleThreeKit, GENERIC_VEHICLE_THREE_KIT_DEFINITION } from "../generic-vehicle-three-kit/index.js";
