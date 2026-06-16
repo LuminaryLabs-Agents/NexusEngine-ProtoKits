@@ -338,7 +338,7 @@ function reconcileTerrainStreamer(world, state, config) {
     evictedThisTick += 1;
   }
 
-  const readyPatches = desiredIds.map((id) => patchRegistry[id]).filter((patch) => patch?.revision === revisions[patch.id]);
+  const readyPatches = desiredIds.map((id) => patchRegistry[id]).filter((patch) => patch && patch.revision === revisions[patch.id]);
   const lodCounts = {};
   for (const patch of readyPatches) lodCounts[patch.lod] = (lodCounts[patch.lod] ?? 0) + 1;
   const previousAverage = num(previousWorld.streamingStats?.averageBuildCost, 0);
