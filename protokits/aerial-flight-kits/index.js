@@ -4,6 +4,7 @@ export * from './flight.js';
 export * from './world.js';
 export * from './descriptors.js';
 export * from './rig.js';
+export * from './weather.js';
 
 import { createGenericAtmosphereSkyKit, createGenericFlightInputKit, createGenericTerrainSamplerKit } from './environment.js';
 import { createGenericAerialBodyKit, createGenericBoostImpulseKit, createGenericGlidePhysicsKit } from './flight.js';
@@ -21,12 +22,16 @@ import {
   createProceduralWingFlapKit,
   createRigAnimationDescriptorKit
 } from './rig.js';
+import {
+  createAtmosphericWeatherKit,
+  createVolumetricLightingKit
+} from './weather.js';
 
 export const GENERIC_AERIAL_ADVENTURE_STACK_DEFINITION = Object.freeze({
   id: 'generic-aerial-adventure-stack',
   provides: ['preset:aerial-adventure'],
   requires: [],
-  purpose: 'Convenience stack for open-world aerial traversal, lift volumes, companion flocks, gates, articulated rig animation, camera, VFX, audio, challenge state, and render descriptors.'
+  purpose: 'Convenience stack for open-world aerial traversal, lift volumes, companion flocks, gates, articulated rig animation, atmospheric weather, volumetric lighting, camera, VFX, audio, challenge state, and render descriptors.'
 });
 
 export function createDefaultGenericAerialAdventureConfig(config = {}) {
@@ -125,6 +130,19 @@ export function createDefaultGenericAerialAdventureConfig(config = {}) {
       glideFlattening: 0.82,
       ...(config.rig ?? {})
     },
+    weather: {
+      fogDensity: 0.00105,
+      hazeDensity: 0.00072,
+      cloudOpacity: 0.32,
+      windSpeed: 18,
+      ...(config.weather ?? {})
+    },
+    lighting: {
+      sunPower: 1.15,
+      anisotropy: 0.42,
+      godRays: true,
+      ...(config.lighting ?? {})
+    },
     audio: {
       maxGain: 0.22,
       ...(config.audio ?? {})
@@ -159,6 +177,8 @@ export function createGenericAerialAdventureKits(NexusRealtime, config = {}) {
     createProceduralWingFlapKit(NexusRealtime, shared.rig),
     createFlightPoseDriverKit(NexusRealtime, shared.rig),
     createRigAnimationDescriptorKit(NexusRealtime, shared.rig),
+    createAtmosphericWeatherKit(NexusRealtime, shared.weather),
+    createVolumetricLightingKit(NexusRealtime, { ...shared.weather, ...shared.lighting }),
     createGenericFlightAudioKit(NexusRealtime, shared.audio),
     createGenericAerialRenderDescriptorKit(NexusRealtime, shared)
   ];
