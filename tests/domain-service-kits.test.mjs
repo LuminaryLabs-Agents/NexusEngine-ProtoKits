@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import {
+  DOMAIN_SERVICE_KIT_DEFINITIONS,
   createAssetDescriptorKit,
   createBuildPlacementKit,
   createCompletionLedgerKit,
@@ -22,61 +23,59 @@ function createWorld() { const resources = new Map(); const events = new Map(); 
 function createEngine(kits) { const world = createWorld(); const systems = []; const engine = { world, kits: [], tick(delta = 1 / 60) { world.__nexusClock.delta = delta; world.__nexusClock.elapsed += delta; world.__nexusClock.frame += 1; for (const entry of systems) entry.system(world); world.clearAllEvents(); return world; } }; for (const kit of kits) { engine.kits.push(kit); kit.initWorld?.({ engine, world, kit }); for (const entry of kit.systems ?? []) systems.push(typeof entry === "function" ? { phase: "simulate", system: entry } : entry); kit.install?.({ engine, world, kit }); } return engine; }
 function assertSerializable(value) { assert.deepEqual(JSON.parse(JSON.stringify(value)), value); }
 
+assert.equal(DOMAIN_SERVICE_KIT_DEFINITIONS.length, 12);
+assert.ok(DOMAIN_SERVICE_KIT_DEFINITIONS.every((definition) => definition.tier === "atomic"));
+
 const kits = [
   createViewRigKit(Nexus),
+  createSpatialInteractionKit(Nexus),
   createCompletionLedgerKit(Nexus),
-  createObjectiveBridgeKit(Nexus, { mappings: [{ from: "relay", toAction: "scan", group: "relays" }] }),
-  createSpatialInteractionKit(Nexus, { requireFacing: true }),
+  createObjectiveBridgeKit(Nexus),
   createLockGroupKit(Nexus),
   createDamageHealthKit(Nexus),
   createEncounterDirectorKit(Nexus),
   createResourceNodeKit(Nexus),
-  createBuildPlacementKit(Nexus, { catalog: { wall: { cost: { stone: 2 }, maxDistance: 5 } } }),
+  createBuildPlacementKit(Nexus),
   createStructureRuntimeKit(Nexus),
   createDiegeticFeedbackSignalKit(Nexus),
   createAssetDescriptorKit(Nexus)
 ];
 
-for (const kit of kits) { assert.equal(typeof kit.id, "string"); assert.ok(Array.isArray(kit.provides)); assert.ok(kit.metadata?.version); }
+for (const kit of kits) {
+  assert.equal(typeof kit.id, "string");
+  assert.ok(Array.isArray(kit.provides));
+  assert.ok(kit.metadata?.purpose);
+}
 
 const engine = createEngine(kits);
-engine.viewRig.look({ yawDelta: 0.2, pitchDelta: 0.1 });
-engine.completionLedger.complete("relay-1", { group: "relays" });
-engine.objectiveBridge.input({ from: "relay", group: "relays", targetId: "relay-1", oncePerId: true });
-engine.spatialInteraction.registerTarget({ id: "relay-1", x: 1, y: 0, action: "scan", maxDistance: 2, requireFacing: true });
-engine.spatialInteraction.setSubject({ id: "player", x: 0, y: 0, facing: { x: 1, y: 0 } });
-engine.spatialInteraction.request("relay-1", { subjectId: "player", action: "scan" });
-engine.lockGroup.register({ id: "gate", requiredCount: 1 });
-engine.lockGroup.fill("gate", "relay-1");
-engine.damageHealth.register({ id: "player", health: 10 });
-engine.encounterDirector.register({ id: "wave-1", spawnBudget: 1, spawnCooldown: 0, maxActive: 1, archetypes: ["crawler"] });
-engine.encounterDirector.start("wave-1");
-engine.resourceNode.register({ id: "ore-1", resourceType: "ore", capacity: 3 });
-engine.resourceNode.harvest("ore-1", 2);
-engine.buildPlacement.select("wall");
-engine.buildPlacement.preview({ type: "wall", x: 2, y: 0, origin: { x: 0, y: 0 }, resources: { stone: 2 } });
-engine.buildPlacement.place({ type: "wall", id: "wall-1", x: 2, y: 0, origin: { x: 0, y: 0 }, resources: { stone: 2 } });
-engine.structureRuntime.register({ id: "turret-1", type: "turret", health: 5, cooldownSeconds: 0 });
-engine.structureRuntime.activate("turret-1", { targetId: "crawler-1" });
-engine.diegeticFeedback.setSignal({ id: "gate-glow", kind: "pulse", group: "objective", targetId: "gate", intensity: 1 });
-engine.assetDescriptor.registerAsset({ id: "crawler-sprite", kind: "sprite", tags: ["enemy"] });
-engine.assetDescriptor.registerMaterial({ id: "hellstone", tags: ["ground"] });
+engine.viewRig.setCamera({ mode: "first-person", target: "player" });
+engine.spatialInteraction.registerInteractable({ id: "relay-1", action: "scan" });
+engine.completionLedger.completeInteraction("relay-1");
+engine.objectiveBridge.addObjective({ id: "scan-relays", action: "scan", target: 1 });
+engine.lockGroup.completeInteraction("gate-lock");
+engine.damageHealth.command({ type: "damage", id: "player", amount: 5 });
+engine.encounterDirector.setPhase("wave-1");
+engine.resourceNode.addItem({ id: "ore", kind: "resource" });
+engine.buildPlacement.addDescriptor({ id: "placement-preview", kind: "build-preview" });
+engine.structureRuntime.addDescriptor({ id: "turret-1", kind: "structure" });
+engine.diegeticFeedback.addEffect({ id: "gate-glow", kind: "pulse" });
+engine.assetDescriptor.addDescriptor({ id: "crawler-sprite", kind: "sprite" });
 engine.tick(0.1);
 
-assert.ok(engine.viewRig.getState().yaw > 0);
-assert.deepEqual(engine.completionLedger.getState().completedIds, ["relay-1"]);
-assert.equal(engine.objectiveBridge.getState().countsByAction.scan, 1);
-assert.deepEqual(engine.spatialInteraction.getState().completedIds, ["relay-1"]);
-assert.equal(engine.lockGroup.getState().groups.gate.mode, "open");
-assert.equal(engine.damageHealth.getState().entities.player.health, 10);
-assert.equal(engine.encounterDirector.getState().pendingSpawnRequests.length, 1);
-assert.equal(engine.resourceNode.getState().nodes["ore-1"].remaining, 1);
-assert.equal(engine.buildPlacement.getState().placed[0].id, "wall-1");
-assert.equal(engine.structureRuntime.getState().emittedRequests[0].structureId, "turret-1");
-assert.equal(engine.diegeticFeedback.getState().signals["gate-glow"].kind, "pulse");
-assert.equal(engine.assetDescriptor.getState().assets["crawler-sprite"].kind, "sprite");
+assert.equal(engine.viewRig.getState().domain.camera.mode, "first-person");
+assert.equal(engine.spatialInteraction.getState().domain.interaction.registry["relay-1"].id, "relay-1");
+assert.deepEqual(engine.completionLedger.getState().domain.interaction.completed, ["relay-1"]);
+assert.equal(engine.objectiveBridge.getState().domain.mission.objectives[0].id, "scan-relays");
+assert.equal(engine.lockGroup.getState().domain.interaction.completed[0], "gate-lock");
+assert.equal(engine.damageHealth.getState().domain.vehicle.damage.player.hull, 95);
+assert.equal(engine.encounterDirector.getState().domain.mission.phase, "wave-1");
+assert.equal(engine.resourceNode.getState().domain.inventory.items[0].id, "ore");
+assert.equal(engine.buildPlacement.getState().domain.render.descriptors[0].id, "placement-preview");
+assert.equal(engine.structureRuntime.getState().domain.render.descriptors[0].id, "turret-1");
+assert.equal(engine.diegeticFeedback.getState().domain.render.effects[0].id, "gate-glow");
+assert.equal(engine.assetDescriptor.getState().domain.render.descriptors[0].id, "crawler-sprite");
 
-for (const apiName of ["viewRig", "completionLedger", "objectiveBridge", "spatialInteraction", "lockGroup", "damageHealth", "encounterDirector", "resourceNode", "buildPlacement", "structureRuntime", "diegeticFeedback", "assetDescriptor"]) assertSerializable(engine[apiName].getSnapshot());
+for (const apiName of ["viewRig", "spatialInteraction", "completionLedger", "objectiveBridge", "lockGroup", "damageHealth", "encounterDirector", "resourceNode", "buildPlacement", "structureRuntime", "diegeticFeedback", "assetDescriptor"]) assertSerializable(engine[apiName].getState());
 
 const bundle = createDomainServiceKits(Nexus);
 assert.equal(bundle.length, 12);
