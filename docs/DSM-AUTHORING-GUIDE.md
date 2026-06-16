@@ -1,34 +1,41 @@
 # DSM Authoring Guide
 
-Use this guide when creating or refining a ProtoKit as a Domain Service Module.
+Use this guide when creating or refining a ProtoKit using Domain Service Module architecture.
+
+```txt
+DSM = architecture concept
+Kit = implementation unit
+```
+
+In this repo, DSMs are built and shipped as `-kit` folders with `createXKit()` factories.
 
 ## Authoring target
 
-A good DSM is a reusable module that:
+A good kit is a reusable module that:
 
 - defines one clear domain
 - exposes small services/API that make the domain happen
 - accepts serializable data
 - emits explicit events
 - owns explicit resources
-- composes child DSMs only through public contracts
+- composes child kits only through public contracts
 - can run headlessly
 - can reset, snapshot, replay, and save-load where relevant
 
-## Step 1: Name the domain, not the game
+## Step 1: Name the domain, implement as a kit
 
-Start with the reusable concept.
+Start with the reusable concept, then map it to a kit name.
 
 Good:
 
 ```txt
-RouteDSM
-TerrainSamplerDSM
-ScanTargetDSM
-TreeDSM
-LeafDSM
-BeaconDSM
-ThreatPressureDSM
+Route domain -> route-kit -> createRouteKit()
+Terrain sampler domain -> terrain-sampler-kit -> createTerrainSamplerKit()
+Scan target domain -> scan-target-kit -> createScanTargetKit()
+Tree domain -> tree-kit -> createTreeKit()
+Leaf domain -> leaf-kit -> createLeafKit()
+Beacon domain -> beacon-kit -> createBeaconKit()
+Threat pressure domain -> threat-pressure-kit -> createThreatPressureKit()
 ```
 
 Bad:
@@ -37,6 +44,8 @@ Bad:
 FoglineRouteKit
 SoraCheckpointThing
 ZombieTreeKit
+tree-dsm
+createTreeDSM()
 ```
 
 Game-specific names are allowed only for presets, compatibility bridges, demos, and tests.
@@ -46,16 +55,16 @@ Game-specific names are allowed only for presets, compatibility bridges, demos, 
 Write one paragraph:
 
 ```txt
-This DSM defines ______ as ______.
+This kit defines ______ as ______.
 ```
 
 Example:
 
 ```txt
-TreeDSM defines trees as spatial foliage structures with trunk, canopy, leaf density, variant selection, render descriptors, and optional collision/occlusion hints.
+tree-kit defines trees as spatial foliage structures with trunk, canopy, leaf density, variant selection, render descriptors, and optional collision/occlusion hints.
 ```
 
-If the paragraph contains several unrelated meanings, split the DSM.
+If the paragraph contains several unrelated meanings, split the kit.
 
 ## Step 3: Define services as the API
 
@@ -64,19 +73,19 @@ Services are the public API that make the domain usable.
 Examples:
 
 ```txt
-RouteDSM services:
+route-kit services:
   sampleRoute(t)
   nearestPoint(position)
   progressAlongRoute(position)
   makeRouteCorridor(width)
 
-ScanTargetDSM services:
+scan-target-kit services:
   registerTarget(data)
   setScannerPose(data)
   pulseScan(command)
   getSnapshot()
 
-TreeDSM services:
+tree-kit services:
   registerSpecies(data)
   spawnTreeInstances(data)
   getColliderHints()
@@ -87,7 +96,7 @@ Keep services small and verb-based. Do not expose internal resources directly un
 
 ## Step 4: Define data contracts
 
-Data configures the DSM. Code defines behavior; data defines the content/tuning.
+Data configures the kit. Code defines behavior; data defines the content/tuning.
 
 A data contract should include:
 
@@ -138,7 +147,7 @@ command: scanTarget.scanRequested
 fact: scanTarget.completed
 ```
 
-## Step 6: Decide child DSMs
+## Step 6: Decide child kits
 
 Ask:
 
@@ -147,28 +156,27 @@ Ask:
 - Does it have its own events/resources?
 - Can it be tested without the parent?
 
-If yes, make it a child DSM.
+If yes, make it a child kit.
 
 Example:
 
 ```txt
-TreeDSM
-  child DSMs:
-    LeafDSM
-    TrunkDSM
-    CanopyDSM
-    ScatterPlacementDSM
-    ColliderHintDSM
+tree-kit
+  child kits:
+    leaf-kit
+    trunk-kit
+    canopy-kit
+    scatter-placement-kit
+    collider-hint-kit
 ```
 
 ## Step 7: Implement runtime-kit compatibility
 
-A runtime-installed DSM should usually export a factory like:
+A runtime-installed kit should usually export a factory like:
 
 ```js
 export function createExampleKit(NexusRealtime, options = {}) {
   const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
-  // define resources/events/systems/install/initWorld
   return defineRuntimeKit({ ... });
 }
 ```
@@ -182,9 +190,9 @@ Required habits:
 - install a small public engine API only if needed
 - expose `getState`, `getSnapshot`, `reset`, and `loadSnapshot` where useful
 
-## Step 8: Keep reusable DSMs renderer-independent
+## Step 8: Keep reusable kits renderer-independent
 
-Reusable DSMs can output render descriptors but must not draw.
+Reusable kits can output render descriptors but must not draw.
 
 Allowed:
 
@@ -196,7 +204,7 @@ camera target descriptors
 audio cue descriptors
 ```
 
-Not allowed in reusable DSMs:
+Not allowed in reusable kits:
 
 ```txt
 DOM access
@@ -217,7 +225,7 @@ Minimum tests:
 - factory smoke
 - headless state transition
 - reset/snapshot
-- composition with at least one adjacent DSM if applicable
+- composition with at least one adjacent kit if applicable
 - data contract defaults
 
 ## Step 10: Export and document
@@ -225,7 +233,7 @@ Minimum tests:
 Add or update:
 
 - `package.json` export map if this is public
-- `protokits/<name>/README.md` if the DSM is significant
+- `protokits/<name>/README.md` if the kit is significant
 - `docs/DSM-CATALOG.md` if this establishes a new family
 - tests and smoke coverage
 
@@ -238,7 +246,7 @@ Before coding:
 [ ] Services/API are listed.
 [ ] Data contract is explicit.
 [ ] Resources/events are named.
-[ ] Child DSMs are identified.
+[ ] Child kits are identified.
 [ ] Renderer boundary is clear.
 [ ] Tests are planned.
 ```
@@ -250,7 +258,7 @@ Before merging:
 [ ] Public API is small.
 [ ] State is serializable.
 [ ] Reset/snapshot are deterministic.
-[ ] No renderer/browser dependencies in reusable DSM.
+[ ] No renderer/browser dependencies in reusable kit.
 [ ] Tests pass.
 [ ] Exports/docs are updated.
 ```
