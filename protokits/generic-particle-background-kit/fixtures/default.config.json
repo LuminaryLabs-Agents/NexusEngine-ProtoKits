@@ -1,0 +1,20 @@
+{
+  "id": "fixture-particle-background",
+  "preset": "nexusGallery",
+  "intensity": 1,
+  "timeScale": 1,
+  "layers": [
+    {
+      "id": "fixture-gold-dust",
+      "count": 16,
+      "scale": 12,
+      "speed": 0.04,
+      "drift": [0.05, -0.02],
+      "twinkle": 0.8,
+      "size": 1,
+      "opacity": 0.35,
+      "color": [1, 0.86, 0.34],
+      "seed": 11
+    }
+  ]
+}
