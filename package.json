@@ -76,6 +76,7 @@
     "./fogline-survey-pressure-bridge-kit": "./protokits/fogline-survey-pressure-bridge-kit/index.js"
   },
   "files": [
+    "KITS.md",
     "protokits",
     "apps",
     "scripts",
