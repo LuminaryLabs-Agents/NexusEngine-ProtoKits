@@ -1,6 +1,6 @@
 import { clamp, clone, createDefinitionFactory, defineInjectedRuntimeKit, ensureResource, number } from "../protokit-core/index.js";
 
-export const FLIGHT_MOTION_KIT_VERSION = "0.1.2";
+export const FLIGHT_MOTION_KIT_VERSION = "0.1.3";
 
 export const DEFAULT_FLIGHT_CONFIG = Object.freeze({
   gravity: 0.18,
@@ -9,22 +9,25 @@ export const DEFAULT_FLIGHT_CONFIG = Object.freeze({
   maxSpeed: 140,
   boostImpulse: 45,
   boostCooldown: 1.5,
-  pitchSpeed: 1.8,
-  rollSpeed: 2.2,
-  yawFromRoll: 1.5,
+  pitchSpeed: 2.1,
+  rollSpeed: 2.6,
+  yawFromRoll: 1.42,
   groundClearance: 12,
   stallSpeed: 8,
   minForwardSpeed: 15,
   controlMode: "assisted",
+  controlResponseMode: "direct",
   targetPitch: 0.035,
   targetRoll: 0,
+  pitchInputScale: 0.78,
+  rollInputScale: 0.94,
   maxPitch: 0.82,
-  maxRoll: 0.86,
-  pitchResponse: 5.4,
-  rollResponse: 6.2,
-  autoLevel: 4.6,
-  pitchDamping: 2.2,
-  rollDamping: 3.8,
+  maxRoll: 0.82,
+  pitchResponse: 7.2,
+  rollResponse: 10.8,
+  autoLevel: 7.4,
+  pitchDamping: 4.2,
+  rollDamping: 6.5,
   minimumAirspeed: 42,
   stallRecoveryPitch: 0.14,
   stallRecoveryLift: 10,
@@ -36,19 +39,19 @@ export const DEFAULT_FLIGHT_CONFIG = Object.freeze({
   terrainSpeedBias: 8,
   sinkRateLimit: -38,
   flightPathAlignment: true,
-  horizontalAlignRate: 2.8,
-  verticalAlignRate: 3.6,
+  horizontalAlignRate: 5.2,
+  verticalAlignRate: 4.8,
   carveMode: "screen-focus",
-  carveStrength: 0.72,
-  carveResponse: 3.2,
-  bankCarveScale: 1.45,
-  pitchCarveScale: 1.15,
-  bankTurnAuthority: 1.35,
-  turnLiftLoss: 0.18,
-  turnDiveAssist: 0.08,
-  swoopAcceleration: 12,
-  diveAcceleration: 24,
-  climbAcceleration: 14
+  carveStrength: 1.02,
+  carveResponse: 9.5,
+  bankCarveScale: 1.34,
+  pitchCarveScale: 1.14,
+  bankTurnAuthority: 1.74,
+  turnLiftLoss: 0.055,
+  turnDiveAssist: 0.03,
+  swoopAcceleration: 18,
+  diveAcceleration: 30,
+  climbAcceleration: 17
 });
 
 export function createFlightState(options = {}) {
@@ -64,6 +67,7 @@ export function createFlightState(options = {}) {
       mode: config.controlMode,
       targetPitch: number(config.targetPitch, 0.035),
       targetRoll: number(config.targetRoll, 0),
+      responseMode: config.controlResponseMode,
       lastInput: { pitch: 0, bank: 0, boost: false }
     },
     carve: {
@@ -98,6 +102,7 @@ const dot = (a, b) => number(a.x) * number(b.x) + number(a.y) * number(b.y) + nu
 const mix = (a, b, t) => number(a) + (number(b) - number(a)) * clamp(t, 0, 1);
 const approach = (value, target, rate, dt) => target + (number(value) - target) * Math.exp(-Math.max(0, rate) * dt);
 const alignAmount = (rate, delta) => clamp(1 - Math.exp(-Math.max(0, number(rate)) * delta), 0, 1);
+const vecMix = (a, b, t) => ({ x: mix(a.x, b.x, t), y: mix(a.y, b.y, t), z: mix(a.z, b.z, t) });
 
 export function forwardFromRotation(rotation = {}) {
   const pitch = number(rotation.pitch);
@@ -118,17 +123,24 @@ function normalizedControlInput(input = {}) {
 function assistedTargets(next, cfg, input, delta, clearance) {
   const previous = next.control ?? {};
   const mode = input.mode ?? cfg.controlMode ?? previous.mode ?? "assisted";
-  let targetPitch = number(previous.targetPitch, number(cfg.targetPitch, 0.035));
+  const trimPitch = number(cfg.targetPitch, 0.035);
+  const direct = cfg.controlResponseMode !== "incremental";
+  let targetPitch = number(previous.targetPitch, trimPitch);
   let targetRoll = number(previous.targetRoll, number(cfg.targetRoll, 0));
 
   if (mode === "manual") {
     targetPitch = number(next.rotation.pitch) + input.pitch * cfg.pitchSpeed * delta;
     targetRoll = number(next.rotation.roll) + input.bank * cfg.rollSpeed * delta;
+  } else if (direct) {
+    const desiredPitch = trimPitch + input.pitch * number(cfg.maxPitch, 0.82) * number(cfg.pitchInputScale, 0.78);
+    const desiredRoll = input.bank * number(cfg.maxRoll, 0.82) * number(cfg.rollInputScale, 0.94);
+    targetPitch = Math.abs(input.pitch) > 0.001 ? desiredPitch : approach(targetPitch, trimPitch, cfg.pitchDamping, delta);
+    targetRoll = Math.abs(input.bank) > 0.001 ? desiredRoll : approach(targetRoll, 0, cfg.autoLevel, delta);
   } else {
     targetPitch += input.pitch * cfg.pitchSpeed * delta;
     targetRoll += input.bank * cfg.rollSpeed * delta;
     if (Math.abs(input.bank) < 0.001) targetRoll = approach(targetRoll, 0, cfg.autoLevel, delta);
-    if (Math.abs(input.pitch) < 0.001) targetPitch = approach(targetPitch, number(cfg.targetPitch, 0.035), cfg.pitchDamping, delta);
+    if (Math.abs(input.pitch) < 0.001) targetPitch = approach(targetPitch, trimPitch, cfg.pitchDamping, delta);
   }
 
   const terrainAvoidanceActive = mode !== "manual" && cfg.terrainAvoidance !== false && Number.isFinite(clearance) && clearance < number(cfg.safeClearance, 96);
@@ -139,28 +151,32 @@ function assistedTargets(next, cfg, input, delta, clearance) {
 
   return {
     mode,
+    responseMode: direct ? "direct" : "incremental",
     targetPitch: clamp(targetPitch, -number(cfg.maxPitch, 0.82), number(cfg.maxPitch, 0.82)),
-    targetRoll: clamp(targetRoll, -number(cfg.maxRoll, 0.86), number(cfg.maxRoll, 0.86)),
+    targetRoll: clamp(targetRoll, -number(cfg.maxRoll, 0.82), number(cfg.maxRoll, 0.82)),
     terrainAvoidanceActive
   };
 }
 
-function carveFocusDirection(rotation, targets, cfg, input, assisted) {
+function carveFocusDirection(next, targets, cfg, input, assisted, delta) {
+  const rotation = next.rotation ?? {};
   const roll = number(rotation.roll);
-  const turnStrength = clamp(Math.abs(roll) / Math.max(0.0001, number(cfg.maxRoll, 0.86)), 0, 1);
+  const turnStrength = clamp(Math.max(Math.abs(roll) / Math.max(0.0001, number(cfg.maxRoll, 0.82)), Math.abs(input.bank) * 0.55), 0, 1);
   if (!assisted || cfg.carveMode === "off") {
     return { focusDirection: forwardFromRotation(rotation), turnStrength, active: false };
   }
-  const carveLean = roll * number(cfg.bankCarveScale, 1.45) + input.bank * number(cfg.carveStrength, 0.72) * 0.16;
-  const pitchLean = (targets.targetPitch - number(rotation.pitch)) * number(cfg.pitchCarveScale, 1.15) + input.pitch * 0.045;
-  const focusDirection = norm(forwardFromRotation({
+  const carveLean = roll * number(cfg.bankCarveScale, 1.34) + input.bank * number(cfg.carveStrength, 1.02) * 0.24;
+  const pitchLean = (targets.targetPitch - number(rotation.pitch)) * number(cfg.pitchCarveScale, 1.14) + input.pitch * 0.055;
+  const rawFocus = norm(forwardFromRotation({
     pitch: number(rotation.pitch) + pitchLean,
     yaw: number(rotation.yaw) + carveLean,
     roll: number(rotation.roll)
   }));
+  const previous = norm(next.carve?.focusDirection, forwardFromRotation(rotation));
+  const response = alignAmount(number(cfg.carveResponse, 9.5), delta);
   return {
-    focusDirection,
-    turnStrength: clamp(Math.max(turnStrength, Math.abs(input.bank) * 0.42), 0, 1),
+    focusDirection: norm(vecMix(previous, rawFocus, response), rawFocus),
+    turnStrength,
     active: true
   };
 }
@@ -200,13 +216,12 @@ export function stepFlight(state = {}, input = {}, dt = 1 / 60, terrainSampler =
   }
   next.rotation.pitch = clamp(number(next.rotation.pitch), -1.4, 1.4);
   next.rotation.roll = clamp(number(next.rotation.roll), -1.2, 1.2);
-  const turnBoost = 1 + Math.abs(next.rotation.roll) * number(cfg.bankTurnAuthority, 1.35) * 0.18;
+  const turnBoost = 1 + Math.abs(next.rotation.roll) * number(cfg.bankTurnAuthority, 1.74) * 0.22;
   next.rotation.yaw = number(next.rotation.yaw) + next.rotation.roll * cfg.yawFromRoll * turnBoost * delta;
   if (!assisted && Math.abs(controlInput.bank) < 0.001) next.rotation.roll *= Math.exp(-4.5 * delta);
 
   let velocity = clone(next.velocity ?? { x: 0, y: 0, z: -45 });
-  const forward = forwardFromRotation(next.rotation);
-  const carve = carveFocusDirection(next.rotation, targets, cfg, controlInput, assisted);
+  const carve = carveFocusDirection(next, targets, cfg, controlInput, assisted, delta);
   const focusDirection = carve.focusDirection;
   if (next.boostCooldown > 0) next.boostCooldown = Math.max(0, next.boostCooldown - delta);
   if (controlInput.boost && next.boostCooldown <= 0) {
@@ -216,12 +231,12 @@ export function stepFlight(state = {}, input = {}, dt = 1 / 60, terrainSampler =
 
   velocity.y -= 9.81 * cfg.gravity * delta;
   const speed = len(velocity);
-  if (next.rotation.pitch < 0) velocity = add(velocity, focusDirection, Math.abs(Math.sin(next.rotation.pitch)) * (42 + number(cfg.diveAcceleration, 24)) * delta);
+  if (next.rotation.pitch < 0) velocity = add(velocity, focusDirection, Math.abs(Math.sin(next.rotation.pitch)) * (42 + number(cfg.diveAcceleration, 30)) * delta);
   else if (speed > cfg.stallSpeed) {
     const climb = Math.sin(next.rotation.pitch);
     velocity.y += speed * 0.45 * climb * cfg.lift * delta;
     velocity = add(velocity, focusDirection, -speed * 0.28 * climb * delta);
-    velocity = add(velocity, focusDirection, Math.max(0, climb) * number(cfg.climbAcceleration, 14) * delta);
+    velocity = add(velocity, focusDirection, Math.max(0, climb) * number(cfg.climbAcceleration, 17) * delta);
   }
 
   if (assisted && cfg.flightPathAlignment !== false) {
@@ -231,9 +246,9 @@ export function stepFlight(state = {}, input = {}, dt = 1 / 60, terrainSampler =
 
   const turnStrength = carve.turnStrength;
   if (assisted && turnStrength > 0.001) {
-    velocity = add(velocity, focusDirection, number(cfg.swoopAcceleration, 12) * turnStrength * delta);
-    velocity.y -= Math.max(0, number(cfg.turnLiftLoss, 0.18)) * turnStrength * Math.max(20, speed) * delta;
-    velocity.y -= Math.max(0, number(cfg.turnDiveAssist, 0.08)) * turnStrength * Math.max(20, speed) * delta;
+    velocity = add(velocity, focusDirection, number(cfg.swoopAcceleration, 18) * turnStrength * delta);
+    velocity.y -= Math.max(0, number(cfg.turnLiftLoss, 0.055)) * turnStrength * Math.max(20, speed) * delta;
+    velocity.y -= Math.max(0, number(cfg.turnDiveAssist, 0.03)) * turnStrength * Math.max(20, speed) * delta;
   }
 
   const forwardDot = dot(velocity, focusDirection);
@@ -249,7 +264,8 @@ export function stepFlight(state = {}, input = {}, dt = 1 / 60, terrainSampler =
   }
   if (assisted && velocity.y < number(cfg.sinkRateLimit, -38)) velocity.y = approach(velocity.y, number(cfg.sinkRateLimit, -38), 7, delta);
 
-  const drag = Math.min(len(velocity) * len(velocity) * cfg.drag * 0.0018 * delta, len(velocity) * 0.4);
+  const currentSpeed = len(velocity);
+  const drag = Math.min(currentSpeed * currentSpeed * cfg.drag * 0.0018 * delta, currentSpeed * 0.4);
   velocity = add(velocity, norm(velocity), -drag);
   const nextForwardDot = dot(velocity, focusDirection);
   if (nextForwardDot < cfg.minForwardSpeed && !next.onGround) velocity = add(velocity, focusDirection, 6 * delta);
@@ -276,6 +292,7 @@ export function stepFlight(state = {}, input = {}, dt = 1 / 60, terrainSampler =
   next.speed = len(velocity);
   next.control = {
     mode: targets.mode,
+    responseMode: targets.responseMode,
     targetPitch: targets.targetPitch,
     targetRoll: targets.targetRoll,
     lastInput: controlInput
@@ -353,6 +370,6 @@ export function createFlightMotionKit(nexusRealtime = {}, options = {}) {
         snapshot: () => clone(state())
       };
     },
-    metadata: { version: FLIGHT_MOTION_KIT_VERSION, purpose: "Generic pitch/roll/yaw glider physics with assisted stabilization, flight-path alignment, screen-focus carving, terrain clearance, boost, and manual override support." }
+    metadata: { version: FLIGHT_MOTION_KIT_VERSION, purpose: "Generic pitch/roll/yaw glider physics with direct assisted controls, flight-path alignment, screen-focus carving, terrain clearance, boost, and manual override support." }
   });
 }
