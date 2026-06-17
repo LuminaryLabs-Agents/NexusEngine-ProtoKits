@@ -32,6 +32,7 @@
     "./generic-mode-projected-route": "./protokits/generic-mode-projected-route/index.js",
     "./generic-particle-background-kit": "./protokits/generic-particle-background-kit/index.js",
     "./generic-pressure-loop-kit": "./protokits/generic-pressure-loop-kit/index.js",
+    "./generic-resource-loop-kit": "./protokits/generic-resource-loop-kit/index.js",
     "./foundation-kit": "./protokits/foundation-kit/index.js",
     "./input-kit": "./protokits/input-kit/index.js",
     "./first-person-camera-kit": "./protokits/first-person-camera-kit/index.js",

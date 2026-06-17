@@ -14,3 +14,4 @@ NexusRealtime-ProtoKits provides reusable, branded-app-neutral Domain Service Ki
 - Browser-only remote URL forwarder modules are skipped by the local Node import smoke; local ProtoKit index modules should still import cleanly.
 - Flight drag in `flight-motion-kit` is time-step scaled so simulation behavior is not frame-rate dependent.
 - `generic-pressure-loop-kit` is the first GPT-brainstormed AAA-batch DSK candidate. It owns renderer-agnostic pressure channels, thresholds, status transitions, and warning/peaked/recovered events for reusable heat, storm, alert, oxygen debt, radiation, corruption, collapse, or similar loops.
+- `generic-resource-loop-kit` is the second GPT-brainstormed AAA-batch DSK candidate. It owns renderer-agnostic resource meters, passive rates, spend/restore, locks, empty/full flags, threshold crossings, reset, and deterministic validation for reusable stamina, oxygen, charge, oil, hull, ink, tether, corruption, debt, or similar loops.

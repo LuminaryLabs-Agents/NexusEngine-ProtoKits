@@ -731,3 +731,8 @@ hosts for presentation
 ```txt
 NexusRealtime grows by turning repeated gameplay needs into clean domain services, not by accumulating one-off game code.
 ```
+
+## Recent Incubating DSKs
+
+- `generic-pressure-loop-kit`: renderer-agnostic pressure channels, thresholds, and warning/peaked/recovered events.
+- `generic-resource-loop-kit`: renderer-agnostic resource meters, rates, locks, empty/full state, threshold crossings, and deterministic reset.
