@@ -113,7 +113,7 @@ Wrong:
 
 ```txt
 fogline-tree-kit
-sora-terrain-kit
+aerial-terrain-kit
 hellscape-build-everything-kit
 ```
 

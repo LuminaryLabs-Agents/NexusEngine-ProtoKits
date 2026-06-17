@@ -15,7 +15,7 @@ The stack keeps NexusRealtime responsibilities separated:
 
 ## Why this stack exists
 
-The original aerial prototype mixed renderer, terrain generation, flight physics, rings, thermals, flock agents, camera, VFX, audio, and objective flow inside one browser file. This stack moves the reusable behavior into runtime-shaped ProtoKits so a game like **Sora The Infinite** can stay a preset plus a renderer host.
+The original aerial prototype mixed renderer, terrain generation, flight physics, rings, thermals, flock agents, camera, VFX, audio, and objective flow inside one browser file. This stack moves the reusable behavior into runtime-shaped ProtoKits so a branded aerial game can stay a preset plus a renderer host.
 
 ## Implemented kit plan
 
@@ -55,7 +55,7 @@ import { createGenericAerialAdventureKits } from "https://cdn.jsdelivr.net/gh/Lu
 
 const engine = NexusRealtime.createRealtimeGame({
   kits: createGenericAerialAdventureKits(NexusRealtime, {
-    seed: "sora-the-infinite",
+    seed: "aerial-example",
     terrain: {
       heightScale: 170,
       sampleSegments: 32,
@@ -92,6 +92,6 @@ A Three.js renderer should:
 
 ## Validation experiment
 
-`NexusRealtime-Experiments/experiments/sora-the-infinite/` is the branded validation app for this generic stack.
+Branded validation apps should live in NexusRealtime-Experiments, not inside ProtoKits.
 
 The game name belongs in Experiments and presets. The ProtoKits remain generic so the same stack can power other aerial games.

@@ -95,7 +95,7 @@ Poor candidates:
 
 ```txt
 FoglineRelayEverythingKit
-SoraBirdOnlyKit
+BirdOnlyAerialKit
 ZombieOrchardSpecificTreeKit
 ```
 

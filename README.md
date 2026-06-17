@@ -170,23 +170,30 @@ Advanced hosts can import `createNextLedgeCloudClimbKits()` from the same preset
 
 Composable renderer-agnostic kits for open-world games, flight games, traversal games, and seeded procedural worlds.
 
-These kits are generic by design. A game such as `Sora` should be a preset and data file over the generic kits, not a set of bird-only engine modules.
+These kits are generic by design. A game should keep its own preset/data in the app or experiment that consumes the kits.
 
 ```js
 import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
 import {
-  createSoraFlightGame,
-  createSoraFlightKits
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/sora-flight-preset/index.js";
+  createFlightMotionKit
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/flight-motion-kit/index.js";
+import {
+  createTerrainSamplerKit
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/terrain-sampler-kit/index.js";
+import {
+  createWorldPatchKit
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/world-patch-kit/index.js";
 
-const game = createSoraFlightGame(NexusRealtime, {
-  seed: "sora-sunlit-v1",
-  mode: "hybrid",
-  quality: "adaptive"
+const game = NexusRealtime.createRealtimeGame({
+  kits: [
+    createTerrainSamplerKit(NexusRealtime, { seed: "terrain-seed" }),
+    createWorldPatchKit(NexusRealtime, { patchSize: 500, radius: 2 }),
+    createFlightMotionKit(NexusRealtime, { actorId: "player" })
+  ]
 });
 ```
 
-Advanced hosts can import `createSoraFlightKits()` and compose the kit list manually.
+Hosts compose the generic kits manually and keep game-specific data outside ProtoKits.
 
 ### Generic World / Flight Kit List
 
@@ -204,6 +211,5 @@ Advanced hosts can import `createSoraFlightKits()` and compose the kit list manu
 - `flock-agent-kit` — generic companion swarm/follow agents for birds, drones, fish, boats, or cars.
 - `updraft-volume-kit` — generic wind/current/lift force volumes and visual descriptors.
 - `checkpoint-volume-kit` — generic ring, gate, pickup, checkpoint, and boost-trigger volumes.
-- `sora-flight-preset` — example preset/data composition that turns the generic stack into a sunlit bird flight game.
 
 ## Structure

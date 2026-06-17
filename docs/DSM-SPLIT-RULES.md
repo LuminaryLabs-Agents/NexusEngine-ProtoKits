@@ -98,7 +98,7 @@ BeaconDSM creates Three.js lights.
 
 ## Split when game names appear in generic code
 
-If generic code says `fogline`, `sora`, `hellscape`, or `zombie-orchard`, check whether the behavior belongs in:
+If generic code says a game name such as `fogline`, `hellscape`, or `zombie-orchard`, check whether the behavior belongs in:
 
 - a preset
 - a bridge
@@ -137,7 +137,7 @@ Bridge/preset examples:
 
 ```txt
 Fogline survey-pressure bridge
-Sora flight preset
+Aerial flight preset
 Hellscape siege preset
 Zombie Orchard survival bridge
 ```

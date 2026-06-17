@@ -42,7 +42,7 @@ Bad:
 
 ```txt
 FoglineRouteKit
-SoraCheckpointThing
+AerialCheckpointThing
 ZombieTreeKit
 tree-dsm
 createTreeDSM()

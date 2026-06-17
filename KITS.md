@@ -358,7 +358,7 @@ Bad:
 ```txt
 createPenguinPhysicsKit
 createNextLedgeOnlyRouteKit
-createSoraBirdOnlyTerrainKit
+createBirdOnlyTerrainKit
 ```
 
 The game-specific part should be a preset.
@@ -412,7 +412,6 @@ Turn generic kits into a themed game configuration.
 
 ```txt
 blackwake-preset-kit
-sora-flight-preset
 next-ledge-preset
 penguin-prix-preset
 fogline-preset
@@ -595,7 +594,6 @@ protokits/
 
   presets/
     blackwake-preset
-    sora-flight-preset
     next-ledge-preset
     penguin-prix-preset
     fogline-preset
@@ -604,7 +602,6 @@ protokits/
   deploy/
     fogline-relay-deploy-kit
     hellscape-siege-deploy-kit
-    sora-infinite-deploy-kit
     next-ledge-demo-deploy-kit
 ```
 

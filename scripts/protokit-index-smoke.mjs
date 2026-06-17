@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readdirSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -20,8 +20,14 @@ walk(protoRoot);
 indexFiles.sort();
 
 const failures = [];
+const skippedRemoteForwarders = [];
 for (const file of indexFiles) {
   const label = relative(root, file);
+  const source = readFileSync(file, "utf8");
+  if (/\bfrom\s+["']https?:\/\//.test(source)) {
+    skippedRemoteForwarders.push(label);
+    continue;
+  }
   try {
     const module = await import(pathToFileURL(resolve(file)).href);
     assert.ok(Object.keys(module).length > 0, `${label} should export at least one symbol`);
@@ -37,4 +43,7 @@ if (failures.length > 0) {
   throw new Error(`${failures.length} ProtoKit index import smoke checks failed.`);
 }
 
-console.log(`Imported ${indexFiles.length} ProtoKit index modules.`);
+const suffix = skippedRemoteForwarders.length
+  ? `; skipped ${skippedRemoteForwarders.length} remote URL forwarder(s): ${skippedRemoteForwarders.join(", ")}`
+  : "";
+console.log(`Imported ${indexFiles.length - skippedRemoteForwarders.length} ProtoKit index modules${suffix}.`);

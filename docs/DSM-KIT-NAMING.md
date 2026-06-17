@@ -86,7 +86,7 @@ Bad:
 
 ```txt
 protokits/fogline-tree-kit/
-protokits/sora-terrain-kit/
+protokits/aerial-terrain-kit/
 protokits/hellscape-build-everything-kit/
 ```
 

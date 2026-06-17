@@ -8,7 +8,7 @@ The key change is to stop treating world streaming as a full-window rebuild. The
 
 ## Problem
 
-The old Sora configuration could produce lag spikes because the active patch window was rebuilt synchronously when the player crossed a patch boundary. Each patch contained terrain samples that then caused the renderer to allocate new geometry.
+The old branded aerial configuration could produce lag spikes because the active patch window was rebuilt synchronously when the player crossed a patch boundary. Each patch contained terrain samples that then caused the renderer to allocate new geometry.
 
 ## Implemented Phase 1
 
@@ -50,7 +50,7 @@ RenderUploadQueueKit
 2. Move terrain query support back into the registry implementation.
 3. Add headless tests for stable patch ids, queue draining, cache eviction, and deterministic rebuilds.
 4. Add adaptive quality: reduce segment count or patch radius after repeated frame spikes.
-5. Move Super Fly from the legacy `sora-the-infinite` path to a new route only after adding a redirect.
+5. Move Super Fly from the legacy aerial experiment path to a new route only after adding a redirect.
 
 ## Acceptance Criteria
 

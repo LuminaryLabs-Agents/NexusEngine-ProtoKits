@@ -68,7 +68,7 @@ export function stepFlight(state = {}, input = {}, dt = 1 / 60, terrainSampler =
     velocity.y += speed * 0.45 * climb * cfg.lift * delta;
     velocity = add(velocity, forward, -speed * 0.28 * climb * delta);
   }
-  const drag = Math.min(speed * speed * cfg.drag * 0.0018, 0.45);
+  const drag = Math.min(speed * speed * cfg.drag * 0.0018 * delta, speed * 0.4);
   velocity = add(velocity, norm(velocity), -drag);
   const forwardDot = velocity.x * forward.x + velocity.y * forward.y + velocity.z * forward.z;
   if (forwardDot < cfg.minForwardSpeed && !next.onGround) velocity = add(velocity, forward, 6 * delta);

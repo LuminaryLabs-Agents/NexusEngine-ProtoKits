@@ -117,7 +117,18 @@ export function createGenericParticleBackgroundKit(NexusRealtime, config = {}) {
       state = { ...state, descriptor: createParticleBackgroundDescriptor({ ...state.descriptor, ...(event.config ?? {}) }), lastReason: event.reason ?? "configure" };
     }
     for (const event of world.readEvents(SetPreset)) {
-      state = { ...state, descriptor: createParticleBackgroundDescriptor({ ...state.descriptor, preset: event.preset ?? "nexusGallery", ...(event.config ?? {}) }), lastReason: event.reason ?? "preset" };
+      state = {
+        ...state,
+        descriptor: createParticleBackgroundDescriptor({
+          preset: event.preset ?? "nexusGallery",
+          enabled: state.descriptor?.enabled,
+          intensity: state.descriptor?.intensity,
+          timeScale: state.descriptor?.timeScale,
+          parallax: state.descriptor?.parallax,
+          ...(event.config ?? {})
+        }),
+        lastReason: event.reason ?? "preset"
+      };
     }
     for (const event of world.readEvents(SetEnabled)) {
       state = { ...state, descriptor: { ...state.descriptor, enabled: Boolean(event.enabled) }, lastReason: event.reason ?? "enabled" };

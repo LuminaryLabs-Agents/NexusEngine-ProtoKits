@@ -244,7 +244,7 @@ Avoid:
 
 ```txt
 fogline-scan-kit
-sora-gate-kit
+aerial-gate-kit
 hellscape-tree-kit
 ```
 
