@@ -1,6 +1,7 @@
 export { createGenericProtoKit, GENERIC_KIT_UTILS_VERSION } from "../generic-kit-utils/index.js";
 export * from "../domain-service-kits/index.js";
 export { createGenericDefenseKits, createGenericDefenseGame, createGenericDefenseLevel, GENERIC_DEFENSE_KITS_VERSION } from "../generic-defense-kits/index.js";
+export { createGenericDefenseKits as createGenericDefenseAaaKits, createGenericDefenseGame as createGenericDefenseAaaGame, createGenericDefenseLevel as createGenericDefenseAaaLevel, GENERIC_DEFENSE_AAA_KITS_VERSION, createGenericDefenseFoundationKit, createGenericDefenseWorldKit, createGenericDefenseBuildKit, createGenericDefenseCombatKit, createGenericDefenseAgentKit, createGenericDefenseWaveKit, createGenericDefenseEconomyKit, createGenericDefenseAbilityKit, createGenericDefenseObjectiveKit, createGenericDefensePresentationKit, createGenericDefenseScaleKit, createGenericDefenseAuthoringQaKit } from "../generic-defense-aaa-kits/index.js";
 
 export { createGenericSeedKit, GENERIC_SEED_KIT_DEFINITION } from "../generic-seed-kit/index.js";
 export { createGenericClockKit, GENERIC_CLOCK_KIT_DEFINITION } from "../generic-clock-kit/index.js";
