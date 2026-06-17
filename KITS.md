@@ -737,3 +737,4 @@ NexusRealtime grows by turning repeated gameplay needs into clean domain service
 - `generic-pressure-loop-kit`: renderer-agnostic pressure channels, thresholds, and warning/peaked/recovered events.
 - `generic-resource-loop-kit`: renderer-agnostic resource meters, rates, locks, empty/full state, threshold crossings, and deterministic reset.
 - `generic-action-window-kit`: renderer-agnostic action timing, perfect/good/miss judgment, cooldowns, rejection reasons, and deterministic reset.
+- `generic-affordance-descriptor-kit`: renderer-agnostic interactable availability, target descriptors, stable rejection reasons, and usable/blocked/completed state.
