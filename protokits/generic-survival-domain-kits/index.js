@@ -123,9 +123,9 @@ export function createThreatRosterKit(nexusRealtime = {}, config = {}) {
   return {
     ...base,
     id: config.kitId ?? "threat-roster-kit",
-    components: { ThreatArchetype: base.components?.MonsterArchetype, ThreatProfile: base.components?.MonsterThreat, ThreatSpawnRequestTag: base.components?.MonsterSpawnRequestTag },
-    resources: { ThreatRosterState: base.resources?.MonsterRosterState },
-    events: { HordeSpawnRequested: base.events?.HordeSpawnRequested, ThreatSpawnRequested: base.events?.MonsterSpawnRequested, ThreatArchetypeSelected: base.events?.MonsterArchetypeSelected, ThreatDefeated: base.events?.MonsterDefeated, BossThreatQueued: base.events?.BossMonsterQueued },
+    components: { ThreatArchetype: base.components?.MonsterArchetype, ThreatProfile: base.components?.MonsterThreat, ThreatSpawnRequestTag: base.components?.MonsterSpawnRequestTag, MonsterArchetype: base.components?.MonsterArchetype, MonsterThreat: base.components?.MonsterThreat, MonsterSpawnRequestTag: base.components?.MonsterSpawnRequestTag },
+    resources: { ThreatRosterState: base.resources?.MonsterRosterState, MonsterRosterState: base.resources?.MonsterRosterState },
+    events: { HordeSpawnRequested: base.events?.HordeSpawnRequested, ThreatSpawnRequested: base.events?.MonsterSpawnRequested, ThreatArchetypeSelected: base.events?.MonsterArchetypeSelected, ThreatDefeated: base.events?.MonsterDefeated, BossThreatQueued: base.events?.BossMonsterQueued, MonsterSpawnRequested: base.events?.MonsterSpawnRequested, MonsterArchetypeSelected: base.events?.MonsterArchetypeSelected, MonsterDefeated: base.events?.MonsterDefeated, BossMonsterQueued: base.events?.BossMonsterQueued },
     provides: ["survival:threat-roster"],
     install(ctx) { base.install?.(ctx); ctx.engine.threatRoster = ctx.engine.zombieOrchard?.monsterRoster; },
     metadata: { version: THREAT_ROSTER_KIT_VERSION, domain: "survival", purpose: "Generic hostile/threat archetypes, spawn descriptors, boss/elite queues, and defeat accounting." }
