@@ -39,6 +39,13 @@ Game-specific content becomes data, preset, sequence, or Deploy Kit.
 Presentation stays in the host or renderer adapter.
 ```
 
+Recent incubating generic DSKs:
+
+```txt
+generic-pressure-loop-kit
+  deterministic multi-channel pressure loops for heat, storm, alert, oxygen debt, radiation, corruption, collapse, and similar pressure systems
+```
+
 A game should be:
 
 ```txt
