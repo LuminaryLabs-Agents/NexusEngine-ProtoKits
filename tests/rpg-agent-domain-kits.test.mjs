@@ -41,6 +41,7 @@ const { engine } = install([
       { id: "guard_01", label: "Guard", role: "guard", position: { x: 0, z: 0 }, metadata: { sightRange: 8 } },
       { id: "player", label: "Player", position: { x: 2, z: 0 }, tags: ["person"] },
       { id: "merchant", label: "Merchant", position: { x: 4, z: 0 }, tags: ["person"] },
+      { id: "gate", label: "Gate", position: { x: 5, z: 0 }, tags: ["door"] },
       { id: "distant_wolf", label: "Distant Wolf", position: { x: 40, z: 0 }, tags: ["monster"] },
       { id: "hidden_note", label: "Hidden Note", position: { x: 1, z: 0 }, hidden: true }
     ]
