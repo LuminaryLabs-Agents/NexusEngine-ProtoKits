@@ -81,4 +81,9 @@ export function createDomainServiceKits(NexusRealtime, config = {}) {
   ];
 }
 
+export * from "../2d-platformer-domain/index.js";
+export * from "../adventure-domain/index.js";
+export * from "../survival-crafting-domain/index.js";
+export * from "../environment-domain/index.js";
+
 export default createDomainServiceKits;
