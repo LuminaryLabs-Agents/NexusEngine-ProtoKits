@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import {
+  ADVENTURE_DOMAIN_MANIFEST,
   DOMAIN_SERVICE_KIT_DEFINITIONS,
+  ENVIRONMENT_DOMAIN_MANIFEST,
+  SURVIVAL_CRAFTING_DOMAIN_MANIFEST,
+  TWO_D_PLATFORMER_DOMAIN_MANIFEST,
+  create2DPlatformerDomainKits,
+  createAdventureDomainKits,
   createAssetDescriptorKit,
   createBuildPlacementKit,
   createCompletionLedgerKit,
@@ -8,11 +14,13 @@ import {
   createDiegeticFeedbackSignalKit,
   createDomainServiceKits,
   createEncounterDirectorKit,
+  createEnvironmentDomainKits,
   createLockGroupKit,
   createObjectiveBridgeKit,
   createResourceNodeKit,
   createSpatialInteractionKit,
   createStructureRuntimeKit,
+  createSurvivalCraftingDomainKits,
   createViewRigKit
 } from "../protokits/domain-service-kits/index.js";
 
@@ -80,4 +88,26 @@ for (const apiName of ["viewRig", "spatialInteraction", "completionLedger", "obj
 const bundle = createDomainServiceKits(Nexus);
 assert.equal(bundle.length, 12);
 assert.ok(bundle.some((kit) => kit.provides.includes("interaction:spatial")));
+
+const domainBundles = [
+  [TWO_D_PLATFORMER_DOMAIN_MANIFEST, create2DPlatformerDomainKits(Nexus)],
+  [ADVENTURE_DOMAIN_MANIFEST, createAdventureDomainKits(Nexus)],
+  [SURVIVAL_CRAFTING_DOMAIN_MANIFEST, createSurvivalCraftingDomainKits(Nexus)],
+  [ENVIRONMENT_DOMAIN_MANIFEST, createEnvironmentDomainKits(Nexus)]
+];
+
+for (const [manifest, created] of domainBundles) {
+  assert.equal(created.length, manifest.kits.length);
+  assert.ok(manifest.excludes.includes("fluid-domain"));
+  assert.ok(manifest.excludes.includes("water-subdomain"));
+  assert.ok(!manifest.kits.some((kitId) => kitId.startsWith("fluid-") || kitId.startsWith("water-")));
+  assert.ok(created.every((kit) => typeof kit.createRuntimeKit === "function"));
+  assert.ok(created.every((kit) => kit.metadata?.purpose || kit.purpose));
+}
+
+assert.ok(TWO_D_PLATFORMER_DOMAIN_MANIFEST.kits.includes("2d-player-movement-kit"));
+assert.ok(ADVENTURE_DOMAIN_MANIFEST.kits.includes("quest-domain-service-kit"));
+assert.ok(SURVIVAL_CRAFTING_DOMAIN_MANIFEST.kits.includes("build-break-domain-service-kit"));
+assert.ok(ENVIRONMENT_DOMAIN_MANIFEST.kits.includes("cloud-layer-kit"));
+
 console.log("domain service kit tests passed");
