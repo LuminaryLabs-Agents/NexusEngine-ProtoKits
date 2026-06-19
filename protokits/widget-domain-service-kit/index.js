@@ -1,1 +1,1 @@
-export { createWidgetDomainServiceKit, createWidgetDomainServiceKit as default, WIDGET_DOMAIN_SERVICE_KIT_VERSION } from '../spatial-authoring-kits/index.js';
+export { createWidgetDsk as createWidgetDomainServiceKit, createWidgetDsk as default } from '../spatial-authoring-kits/index.js';
