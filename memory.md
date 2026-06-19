@@ -13,6 +13,7 @@ NexusRealtime-ProtoKits provides reusable, branded-app-neutral Domain Service Ki
 ## Conventions
 - Keep aerial, terrain, render, actor, VFX, audio, and camera kits generic and composable.
 - Do not add branded bird-sim data, preset exports, or app-specific objective/challenge logic here.
+- Use `docs/PROTOKIT-EXPANSION-LOOP.md` as the durable boundary for adding reusable behavior from visual experiments: ProtoKits own app-neutral services, descriptors, resources, events, snapshot, and reset contracts; Experiments own playable proof.
 - Browser-only remote URL forwarder modules are skipped by the local Node import smoke; local ProtoKit index modules should still import cleanly.
 - Browser CDN hosts using direct-import DSK ProtoKits need an import map that resolves bare `nexusrealtime` to the desired NexusRealtime URL or package path.
 - Flight drag in `flight-motion-kit` is time-step scaled so simulation behavior is not frame-rate dependent.

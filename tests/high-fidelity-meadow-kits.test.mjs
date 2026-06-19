@@ -6,6 +6,7 @@ import {
   createGrassFieldSystemKit,
   createHighFidelityMeadowKits,
   createMeadowSimulationModeKit,
+  createMeadowVisualTargetKit,
   createParticleVfxDomainServiceKit,
   createProceduralMeshSynthesisKit,
   createProceduralStructureDomainServiceKit,
@@ -81,7 +82,16 @@ assert.equal(scene.structures.mesh.triangleCount > 20, true);
 assert.equal(scene.creatures.herd.length, 2);
 assert.equal(scene.sky.shaderModel, "webgl-procedural-skybox");
 
+const visualTarget = createMeadowVisualTargetKit({}, { seed: "test-target" });
+const targetDescriptor = visualTarget.createTargetDescriptor();
+assert.equal(targetDescriptor.type, "visual-target-composition");
+assert.ok(targetDescriptor.path.points.length >= 4);
+assert.ok(targetDescriptor.treeLine.trees.length >= 4);
+assert.ok(targetDescriptor.focus.focalFeatures.includes("player-silhouette"));
+assert.equal(visualTarget.validateSceneDescriptor({ ...scene, visualTarget: targetDescriptor, flowers: { flowers: [{ id: "flower" }] } }).passed, true);
+
 const bundle = createHighFidelityMeadowKits({}, { meadowContent: { livestockCount: 1 } });
 assert.ok(bundle.meadowSimulationMode.kitStack.includes("fur-wool-hair-domain-service-kit"));
+assert.ok(bundle.meadowVisualTarget.provides.includes("visual:target-composition"));
 
 console.log("High-fidelity meadow ProtoKits passed.");

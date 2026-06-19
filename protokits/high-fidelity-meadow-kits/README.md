@@ -13,6 +13,7 @@ Use existing domains before adding new ones:
 - Update `biome-field-kit`, `vegetation-archetype-kit`, `ground-contact-kit`, and `vegetation-lod-kit` for existing vegetation placement/LOD responsibilities.
 - Use this package for the missing high-fidelity simulation/render-descriptor domains: terrain field, wind field, grass instance buffers, procedural structures, procedural mesh synthesis, particle VFX, creature bodies, fur/wool/hair descriptors, and meadow mode composition.
 - Do not create cottage-, sheep-, or chimney-specific kits; those remain presets/content.
+- Visual target proof descriptors, such as camera framing, path focal points, a player silhouette anchor, and distant tree-line placement, belong in `createMeadowVisualTargetKit` because they are renderer-agnostic composition intent. The Experiment decides how to render them.
 
 ## Main factories
 
@@ -33,6 +34,7 @@ createCreatureProceduralBodyKit
 createCreatureAnimationDomainServiceKit
 createFurWoolHairDomainServiceKit
 createSkyAtmosphereDomainServiceKit
+createMeadowVisualTargetKit
 createHighFidelityMeadowContentKit
 createMeadowSimulationModeKit
 createHighFidelityMeadowKits
@@ -96,6 +98,10 @@ hair:groom-descriptors
 render:fur-shell-descriptors
 sky:atmosphere
 render:skybox-descriptors
+visual:target-composition
+camera:target-framing
+route:visual-path
+environment:tree-line-descriptors
 mode:meadow-simulation
 scene:high-fidelity-meadow
 ```

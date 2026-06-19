@@ -40,6 +40,83 @@ export function createFurWoolHairDomainServiceKit(N = {}, o = {}) { const shellC
 export function createSkyAtmosphereDomainServiceKit(N = {}, o = {}) { return kit(N, { id: o.id ?? "sky-atmosphere-domain-service-kit", apiName: "skyAtmosphereDomain", category: "domain-service", purpose: "Customizable procedural skybox, sun, haze, cloud, exposure, and horizon descriptors.", requires: ["time:simulation", "wind:field"], provides: ["sky:atmosphere", "lighting:environment", "render:skybox-descriptors"], getSkyDescriptor(d = {}) { const t = number(d.timeOfDay, number(o.timeOfDay, 0.43)), a = t * Math.PI * 2 - Math.PI * 0.5, sun = norm({ x: Math.cos(a), y: Math.max(0.05, Math.sin(a)), z: 0.25 }); return Object.freeze({ id: d.id ?? "sky.dynamic.meadow", type: "procedural-sky-atmosphere", timeOfDay: t, sunDirection: sun, horizonColor: d.horizonColor ?? "#d6d7bf", zenithColor: d.zenithColor ?? "#6ea8d8", cloudCover: number(d.cloudCover, 0.38), haze: number(d.haze, 0.22), shaderModel: "webgl-procedural-skybox" }); } }); }
 
 export function createHighFidelityMeadowContentKit(N = {}, o = {}) { const preset = Object.freeze({ id: o.id ?? "high-fidelity-meadow-demo-content", terrain: { seed: o.seed ?? "hf-meadow", foundationMasks: [{ center: { x: 0, z: 0 }, radius: 7.5, height: 0 }] }, wind: { seed: `${o.seed ?? "hf-meadow"}:wind` }, grass: { density: number(o.grassDensity, 2.6), maxInstancesPerChunk: Math.floor(number(o.maxGrassInstancesPerChunk, 6500)) }, cottage: { id: "meadow.cottage", position: { x: 0, y: 0, z: 0 } }, smoke: { capacity: Math.floor(number(o.smokeCapacity, 2048)), rate: number(o.smokeRate, 42) }, livestock: { count: Math.floor(number(o.livestockCount, 8)), archetype: "wool-livestock" }, sky: { timeOfDay: number(o.timeOfDay, 0.43) }, camera: { position: { x: 0, y: 2.4, z: 24 }, target: { x: 0, y: 1.5, z: 0 }, fov: 48 } }); return kit(N, { id: preset.id, apiName: "highFidelityMeadowContent", category: "content", purpose: "Declarative meadow content preset for terrain, cottage, grass, smoke, livestock, wind, sky, and camera.", provides: ["content:meadow-demo", "preset:high-fidelity-meadow"], preset, getPreset: () => preset }); }
+export function createMeadowVisualTargetKit(N = {}, o = {}) {
+  const seed = o.seed ?? "meadow-visual-target";
+  const pathPoints = arr(o.pathPoints).length ? arr(o.pathPoints).map((point) => vec(point)) : [
+    { x: -11, y: 0.04, z: -36 },
+    { x: -7, y: 0.04, z: -24 },
+    { x: -1.8, y: 0.04, z: -12 },
+    { x: 2.5, y: 0.04, z: 2 },
+    { x: 6.5, y: 0.04, z: 18 },
+    { x: 1.5, y: 0.04, z: 34 }
+  ];
+  const treeLine = Array.from({ length: Math.max(4, Math.floor(number(o.treeCount, 13))) }, (_, i) => {
+    const t = i / Math.max(1, Math.floor(number(o.treeCount, 13)) - 1);
+    return Object.freeze({
+      id: `target.tree-line.${i}`,
+      x: round(-58 + t * 116 + Math.sin(i * 2.1 + hashString(seed) * 0.001) * 3.5),
+      y: 0,
+      z: round(number(o.treeLineZ, 62) + Math.cos(i * 1.7) * 5),
+      height: round(number(o.treeHeight, 8.5) + (i % 4) * 1.2),
+      crownRadius: round(number(o.treeCrownRadius, 2.3) + (i % 3) * 0.35)
+    });
+  });
+  const descriptor = Object.freeze({
+    id: o.id ?? "meadow.visual-target.golden-path",
+    type: "visual-target-composition",
+    targetPrompt: o.targetPrompt ?? "Golden-hour third-person meadow with readable path, player silhouette, layered grass, wildflowers, rocks, distant tree line, and atmospheric depth.",
+    owns: ["visual target intent", "camera composition descriptors", "path focal descriptors", "tree-line placement descriptors"],
+    provides: ["visual:target-composition", "camera:target-framing", "route:visual-path", "environment:tree-line-descriptors"],
+    requires: ["terrain:height-sampler", "vegetation:grass-instance-buffers", "sky:atmosphere"],
+    camera: {
+      mode: "third-person-meadow-proof",
+      position: { x: -10, y: 7.6, z: -36 },
+      target: { x: 0, y: 1.35, z: -4 },
+      fov: 45,
+      purpose: "Keep the path, player silhouette, meadow volume, and distant tree line readable together."
+    },
+    path: {
+      id: "target.winding-dirt-path",
+      kind: "winding-dirt-path",
+      materialHint: "warm compacted soil with short grass edges",
+      points: Object.freeze(pathPoints.map((point, index) => Object.freeze({ id: `target.path.${index}`, ...point })))
+    },
+    focus: {
+      playerSilhouette: { id: "target.player-silhouette", x: -2.1, y: 0.08, z: -14.5, height: 1.45, color: "#1b2418" },
+      focalFeatures: Object.freeze(["path", "player-silhouette", "wildflowers", "rocks", "grass-volume", "tree-line", "atmospheric-depth"])
+    },
+    treeLine: {
+      id: "target.distant-tree-line",
+      role: "scale-and-horizon-depth",
+      trees: Object.freeze(treeLine)
+    },
+    snapshot: { serializable: true, reset: "deterministic-from-seed", version: HIGH_FIDELITY_MEADOW_KITS_VERSION }
+  });
+  return kit(N, {
+    id: o.kitId ?? "meadow-visual-target-kit",
+    apiName: "meadowVisualTarget",
+    category: "domain-service",
+    purpose: "Renderer-agnostic visual target composition descriptors for meadow proof scenes.",
+    requires: descriptor.requires,
+    provides: descriptor.provides,
+    getTargetSpec: () => descriptor,
+    createTargetDescriptor(overrides = {}) {
+      return Object.freeze({ ...descriptor, ...overrides, snapshot: { ...descriptor.snapshot, ...(overrides.snapshot ?? {}) } });
+    },
+    validateSceneDescriptor(scene = {}) {
+      const checks = {
+        hasPath: Boolean(scene.visualTarget?.path?.points?.length ?? descriptor.path.points.length),
+        hasPlayerSilhouette: Boolean(scene.visualTarget?.focus?.playerSilhouette ?? descriptor.focus.playerSilhouette),
+        hasTreeLine: Boolean(scene.visualTarget?.treeLine?.trees?.length ?? descriptor.treeLine.trees.length),
+        hasFlowers: Boolean(scene.flowers?.flowers?.length),
+        hasGrass: Boolean(scene.grass?.bladeCount || scene.vegetation?.grassInstances?.count),
+        hasAtmosphere: Boolean(scene.sky || scene.visualTarget)
+      };
+      const score = Object.values(checks).filter(Boolean).length;
+      return Object.freeze({ ...checks, score, passed: score >= 5, expected: Object.freeze(["path", "player-silhouette", "tree-line", "flowers", "grass", "atmosphere"]) });
+    }
+  });
+}
 export function createMeadowSimulationModeKit(N = {}, o = {}) { const content = o.content ?? createHighFidelityMeadowContentKit(N, o).getPreset(); const apiObj = { id: o.id ?? "meadow-simulation-mode-kit", apiName: "meadowSimulationMode", category: "mode", purpose: "Composes the high-fidelity meadow domain stack into one renderer-ready scene.", requires: ["terrain:height-sampler", "wind:field", "render:descriptors"], provides: ["mode:meadow-simulation", "scene:high-fidelity-meadow"], kitStack: Object.freeze(["resource-lifetime-runtime-kit", "typed-array-store-runtime-kit", "dirty-set-runtime-kit", "terrain-field-domain-service-kit", "terrain-material-domain-service-kit", "wind-field-domain-service-kit", "grass-field-system-kit", "procedural-structure-domain-service-kit", "procedural-mesh-synthesis-kit", "particle-vfx-domain-service-kit", "sky-atmosphere-domain-service-kit", "creature-domain-service-kit", "creature-procedural-body-kit", "creature-animation-domain-service-kit", "fur-wool-hair-domain-service-kit"]), content, buildScene() { const terrain = createTerrainFieldDomainServiceKit(N, content.terrain), wind = createWindFieldDomainServiceKit(N, content.wind), grass = createGrassFieldSystemKit(N, { ...content.grass, terrain }), structures = createProceduralStructureDomainServiceKit(N, content.cottage), meshKit = createProceduralMeshSynthesisKit(N), particles = createParticleVfxDomainServiceKit(N, content.smoke), creatures = createCreatureDomainServiceKit(N, { seed: `${content.id}:creatures` }), body = createCreatureProceduralBodyKit(N), anim = createCreatureAnimationDomainServiceKit(N), fur = createFurWoolHairDomainServiceKit(N), sky = createSkyAtmosphereDomainServiceKit(N, content.sky); const chunk = terrain.createChunkDescriptor(0, 0), grassInstances = grass.generateChunkInstances(chunk, { terrain, camera: content.camera.position }), cottage = structures.createStructureDescriptor(content.cottage), cottageMesh = meshKit.buildStructureMesh(cottage), emitter = particles.createEmitter({ position: cottage.anchors.chimneyTop, rate: content.smoke.rate }), pool = particles.createParticlePool(content.smoke.capacity); particles.stepPool(pool, [emitter], 0.1, { wind, time: 0.1 }); const herd = creatures.createHerd(content.livestock.count), creatureMesh = body.buildLivestockMesh(), groom = fur.createGroomDescriptor(creatureMesh); return Object.freeze({ id: `${content.id}.scene`, kitStack: apiObj.kitStack, content, terrain: { chunks: [chunk] }, vegetation: { grassInstances, grassBatch: grass.createRenderBatchDescriptor(grassInstances) }, structures: { cottage, mesh: meshKit.createMeshDescriptor(cottageMesh, cottage.materials) }, particles: { emitters: [emitter], smokeBatch: particles.createBatchDescriptor(pool) }, creatures: { herd, mesh: creatureMesh, groom, furShells: fur.createShellDescriptors(groom, "near"), samplePose: anim.samplePose(herd[0], 0.25) }, sky: sky.getSkyDescriptor(content.sky), camera: content.camera, diagnostics: { grassBytes: grassInstances.memoryBytes, cottageTriangles: cottageMesh.triangleCount, creatureTriangles: creatureMesh.triangleCount, smokeCapacity: pool.capacity } }); } }; return kit(N, apiObj); }
-export function createHighFidelityMeadowKits(N = {}, o = {}) { return Object.freeze({ version: HIGH_FIDELITY_MEADOW_KITS_VERSION, resourceLifetime: createResourceLifetimeRuntimeKit(N, o.resourceLifetime ?? {}), typedArrayStore: createTypedArrayStoreRuntimeKit(N, o.typedArrayStore ?? {}), dirtySets: createDirtySetRuntimeKit(N, o.dirtySets ?? {}), terrainField: createTerrainFieldDomainServiceKit(N, o.terrainField ?? {}), terrainMaterial: createTerrainMaterialDomainServiceKit(N, o.terrainMaterial ?? {}), windField: createWindFieldDomainServiceKit(N, o.windField ?? {}), secondaryMotion: createSecondaryMotionDomainServiceKit(N, o.secondaryMotion ?? {}), grassFieldSystem: createGrassFieldSystemKit(N, o.grassFieldSystem ?? {}), proceduralStructureDomain: createProceduralStructureDomainServiceKit(N, o.proceduralStructureDomain ?? {}), proceduralMeshSynthesis: createProceduralMeshSynthesisKit(N, o.proceduralMeshSynthesis ?? {}), particleVfxDomain: createParticleVfxDomainServiceKit(N, o.particleVfxDomain ?? {}), creatureDomain: createCreatureDomainServiceKit(N, o.creatureDomain ?? {}), creatureProceduralBody: createCreatureProceduralBodyKit(N, o.creatureProceduralBody ?? {}), creatureAnimationDomain: createCreatureAnimationDomainServiceKit(N, o.creatureAnimationDomain ?? {}), furWoolHairDomain: createFurWoolHairDomainServiceKit(N, o.furWoolHairDomain ?? {}), skyAtmosphereDomain: createSkyAtmosphereDomainServiceKit(N, o.skyAtmosphereDomain ?? {}), meadowContent: createHighFidelityMeadowContentKit(N, o.meadowContent ?? {}), meadowSimulationMode: createMeadowSimulationModeKit(N, o.meadowSimulationMode ?? o.meadowContent ?? {}) }); }
+export function createHighFidelityMeadowKits(N = {}, o = {}) { return Object.freeze({ version: HIGH_FIDELITY_MEADOW_KITS_VERSION, resourceLifetime: createResourceLifetimeRuntimeKit(N, o.resourceLifetime ?? {}), typedArrayStore: createTypedArrayStoreRuntimeKit(N, o.typedArrayStore ?? {}), dirtySets: createDirtySetRuntimeKit(N, o.dirtySets ?? {}), terrainField: createTerrainFieldDomainServiceKit(N, o.terrainField ?? {}), terrainMaterial: createTerrainMaterialDomainServiceKit(N, o.terrainMaterial ?? {}), windField: createWindFieldDomainServiceKit(N, o.windField ?? {}), secondaryMotion: createSecondaryMotionDomainServiceKit(N, o.secondaryMotion ?? {}), grassFieldSystem: createGrassFieldSystemKit(N, o.grassFieldSystem ?? {}), proceduralStructureDomain: createProceduralStructureDomainServiceKit(N, o.proceduralStructureDomain ?? {}), proceduralMeshSynthesis: createProceduralMeshSynthesisKit(N, o.proceduralMeshSynthesis ?? {}), particleVfxDomain: createParticleVfxDomainServiceKit(N, o.particleVfxDomain ?? {}), creatureDomain: createCreatureDomainServiceKit(N, o.creatureDomain ?? {}), creatureProceduralBody: createCreatureProceduralBodyKit(N, o.creatureProceduralBody ?? {}), creatureAnimationDomain: createCreatureAnimationDomainServiceKit(N, o.creatureAnimationDomain ?? {}), furWoolHairDomain: createFurWoolHairDomainServiceKit(N, o.furWoolHairDomain ?? {}), skyAtmosphereDomain: createSkyAtmosphereDomainServiceKit(N, o.skyAtmosphereDomain ?? {}), meadowContent: createHighFidelityMeadowContentKit(N, o.meadowContent ?? {}), meadowVisualTarget: createMeadowVisualTargetKit(N, o.meadowVisualTarget ?? {}), meadowSimulationMode: createMeadowSimulationModeKit(N, o.meadowSimulationMode ?? o.meadowContent ?? {}) }); }
 export default createHighFidelityMeadowKits;
