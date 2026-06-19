@@ -1,56 +1,69 @@
-# Spatial Authoring DSK ProtoKits
+# Spatial Authoring Hand DSK ProtoKits
 
-Experimental v2 ProtoKit stack for SeedSpatial-style spatial authoring.
+Experimental v2 ProtoKit stack for hands-only SeedSpatial-style spatial authoring.
 
-This package defines renderer-independent, OpenXR/WebXR-compatible behavior domains for in-headset spatial creation. The kits are intentionally runtime-shaped and experimental: they define contracts, factory surfaces, requires/provides tokens, version constants, and composition helpers that can be validated in headless tests and later expanded into deeper per-domain state machines.
+This package defines the minimal required atomic DSKs for the first hand-tracking demo: hand adapters, gesture recognition, scene graph state, selection, transforms, widgets, interactions, and persistence. It intentionally excludes non-required future domains such as layout, binding, publishing, and AI patch generation until the hand-only authoring loop is proven.
 
 ## Core rule
 
 DSKs do not store raw XR runtime objects.
 
-They do not store `XrSession`, `XrSpace`, `XrSwapchain`, `XRSession`, `XRFrame`, `XRInputSource`, DOM nodes, Canvas contexts, Three.js objects, or renderer instances. Adapter kits normalize headset/runtime state into plain commands and descriptors.
+They do not store `XrSession`, `XrSpace`, `XrSwapchain`, `XRSession`, `XRFrame`, `XRInputSource`, DOM nodes, Canvas contexts, Three.js objects, or renderer instances. Adapter DSKs normalize headset/runtime state into plain commands and descriptors.
 
 ```txt
-OpenXR / WebXR runtime
-→ OpenXR or WebXR adapter kit
-→ normalized xr.point / xr.action / anchor descriptors
-→ DSK command
-→ validated scene graph patch
-→ publishable artifact
+OpenXR / WebXR hand tracking
+→ openxr-hand-adapter-dsk or webxr-hand-adapter-dsk
+→ normalized hand command
+→ hand-gesture-dsk
+→ selection / transform / widget / interaction / persistence DSK
+→ scene graph patch or JSON-safe snapshot
 ```
 
-## Included kits
+## Required hand-authoring DSKs
 
-- `spatial-scene-graph-kit`
-- `selection-domain-service-kit`
-- `transform-domain-service-kit`
-- `layout-domain-service-kit`
-- `widget-domain-service-kit`
-- `interaction-domain-service-kit`
-- `binding-domain-service-kit`
-- `persistence-domain-service-kit`
-- `publish-domain-service-kit`
-- `ai-generation-domain-service-kit`
-- `openxr-adapter-kit`
-- `webxr-adapter-kit`
-- `xr-spatial-anchor-kit`
-- `spatial-authoring-mode-kit`
+- `webxr-hand-adapter-dsk`
+- `openxr-hand-adapter-dsk`
+- `hand-gesture-dsk`
+- `spatial-scene-graph-dsk`
+- `selection-dsk`
+- `transform-dsk`
+- `widget-dsk`
+- `interaction-dsk`
+- `persistence-dsk`
 
 ## Import
 
 ```js
 import {
-  createSpatialAuthoringKits,
-  createSpatialSceneGraphKit,
-  createSelectionDomainServiceKit,
-  createOpenXRAdapterKit
+  createHandAuthoringDsks,
+  createWebXRHandAdapterDsk,
+  createOpenXRHandAdapterDsk,
+  createHandGestureDsk,
+  createSpatialSceneGraphDsk,
+  createSelectionDsk,
+  createTransformDsk,
+  createWidgetDsk,
+  createInteractionDsk,
+  createPersistenceDsk
 } from "./protokits/spatial-authoring-kits/index.js";
 ```
 
 ## OpenXR compatibility stance
 
-OpenXR is treated as the headset runtime contract. WebXR is treated as the web publishing contract. DSKs are the behavior contract. Adapter kits translate between runtime-specific input/spaces/anchors and normalized DSK commands.
+OpenXR is the native headset runtime contract. WebXR is the web publishing and browser runtime contract. DSKs are the behavior contract. Adapter DSKs translate runtime-specific hand input, action spaces, reference spaces, and hit results into normalized hand commands.
+
+## First supported UX loop
+
+```txt
+hand ray
+pinch select
+pinch drag move
+two-hand resize
+palm/menu create note or timer
+press widget
+save/reload snapshot
+```
 
 ## Status
 
-Experimental. These are ProtoKits for proving a spatial authoring DSK stack, not production-grade app/editor infrastructure yet.
+Experimental. These are ProtoKits for proving a hand-authored spatial DSK stack, not production-grade app/editor infrastructure yet.
