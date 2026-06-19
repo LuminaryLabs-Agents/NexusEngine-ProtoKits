@@ -1,1 +1,1 @@
-export { createPersistenceDomainServiceKit, createPersistenceDomainServiceKit as default, PERSISTENCE_DOMAIN_SERVICE_KIT_VERSION } from '../spatial-authoring-kits/index.js';
+export { createPersistenceDsk as createPersistenceDomainServiceKit, createPersistenceDsk as default } from '../spatial-authoring-kits/index.js';
