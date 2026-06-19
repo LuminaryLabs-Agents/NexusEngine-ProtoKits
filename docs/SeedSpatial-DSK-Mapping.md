@@ -1,31 +1,42 @@
-# SeedSpatial DSK Mapping
+# SeedSpatial Hand DSK Mapping
 
-This document maps SeedSpatial-style in-headset authoring actions onto the spatial authoring ProtoKit stack.
+This document maps the first hands-only SeedSpatial authoring loop onto the required atomic hand DSK stack.
 
 ## Principle
 
-SeedSpatial is the human authoring surface. DSKs are the reusable behavior grammar. OpenXR/WebXR/PICO sensor details stay in adapter kits; DSKs receive normalized commands.
+SeedSpatial is the human authoring surface. Hand adapter DSKs translate OpenXR/WebXR/PICO hand data into normalized hand commands. The behavior DSKs define what those commands mean.
 
-## Mappings
+## Required mappings
 
-| User action | Normalized command | Responsible kit | Result |
+| User action | Normalized command | Responsible DSK | Result |
 |---|---|---|---|
-| Point at a panel and say “make this bigger” | `xr.point` then `transform.resizeRequested` | `selection-domain-service-kit`, `transform-domain-service-kit` | Scene graph transform patch |
-| Frame several objects and say “align these” | `selection.regionRequested`, `layout.alignRequested` | `selection-domain-service-kit`, `layout-domain-service-kit` | Multi-object layout patch |
-| Point from object A to object B and say “put this there” | `selection.pointToPointRequested`, `transform.moveRequested` | `selection-domain-service-kit`, `transform-domain-service-kit` | Targeted move patch |
-| Create a timer here | `ai.patch.requested` or `widget.createRequested` | `ai-generation-domain-service-kit`, `widget-domain-service-kit` | Timer widget descriptor |
-| Make this button open that note | `binding.createRequested` | `binding-domain-service-kit`, `interaction-domain-service-kit` | Declarative binding rule |
-| Save this workspace | `persistence.saveRequested` | `persistence-domain-service-kit` | JSON-safe snapshot |
-| Publish this | `publish.requested` | `publish-domain-service-kit` | WebXR/OpenXR artifact descriptor |
+| Point index finger at a panel | `hand.ray` | `webxr-hand-adapter-dsk` or `openxr-hand-adapter-dsk`, then `hand-gesture-dsk` | normalized hand ray / hover intent |
+| Pinch while pointing at a panel | `hand.pinchStart` with hit object | `selection-dsk` | selected object id |
+| Pinch-hold and move hand | `hand.grabMove` | `transform-dsk` | scene graph move patch |
+| Two-hand pinch apart/together | `hand.twoHandScale` | `transform-dsk` | scene graph resize patch |
+| Palm menu → create note/timer | `widget.create` | `widget-dsk`, `spatial-scene-graph-dsk` | new semantic widget object |
+| Pinch/press a widget | `interaction.request` | `interaction-dsk` | semantic press/open/toggle/start event |
+| Save workspace | `persistence.capture` | `persistence-dsk` | JSON-safe workspace snapshot |
+
+## Explicitly deferred
+
+These are useful but not required for the first hands-only demo:
+
+- layout / align
+- binding button-to-panel behavior
+- publish artifact generation
+- AI patch proposal flow
+- persistent spatial anchors beyond normalized descriptors
 
 ## OpenXR-safe flow
 
 ```txt
-OpenXR Action / Action Space / Reference Space
-→ openxr-adapter-kit
-→ normalized action, pose, ray, hit, anchor descriptor
-→ DSK command
-→ scene patch or event
+OpenXR hand joints / action spaces / reference spaces
+→ openxr-hand-adapter-dsk
+→ normalized hand command
+→ hand-gesture-dsk
+→ selection / transform / widget / interaction / persistence DSK
+→ scene graph patch or snapshot
 ```
 
-The same DSK stack can be fed from WebXR, desktop mock input, PICO OS services, or native OpenXR adapters.
+The same behavior DSKs can be fed from WebXR hand input, desktop mock input, PICO OS services, or native OpenXR adapters.
