@@ -1,6 +1,6 @@
 {
   "name": "@luminarylabs/nexusrealtime-protokits",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "description": "Prototype kits for NexusRealtime games.",
   "exports": {
@@ -88,7 +88,22 @@
     "./gamehost-standard-kit": "./protokits/gamehost-standard-kit/index.js",
     "./token-registry-kit": "./protokits/token-registry-kit/index.js",
     "./fogline-survey-pressure-bridge-kit": "./protokits/fogline-survey-pressure-bridge-kit/index.js",
-    "./rendering-stack-kits": "./protokits/rendering-stack-kits/index.js"
+    "./rendering-stack-kits": "./protokits/rendering-stack-kits/index.js",
+    "./spatial-authoring-kits": "./protokits/spatial-authoring-kits/index.js",
+    "./spatial-scene-graph-kit": "./protokits/spatial-scene-graph-kit/index.js",
+    "./selection-domain-service-kit": "./protokits/selection-domain-service-kit/index.js",
+    "./transform-domain-service-kit": "./protokits/transform-domain-service-kit/index.js",
+    "./layout-domain-service-kit": "./protokits/layout-domain-service-kit/index.js",
+    "./widget-domain-service-kit": "./protokits/widget-domain-service-kit/index.js",
+    "./interaction-domain-service-kit": "./protokits/interaction-domain-service-kit/index.js",
+    "./binding-domain-service-kit": "./protokits/binding-domain-service-kit/index.js",
+    "./persistence-domain-service-kit": "./protokits/persistence-domain-service-kit/index.js",
+    "./publish-domain-service-kit": "./protokits/publish-domain-service-kit/index.js",
+    "./ai-generation-domain-service-kit": "./protokits/ai-generation-domain-service-kit/index.js",
+    "./openxr-adapter-kit": "./protokits/openxr-adapter-kit/index.js",
+    "./webxr-adapter-kit": "./protokits/webxr-adapter-kit/index.js",
+    "./xr-spatial-anchor-kit": "./protokits/xr-spatial-anchor-kit/index.js",
+    "./spatial-authoring-mode-kit": "./protokits/spatial-authoring-mode-kit/index.js"
   },
   "files": [
     "KITS.md",
