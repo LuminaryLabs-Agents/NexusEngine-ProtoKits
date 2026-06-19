@@ -1,4 +1,5 @@
 import { createGenericProtoKit } from "../generic-kit-utils/index.js";
+import { normalizeProtoKitFactoryArgs } from "../nexus-dsk-adapter/index.js";
 export const DOMAIN_SERVICE_KITS_VERSION = "0.1.0";
 export const VIEW_RIG_KIT_VERSION = DOMAIN_SERVICE_KITS_VERSION;
 export const SPATIAL_INTERACTION_KIT_VERSION = DOMAIN_SERVICE_KITS_VERSION;
@@ -59,7 +60,10 @@ export function createStructureRuntimeKit(NexusRealtime, config = {}) { return c
 export function createDiegeticFeedbackSignalKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, DIEGETIC_FEEDBACK_SIGNAL_KIT_DEFINITION, config); }
 export function createAssetDescriptorKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, ASSET_DESCRIPTOR_KIT_DEFINITION, config); }
 
+export const createNCompletionLedgerKit = createCompletionLedgerKit;
+
 export function createDomainServiceKits(NexusRealtime, config = {}) {
+  ({ NexusRealtime, config } = normalizeProtoKitFactoryArgs(NexusRealtime, config));
   const cfg = config ?? {};
   return [
     createViewRigKit(NexusRealtime, cfg.viewRig ?? {}),

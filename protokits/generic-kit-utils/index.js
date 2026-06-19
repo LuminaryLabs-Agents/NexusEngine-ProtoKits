@@ -1,3 +1,5 @@
+import { normalizeProtoKitFactoryArgs, withProtoDomainServiceRuntime } from "../nexus-dsk-adapter/index.js";
+
 export const GENERIC_KIT_UTILS_VERSION = "0.2.0";
 
 function fallbackDefineRuntimeKit(config) {
@@ -265,6 +267,9 @@ function buildApi({ id, definition, world, State, Command, createInitialState })
     reset() {
       world.setResource?.(State, createInitialState());
       return api.getState();
+    },
+    getSnapshot() {
+      return JSON.parse(JSON.stringify(api.getState()));
     }
   };
 
@@ -298,6 +303,11 @@ function buildApi({ id, definition, world, State, Command, createInitialState })
 }
 
 export function createGenericProtoKit(NexusRealtime, definition, config = {}) {
+  ({ NexusRealtime, config } = normalizeProtoKitFactoryArgs(NexusRealtime, config));
+  NexusRealtime = withProtoDomainServiceRuntime(NexusRealtime, definition.id ?? definition.camelName, {
+    version: definition.version ?? GENERIC_KIT_UTILS_VERSION,
+    apiName: definition.engineKey
+  });
   const defineRuntimeKit = NexusRealtime?.defineRuntimeKit ?? fallbackDefineRuntimeKit;
   const id = config.id ?? definition.id;
   const stateBindingName = `${definition.camelName}State`;

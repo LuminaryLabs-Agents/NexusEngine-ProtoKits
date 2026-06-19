@@ -1,1 +1,1 @@
-export { SCAN_SURVEY_KIT_VERSION, createScanSurveyKit as default, createScanSurveyKit } from "../domain-foundation/index.js";
+export { SCAN_SURVEY_KIT_VERSION, createScanSurveyKit as default, createScanSurveyKit, createNScanSurveyKit } from "../domain-foundation/index.js";

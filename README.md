@@ -4,6 +4,35 @@ Prototype game kits for NexusRealtime.
 
 These kits are intentionally separate from the core NexusRealtime package. They are used to prove game features before promoting stable surfaces into the main engine.
 
+## NexusRealtime DSK Contract
+
+First-wave DSK ProtoKits now import `nexusrealtime` directly and return `defineDomainServiceKit()` kits when the core runtime is available. The old `createXKit(NexusRealtime, config)` call style remains as a migration shim, but the target path is `createNXKit(config)` or `createXKit(config)`.
+
+```js
+import { createRealtimeGame } from "nexusrealtime";
+import { createNScanSurveyKit } from "@luminarylabs/nexusrealtime-protokits/scan-survey-kit";
+
+const engine = createRealtimeGame({
+  kits: [
+    createNScanSurveyKit({ radius: 3 })
+  ]
+});
+
+engine.n.scanSurvey.registerTarget({ id: "relay-1", x: 2, y: 0 });
+```
+
+Browser CDN hosts need an import map for the bare `nexusrealtime` import:
+
+```html
+<script type="importmap">
+{
+  "imports": {
+    "nexusrealtime": "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@0.0.2/src/index.js"
+  }
+}
+</script>
+```
+
 ## Action Input Kit
 
 Contextual action routing for browser hosts and subscribed gameplay kits. The host captures platform input, calls the `engine.actionInput` API, and this ProtoKit emits semantic action events only when held state, axis, aim, or button edges change.

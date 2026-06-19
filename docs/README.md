@@ -23,6 +23,7 @@ In this repo, DSMs are built and shipped as `-kit` folders with `createXKit()` f
 - `DSM-DATA-CONTRACTS.md` — data-driven module contracts.
 - `DSM-TESTING-GUIDE.md` — required tests and reliability expectations.
 - `DSM-PROMOTION-GUIDE.md` — promotion gates from experiment to ProtoKit to core.
+- `DSK-FIRST-WAVE-LEDGER.md` — closed migration ledger for the first `defineDomainServiceKit()` wave.
 
 ## Templates
 
