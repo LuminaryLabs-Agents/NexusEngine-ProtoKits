@@ -1,1 +1,419 @@
-import { createGenericProtoKit } from '../generic-kit-utils/index.js';export const SPATIAL_AUTHORING_KITS_VERSION='0.2.0';export const SPATIAL_SCENE_GRAPH_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const SELECTION_DOMAIN_SERVICE_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const TRANSFORM_DOMAIN_SERVICE_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const LAYOUT_DOMAIN_SERVICE_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const WIDGET_DOMAIN_SERVICE_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const INTERACTION_DOMAIN_SERVICE_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const BINDING_DOMAIN_SERVICE_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const PERSISTENCE_DOMAIN_SERVICE_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const PUBLISH_DOMAIN_SERVICE_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const AI_GENERATION_DOMAIN_SERVICE_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const OPENXR_ADAPTER_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const WEBXR_ADAPTER_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const XR_SPATIAL_ANCHOR_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;export const SPATIAL_AUTHORING_MODE_KIT_VERSION=SPATIAL_AUTHORING_KITS_VERSION;function define(id,camelName,engineKey,category,provides,purpose,requires=[],contracts={}){return Object.freeze({id,camelName,engineKey,category,tier:'atomic',version:SPATIAL_AUTHORING_KITS_VERSION,provides,requires,purpose,contracts});}export const SPATIAL_AUTHORING_CONTRACTS=Object.freeze({referenceSpaces:['viewer','local','local-floor','bounded-floor','stage','world'],inputShape:{type:'xr.point',actorId:'string',source:'right-hand-ray|left-hand-ray|gaze|controller|mouse',referenceSpace:'local-floor',ray:{origin:'vec3',direction:'vec3'},hit:{objectId:'string',point:'vec3',distance:'number'},confidence:'0..1'},objectShape:{id:'string',type:'string',transform:{space:'local-floor',position:'vec3',rotation:'quat',scale:'vec3'},anchor:{type:'world|stage|local|wall|table|object|xr-anchor',anchorId:'string|null',referenceSpace:'local|local-floor|bounded-floor|viewer|stage',persistence:'session|persistent|portable'},capabilities:['selectable','movable','resizable','rotatable','alignable','bindable','publishable'],widget:'object|null',interaction:'object|null',bindings:'array'},patchShape:{id:'string',type:'string',source:'user|ai|system',actorId:'string',targetIds:'string[]',operations:'validated scene graph operations',status:'pending|applied|rejected|reverted'},eventNames:['scene.patch.applied','selection.changed','transform.applied','layout.applied','widget.created','interaction.completed','binding.triggered','persistence.saved','publish.artifactBuilt','ai.patchApplied','xr.inputAction.normalized','xr.anchor.resolved']});export const SPATIAL_SCENE_GRAPH_KIT_DEFINITION=define('spatial-scene-graph-kit','spatialSceneGraphKit','spatialScene','spatial-authoring',['scene:graph','scene:objects','scene:patches','scene:dirty-set'],'Persistent semantic scene graph, object descriptors, parent/child state, capabilities, dirty sets, and reversible patch ledger.',[],{resources:['spatialSceneGraph.state'],commands:['scene.object.createRequested','scene.object.updateRequested','scene.object.removeRequested','scene.patch.applyRequested','scene.patch.revertRequested']});export const SELECTION_DOMAIN_SERVICE_KIT_DEFINITION=define('selection-domain-service-kit','selectionDomainServiceKit','selection','spatial-authoring',['selection:state','selection:targeting'],'Normalized point, gaze, ray, hover, region, and point-to-point selection state. Host adapters resolve sensors; this kit owns semantic selection.', ['scene:graph'],{commands:['selection.pointRequested','selection.regionRequested','selection.pointToPointRequested','selection.clearRequested']});export const TRANSFORM_DOMAIN_SERVICE_KIT_DEFINITION=define('transform-domain-service-kit','transformDomainServiceKit','transforms','spatial-authoring',['transform:commands','transform:patches'],'Validated move, resize, rotate, scale, and anchor transform commands that produce scene graph patches.', ['scene:graph','selection:state'],{commands:['transform.moveRequested','transform.resizeRequested','transform.rotateRequested','transform.anchorRequested']});export const LAYOUT_DOMAIN_SERVICE_KIT_DEFINITION=define('layout-domain-service-kit','layoutDomainServiceKit','layout','spatial-authoring',['layout:commands','layout:patches'],'Multi-object align, distribute, group, ungroup, snap, table/wall placement, and grid layout patch authoring.', ['scene:graph','selection:state','transform:patches'],{commands:['layout.alignRequested','layout.distributeRequested','layout.groupRequested','layout.snapRequested','layout.gridRequested']});export const WIDGET_DOMAIN_SERVICE_KIT_DEFINITION=define('widget-domain-service-kit','widgetDomainServiceKit','widgets','spatial-authoring',['widget:registry','widget:factory','widget:state'],'Semantic widget registry and factory for panels, notes, timers, clocks, buttons, media placeholders, charts, labels, sliders, and toggles.', ['scene:graph'],{widgetTypes:['panel','note','timer','clock','button','mediaPlayerPlaceholder','chartPlaceholder','label','slider','toggle'],commands:['widget.createRequested','widget.updateRequested','widget.actionRequested']});export const INTERACTION_DOMAIN_SERVICE_KIT_DEFINITION=define('interaction-domain-service-kit','interactionDomainServiceKit','interactions','spatial-authoring',['interaction:commands','interaction:registry','interaction:events'],'Semantic interaction verbs and affordances: press, toggle, open, close, inspect, use, start, pause, reset, play.', ['scene:graph'],{verbs:['press','toggle','open','close','inspect','use','start','pause','reset','play']});export const BINDING_DOMAIN_SERVICE_KIT_DEFINITION=define('binding-domain-service-kit','bindingDomainServiceKit','bindings','spatial-authoring',['binding:rules','binding:events'],'Declarative event-to-command rules for make-this-control-that behavior, without direct object-to-object coupling.', ['scene:graph','interaction:events','widget:registry'],{bindingShape:{sourceObjectId:'string',sourceEvent:'interaction.completed:press',targetObjectId:'string',targetAction:'open|close|toggle|use',payload:'object'}});export const PERSISTENCE_DOMAIN_SERVICE_KIT_DEFINITION=define('persistence-domain-service-kit','persistenceDomainServiceKit','persistence','spatial-authoring',['persistence:snapshot','persistence:history','persistence:undo-redo'],'JSON-safe workspace snapshots, scene graph hydration, patch history, undo, redo, and autosave-dirty state.', ['scene:graph'],{snapshotIncludes:['scene','widgets','interactions','bindings','anchors']});export const PUBLISH_DOMAIN_SERVICE_KIT_DEFINITION=define('publish-domain-service-kit','publishDomainServiceKit','publish','spatial-authoring',['publish:artifact','publish:webxr-shell','publish:openxr-target'],'Deterministic publish artifact descriptor for WebXR/OpenXR playback shells. Server/upload stays in host adapters.', ['persistence:snapshot','scene:graph'],{targets:['webxr','openxr','inlineDesktopFallback'],requiredCapabilities:['immersive-ar','hand-tracking-or-controller-ray','local-floor-reference-space','spatial-anchors-optional']});export const AI_GENERATION_DOMAIN_SERVICE_KIT_DEFINITION=define('ai-generation-domain-service-kit','aiGenerationDomainServiceKit','aiGeneration','spatial-authoring',['ai:patch-request','ai:patch-validation'],'Scoped AI request/proposal/validation layer. It never calls a model directly; host AI companions return constrained patch proposals.', ['scene:graph','selection:state','widget:registry'],{expectedResponseSchema:'scenePatchProposal.v1'});export const OPENXR_ADAPTER_KIT_DEFINITION=define('openxr-adapter-kit','openXrAdapterKit','openxrAdapter','xr-adapter',['xr:input-actions','xr:pose-source','xr:reference-space','xr:session-state','openxr:adapter'],'OpenXR-compatible adapter boundary that normalizes XrAction, XrActionSpace, reference-space, pose, hand ray, and hit data into DSK commands. Raw OpenXR handles stay out of DSK state.', [],{rawHandlesForbidden:['XrSession','XrSpace','XrSwapchain'],normalizedOutput:'xr.inputAction.normalized'});export const WEBXR_ADAPTER_KIT_DEFINITION=define('webxr-adapter-kit','webXrAdapterKit','webxrAdapter','xr-adapter',['xr:input-actions','xr:pose-source','xr:reference-space','xr:session-state','webxr:adapter'],'WebXR adapter boundary that normalizes XRSession, XRFrame, XRInputSource, hit-test, hand ray, and reference-space data into the same DSK command format.', [],{rawHandlesForbidden:['XRSession','XRFrame','XRInputSource'],normalizedOutput:'xr.inputAction.normalized'});export const XR_SPATIAL_ANCHOR_KIT_DEFINITION=define('xr-spatial-anchor-kit','xrSpatialAnchorKit','xrAnchors','xr-adapter',['xr:anchors','xr:anchor-resolution','xr:anchor-descriptors'],'Normalized spatial anchor descriptors for OpenXR, WebXR, PICO, and mock providers. DSK scene objects reference anchor IDs rather than vendor runtime objects.', [],{anchorShape:{provider:'openxr|webxr|pico|mock',referenceSpace:'local-floor',persistence:'session|persistent|portable',confidence:'0..1'}});export const SPATIAL_AUTHORING_MODE_KIT_DEFINITION=define('spatial-authoring-mode-kit','spatialAuthoringModeKit','spatialAuthoring','mode',['mode:spatial-authoring'],'High-level composition surface for SeedSpatial-style authoring: point/select, transform, layout, create widgets, bind behavior, persist, publish, and accept scoped AI patches.', ['scene:graph','selection:state','transform:commands','layout:commands','widget:registry','interaction:commands','binding:rules','persistence:snapshot','publish:artifact','ai:patch-request']);export const SPATIAL_AUTHORING_KIT_DEFINITIONS=Object.freeze([SPATIAL_SCENE_GRAPH_KIT_DEFINITION,SELECTION_DOMAIN_SERVICE_KIT_DEFINITION,TRANSFORM_DOMAIN_SERVICE_KIT_DEFINITION,LAYOUT_DOMAIN_SERVICE_KIT_DEFINITION,WIDGET_DOMAIN_SERVICE_KIT_DEFINITION,INTERACTION_DOMAIN_SERVICE_KIT_DEFINITION,BINDING_DOMAIN_SERVICE_KIT_DEFINITION,PERSISTENCE_DOMAIN_SERVICE_KIT_DEFINITION,PUBLISH_DOMAIN_SERVICE_KIT_DEFINITION,AI_GENERATION_DOMAIN_SERVICE_KIT_DEFINITION,OPENXR_ADAPTER_KIT_DEFINITION,WEBXR_ADAPTER_KIT_DEFINITION,XR_SPATIAL_ANCHOR_KIT_DEFINITION,SPATIAL_AUTHORING_MODE_KIT_DEFINITION]);function make(def,NexusRealtime,config={}){return createGenericProtoKit(NexusRealtime,def,{...config,contracts:{...(def.contracts??{}),...(config.contracts??{})}});}export function createSpatialSceneGraphKit(NexusRealtime,config={}){return make(SPATIAL_SCENE_GRAPH_KIT_DEFINITION,NexusRealtime,config);}export function createSelectionDomainServiceKit(NexusRealtime,config={}){return make(SELECTION_DOMAIN_SERVICE_KIT_DEFINITION,NexusRealtime,config);}export function createTransformDomainServiceKit(NexusRealtime,config={}){return make(TRANSFORM_DOMAIN_SERVICE_KIT_DEFINITION,NexusRealtime,config);}export function createLayoutDomainServiceKit(NexusRealtime,config={}){return make(LAYOUT_DOMAIN_SERVICE_KIT_DEFINITION,NexusRealtime,config);}export function createWidgetDomainServiceKit(NexusRealtime,config={}){return make(WIDGET_DOMAIN_SERVICE_KIT_DEFINITION,NexusRealtime,config);}export function createInteractionDomainServiceKit(NexusRealtime,config={}){return make(INTERACTION_DOMAIN_SERVICE_KIT_DEFINITION,NexusRealtime,config);}export function createBindingDomainServiceKit(NexusRealtime,config={}){return make(BINDING_DOMAIN_SERVICE_KIT_DEFINITION,NexusRealtime,config);}export function createPersistenceDomainServiceKit(NexusRealtime,config={}){return make(PERSISTENCE_DOMAIN_SERVICE_KIT_DEFINITION,NexusRealtime,config);}export function createPublishDomainServiceKit(NexusRealtime,config={}){return make(PUBLISH_DOMAIN_SERVICE_KIT_DEFINITION,NexusRealtime,config);}export function createAiGenerationDomainServiceKit(NexusRealtime,config={}){return make(AI_GENERATION_DOMAIN_SERVICE_KIT_DEFINITION,NexusRealtime,config);}export function createOpenXrAdapterKit(NexusRealtime,config={}){return make(OPENXR_ADAPTER_KIT_DEFINITION,NexusRealtime,config);}export function createWebXrAdapterKit(NexusRealtime,config={}){return make(WEBXR_ADAPTER_KIT_DEFINITION,NexusRealtime,config);}export function createXrSpatialAnchorKit(NexusRealtime,config={}){return make(XR_SPATIAL_ANCHOR_KIT_DEFINITION,NexusRealtime,config);}export function createSpatialAuthoringModeKit(NexusRealtime,config={}){return make(SPATIAL_AUTHORING_MODE_KIT_DEFINITION,NexusRealtime,config);}export const createOpenXRAdapterKit=createOpenXrAdapterKit;export const createWebXRAdapterKit=createWebXrAdapterKit;export const createXRSpatialAnchorKit=createXrSpatialAnchorKit;export function createSpatialAuthoringKits(NexusRealtime,config={}){const cfg=config??{};return [createOpenXrAdapterKit(NexusRealtime,cfg.openxr??{}),createWebXrAdapterKit(NexusRealtime,cfg.webxr??{}),createXrSpatialAnchorKit(NexusRealtime,cfg.xrAnchors??{}),createSpatialSceneGraphKit(NexusRealtime,cfg.scene??{}),createSelectionDomainServiceKit(NexusRealtime,cfg.selection??{}),createTransformDomainServiceKit(NexusRealtime,cfg.transform??{}),createLayoutDomainServiceKit(NexusRealtime,cfg.layout??{}),createWidgetDomainServiceKit(NexusRealtime,cfg.widgets??{}),createInteractionDomainServiceKit(NexusRealtime,cfg.interactions??{}),createBindingDomainServiceKit(NexusRealtime,cfg.bindings??{}),createPersistenceDomainServiceKit(NexusRealtime,cfg.persistence??{}),createPublishDomainServiceKit(NexusRealtime,cfg.publish??{}),createAiGenerationDomainServiceKit(NexusRealtime,cfg.aiGeneration??{}),createSpatialAuthoringModeKit(NexusRealtime,cfg.mode??{})];}export default createSpatialAuthoringKits;
+export const SPATIAL_AUTHORING_KITS_VERSION = "0.3.0";
+
+export const REQUIRED_HAND_AUTHORING_KITS = Object.freeze([
+  "webxr-hand-adapter-dsk",
+  "openxr-hand-adapter-dsk",
+  "hand-gesture-dsk",
+  "spatial-scene-graph-dsk",
+  "selection-dsk",
+  "transform-dsk",
+  "widget-dsk",
+  "interaction-dsk",
+  "persistence-dsk"
+]);
+
+const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
+const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
+const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+const clockFrame = (world) => toNumber(world?.__nexusClock?.frame, 0);
+
+export function requireNexus(NexusRealtime, name = "hand authoring dsk") {
+  for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
+    if (typeof NexusRealtime?.[key] !== "function") {
+      throw new TypeError(`${name} requires NexusRealtime.${key}.`);
+    }
+  }
+}
+
+export function vec3(value = {}, fallback = {}) {
+  return {
+    x: toNumber(value.x, toNumber(fallback.x, 0)),
+    y: toNumber(value.y, toNumber(fallback.y, 0)),
+    z: toNumber(value.z, toNumber(fallback.z, 0))
+  };
+}
+
+export function quat(value = {}, fallback = {}) {
+  return {
+    x: toNumber(value.x, toNumber(fallback.x, 0)),
+    y: toNumber(value.y, toNumber(fallback.y, 0)),
+    z: toNumber(value.z, toNumber(fallback.z, 0)),
+    w: toNumber(value.w, toNumber(fallback.w, 1))
+  };
+}
+
+export function normalizeTransform(value = {}) {
+  return {
+    space: String(value.space ?? value.referenceSpace ?? "local-floor"),
+    position: vec3(value.position),
+    rotation: quat(value.rotation),
+    scale: vec3(value.scale, { x: 1, y: 1, z: 1 })
+  };
+}
+
+export function normalizeSpatialObject(value = {}, index = 0) {
+  const id = String(value.id ?? `object-${index}`).trim();
+  if (!id) throw new TypeError("Spatial objects require a stable id.");
+  const capabilities = value.capabilities ?? {};
+  return {
+    id,
+    type: String(value.type ?? "spatial.object"),
+    name: String(value.name ?? id),
+    tags: asArray(value.tags).map(String).filter(Boolean),
+    parentId: value.parentId ?? null,
+    transform: normalizeTransform(value.transform ?? {}),
+    bounds: {
+      center: vec3(value.bounds?.center),
+      size: vec3(value.bounds?.size, { x: 0.4, y: 0.25, z: 0.04 })
+    },
+    anchor: {
+      type: String(value.anchor?.type ?? "local"),
+      anchorId: value.anchor?.anchorId ?? null,
+      referenceSpace: String(value.anchor?.referenceSpace ?? value.transform?.space ?? "local-floor"),
+      persistence: String(value.anchor?.persistence ?? "session"),
+      confidence: toNumber(value.anchor?.confidence, 1)
+    },
+    capabilities: {
+      selectable: capabilities.selectable !== false,
+      movable: capabilities.movable !== false,
+      resizable: capabilities.resizable !== false,
+      rotatable: capabilities.rotatable !== false,
+      interactable: capabilities.interactable !== false,
+      persistent: capabilities.persistent !== false
+    },
+    widget: value.widget ? clone(value.widget) : null,
+    interaction: value.interaction ? clone(value.interaction) : null,
+    metadata: clone(value.metadata ?? {})
+  };
+}
+
+function definition(id, engineKey, provides, requires, purpose, category = "hand-authoring-dsk") {
+  return Object.freeze({ id, engineKey, provides, requires, purpose, category });
+}
+
+export const WEBXR_HAND_ADAPTER_DSK_DEFINITION = definition("webxr-hand-adapter-dsk", "webxrHandAdapter", ["hand:adapter", "webxr:hand-input", "xr:normalized-hand-command"], [], "Normalizes WebXR hand/input-source data into plain hand commands without storing XRSession, XRFrame, XRInputSource, DOM, Canvas, or renderer objects.", "adapter-dsk");
+export const OPENXR_HAND_ADAPTER_DSK_DEFINITION = definition("openxr-hand-adapter-dsk", "openxrHandAdapter", ["hand:adapter", "openxr:hand-input", "xr:normalized-hand-command"], [], "Normalizes OpenXR action-space and hand-joint data into plain hand commands without storing XrSession, XrSpace, XrSwapchain, or renderer objects.", "adapter-dsk");
+export const HAND_GESTURE_DSK_DEFINITION = definition("hand-gesture-dsk", "handGestures", ["hand:gesture", "hand:pinch", "hand:ray", "hand:two-hand-gesture", "hand:menu-intent"], ["xr:normalized-hand-command"], "Classifies normalized hand frames into authoring gestures.");
+export const SPATIAL_SCENE_GRAPH_DSK_DEFINITION = definition("spatial-scene-graph-dsk", "spatialScene", ["scene:graph", "scene:objects", "scene:patches", "scene:dirty-set"], [], "Owns persistent spatial objects, transforms, anchors, capabilities, dirty ids, and patches.");
+export const SELECTION_DSK_DEFINITION = definition("selection-dsk", "selection", ["selection:state", "selection:targeting"], ["scene:graph", "hand:gesture"], "Turns hand hits and pinch selections into selected/framed/hovered object state.");
+export const TRANSFORM_DSK_DEFINITION = definition("transform-dsk", "transforms", ["transform:commands", "transform:patches"], ["scene:graph", "selection:state", "hand:gesture"], "Applies hand move and two-hand resize commands as scene graph patches.");
+export const WIDGET_DSK_DEFINITION = definition("widget-dsk", "widgets", ["widget:registry", "widget:factory", "widget:state"], ["scene:graph"], "Creates semantic panel, note, timer, and button widget scene objects.");
+export const INTERACTION_DSK_DEFINITION = definition("interaction-dsk", "interactions", ["interaction:commands", "interaction:registry", "interaction:events"], ["scene:graph", "widget:registry"], "Owns semantic press, toggle, open, close, start, pause, reset, and inspect verbs.");
+export const PERSISTENCE_DSK_DEFINITION = definition("persistence-dsk", "persistence", ["persistence:snapshot", "persistence:history", "persistence:undo-redo"], ["scene:graph", "widget:registry", "interaction:events"], "Captures and serializes JSON-safe hand-authored workspace state.");
+
+export const HAND_AUTHORING_DSK_DEFINITIONS = Object.freeze([
+  WEBXR_HAND_ADAPTER_DSK_DEFINITION,
+  OPENXR_HAND_ADAPTER_DSK_DEFINITION,
+  HAND_GESTURE_DSK_DEFINITION,
+  SPATIAL_SCENE_GRAPH_DSK_DEFINITION,
+  SELECTION_DSK_DEFINITION,
+  TRANSFORM_DSK_DEFINITION,
+  WIDGET_DSK_DEFINITION,
+  INTERACTION_DSK_DEFINITION,
+  PERSISTENCE_DSK_DEFINITION
+]);
+
+export const SPATIAL_AUTHORING_CONTRACTS = Object.freeze({
+  normalizedHandCommand: {
+    type: "hand.gesture",
+    actorId: "user",
+    hand: "left|right|both",
+    gesture: "point|pinchStart|pinchMove|pinchEnd|grab|twoHandScale|twoHandRotate|palmMenu|undo",
+    referenceSpace: "local-floor",
+    confidence: "0..1",
+    ray: { origin: "vec3", direction: "vec3" },
+    pinch: { active: "boolean", strength: "0..1", indexThumbDistance: "meters" },
+    hit: { objectId: "string|null", point: "vec3", distance: "number" }
+  },
+  rawRuntimeObjectsForbidden: ["XrSession", "XrSpace", "XrSwapchain", "XRSession", "XRFrame", "XRInputSource", "HTMLCanvasElement", "THREE.Object3D"]
+});
+
+function defineAtomicKit(NexusRealtime, definition, config, spec) {
+  requireNexus(NexusRealtime, definition.id);
+  return NexusRealtime.defineRuntimeKit({
+    id: config.kitId ?? definition.id,
+    requires: definition.requires,
+    provides: definition.provides,
+    ...spec,
+    metadata: {
+      version: SPATIAL_AUTHORING_KITS_VERSION,
+      status: "experimental",
+      category: definition.category,
+      purpose: definition.purpose
+    }
+  });
+}
+
+function createHandAdapterDsk(NexusRealtime, definition, config = {}) {
+  const State = NexusRealtime.defineResource(`${definition.id}.state`);
+  const Input = NexusRealtime.defineEvent(`${definition.id}.input`);
+  const Normalized = NexusRealtime.defineEvent(`${definition.id}.normalized`);
+  const createInitialState = () => ({
+    version: SPATIAL_AUTHORING_KITS_VERSION,
+    provider: definition.id.includes("webxr") ? "webxr" : "openxr",
+    referenceSpace: config.referenceSpace ?? "local-floor",
+    commands: [],
+    lastCommand: null,
+    rawRuntimeObjectsForbidden: [...SPATIAL_AUTHORING_CONTRACTS.rawRuntimeObjectsForbidden]
+  });
+  function normalize(payload = {}, state = createInitialState()) {
+    return {
+      type: payload.type ?? "hand.poseFrame",
+      actorId: payload.actorId ?? "user",
+      hand: payload.hand ?? "right",
+      gesture: payload.gesture ?? payload.type ?? "pose",
+      source: payload.source ?? state.provider,
+      referenceSpace: payload.referenceSpace ?? state.referenceSpace,
+      confidence: Math.max(0, Math.min(1, toNumber(payload.confidence, 1))),
+      ray: payload.ray ? { origin: vec3(payload.ray.origin), direction: vec3(payload.ray.direction, { z: -1 }) } : null,
+      pinch: payload.pinch ? clone(payload.pinch) : null,
+      pose: payload.pose ? clone(payload.pose) : null,
+      hit: payload.hit ? { ...clone(payload.hit), objectId: payload.hit.objectId ?? null, point: vec3(payload.hit.point), distance: toNumber(payload.hit.distance, 0) } : null
+    };
+  }
+  function system(world) {
+    let state = world.getResource(State) ?? createInitialState();
+    for (const event of world.readEvents(Input)) {
+      const command = normalize(event, state);
+      state = { ...state, commands: [...state.commands.slice(-31), command], lastCommand: command };
+      world.emit(Normalized, command);
+    }
+    world.setResource(State, state);
+  }
+  return defineAtomicKit(NexusRealtime, definition, config, {
+    resources: { State },
+    events: { Input, Normalized },
+    systems: [{ phase: "input", name: `${definition.engineKey}System`, system }],
+    initWorld({ world }) { world.setResource(State, createInitialState()); },
+    install({ engine, world }) {
+      engine[definition.engineKey] = {
+        input(payload = {}) { world.emit(Input, payload); return world.getResource(State); },
+        normalize(payload = {}) { return normalize(payload, world.getResource(State) ?? createInitialState()); },
+        getState() { return world.getResource(State); }
+      };
+    },
+    bindings: { State }
+  });
+}
+
+export function createWebXrHandAdapterDsk(NexusRealtime, config = {}) { return createHandAdapterDsk(NexusRealtime, WEBXR_HAND_ADAPTER_DSK_DEFINITION, config); }
+export function createOpenXrHandAdapterDsk(NexusRealtime, config = {}) { return createHandAdapterDsk(NexusRealtime, OPENXR_HAND_ADAPTER_DSK_DEFINITION, config); }
+export const createWebXRHandAdapterDsk = createWebXrHandAdapterDsk;
+export const createOpenXRHandAdapterDsk = createOpenXrHandAdapterDsk;
+
+export function createHandGestureDsk(NexusRealtime, config = {}) {
+  const State = NexusRealtime.defineResource("handGesture.state");
+  const Command = NexusRealtime.defineEvent("handGesture.command");
+  const Recognized = NexusRealtime.defineEvent("handGesture.recognized");
+  const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, active: {}, recent: [], lastGesture: null });
+  function system(world) {
+    let state = world.getResource(State) ?? createInitialState();
+    for (const event of world.readEvents(Command)) {
+      const gesture = { ...clone(event), gesture: event.gesture ?? event.type ?? "pose", tick: clockFrame(world) };
+      state = { ...state, active: { ...state.active, [gesture.hand ?? "right"]: gesture }, recent: [...state.recent.slice(-31), gesture], lastGesture: gesture };
+      world.emit(Recognized, gesture);
+    }
+    world.setResource(State, state);
+  }
+  return defineAtomicKit(NexusRealtime, HAND_GESTURE_DSK_DEFINITION, config, {
+    resources: { State }, events: { Command, Recognized }, systems: [{ phase: "input", name: "handGestureDskSystem", system }],
+    initWorld({ world }) { world.setResource(State, createInitialState()); },
+    install({ engine, world }) { engine.handGestures = { command(payload = {}) { world.emit(Command, payload); return world.getResource(State); }, getState() { return world.getResource(State); } }; },
+    bindings: { State }
+  });
+}
+
+export function createSpatialSceneGraphDsk(NexusRealtime, config = {}) {
+  const State = NexusRealtime.defineResource("spatialSceneGraph.state");
+  const Create = NexusRealtime.defineEvent("spatialScene.object.create");
+  const Update = NexusRealtime.defineEvent("spatialScene.object.update");
+  const Patch = NexusRealtime.defineEvent("spatialScene.patch.apply");
+  const Applied = NexusRealtime.defineEvent("spatialScene.patch.applied");
+  const createInitialState = () => {
+    const objects = {};
+    for (const [index, object] of asArray(config.objects).entries()) {
+      const normalized = normalizeSpatialObject(object, index);
+      objects[normalized.id] = normalized;
+    }
+    return { version: SPATIAL_AUTHORING_KITS_VERSION, sceneId: config.sceneId ?? "hand-workspace", objects, dirtyObjectIds: [], patches: [], rejectedPatches: [], lastPatchId: null };
+  };
+  function applyPatch(state, patch) {
+    const id = patch.id ?? `patch-${state.patches.length + 1}`;
+    const next = { ...state, objects: { ...state.objects } };
+    if (patch.type === "createObject") {
+      const object = normalizeSpatialObject(patch.object);
+      next.objects[object.id] = object;
+      return { ...next, dirtyObjectIds: Array.from(new Set([...state.dirtyObjectIds, object.id])), patches: [...state.patches, { ...patch, id, status: "applied" }], lastPatchId: id };
+    }
+    if (patch.type === "updateObject" && next.objects[patch.objectId]) {
+      next.objects[patch.objectId] = { ...next.objects[patch.objectId], ...clone(patch.partial ?? {}), id: patch.objectId, transform: patch.partial?.transform ? normalizeTransform(patch.partial.transform) : next.objects[patch.objectId].transform };
+      return { ...next, dirtyObjectIds: Array.from(new Set([...state.dirtyObjectIds, patch.objectId])), patches: [...state.patches, { ...patch, id, status: "applied" }], lastPatchId: id };
+    }
+    return { ...state, rejectedPatches: [...state.rejectedPatches, { ...patch, id, reason: "invalid-patch" }] };
+  }
+  function system(world) {
+    let state = world.getResource(State) ?? createInitialState();
+    for (const event of world.readEvents(Create)) state = applyPatch(state, { type: "createObject", object: event.object ?? event });
+    for (const event of world.readEvents(Update)) state = applyPatch(state, { type: "updateObject", objectId: event.objectId ?? event.id, partial: event.partial ?? event });
+    for (const event of world.readEvents(Patch)) state = applyPatch(state, event);
+    if (state.lastPatchId) world.emit(Applied, { patchId: state.lastPatchId, dirtyObjectIds: state.dirtyObjectIds });
+    world.setResource(State, state);
+  }
+  return defineAtomicKit(NexusRealtime, SPATIAL_SCENE_GRAPH_DSK_DEFINITION, config, {
+    resources: { State }, events: { Create, Update, Patch, Applied }, systems: [{ phase: "simulate", name: "spatialSceneGraphDskSystem", system }],
+    initWorld({ world }) { world.setResource(State, createInitialState()); },
+    install({ engine, world }) { engine.spatialScene = { createObject(object) { world.emit(Create, { object }); return world.getResource(State); }, updateObject(objectId, partial) { world.emit(Update, { objectId, partial }); return world.getResource(State); }, applyPatch(patch) { world.emit(Patch, patch); return world.getResource(State); }, getObject(id) { return world.getResource(State)?.objects?.[id] ?? null; }, getState() { return world.getResource(State); } }; },
+    bindings: { State }
+  });
+}
+
+export function createSelectionDsk(NexusRealtime, config = {}) {
+  const State = NexusRealtime.defineResource("selection.state");
+  const Select = NexusRealtime.defineEvent("selection.pointSelect");
+  const Clear = NexusRealtime.defineEvent("selection.clear");
+  const Changed = NexusRealtime.defineEvent("selection.changed");
+  const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, selectedObjectIds: [], hoveredObjectId: null, framedObjectIds: [], confidence: 0, lastReason: "initialized" });
+  function system(world) {
+    let state = world.getResource(State) ?? createInitialState();
+    for (const event of world.readEvents(Select)) {
+      const id = event.objectId ?? event.hit?.objectId;
+      if (!id) continue;
+      state = { ...state, selectedObjectIds: [id], hoveredObjectId: id, confidence: toNumber(event.confidence, 1), lastReason: "point-select" };
+      world.emit(Changed, { selectedObjectIds: state.selectedObjectIds });
+    }
+    for (const event of world.readEvents(Clear)) {
+      state = { ...state, selectedObjectIds: [], hoveredObjectId: null, lastReason: event.reason ?? "clear" };
+      world.emit(Changed, { selectedObjectIds: [] });
+    }
+    world.setResource(State, state);
+  }
+  return defineAtomicKit(NexusRealtime, SELECTION_DSK_DEFINITION, config, {
+    resources: { State }, events: { Select, Clear, Changed }, systems: [{ phase: "simulate", name: "selectionDskSystem", system }],
+    initWorld({ world }) { world.setResource(State, createInitialState()); },
+    install({ engine, world }) { engine.selection = { pointSelect(payload = {}) { world.emit(Select, payload); return world.getResource(State); }, clear(payload = {}) { world.emit(Clear, payload); return world.getResource(State); }, getState() { return world.getResource(State); } }; },
+    bindings: { State }
+  });
+}
+
+export function createTransformDsk(NexusRealtime, config = {}) {
+  const State = NexusRealtime.defineResource("transform.state");
+  const Move = NexusRealtime.defineEvent("transform.move");
+  const Resize = NexusRealtime.defineEvent("transform.resize");
+  const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, lastPatch: null });
+  const targetIds = (world, value) => asArray(value).length ? asArray(value).map(String) : (world.getResource({ name: "selection.state" })?.selectedObjectIds ?? []);
+  function system(world) {
+    let state = world.getResource(State) ?? createInitialState();
+    for (const event of world.readEvents(Move)) {
+      for (const id of targetIds(world, event.targetIds ?? event.objectId)) {
+        const patch = { type: "updateObject", objectId: id, partial: { transform: { position: vec3(event.position ?? event.delta) } }, source: "transform-dsk" };
+        world.emit({ name: "spatialScene.patch.apply" }, patch);
+        state = { ...state, lastPatch: patch };
+      }
+    }
+    for (const event of world.readEvents(Resize)) {
+      for (const id of targetIds(world, event.targetIds ?? event.objectId)) {
+        const scalar = toNumber(event.scalar, 1);
+        const patch = { type: "updateObject", objectId: id, partial: { transform: { scale: vec3(event.scale, { x: scalar, y: scalar, z: scalar }) } }, source: "transform-dsk" };
+        world.emit({ name: "spatialScene.patch.apply" }, patch);
+        state = { ...state, lastPatch: patch };
+      }
+    }
+    world.setResource(State, state);
+  }
+  return defineAtomicKit(NexusRealtime, TRANSFORM_DSK_DEFINITION, config, {
+    resources: { State }, events: { Move, Resize }, systems: [{ phase: "simulate", name: "transformDskSystem", system }],
+    initWorld({ world }) { world.setResource(State, createInitialState()); },
+    install({ engine, world }) { engine.transforms = { move(targetIds, position) { world.emit(Move, { targetIds, position }); return world.getResource(State); }, resize(targetIds, value) { const payload = typeof value === "number" ? { scalar: value } : { scale: value }; world.emit(Resize, { targetIds, ...payload }); return world.getResource(State); }, getState() { return world.getResource(State); } }; },
+    bindings: { State }
+  });
+}
+
+export function createWidgetDsk(NexusRealtime, config = {}) {
+  const State = NexusRealtime.defineResource("widget.state");
+  const Create = NexusRealtime.defineEvent("widget.create");
+  const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, types: ["panel", "note", "timer", "button"], instances: {}, lastCreatedObjectId: null });
+  function system(world) {
+    let state = world.getResource(State) ?? createInitialState();
+    for (const event of world.readEvents(Create)) {
+      const type = event.type ?? "panel";
+      const id = event.id ?? `${type}-${Object.keys(state.instances).length + 1}`;
+      const widget = { type, props: clone(event.props ?? {}), state: clone(event.state ?? {}) };
+      state = { ...state, instances: { ...state.instances, [id]: widget }, lastCreatedObjectId: id };
+      world.emit({ name: "spatialScene.object.create" }, { object: normalizeSpatialObject({ id, type: `widget.${type}`, tags: ["widget", type], transform: event.transform, widget, interaction: { verbs: ["press", "open", "close", "toggle", "start", "pause", "reset"] } }) });
+    }
+    world.setResource(State, state);
+  }
+  return defineAtomicKit(NexusRealtime, WIDGET_DSK_DEFINITION, config, {
+    resources: { State }, events: { Create }, systems: [{ phase: "simulate", name: "widgetDskSystem", system }],
+    initWorld({ world }) { world.setResource(State, createInitialState()); },
+    install({ engine, world }) { engine.widgets = { create(type, props = {}, transform = {}) { world.emit(Create, { type, props, transform }); return world.getResource(State); }, getState() { return world.getResource(State); } }; },
+    bindings: { State }
+  });
+}
+
+export function createInteractionDsk(NexusRealtime, config = {}) {
+  const State = NexusRealtime.defineResource("interaction.state");
+  const Request = NexusRealtime.defineEvent("interaction.request");
+  const Completed = NexusRealtime.defineEvent("interaction.completed");
+  const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, verbs: ["press", "toggle", "open", "close", "start", "pause", "reset", "inspect"], history: [], lastInteraction: null });
+  function system(world) {
+    let state = world.getResource(State) ?? createInitialState();
+    for (const event of world.readEvents(Request)) {
+      const record = { actorId: event.actorId ?? "user", targetId: event.targetId ?? event.objectId, verb: event.verb ?? "press", payload: clone(event.payload ?? {}), tick: clockFrame(world) };
+      state = { ...state, history: [...state.history.slice(-31), record], lastInteraction: record };
+      world.emit(Completed, record);
+    }
+    world.setResource(State, state);
+  }
+  return defineAtomicKit(NexusRealtime, INTERACTION_DSK_DEFINITION, config, {
+    resources: { State }, events: { Request, Completed }, systems: [{ phase: "simulate", name: "interactionDskSystem", system }],
+    initWorld({ world }) { world.setResource(State, createInitialState()); },
+    install({ engine, world }) { engine.interactions = { request(payload = {}) { world.emit(Request, payload); return world.getResource(State); }, press(targetId, actorId = "user") { world.emit(Request, { targetId, actorId, verb: "press" }); return world.getResource(State); }, getState() { return world.getResource(State); } }; },
+    bindings: { State }
+  });
+}
+
+export function createPersistenceDsk(NexusRealtime, config = {}) {
+  const State = NexusRealtime.defineResource("persistence.state");
+  const Capture = NexusRealtime.defineEvent("persistence.capture");
+  const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, snapshots: {}, currentSnapshotId: null, lastSerialized: null });
+  function system(world) {
+    let state = world.getResource(State) ?? createInitialState();
+    for (const event of world.readEvents(Capture)) {
+      const id = event.id ?? `snapshot-${Object.keys(state.snapshots).length + 1}`;
+      const snapshot = { id, label: event.label ?? id, capturedAtTick: clockFrame(world), scene: clone(world.getResource({ name: "spatialSceneGraph.state" })), widgets: clone(world.getResource({ name: "widget.state" })), interactions: clone(world.getResource({ name: "interaction.state" })) };
+      state = { ...state, snapshots: { ...state.snapshots, [id]: snapshot }, currentSnapshotId: id, lastSerialized: JSON.stringify(snapshot) };
+    }
+    world.setResource(State, state);
+  }
+  return defineAtomicKit(NexusRealtime, PERSISTENCE_DSK_DEFINITION, config, {
+    resources: { State }, events: { Capture }, systems: [{ phase: "post", name: "persistenceDskSystem", system }],
+    initWorld({ world }) { world.setResource(State, createInitialState()); },
+    install({ engine, world }) { engine.persistence = { capture(label = "snapshot") { world.emit(Capture, { label }); return world.getResource(State); }, serialize() { return world.getResource(State)?.lastSerialized ?? JSON.stringify(world.getResource(State)); }, getState() { return world.getResource(State); } }; },
+    bindings: { State }
+  });
+}
+
+export function createHandAuthoringDsks(NexusRealtime, config = {}) {
+  const cfg = config ?? {};
+  return [
+    createWebXrHandAdapterDsk(NexusRealtime, cfg.webxrHand ?? {}),
+    createOpenXrHandAdapterDsk(NexusRealtime, cfg.openxrHand ?? {}),
+    createHandGestureDsk(NexusRealtime, cfg.handGestures ?? {}),
+    createSpatialSceneGraphDsk(NexusRealtime, cfg.scene ?? {}),
+    createSelectionDsk(NexusRealtime, cfg.selection ?? {}),
+    createTransformDsk(NexusRealtime, cfg.transform ?? {}),
+    createWidgetDsk(NexusRealtime, cfg.widgets ?? {}),
+    createInteractionDsk(NexusRealtime, cfg.interactions ?? {}),
+    createPersistenceDsk(NexusRealtime, cfg.persistence ?? {})
+  ];
+}
+
+export const createSpatialAuthoringKits = createHandAuthoringDsks;
+export const createSpatialSceneGraphKit = createSpatialSceneGraphDsk;
+export const createSelectionDomainServiceKit = createSelectionDsk;
+export const createTransformDomainServiceKit = createTransformDsk;
+export const createWidgetDomainServiceKit = createWidgetDsk;
+export const createInteractionDomainServiceKit = createInteractionDsk;
+export const createPersistenceDomainServiceKit = createPersistenceDsk;
+export default createHandAuthoringDsks;
