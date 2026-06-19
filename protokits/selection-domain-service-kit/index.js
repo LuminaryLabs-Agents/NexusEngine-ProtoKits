@@ -1,1 +1,1 @@
-export { createSelectionDomainServiceKit, createSelectionDomainServiceKit as default, SELECTION_DOMAIN_SERVICE_KIT_VERSION } from '../spatial-authoring-kits/index.js';
+export { createSelectionDsk as createSelectionDomainServiceKit, createSelectionDsk as default } from '../spatial-authoring-kits/index.js';
