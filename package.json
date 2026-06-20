@@ -90,6 +90,7 @@
     "./fogline-survey-pressure-bridge-kit": "./protokits/fogline-survey-pressure-bridge-kit/index.js",
     "./rendering-stack-kits": "./protokits/rendering-stack-kits/index.js",
     "./spatial-authoring-kits": "./protokits/spatial-authoring-kits/index.js",
+    "./spatial-authoring-toolkit-dsks": "./protokits/spatial-authoring-toolkit-dsks/index.js",
     "./webxr-hand-adapter-dsk": "./protokits/webxr-hand-adapter-dsk/index.js",
     "./openxr-hand-adapter-dsk": "./protokits/openxr-hand-adapter-dsk/index.js",
     "./hand-gesture-dsk": "./protokits/hand-gesture-dsk/index.js",
