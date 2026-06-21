@@ -24,6 +24,7 @@ In this repo, DSMs are built and shipped as `-kit` folders with `createXKit()` f
 - `DSM-TESTING-GUIDE.md` — required tests and reliability expectations.
 - `DSM-PROMOTION-GUIDE.md` — promotion gates from experiment to ProtoKit to core.
 - `DSK-FIRST-WAVE-LEDGER.md` — closed migration ledger for the first `defineDomainServiceKit()` wave.
+- `dsk-composition-upgrade-plan.md` — composition-first object proof upgrade plan for bounded DSK containers.
 
 ## Templates
 
@@ -36,3 +37,9 @@ In this repo, DSMs are built and shipped as `-kit` folders with `createXKit()` f
 A kit defines a domain and exposes services/API that make that domain happen. Larger kits compose smaller kits recursively until the remaining parts are atomic.
 
 Games should compose kits through data. Games should not define reusable architecture directly.
+
+## Composition-first extension
+
+For object proofs and idea-packet-driven work, prefer upgrading existing bounded containers before creating new kits.
+
+Object-specific packets such as banana, coin, button, crate, and potion are specs/presets/proofs, not standalone kits.
