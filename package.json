@@ -5,6 +5,7 @@
   "description": "Prototype kits for NexusRealtime applications.",
   "exports": {
     "./aerial-canyon-kits": "./protokits/aerial-canyon-kits/index.js",
+    "./aerial-patch-window-domain-kit": "./protokits/aerial-patch-window-domain-kit/index.js",
     "./canyon-terrain-domain-kit": "./protokits/canyon-terrain-domain-kit/index.js",
     "./flight-corridor-domain-kit": "./protokits/flight-corridor-domain-kit/index.js",
     "./powered-aerial-flight-domain-kit": "./protokits/powered-aerial-flight-domain-kit/index.js",
@@ -52,15 +53,7 @@
     "./persistence-domain-service-kit": "./protokits/spatial-authoring-kits/index.js",
     "./*": "./protokits/*/index.js"
   },
-  "files": [
-    "KITS.md",
-    "README-DSM-ADDENDUM.md",
-    "docs",
-    "protokits",
-    "apps",
-    "scripts",
-    "tests"
-  ],
+  "files": ["KITS.md", "README-DSM-ADDENDUM.md", "docs", "protokits", "apps", "scripts", "tests"],
   "scripts": {
     "check": "npm run check:syntax && npm test",
     "check:syntax": "node scripts/check-all-js.mjs",
