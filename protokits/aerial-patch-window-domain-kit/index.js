@@ -1,6 +1,6 @@
-import { defineInjectedRuntimeKit, hashString, number } from "../foundation-kit/index.js";
+import { defineInjectedRuntimeKit, number } from "../foundation-kit/index.js";
 
-export const AERIAL_PATCH_WINDOW_DOMAIN_KIT_VERSION = "0.1.1";
+export const AERIAL_PATCH_WINDOW_DOMAIN_KIT_VERSION = "0.1.2";
 
 function defineResource(NexusRealtime, name) {
   return typeof NexusRealtime.defineResource === "function" ? NexusRealtime.defineResource(name) : `resource:${name}`;
@@ -28,6 +28,21 @@ function defaultRings(config = {}) {
   ];
 }
 
+function normalizeRings(config = {}) {
+  const raw = Array.isArray(config.lodRings) && config.lodRings.length ? config.lodRings : defaultRings(config);
+  const baseSize = number(config.chunkSize ?? config.patchSize ?? raw[0]?.patchSize ?? raw[0]?.size, 768);
+  const exclusiveGrid = config.exclusiveGrid !== false;
+  return raw.map((ring, index) => ({
+    id: ring.id ?? ["near", "mid", "far"][index] ?? `lod-${index}`,
+    radius: Math.max(0, Math.floor(number(ring.radius, 1))),
+    size: exclusiveGrid ? baseSize : number(ring.patchSize ?? ring.size, baseSize),
+    segments: number(ring.sampleSegments ?? ring.segments, index === 0 ? 64 : index === 1 ? 32 : 14),
+    ahead: number(ring.preloadAhead ?? ring.ahead, 0),
+    exclusiveGrid,
+    innerRadius: exclusiveGrid && index > 0 ? Math.max(-1, Math.floor(number(raw[index - 1]?.radius, 0))) : -1
+  }));
+}
+
 function makePatch(engine, state, ring, index, px, pz, preload = false) {
   const size = number(ring.size, 768);
   const centerX = px * size;
@@ -49,11 +64,12 @@ function makePatch(engine, state, ring, index, px, pz, preload = false) {
     interactive: ring.id === "near",
     visualOnly: ring.id !== "near",
     preload,
+    exclusiveGrid: Boolean(ring.exclusiveGrid),
     patch: patchClass,
     material,
     color: terrain?.patchColor?.(patchClass) ?? "#884111",
     materialDescriptorId: "aerialPatchWindow.terrainMaterial",
-    revision: `${state.seed}:${id}:${ring.segments}:${size}`,
+    revision: `${state.seed}:${id}:${ring.segments}:${size}:${ring.exclusiveGrid ? "exclusive" : "overlap"}`,
     status: "ready",
     builtAt: state.frame
   };
@@ -73,7 +89,7 @@ function initialState(config = {}, reason = "initialized") {
     dirtyPatchIds: [],
     removedPatchIds: [],
     terrainMaterial: { id: "aerialPatchWindow.terrainMaterial", shader: "world-space-canyon-terrain" },
-    streamingStats: { reason, desired: 0, ready: 0, dirty: 0, removed: 0, cached: 0, lodCounts: {} }
+    streamingStats: { reason, desired: 0, ready: 0, dirty: 0, removed: 0, cached: 0, lodCounts: {}, exclusiveGrid: config.exclusiveGrid !== false }
   };
 }
 
@@ -89,12 +105,13 @@ export function createAerialPatchWindowDomainKit(NexusRealtime = {}, config = {}
       state.viewer = { x: number(body.position.x), y: number(body.position.y), z: number(body.position.z), forward: forwardFromBody(body) };
     }
     const coordMap = new Map();
-    const rings = (Array.isArray(config.lodRings) && config.lodRings.length ? config.lodRings : defaultRings(config)).map((ring, index) => ({ id: ring.id ?? ["near", "mid", "far"][index] ?? `lod-${index}`, radius: Math.max(0, Math.floor(number(ring.radius, 1))), size: number(ring.patchSize ?? ring.size, 768), segments: number(ring.sampleSegments ?? ring.segments, 16), ahead: number(ring.preloadAhead ?? ring.ahead, 0) }));
+    const rings = normalizeRings(config);
     rings.forEach((ring, index) => {
       const cx = Math.round(number(state.viewer.x) / ring.size);
       const cz = Math.round(number(state.viewer.z) / ring.size);
       for (let dz = -ring.radius; dz <= ring.radius; dz += 1) {
         for (let dx = -ring.radius; dx <= ring.radius; dx += 1) {
+          if (ring.exclusiveGrid && index > 0 && Math.max(Math.abs(dx), Math.abs(dz)) <= ring.innerRadius) continue;
           const id = patchId(ring.id, cx + dx, cz + dz);
           coordMap.set(id, makePatch(installedEngine, state, ring, index, cx + dx, cz + dz, false));
         }
@@ -102,6 +119,9 @@ export function createAerialPatchWindowDomainKit(NexusRealtime = {}, config = {}
       for (let step = 1; step <= ring.ahead; step += 1) {
         const px = cx + Math.round(number(state.viewer.forward?.x) * step);
         const pz = cz + Math.round(number(state.viewer.forward?.z, 1) * step);
+        const dx = px - cx;
+        const dz = pz - cz;
+        if (ring.exclusiveGrid && index > 0 && Math.max(Math.abs(dx), Math.abs(dz)) <= ring.innerRadius) continue;
         const id = patchId(ring.id, px, pz);
         coordMap.set(id, makePatch(installedEngine, state, ring, index, px, pz, true));
       }
@@ -125,7 +145,7 @@ export function createAerialPatchWindowDomainKit(NexusRealtime = {}, config = {}
       dirtyPatchIds,
       removedPatchIds,
       patchCount: patches.length,
-      streamingStats: { desired: desiredPatchIds.length, ready: patches.length, dirty: dirtyPatchIds.length, removed: removedPatchIds.length, cached: Object.keys(registry).length, lodCounts, qualityTier: config.qualityTier ?? "high" }
+      streamingStats: { desired: desiredPatchIds.length, ready: patches.length, dirty: dirtyPatchIds.length, removed: removedPatchIds.length, cached: Object.keys(registry).length, lodCounts, qualityTier: config.qualityTier ?? "high", exclusiveGrid: config.exclusiveGrid !== false }
     });
   }
 
@@ -147,7 +167,7 @@ export function createAerialPatchWindowDomainKit(NexusRealtime = {}, config = {}
       engine.genericWorldPatch ??= engine.aerialPatchWindow;
       engine.terrainStreamer ??= engine.aerialPatchWindow;
     },
-    metadata: { version: AERIAL_PATCH_WINDOW_DOMAIN_KIT_VERSION, domain: "aerial-patch-window", purpose: "Flight-biased terrain patch window provider for aerial canyon vegetation and procedural object descriptors." }
+    metadata: { version: AERIAL_PATCH_WINDOW_DOMAIN_KIT_VERSION, domain: "aerial-patch-window", purpose: "Flight-biased exclusive-grid patch window provider for terrain, vegetation, procedural objects and render bundles." }
   });
 }
 
