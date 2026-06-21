@@ -25,6 +25,7 @@ In this repo, DSMs are built and shipped as `-kit` folders with `createXKit()` f
 - `DSM-PROMOTION-GUIDE.md` — promotion gates from experiment to ProtoKit to core.
 - `DSK-FIRST-WAVE-LEDGER.md` — closed migration ledger for the first `defineDomainServiceKit()` wave.
 - `dsk-composition-upgrade-plan.md` — composition-first object proof upgrade plan for bounded DSK containers.
+- `dsk-composition-implementation-ledger.md` — implementation ledger for the first object-proof composition pass.
 
 ## Templates
 
