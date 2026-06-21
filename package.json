@@ -7,6 +7,7 @@
     "./aerial-canyon-kits": "./protokits/aerial-canyon-kits/index.js",
     "./aerial-biome-fidelity-kits": "./protokits/aerial-biome-fidelity-kits/index.js",
     "./aerial-cel-flight-feel-kits": "./protokits/aerial-cel-flight-feel-kits/index.js",
+    "./aerial-render-bundle-kits": "./protokits/aerial-render-bundle-kits/index.js",
     "./aerial-ui-interaction-kits": "./protokits/aerial-ui-interaction-kits/index.js",
     "./aerial-patch-window-domain-kit": "./protokits/aerial-patch-window-domain-kit/index.js",
     "./canyon-terrain-domain-kit": "./protokits/canyon-terrain-domain-kit/index.js",
