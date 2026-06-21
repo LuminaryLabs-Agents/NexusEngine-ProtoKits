@@ -1,7 +1,24 @@
-import * as DirectNexusRealtime from "nexusrealtime";
-
 export const PROTOKITS_DSK_ADAPTER_VERSION = "0.0.2";
 export const PROTOKITS_DSK_STABILITY = "experimental";
+
+const LOCAL_NEXUS_RUNTIME = Object.freeze({
+  adapter: "local-protokit-fallback-runtime",
+  defineResource(name, options = {}) {
+    return Object.freeze({ kind: "resource", name, ...options });
+  },
+  defineEvent(name, options = {}) {
+    return Object.freeze({ kind: "event", name, ...options });
+  },
+  defineRuntimeKit(config = {}) {
+    return Object.freeze({ kind: "runtime-kit", ...config });
+  },
+  defineDomainServiceKit(config = {}) {
+    return Object.freeze({ kind: "domain-service-kit", ...config });
+  },
+  createRealtimeGame(config = {}) {
+    return Object.freeze({ kind: "realtime-game", ...config });
+  }
+});
 
 const FIRST_WAVE_DSKS = Object.freeze({
   createZoneFieldKit: {
@@ -51,10 +68,6 @@ const FIRST_WAVE_DSKS = Object.freeze({
   }
 });
 
-function isObject(value) {
-  return value && typeof value === "object" && !Array.isArray(value);
-}
-
 export function isNexusRuntimeCandidate(value) {
   return Boolean(
     value &&
@@ -77,9 +90,9 @@ export function normalizeProtoKitFactoryArgs(runtimeOrConfig, maybeConfig = {}) 
   }
 
   return {
-    NexusRealtime: DirectNexusRealtime,
+    NexusRealtime: LOCAL_NEXUS_RUNTIME,
     config: runtimeOrConfig ?? {},
-    mode: "direct-import"
+    mode: "local-fallback-runtime"
   };
 }
 
@@ -131,4 +144,3 @@ export function withProtoDomainServiceRuntime(NexusRealtime, key, options = {}) 
     }
   });
 }
-
