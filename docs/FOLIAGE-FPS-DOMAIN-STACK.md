@@ -1,10 +1,17 @@
 # Foliage FPS Domain Stack
 
-This stack moves reusable procedural foliage FPS behavior into ProtoKits while leaving browser rendering in NexusRealtime Experiments.
+This stack moves reusable procedural and Objaverse-derived foliage FPS behavior into ProtoKits while leaving browser rendering in NexusRealtime Experiments.
 
 ## Implemented domains
 
 - async and Objaverse loading foundation
+- object family registry
+- object variant selection
+- object LOD policy
+- object material variation
+- object grounding profiles
+- semantic object mesh requests
+- object residency and readiness state
 - wind field
 - wind response
 - time of day
@@ -16,25 +23,33 @@ This stack moves reusable procedural foliage FPS behavior into ProtoKits while l
 - vegetation density samples
 - vegetation placement descriptors
 - foliage impostor descriptors
+- foliage batch descriptors
 - procedural foliage composition entry point
 
 ## Renderer boundary
 
-ProtoKits emit data and descriptors. Experiments own Three.js, Canvas, pointer lock, audio output, and the frame loop.
+ProtoKits emit data, requests, readiness, and descriptors. Experiments own Three.js, Canvas, GLTFLoader, pointer lock, audio output, and the frame loop.
 
-## Flow
+## Objaverse object flow
 
 ```txt
-async-domain-load-kit
+SharedAssets manifest
   -> objaverse-catalog-kit
-  -> terrain/world/biome kits
-  -> vegetation-density-field-kit
+  -> object-family-kit
+  -> object-variant-selection-kit
   -> vegetation-placement-kit
-  -> wind-field-kit + wind-response-kit
-  -> foliage-batch-descriptor-kit / foliage-impostor-kit
+  -> object-lod-policy-kit
+  -> object-mesh-request-kit
+  -> experiment GLTF loader adapter
+  -> object-residency-kit / objaverse-mesh-cache-kit
+  -> foliage-batch-descriptor-kit
   -> experiment renderer adapter
 ```
 
+## Fallback rule
+
+A renderer should draw a real object when `objectResidency.isReady(assetId, lod)` is true. Otherwise it should draw a procedural fallback descriptor. A world should not blank while assets stream.
+
 ## Next step
 
-Add `experiments/procedural-foliage-fps/` in NexusRealtime-Experiments and import the composition kit from the ProtoKits CDN.
+Add `experiments/procedural-foliage-fps/` in NexusRealtime-Experiments, import the composition kit from the ProtoKits CDN, and connect a GLTF loader adapter to object mesh requests.
