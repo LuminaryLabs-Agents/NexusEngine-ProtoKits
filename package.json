@@ -61,7 +61,7 @@
   "scripts": {
     "check": "npm run check:syntax && npm test",
     "check:syntax": "node scripts/check-all-js.mjs",
-    "test": "node tests/scoped-rpg-domain-kits-batch-02.test.mjs"
+    "test": "node tests/scoped-rpg-domain-kits-batch-02.test.mjs && node tests/generic-promotion-gate-smoke.test.mjs"
   },
   "license": "MIT"
 }
