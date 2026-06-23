@@ -60,7 +60,7 @@ function assertExpectedPaths(snapshot, expectedPaths = {}, fixtureId) {
   for (const [path, expected] of Object.entries(expectedPaths)) {
     const actual = getPath(snapshot, path);
     if (typeof expected === "number") {
-      assert.equal(Number(actual.toFixed?.(6) ?? actual), expected, `${fixtureId}: ${path}`);
+      assert.equal(Number(Number(actual).toFixed(6)), expected, `${fixtureId}: ${path}`);
     } else {
       assert.deepEqual(actual, expected, `${fixtureId}: ${path}`);
     }
