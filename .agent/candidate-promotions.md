@@ -42,3 +42,15 @@ Promotion lens: reusable behavior is ready for ProtoKits when it forms a rendere
 - `renderDescriptors` / `createGenericDefenseRenderDescriptorDsk` — renderer-agnostic HUD/world descriptors with DOM, Canvas, WebGL, audio, and asset loading outside the kit.
 
 This is a pruning/alias step, not a destructive split. It should reduce route pressure to import the whole composite when a host only needs a specific boundary, and it gives the next promotion gate a clearer path toward Core-ready DSK contracts.
+
+## 2026-06-23 — AAA DSK bridge pruning note
+
+`generic-defense-aaa-dsk-bridge` now combines broad AAA compatibility exports with the pruned `generic-defense-dsk-boundaries` exports. This does not make the AAA facade a Core-promotion candidate; it is a migration bridge for routes that still need compatibility methods while the API surface shrinks.
+
+Promotion/pruning implications:
+
+- Build/keep: `generic-defense-dsk-boundaries` as the atomic alias surface.
+- Keep compatible: `generic-defense-aaa-kits` for existing Signal Bastion-style hosts.
+- Prune through migration: `generic-defense-aaa-dsk-bridge` should be the next import target for hosts that need both broad facade calls and atomic DSK aliases.
+- Do not promote yet: the broad AAA facade remains too large and game-host flavored for Core promotion.
+- Promote later only after proof: atomic map/economy/build/wave/combat/session/render boundaries once they have stable package/Core integration coverage and route consumption evidence.
