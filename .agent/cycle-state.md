@@ -14,15 +14,15 @@ Grow reusable DSK-based ProtoKits while shrinking local experiment JavaScript.
 
 ## Current expansion focus
 
-Use the generic-defense DSK boundary aliases as a compatibility-safe path from broad composite APIs toward smaller resources/events/methods/snapshots/descriptors surfaces.
+Use the generic-defense DSK boundary aliases and the AAA DSK bridge as compatibility-safe paths from broad composite APIs toward smaller resources/events/methods/snapshots/descriptors surfaces.
 
 ## Current pruning focus
 
-Keep `generic-defense-kits` compatible while shifting future imports and promotion review toward `generic-defense-dsk-boundaries` and the seven named atomic aliases: map, economy wallet, build placement, wave/agent director, combat resolver, session facade, and render descriptors.
+Keep `generic-defense-kits` and `generic-defense-aaa-kits` compatible while shifting future imports and promotion review toward `generic-defense-dsk-boundaries`, `generic-defense-aaa-dsk-bridge`, and the seven named atomic aliases: map, economy wallet, build placement, wave/agent director, combat resolver, session facade, and render descriptors.
 
 ## Current validation focus
 
-Run `generic-defense-dsk-boundaries-smoke.test.mjs` before the existing generic-defense replay so API shape is checked before compatibility behavior.
+Run `generic-defense-dsk-boundaries-smoke.test.mjs` before the existing generic-defense replay so API shape and AAA-bridge compatibility are checked before compatibility behavior.
 
 ## Current promotion candidates
 
@@ -38,4 +38,4 @@ See `smoke-tests.md` and `replay-qa.md`.
 
 ## Last meaningful cycle report
 
-See `cycle-reports/`.
+See `.agent/cycle-reports/2026-06-23-api-surface-pruner-1430.md`.
