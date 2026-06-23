@@ -13,6 +13,14 @@ import {
   getGenericDefenseDskBoundary,
   listGenericDefenseDskBoundaries
 } from "../protokits/generic-defense-dsk-boundaries/index.js";
+import {
+  createGenericDefenseAuthoringQaKit,
+  createGenericDefenseBuildKit,
+  createGenericDefenseDskBundle as createGenericDefenseAaaBridgeDskBundle,
+  createGenericDefenseKits as createGenericDefenseAaaBridgeKits,
+  createGenericDefenseMapDsk as createGenericDefenseAaaBridgeMapDsk,
+  listGenericDefenseDskBoundaries as listGenericDefenseAaaBridgeDskBoundaries
+} from "../protokits/generic-defense-aaa-dsk-bridge/index.js";
 
 const expectedBoundaryIds = [
   "map",
@@ -34,6 +42,12 @@ assert.deepEqual(
   listGenericDefenseDskBoundaries().map((boundary) => boundary.id),
   expectedBoundaryIds,
   "boundary list helper exposes the same stable order"
+);
+
+assert.deepEqual(
+  listGenericDefenseAaaBridgeDskBoundaries().map((boundary) => boundary.id),
+  expectedBoundaryIds,
+  "AAA DSK bridge exposes the same pruned boundary list while preserving the compatibility facade"
 );
 
 for (const boundary of GENERIC_DEFENSE_DSK_BOUNDARIES) {
@@ -64,6 +78,32 @@ for (const [kitId, factory] of individualFactories) {
   assert.equal(Boolean(kit.metadata?.dskBoundary), true, `${kitId}: individual alias annotates DSK boundary metadata`);
   assert.equal(Boolean(kit.metadata?.apiSurface), true, `${kitId}: individual alias annotates API surface metadata`);
 }
+
+const bridgeMapKit = createGenericDefenseAaaBridgeMapDsk(createMockNexusRealtime());
+assert.equal(bridgeMapKit.id, "generic-defense-map-kit", "AAA DSK bridge keeps the map DSK alias available beside the broad compatibility facade");
+assert.equal(Boolean(bridgeMapKit.metadata?.apiSurface), true, "AAA DSK bridge annotates atomic DSK API surface metadata");
+
+const bridgeCompatibilityKits = createGenericDefenseAaaBridgeKits(createMockNexusRealtime());
+assert.equal(
+  bridgeCompatibilityKits.some((kit) => kit.id === "generic-defense-build-kit"),
+  true,
+  "AAA DSK bridge keeps the existing broad build facade available for compatibility hosts"
+);
+assert.equal(
+  createGenericDefenseBuildKit(createMockNexusRealtime()).id,
+  "generic-defense-build-kit",
+  "AAA DSK bridge directly exports the compatibility build facade"
+);
+assert.equal(
+  createGenericDefenseAuthoringQaKit(createMockNexusRealtime()).id,
+  "generic-defense-authoring-qa-kit",
+  "AAA DSK bridge directly exports the compatibility authoring QA facade"
+);
+assert.deepEqual(
+  createGenericDefenseAaaBridgeDskBundle(createMockNexusRealtime(), {}, ["map", "renderDescriptors"]).map((kit) => kit.id),
+  ["generic-defense-map-kit", "generic-defense-render-descriptor-kit"],
+  "AAA DSK bridge can return the smallest requested DSK subset without forcing the broad compatibility bundle"
+);
 
 const NexusRealtime = createMockNexusRealtime();
 const kits = createGenericDefenseDskBundle(NexusRealtime, {}, expectedBoundaryIds);
