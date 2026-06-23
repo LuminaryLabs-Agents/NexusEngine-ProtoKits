@@ -43,8 +43,14 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - The bridge smoke checks that the broad AAA compatibility facade is still available, that atomic DSK aliases are exposed beside it, and that a smallest requested DSK subset can be returned without forcing the broad compatibility bundle.
 - This creates a safer next step for Signal Bastion-style routes: they can migrate imports toward the bridge before route code swaps broad facade calls for smaller DSK aliases.
 
+## 2026-06-23 — Downstream executable route smoke update
+
+- Experiments now includes `tests/signal-bastion-executable-route-replay-smoke.mjs` in its full check suite.
+- The smoke imports real Core plus the package export `@luminarylabs/nexusrealtime-protokits/generic-defense-dsk-boundaries`, composes the Signal Bastion debug preset through the seven named DSK aliases, advances fixed ticks, and compares deterministic resource/snapshot/descriptor digests across fresh runs.
+- This gives `generic-defense-dsk-boundaries` route-level consumption proof without moving reusable implementation into Experiments.
+
 ## Open gaps
 
 - After the boundary-alias smoke stays green, replace or supplement compatibility facade calls in Experiments with the smallest relevant generic-defense DSK aliases.
-- Add route-level replay manifests for canonical experiments so each route can point to the ProtoKit/domain replay it validates.
-- Add a Core-backed integration smoke once the repo/package wiring exposes a stable local Core import path in this workspace.
+- Route-level replay manifests now exist in Experiments, and `signal-bastion` has the first executable route-domain replay. Add equivalent executable replays for other lanes only after a real reusable ProtoKit boundary exists.
+- Add a Core-backed integration smoke inside ProtoKits once the repo/package wiring exposes a stable local Core import path in this workspace.
