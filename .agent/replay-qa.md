@@ -47,8 +47,22 @@ Track scenario QA and deterministic replay coverage.
 - Nondeterminism risks: none intentionally included; browser, renderer, DOM, Canvas, WebGL, Three.js, pointer lock, audio, and asset loading remain outside the replay.
 - Status: covered by `tests/generic-defense-replay-smoke.test.mjs` and included in the default ProtoKits `npm test` script.
 
+## Downstream route proof
+
+### 2026-06-23 — Signal Bastion executable route replay in Experiments
+
+- Scenario: browserless route-domain replay for the canonical `signal-bastion` strategic-pressure lane.
+- Kits: real Core `nexusrealtime` plus ProtoKits `generic-defense-dsk-boundaries` package alias surface.
+- Seed/config: Signal Bastion debug preset from `LuminaryLabs-Agents/NexusRealtime-Experiments`, not copied ProtoKit fixtures.
+- Inputs: semantic build, upgrade, wave-start, and snapshot bridge calls from `experiments/signal-bastion-route-domain-replay.json`.
+- Fixed ticks: 30 ticks at `0.1s` using the checked strategic-pressure route contract.
+- Expected snapshots: map/vital, economy, structures, agents, combat, and render descriptor digest equality across fresh runs.
+- Nondeterminism risks: DOM, Canvas, WebGL, Three.js, requestAnimationFrame, browser audio, asset loading, and route-local simulation copies remain excluded.
+- Status: covered downstream by `LuminaryLabs-Agents/NexusRealtime-Experiments` `tests/signal-bastion-executable-route-replay-smoke.mjs`.
+- Promotion implication: `generic-defense-dsk-boundaries` now has route-level consumption proof beyond ProtoKits-local replay, but the browser route still needs migration from the broad compatibility facade to the smallest DSK aliases before local JavaScript shrink is complete.
+
 ## Open gaps
 
 - Split or alias `generic-defense-kits` into clearer atomic DSK boundaries after the compatibility replay stays green: path/slot/vital-target, economy wallet, build-placement, structure runtime, wave/agent director, projectile/combat resolver, and render-descriptor output.
-- Add route-level replay manifests for canonical experiments so each route can point to the ProtoKit/domain replay it validates.
-- Add a Core-backed integration replay once the package wiring exposes a stable local Core import path for headless smoke runs.
+- Keep Experiments route-level replay manifests aligned with ProtoKit coverage; the first executable route-domain replay now exists for `signal-bastion`, while other lanes remain contract-only.
+- Add a Core-backed integration replay once the package wiring exposes a stable local Core import path for headless smoke runs inside ProtoKits itself, not only downstream Experiments.
