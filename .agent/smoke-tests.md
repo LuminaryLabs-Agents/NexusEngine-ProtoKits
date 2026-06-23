@@ -37,6 +37,12 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - The default `npm test` script now runs `generic-defense-dsk-boundaries-smoke.test.mjs` before `generic-defense-replay-smoke.test.mjs`, so the API surface is checked before the broader compatibility composite replay.
 - This closes the API-boundary visibility gap for `generic-defense-kits` without deleting the compatibility bundle or forcing Experiments to change routes immediately.
 
+## 2026-06-23 — AAA DSK bridge smoke update
+
+- `tests/generic-defense-dsk-boundaries-smoke.test.mjs` now also covers `generic-defense-aaa-dsk-bridge`.
+- The bridge smoke checks that the broad AAA compatibility facade is still available, that atomic DSK aliases are exposed beside it, and that a smallest requested DSK subset can be returned without forcing the broad compatibility bundle.
+- This creates a safer next step for Signal Bastion-style routes: they can migrate imports toward the bridge before route code swaps broad facade calls for smaller DSK aliases.
+
 ## Open gaps
 
 - After the boundary-alias smoke stays green, replace or supplement compatibility facade calls in Experiments with the smallest relevant generic-defense DSK aliases.
