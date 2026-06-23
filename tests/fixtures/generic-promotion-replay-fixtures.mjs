@@ -54,7 +54,7 @@ export const promotionReplayFixtures = Object.freeze([
         "resource.tick": 1,
         "resource.resourcesById.stamina.value": 3,
         "resource.resourcesById.stamina.empty": false,
-        "resource.resourcesById.stamina.thresholdStates.low": true,
+        "resource.resourcesById.stamina.thresholdStates.low": false,
         "resource.resourcesById.stamina.lastChangeReason": "rest"
       }
     }
