@@ -43,3 +43,11 @@ Move toward composable DSK-style kits that let hosts stay close to import/config
 ### Higher-level domain pressure
 
 The defense split is pointing toward a higher-level `strategic-pressure-loop` domain above defense map/slots, economy, build placement, waves/agents, combat, render descriptors, generic resources, and hazard pressure.
+
+## 2026-06-23 — AAA DSK bridge pruning map update
+
+- Compatibility bridge: `generic-defense-aaa-dsk-bridge` now re-exports the broad `generic-defense-aaa-kits` facade and the pruned `generic-defense-dsk-boundaries` aliases from one module.
+- Purpose: let Signal Bastion-style hosts keep current AAA facade methods while migrating one seam at a time to smaller map/economy/build/wave/combat/session/render DSK aliases.
+- Package export: `@luminarylabs/nexusrealtime-protokits/generic-defense-aaa-dsk-bridge`.
+- Docs: `docs/generic-defense-api-surface-pruner.md` records the migration rule: prefer the smallest boundary before writing route-local state machines.
+- Test coverage: `tests/generic-defense-dsk-boundaries-smoke.test.mjs` now verifies the bridge keeps compatibility exports and can return a smallest requested DSK subset without forcing the broad compatibility bundle.
