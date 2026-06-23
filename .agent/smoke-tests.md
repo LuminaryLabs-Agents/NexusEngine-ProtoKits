@@ -19,6 +19,12 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - Determinism notes:
 - Status:
 
+## Current coverage notes
+
+- `tests/generic-promotion-gate-smoke.test.mjs` covers `generic-pressure-loop-kit`, `generic-resource-loop-kit`, `generic-action-window-kit`, and `generic-affordance-descriptor-kit` as renderer-agnostic DSK promotion candidates. It asserts resources, events, systems, metadata boundaries, headless ticks/methods, and observable events for each surface.
+
 ## Open gaps
 
-Scheduled tasks should append durable findings here.
+- Add deterministic replay fixtures for the same four generic DSKs: fixed config, fixed command sequence, fixed ticks, expected resource snapshots, and expected event counts.
+- Add Signal Bastion/generic-defense composite smoke that exercises start wave, build, upgrade, kill/reward, vital breach, and renderer descriptor output without Canvas.
+- Add compatibility smoke before splitting `generic-defense-kits` into path/slot/vital, economy, build-placement, structure runtime, wave/agent, projectile/combat, and render-descriptor wrappers.
