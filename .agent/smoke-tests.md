@@ -31,8 +31,14 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - The safest next smoke patch is still the `generic-defense-kits` compatibility smoke before splitting the composite into path/slot/vital, economy, build-placement, structure runtime, wave/agent, projectile/combat, and render-descriptor wrappers.
 - Real Core import coverage remains an integration gap. Current ProtoKit smoke tests use the repo-local Core-compatible smoke harness so they can run without browser or package-level Core dependency coupling.
 
+## 2026-06-23 — API Surface Pruner smoke update
+
+- `tests/generic-defense-dsk-boundaries-smoke.test.mjs` now covers the pruned generic-defense DSK alias surface before the compatibility replay. It asserts the seven named boundaries expose explicit resources, events, methods, snapshots, descriptors, export names, backing kit IDs, DSK metadata, and rendererless headless behavior.
+- The default `npm test` script now runs `generic-defense-dsk-boundaries-smoke.test.mjs` before `generic-defense-replay-smoke.test.mjs`, so the API surface is checked before the broader compatibility composite replay.
+- This closes the API-boundary visibility gap for `generic-defense-kits` without deleting the compatibility bundle or forcing Experiments to change routes immediately.
+
 ## Open gaps
 
-- Add Signal Bastion/generic-defense composite smoke that exercises start wave, build, upgrade, kill/reward, vital breach, and renderer descriptor output without Canvas.
-- Add compatibility smoke before splitting `generic-defense-kits` into path/slot/vital, economy, build-placement, structure runtime, wave/agent, projectile/combat, and render-descriptor wrappers.
+- After the boundary-alias smoke stays green, replace or supplement compatibility facade calls in Experiments with the smallest relevant generic-defense DSK aliases.
+- Add route-level replay manifests for canonical experiments so each route can point to the ProtoKit/domain replay it validates.
 - Add a Core-backed integration smoke once the repo/package wiring exposes a stable local Core import path in this workspace.
