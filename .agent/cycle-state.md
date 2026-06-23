@@ -14,19 +14,19 @@ Grow reusable DSK-based ProtoKits while shrinking local experiment JavaScript.
 
 ## Current expansion focus
 
-TBD by scheduled tasks.
+Use the generic-defense DSK boundary aliases as a compatibility-safe path from broad composite APIs toward smaller resources/events/methods/snapshots/descriptors surfaces.
 
 ## Current pruning focus
 
-TBD by scheduled tasks.
+Keep `generic-defense-kits` compatible while shifting future imports and promotion review toward `generic-defense-dsk-boundaries` and the seven named atomic aliases: map, economy wallet, build placement, wave/agent director, combat resolver, session facade, and render descriptors.
 
 ## Current validation focus
 
-TBD by scheduled tasks.
+Run `generic-defense-dsk-boundaries-smoke.test.mjs` before the existing generic-defense replay so API shape is checked before compatibility behavior.
 
 ## Current promotion candidates
 
-See `promotion-candidates.md`.
+See `promotion-candidates.md` / `candidate-promotions.md`.
 
 ## Current route/canonicalization concerns
 
