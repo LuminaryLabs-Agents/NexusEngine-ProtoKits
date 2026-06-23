@@ -28,3 +28,17 @@ Promotion lens: reusable behavior is ready for ProtoKits when it forms a rendere
 - Keep generic pressure/resource/action-window/affordance smoke coverage in the default ProtoKits test script.
 - Add replay fixtures for the same four DSKs with fixed seeds/ticks and expected resource/event snapshots.
 - Begin extracting Signal Bastion's generic-defense composite into named atomic DSK wrappers without deleting the compatibility bundle.
+
+## 2026-06-23 — API Surface Pruner
+
+`generic-defense-kits` now has a non-destructive DSK boundary alias surface in `protokits/generic-defense-dsk-boundaries/index.js`. The compatibility bundle remains intact, but hosts and future Core promotion reviews can now address seven named atomic boundaries instead of one broad game-flavored API:
+
+- `map` / `createGenericDefenseMapDsk` — path, build-slot, and vital-target resources plus reset/vital damage events.
+- `economyWallet` / `createGenericDefenseEconomyWalletDsk` — wallet resource, credit/debit events, rejection events, and small credit/debit/getState methods.
+- `buildPlacement` / `createGenericDefenseBuildPlacementDsk` — build/upgrade requests, structure runtime state, and build/upgrade/rejection events.
+- `waveAgentDirector` / `createGenericDefenseWaveAgentDirectorDsk` — wave start/completion, spawn queue, active agents, path following, and vital breach output.
+- `combatResolver` / `createGenericDefenseCombatResolverDsk` — targeting, projectile motion, damage resolution, kill rewards, and combat feedback descriptors.
+- `sessionFacade` / `createGenericDefenseSessionFacadeDsk` — small host-input facade and cumulative snapshot surface.
+- `renderDescriptors` / `createGenericDefenseRenderDescriptorDsk` — renderer-agnostic HUD/world descriptors with DOM, Canvas, WebGL, audio, and asset loading outside the kit.
+
+This is a pruning/alias step, not a destructive split. It should reduce route pressure to import the whole composite when a host only needs a specific boundary, and it gives the next promotion gate a clearer path toward Core-ready DSK contracts.
