@@ -55,13 +55,21 @@
     "./interaction-domain-service-kit": "./protokits/spatial-authoring-kits/index.js",
     "./persistence-dsk": "./protokits/spatial-authoring-kits/index.js",
     "./persistence-domain-service-kit": "./protokits/spatial-authoring-kits/index.js",
+    "./generic-defense-dsk-boundaries": "./protokits/generic-defense-dsk-boundaries/index.js",
+    "./generic-defense-map-dsk": "./protokits/generic-defense-dsk-boundaries/index.js",
+    "./generic-defense-economy-wallet-dsk": "./protokits/generic-defense-dsk-boundaries/index.js",
+    "./generic-defense-build-placement-dsk": "./protokits/generic-defense-dsk-boundaries/index.js",
+    "./generic-defense-wave-agent-director-dsk": "./protokits/generic-defense-dsk-boundaries/index.js",
+    "./generic-defense-combat-resolver-dsk": "./protokits/generic-defense-dsk-boundaries/index.js",
+    "./generic-defense-session-facade-dsk": "./protokits/generic-defense-dsk-boundaries/index.js",
+    "./generic-defense-render-descriptor-dsk": "./protokits/generic-defense-dsk-boundaries/index.js",
     "./*": "./protokits/*/index.js"
   },
   "files": ["KITS.md", "README-DSM-ADDENDUM.md", "docs", "protokits", "apps", "scripts", "tests"],
   "scripts": {
     "check": "npm run check:syntax && npm test",
     "check:syntax": "node scripts/check-all-js.mjs",
-    "test": "node tests/scoped-rpg-domain-kits-batch-02.test.mjs && node tests/generic-promotion-gate-smoke.test.mjs && node tests/generic-promotion-replay-smoke.test.mjs && node tests/generic-defense-replay-smoke.test.mjs"
+    "test": "node tests/scoped-rpg-domain-kits-batch-02.test.mjs && node tests/generic-promotion-gate-smoke.test.mjs && node tests/generic-promotion-replay-smoke.test.mjs && node tests/generic-defense-dsk-boundaries-smoke.test.mjs && node tests/generic-defense-replay-smoke.test.mjs"
   },
   "license": "MIT"
 }
