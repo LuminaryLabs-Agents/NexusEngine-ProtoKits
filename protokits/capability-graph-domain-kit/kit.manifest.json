@@ -1,0 +1,17 @@
+{
+  "id": "capability-graph-domain-kit",
+  "domain": "capability-graph",
+  "parentDomain": "domain-control-plane",
+  "scope": "control-domain",
+  "extendsBase": "DomainServiceKit",
+  "composes": ["domain-manifest-registry-domain-kit"],
+  "requires": ["domain:manifest-registry"],
+  "provides": ["domain:capability-graph", "domain:dependency-graph"],
+  "ownsLoop": false,
+  "snapshotPolicy": "serializable",
+  "resetPolicy": "engine-reset-aware",
+  "exportPath": "./capability-graph-domain-kit",
+  "sourcePath": "protokits/capability-graph-domain-kit/index.js",
+  "testPaths": ["tests/domain-composition-planning-smoke.test.mjs"],
+  "status": "experimental"
+}
