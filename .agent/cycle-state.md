@@ -18,13 +18,13 @@ Use the generic-defense DSK boundary aliases, AAA DSK bridge, and `engine.n.gene
 
 The previous Twenty Game Refiner seam in `createGenericPlacementProjectorKit().confirm()` is now closed for the reusable projector path: `protokits/generic-defense-presentation-stack-kit/index.js` prefers `engine.n.genericDefense.sessionFacade.getSnapshot()` for reusable presentation snapshots and `engine.n.genericDefense.sessionFacade.build(...)` for placement confirmation before falling back to compatibility facades.
 
-New Atomic Domain Kit Expander focus: `generic-route-progress-kit` now exists as the smallest reusable route/checkpoint/objective-progress boundary. It has both atomic smoke coverage and fixed-tick replay coverage through `engine.n.genericRouteProgress`; it should now be used to test whether checkpoint-heavy canonical routes can shrink local route JavaScript without mixing in cargo, hazards, pressure, scan/survey, camera, renderer, or browser input responsibilities.
+Atomic Domain Kit Expander focus: `generic-route-progress-kit` remains the smallest reusable route/checkpoint/objective-progress boundary. It now has atomic smoke, fixed-tick replay coverage, and partial downstream `next-ledge` consumption proof through `engine.n.genericRouteProgress` and `domain.routeProgress`. Do not build another route/checkpoint atom; the next useful route-domain pressure is cargo/resource/pressure consumption through the delivery/extraction composite.
 
-New Composite Domain Kit Builder focus: `generic-route-cargo-extraction-kit` now exists as the first lightweight composite above route progress, cargo/resource ledger, and pressure channels. It should be used to test traversal/cargo and delivery/extraction routes without creating route-local checkpoint/cargo/pressure state machines or a monolithic game engine.
+Composite Domain Kit Builder focus: `generic-route-cargo-extraction-kit` now exists as the first lightweight composite above route progress, cargo/resource ledger, and pressure channels. It has ProtoKit smoke/replay coverage but still needs downstream `next-ledge` route consumption before any full traversal/cargo-pressure lane claim.
 
-New API Surface Pruner focus: the route/cargo/extraction family now has preferred atomic child namespaces: `engine.n.genericRouteProgress`, `engine.n.genericResourceLoop`, and `engine.n.genericPressureLoop`. The route-cargo composite now uses those child namespaces first, so Experiments can migrate one boundary at a time instead of depending on broad `engine.generic*` facades.
+API Surface Pruner focus: the route/cargo/extraction family now has preferred atomic child namespaces: `engine.n.genericRouteProgress`, `engine.n.genericResourceLoop`, and `engine.n.genericPressureLoop`. The route-cargo composite now uses those child namespaces first, so Experiments can migrate one boundary at a time instead of depending on broad `engine.generic*` facades.
 
-New Intent Miner focus: treat `vr-platformer-kit-suite` as an incubation suite for a possible `spatial-platformer-loop` higher-level domain, not as a Core-promotion-ready maximum-feature blob. Its child platformer/XR/spatial-board/comfort/render-descriptor boundaries need deterministic replay and downstream Experiments consumption proof before promotion-facing claims.
+Intent Miner focus: treat `vr-platformer-kit-suite` as an incubation suite for a possible `spatial-platformer-loop` higher-level domain, not as a Core-promotion-ready maximum-feature blob. Its child platformer/XR/spatial-board/comfort/render-descriptor boundaries need deterministic replay and downstream Experiments consumption proof before promotion-facing claims.
 
 ## Current pruning focus
 
@@ -67,6 +67,8 @@ See `route-canonicalization.md`.
 See `smoke-tests.md` and `replay-qa.md`.
 
 ## Last meaningful cycle report
+
+Latest Atomic Domain Kit Expander update: `.agent/cycle-reports/2026-06-24-atomic-domain-kit-expander-1228.md` reconciles ProtoKits memory with the current downstream Experiments state. `next-ledge` now gives `generic-route-progress-kit` partial downstream consumption/spec proof through `engine.n.genericRouteProgress`, so the next atomic-domain move is not another route-progress kit; it is a scoped cargo/resource/pressure consumption plan for `generic-route-cargo-extraction-kit` while keeping tether physics, collision, camera, browser input, rendering, assets, and route fiction in Experiments.
 
 Latest Intent Miner update: `.agent/cycle-reports/2026-06-24-intent-miner-1200.md` records the new `vr-platformer-kit-suite` as a spatial-platformer-loop incubation finding. This is ProtoKits map/memory alignment only; no Experiments JavaScript shrink is claimed, no Core promotion is claimed, and Core `.agent/intent.md` is still blocked by integration permissions.
 
