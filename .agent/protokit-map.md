@@ -63,13 +63,14 @@ The defense split is pointing toward a higher-level `strategic-pressure-loop` do
 ## 2026-06-24 — Atomic route-progress map update
 
 - New atomic kit: `generic-route-progress-kit`.
-- Boundary: ordered route/checkpoint/objective progress through `genericRouteProgress.state`, checkpoint entered/completed, route advanced/completed/reset/rejected events, host methods on `engine.genericRouteProgress`, snapshots for active/completed checkpoints, and renderer-agnostic `route-checkpoint` descriptors.
+- Boundary: ordered route/checkpoint/objective progress through `genericRouteProgress.state`, checkpoint entered/completed, route advanced/completed/reset/rejected events, host methods on `engine.n.genericRouteProgress` plus compatibility `engine.genericRouteProgress`, snapshots for active/completed checkpoints, and renderer-agnostic `route-checkpoint` descriptors.
 - Package exposure: available through the package wildcard as `@luminarylabs/nexusrealtime-protokits/generic-route-progress-kit`.
 - Docs/manifest: `protokits/generic-route-progress-kit/README.md` and `kit.manifest.json` define the renderer/browser exclusion boundary.
-- Test coverage: `tests/generic-route-progress-kit-smoke.test.mjs` is now wired into `npm test` after the generic promotion replay smoke and before promotion determinism/defense smokes.
+- Test coverage: `tests/generic-route-progress-kit-smoke.test.mjs` and `tests/generic-route-progress-replay-smoke.test.mjs` are now wired into `npm test` after the generic promotion replay smoke and before the route-cargo composite smoke.
+- Replay coverage: `tests/fixtures/generic-route-progress-replay-fixtures.mjs` covers fixed-tick checkpoint progression plus rejection/reset and validates fresh-run digest equality through `engine.n.genericRouteProgress`.
 - Experiment consumers to consider next: Harbor Salvage, Cargo Chain, Sky Courier, Trainyard Switcher, Dungeon Relay, Floodplain Rescue, and survey/extraction routes that currently own ordered checkpoint state locally.
 - Higher-level domains unlocked: delivery/extraction loop (`route-progress + cargo + hazards`) and survey pressure loop (`route-progress + scan/survey + zones + pressure`).
-- Promotion readiness: incubating only. It has atomic headless smoke coverage, but needs at least one Experiments route consumption proof before Core-promotion review.
+- Promotion readiness: incubating only. It has atomic headless smoke plus replay coverage, but needs at least one Experiments route consumption proof before Core-promotion review.
 
 ## 2026-06-24 — API Surface Pruner route namespace map update
 
@@ -77,5 +78,5 @@ The defense split is pointing toward a higher-level `strategic-pressure-loop` do
 - `generic-resource-loop-kit` now exposes its preferred meter facade under `engine.n.genericResourceLoop` while preserving `engine.genericResourceLoop` compatibility.
 - `generic-pressure-loop-kit` now exposes its preferred channel facade under `engine.n.genericPressureLoop` while preserving `engine.genericPressureLoop` compatibility.
 - `generic-route-cargo-extraction-kit` now builds snapshots and runs route/cargo/pressure commands through those three namespaced child DSKs first, preserving compatibility fallbacks for older hosts.
-- Test coverage: `tests/generic-promotion-gate-smoke.test.mjs`, `tests/generic-route-progress-kit-smoke.test.mjs`, and `tests/generic-route-cargo-extraction-kit-smoke.test.mjs` now poison the broad compatibility surfaces for the covered seams and prove the namespaced DSK surfaces are sufficient.
+- Test coverage: `tests/generic-promotion-gate-smoke.test.mjs`, `tests/generic-route-progress-kit-smoke.test.mjs`, `tests/generic-route-progress-replay-smoke.test.mjs`, and `tests/generic-route-cargo-extraction-kit-smoke.test.mjs` now prove the namespaced DSK surfaces are sufficient for the covered seams.
 - Promotion implication: the delivery/extraction loop has a clearer atomic-to-composite API ladder, but no Core-promotion claim should be made until `next-ledge` or another canonical route consumes the namespace and adds route-level fixed-tick replay evidence.
