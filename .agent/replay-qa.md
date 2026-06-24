@@ -59,6 +59,17 @@ Track scenario QA and deterministic replay coverage.
 - Nondeterminism risks: the guard blocks promotion-facing use of `Date.now`, `performance.now`, `Math.random`, `crypto.getRandomValues`, `requestAnimationFrame`, DOM, Canvas, WebGL, browser audio, and pointer APIs. It also records that `generic-defense-aaa-kits` still has wall-clock/browser-timing convenience paths and should stay outside Core-promotion review until pruned or made tick/command deterministic.
 - Status: covered by `tests/promotion-determinism-guard-smoke.test.mjs` and included in the default ProtoKits `npm test` script.
 
+### 2026-06-24 — Generic defense placement-projector namespace smoke
+
+- Scenario: rendererless placement confirmation through the namespaced generic-defense session facade.
+- Kits: `generic-defense-dsk-boundaries` plus `createGenericPlacementProjectorKit()` from `generic-defense-presentation-stack-kit`.
+- Seed/config: deterministic smoke-world fixture from `tests/aaa-domain-spine-smoke-harness.mjs`; no RNG.
+- Inputs: begin placement with the first fixture blueprint, move to the first fixture slot, confirm with a command id.
+- Fixed ticks: none required; this is a semantic method/snapshot bridge smoke.
+- Expected snapshots: the synced `engine.n.genericDefense.sessionFacade` snapshot resolves the slot/blueprint, the build confirmation creates one structure at the projected slot, and wallet currency decreases.
+- Nondeterminism risks: the smoke poisons `engine.genericDefense` and `engine.defenseBuild` after namespace sync, so the projector must prefer `engine.n.genericDefense.sessionFacade.getSnapshot()` and `.build(...)`; DOM, Canvas, and browser frame timing are absent.
+- Status: covered by `tests/generic-defense-placement-projector-namespace-smoke.test.mjs` and included in the default ProtoKits `npm test` script before generic-defense boundary/replay checks.
+
 ## Downstream route proof
 
 ### 2026-06-23 — Signal Bastion executable route replay in Experiments
@@ -82,14 +93,13 @@ Track scenario QA and deterministic replay coverage.
 
 ## 2026-06-24 — Deterministic Replay QA placement-projector namespace seam
 
-Re-checked the latest Experiments and ProtoKits `.agent/` memory plus the current `generic-defense-presentation-stack-kit` implementation. The remaining strategic-pressure replay seam is now precise: `createGenericPlacementProjectorKit().confirm()` still resolves build confirmation through `engine.defenseBuild?.build` before `engine.genericDefense?.build`, while Experiments records the Signal Bastion route bridge as `placementProjector.confirm -> engine.n.genericDefense.sessionFacade.build`.
+Re-checked the latest Experiments and ProtoKits `.agent/` memory plus the current `generic-defense-presentation-stack-kit` implementation. The remaining strategic-pressure replay seam was precise: `createGenericPlacementProjectorKit().confirm()` still resolved build confirmation through `engine.defenseBuild?.build` before `engine.genericDefense?.build`, while Experiments recorded the Signal Bastion route bridge as `placementProjector.confirm -> engine.n.genericDefense.sessionFacade.build`.
 
-Replay implication: Signal Bastion is not re-owning simulation, but the reusable presentation projector has not fully caught up to the namespaced DSK boundary that the executable replay and browser host are moving toward. The next safe implementation patch is in ProtoKits, not Experiments:
+Replay closure pushed to ProtoKits `main`:
 
-1. Update `protokits/generic-defense-presentation-stack-kit/index.js` so the shared snapshot helper prefers `engine.n?.genericDefense?.sessionFacade?.getSnapshot()` before legacy `engine.genericDefense?.getSnapshot()`.
-2. Update `createGenericPlacementProjectorKit().confirm()` so build confirmation prefers `engine.n?.genericDefense?.sessionFacade?.build(...)`, then falls back to `engine.defenseBuild?.build(...)` and legacy `engine.genericDefense?.build(...)` for compatibility hosts.
-3. Add `tests/generic-defense-placement-projector-namespace-smoke.test.mjs` that installs the seven generic-defense DSK aliases plus `createGenericPlacementProjectorKit()`, syncs `engine.n.genericDefense`, then reassigns/poisons `engine.genericDefense` and `engine.defenseBuild` while keeping the synced namespace alive. The smoke should begin placement, move to a valid slot, confirm, assert one built structure through `namespace.sessionFacade.getSnapshot()`, and assert DOM/Canvas/browser globals are absent.
-4. Wire that smoke into `package.json` before `generic-defense-replay-smoke.test.mjs` so the namespace bridge is guarded before compatibility replay runs.
-5. Only then update Experiments memory to claim the placement seam has shrunk from compatibility facades to the DSK namespace.
+1. Updated `protokits/generic-defense-presentation-stack-kit/index.js` so the shared snapshot helper prefers `engine.n?.genericDefense?.sessionFacade?.getSnapshot()` before legacy `engine.genericDefense?.getSnapshot()`.
+2. Updated `createGenericPlacementProjectorKit().confirm()` so build confirmation prefers `engine.n?.genericDefense?.sessionFacade?.build(...)`, then falls back to `engine.defenseBuild?.build(...)` and legacy `engine.genericDefense?.build(...)` for compatibility hosts.
+3. Added `tests/generic-defense-placement-projector-namespace-smoke.test.mjs`, which installs the seven generic-defense DSK aliases plus `createGenericPlacementProjectorKit()`, syncs `engine.n.genericDefense`, then reassigns/poisons `engine.genericDefense` and `engine.defenseBuild` while keeping the synced namespace alive.
+4. Wired that smoke into `package.json` before generic-defense boundary/replay checks.
 
-Status: patch plan recorded, not implemented in this run because replacing the large presentation-stack source file through the connector without local test execution would be riskier than leaving the exact main-branch patch plan durable for the next scoped push.
+Status: implemented and guarded. The next Experiments cycle can update its memory to claim the placement seam has shrunk from compatibility facades to the DSK namespace, then consider replacing Signal Bastion browser-host placement calls only where its bridge/spec/executable/facade smokes stay green.
