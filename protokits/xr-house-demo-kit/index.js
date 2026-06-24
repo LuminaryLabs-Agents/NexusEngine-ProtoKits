@@ -5,6 +5,10 @@ export function createXrHouseDemoKit(config = {}) {
     version: "0.1.0",
     config,
     kits: [
+      "xr-session-kit",
+      "xr-frame-kit",
+      "xr-layer-kit",
+      "xr-render-descriptor-kit",
       "xr-input-kit",
       "xr-grab-throw-kit",
       "simple-rigid-body-kit",
