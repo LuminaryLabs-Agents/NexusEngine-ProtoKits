@@ -24,6 +24,7 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - `tests/generic-promotion-gate-smoke.test.mjs` covers `generic-pressure-loop-kit`, `generic-resource-loop-kit`, `generic-action-window-kit`, and `generic-affordance-descriptor-kit` as renderer-agnostic DSK promotion candidates. It asserts resources, events, systems, metadata boundaries, headless ticks/methods, and observable events for each surface.
 - `tests/generic-promotion-replay-smoke.test.mjs` plus `tests/fixtures/generic-promotion-replay-fixtures.mjs` adds deterministic fixed-tick replay coverage for the same four generic DSKs. The replay fixtures assert resource snapshots, event counts, method calls, descriptor availability, and fixed frame/tick results without DOM, Canvas, WebGL, browser input, or renderer ownership.
 - `tests/promotion-determinism-guard-smoke.test.mjs` now keeps the promotion-facing generic DSK candidates and `generic-defense-dsk-boundaries`/`generic-defense-aaa-dsk-bridge` free of wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, and animation-frame ownership. It also makes the remaining `generic-defense-aaa-kits` wall-clock/browser-timing compatibility exceptions explicit so they cannot be mistaken for Core-promotion-ready surfaces.
+- `tests/generic-defense-placement-projector-namespace-smoke.test.mjs` now guards the reusable placement projector's transition from broad compatibility facades to `engine.n.genericDefense.sessionFacade` for snapshot/build semantics. It poisons `engine.genericDefense` and `engine.defenseBuild` after namespace sync and confirms a valid placement through the namespaced DSK session facade without DOM, Canvas, or browser frame timing.
 
 ## 2026-06-23 — Headless Tick Smoke Builder findings
 
@@ -65,14 +66,14 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 
 ## 2026-06-24 — Headless Tick Smoke Builder bridge drift finding
 
-- Experiments now specifies Signal Bastion placement input as `placementProjector.confirm` bridged to `engine.n.genericDefense.sessionFacade.build`, but the reusable `generic-defense-presentation-stack-kit` still resolves placement confirmation through `engine.defenseBuild?.build` and then legacy `engine.genericDefense?.build`.
-- This is not a route-local simulation leak, but it is namespace drift: the route is ready to shrink toward namespaced DSK calls faster than the reusable presentation projector currently does.
-- Safest next ProtoKits patch: update `createGenericPlacementProjectorKit()` so `confirm()` prefers `engine.n?.genericDefense?.sessionFacade?.build`, then falls back to `engine.defenseBuild?.build` and legacy `engine.genericDefense?.build` only for compatibility hosts. Add a headless smoke that poisons/reassigns `engine.genericDefense` after DSK namespace sync and proves the projector can still build through `engine.n.genericDefense.sessionFacade` without DOM or Canvas.
-- Do not add the smoke before the implementation change, because the current projector would fail it.
+- Experiments now specifies Signal Bastion placement input as `placementProjector.confirm` bridged to `engine.n.genericDefense.sessionFacade.build`, but the reusable `generic-defense-presentation-stack-kit` still resolved placement confirmation through `engine.defenseBuild?.build` and then legacy `engine.genericDefense?.build` internally.
+- This was not a route-local simulation leak, but it was namespace drift: the route was ready to shrink toward namespaced DSK calls faster than the reusable presentation projector did.
+- The ProtoKits patch is now implemented: `createGenericPlacementProjectorKit()` prefers `engine.n?.genericDefense?.sessionFacade?.getSnapshot()` and `.build(...)`, with compatibility fallbacks still present.
+- `tests/generic-defense-placement-projector-namespace-smoke.test.mjs` guards this by installing the DSK aliases plus the projector, poisoning `engine.genericDefense` and `engine.defenseBuild`, and confirming a valid placement through `engine.n.genericDefense.sessionFacade` without DOM/Canvas/browser timing.
 
 ## Open gaps
 
 - Replace `generic-defense-aaa-kits` wall-clock ledger/presentation stamps with tick/command-derived deterministic stamps or keep the AAA facade outside promotion-facing surfaces.
-- After the boundary-alias smoke stays green, replace or supplement compatibility facade calls in Experiments with the smallest relevant generic-defense DSK aliases and namespaced `engine.n.genericDefense.<boundary>` calls.
+- After the placement/projector namespace smoke and boundary-alias smoke stay green, replace or supplement compatibility facade calls in Experiments with the smallest relevant generic-defense DSK aliases and namespaced `engine.n.genericDefense.<boundary>` calls.
 - Route-level replay manifests now exist in Experiments, and `signal-bastion` has the first executable route-domain replay. Add equivalent executable replays for other lanes only after a real reusable ProtoKit boundary exists.
 - Add a Core-backed integration smoke inside ProtoKits once the repo/package wiring exposes a stable local Core import path in this workspace.
