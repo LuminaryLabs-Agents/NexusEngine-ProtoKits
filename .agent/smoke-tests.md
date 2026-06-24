@@ -25,8 +25,9 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - `tests/generic-promotion-replay-smoke.test.mjs` plus `tests/fixtures/generic-promotion-replay-fixtures.mjs` adds deterministic fixed-tick replay coverage for the same four generic DSKs. The replay fixtures assert resource snapshots, event counts, method calls, descriptor availability, and fixed frame/tick results without DOM, Canvas, WebGL, browser input, or renderer ownership.
 - `tests/generic-route-progress-kit-smoke.test.mjs` covers `generic-route-progress-kit` as an atomic route/checkpoint/objective-progress boundary. It asserts state resources, checkpoint entered/completed events, route advanced/completed/reset/rejected events, ordered active checkpoint snapshots, out-of-order rejection, deterministic tick stamping, renderer-agnostic `route-checkpoint` descriptors, and the preferred `engine.n.genericRouteProgress` namespace after the legacy `engine.genericRouteProgress` facade is poisoned.
 - `tests/generic-route-progress-replay-smoke.test.mjs` plus `tests/fixtures/generic-route-progress-replay-fixtures.mjs` adds deterministic fixed-tick replay coverage for `generic-route-progress-kit`. It runs delivery/checkpoint and rejection/reset fixtures twice, drives only `engine.n.genericRouteProgress` methods after poisoning the broad facade, asserts event counts and route/descriptor snapshots, and guards against wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer-lock, and animation-frame leakage in the route-progress source.
-- `tests/promotion-determinism-guard-smoke.test.mjs` now keeps the promotion-facing generic DSK candidates and `generic-defense-dsk-boundaries`/`generic-defense-aaa-dsk-bridge` free of wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, and animation-frame ownership. It also makes the remaining `generic-defense-aaa-kits` wall-clock/browser-timing compatibility exceptions explicit so they cannot be mistaken for Core-promotion-ready surfaces.
+- `tests/promotion-determinism-guard-smoke.test.mjs` now keeps the promotion-facing generic DSK candidates, `generic-defense-dsk-boundaries`/`generic-defense-aaa-dsk-bridge`, and the new `generic-defense-session-command-kit` free of wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, and animation-frame ownership. It also makes the remaining `generic-defense-aaa-kits` wall-clock/browser-timing compatibility exceptions explicit so they cannot be mistaken for Core-promotion-ready surfaces.
 - `tests/generic-defense-placement-projector-namespace-smoke.test.mjs` now guards the reusable placement projector's transition from broad compatibility facades to `engine.n.genericDefense.sessionFacade` for snapshot/build semantics. It poisons `engine.genericDefense` and `engine.defenseBuild` after namespace sync and confirms a valid placement through the namespaced DSK session facade without DOM, Canvas, or browser frame timing.
+- `tests/generic-defense-session-command-kit-smoke.test.mjs` covers `generic-defense-session-command-kit` as a rendererless command boundary for blueprint selection and structure sell/refund. It installs the seven generic-defense DSK aliases plus the command kit, proves `engine.n.genericDefense.sessionFacade.setBlueprint/sell` and `engine.n.genericDefense.sessionCommands.setBlueprint/sell`, verifies economy refund settlement through the wallet event/resource boundary, and excludes wall-clock, RNG, DOM, Canvas, WebGL, browser audio, and animation-frame APIs.
 
 ## 2026-06-23 — Headless Tick Smoke Builder findings
 
@@ -50,7 +51,7 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 ## 2026-06-23 — Downstream executable route smoke update
 
 - Experiments now includes `tests/signal-bastion-executable-route-replay-smoke.mjs` in its full check suite.
-- The smoke imports real Core plus the package export `@luminarylabs/nexusrealtime-protokits/generic-defense-dsk-boundaries`, composes the Signal Bastion debug preset through the seven named DSK aliases, advances fixed ticks, and compares deterministic resource/snapshot/descriptor digests across fresh runs.
+- The smoke imports real Core plus the package export `@luminarylabs/nexusrealtime-protokits` generic-defense DSK aliases, composes the Signal Bastion debug preset through the seven named DSK aliases, advances fixed ticks, and compares deterministic resource/snapshot/descriptor digests across fresh runs.
 - This gives `generic-defense-dsk-boundaries` route-level consumption proof without moving reusable implementation into Experiments.
 
 ## 2026-06-23 — engine.n generic-defense namespace smoke update
@@ -93,10 +94,16 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - The replay pack adds fixture-level expected events/snapshots and fresh-run digest equality for checkpoint completion, route advance/completion, out-of-order rejection, reset, deterministic tick stamps, and route-checkpoint descriptors.
 - The replay proves route progress through the namespaced DSK boundary (`engine.n.genericRouteProgress`) instead of the broad compatibility facade, while keeping browser/renderer state out of reusable kit logic.
 
+## 2026-06-24 — Signal Bastion session command smoke update
+
+- `generic-defense-session-command-kit` is now covered by `tests/generic-defense-session-command-kit-smoke.test.mjs` and wired into the default ProtoKits `npm test` script before the generic-defense boundary/replay checks.
+- The smoke proves `setBlueprint` and `sell` as namespaced, rendererless session commands that communicate through generic-defense resources/events/methods/snapshots rather than through route-local JavaScript or broad AAA build/wave facades.
+- The promotion determinism guard now scans the new kit so any wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, or animation-frame dependency blocks promotion-facing review.
+
 ## Open gaps
 
 - Replace `generic-defense-aaa-kits` wall-clock ledger/presentation stamps with tick/command-derived deterministic stamps or keep the AAA facade outside promotion-facing surfaces.
-- After the placement/projector namespace smoke and boundary-alias smoke stay green, replace or supplement compatibility facade calls in Experiments with the smallest relevant generic-defense DSK aliases and namespaced `engine.n.genericDefense.<boundary>` calls.
+- After the placement/projector namespace smoke, session-command smoke, and boundary-alias smoke stay green, keep Signal Bastion browser-host calls on the smallest generic-defense DSK aliases and avoid reintroducing broad build/wave compatibility facades.
 - Route-level replay manifests now exist in Experiments, and `signal-bastion` has the first executable route-domain replay. Add equivalent executable replays for other lanes only after a real reusable ProtoKit boundary exists.
 - Add a Core-backed integration smoke inside ProtoKits once the repo/package wiring exposes a stable local Core import path in this workspace.
 - Add downstream route consumption proof for `generic-route-progress-kit`; until then it has stronger atomic replay coverage but not proven local-JS reduction in Experiments.
