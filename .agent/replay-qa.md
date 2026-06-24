@@ -35,6 +35,18 @@ Track scenario QA and deterministic replay coverage.
 - Nondeterminism risks: none observed in fixture design; browser, renderer, DOM, Canvas, WebGL, pointer lock, audio, and asset loading are not involved.
 - Status: covered by `tests/generic-promotion-replay-smoke.test.mjs` and included in the default ProtoKits `npm test` script.
 
+### 2026-06-24 — Generic route-progress replay pack
+
+- Scenario: fixed-tick rendererless replay for the atomic route/checkpoint/objective-progress DSK boundary.
+- Kits: `generic-route-progress-kit` through the preferred `engine.n.genericRouteProgress` namespace.
+- Seed: no RNG; deterministic route/checkpoint command fixtures in `tests/fixtures/generic-route-progress-replay-fixtures.mjs`.
+- Inputs: checkpoint enter/complete, route advance, out-of-order rejection, reset, and fixed-tick refreshes.
+- Fixed ticks: explicit fixture ticks at `0.25s`, `0.1s`, `0.5s`, and zero-delta refresh ticks.
+- Expected events: checkpoint entered/completed, route advanced/completed/reset, and rejection counts.
+- Expected snapshots: active checkpoint, completed ids, route status, deterministic `updatedAtTick`, renderer-agnostic route-checkpoint descriptors, and fresh-run digest equality.
+- Nondeterminism risks: source-level replay guard blocks `Date.now`, `performance.now`, `Math.random`, `crypto.getRandomValues`, `requestAnimationFrame`, DOM, Canvas, WebGL, browser audio, and pointer-lock references from the route-progress kit.
+- Status: covered by `tests/generic-route-progress-replay-smoke.test.mjs`, backed by `tests/fixtures/generic-route-progress-replay-fixtures.mjs`, and included in the default ProtoKits `npm test` script immediately after the atomic route-progress smoke.
+
 ### 2026-06-23 — Generic defense composite replay pack
 
 - Scenario: fixed-tick rendererless replay for the current `generic-defense-kits` compatibility composite before atomic split work.
@@ -90,6 +102,7 @@ Track scenario QA and deterministic replay coverage.
 - Split or alias `generic-defense-kits` into clearer atomic DSK boundaries after the compatibility replay stays green: path/slot/vital-target, economy wallet, build-placement, structure runtime, wave/agent director, projectile/combat resolver, and render-descriptor output.
 - Keep Experiments route-level replay manifests aligned with ProtoKit coverage; the first executable route-domain replay now exists for `signal-bastion`, while other lanes remain contract-only.
 - Add a Core-backed integration replay once the package wiring exposes a stable local Core import path for headless smoke runs inside ProtoKits itself, not only downstream Experiments.
+- Add downstream route consumption proof for `generic-route-progress-kit`; until then it has stronger atomic replay coverage but not proven local experiment JavaScript shrink.
 
 ## 2026-06-24 — Deterministic Replay QA placement-projector namespace seam
 
@@ -104,14 +117,14 @@ Replay closure pushed to ProtoKits `main`:
 
 Status: implemented and guarded. The next Experiments cycle can update its memory to claim the placement seam has shrunk from compatibility facades to the DSK namespace, then consider replacing Signal Bastion browser-host placement calls only where its bridge/spec/executable/facade smokes stay green.
 
-## 2026-06-24 — Atomic route-progress replay gap
+## 2026-06-24 — Deterministic Replay QA route-progress replay closure
 
-`generic-route-progress-kit` now has atomic headless smoke coverage, but not yet a multi-tick replay fixture pack. It is deterministic by construction in the current smoke: no RNG, wall-clock, DOM, Canvas, WebGL, Three.js, pointer lock, browser audio, asset loading, or requestAnimationFrame are involved; state advances only through explicit `enter`, `complete`, `advance`, `reset`, and fixed tick calls.
+`generic-route-progress-kit` now has both atomic smoke coverage and fixed-tick replay coverage. The replay confirms the boundary communicates through `engine.n.genericRouteProgress` methods, route state resources, checkpoint/route events, snapshots, and `route-checkpoint` descriptors after the broad `engine.genericRouteProgress` facade is poisoned.
 
-Replay gap to close after first route consumption proof:
+Replay closure pushed to ProtoKits `main`:
 
-- Scenario: delivery/extraction route ledger with pickup, hazard crossing, cargo handoff, and dropoff checkpoints.
-- Kits: `generic-route-progress-kit` plus a future cargo/logistics DSK and optional pressure/hazard DSKs.
-- Expected events: checkpoint entered/completed, route advanced/completed, cargo loaded/delivered, hazard/pressure deltas if composed.
-- Expected snapshots: active checkpoint, completed ids, cargo ledger, route-checkpoint descriptors, and deterministic digest equality across fresh runs.
-- Status: open; do not claim local experiment JavaScript shrink until at least one Experiments route consumes the route-progress boundary.
+1. Added `tests/fixtures/generic-route-progress-replay-fixtures.mjs` with deterministic delivery/checkpoint and rejection/reset scenarios.
+2. Added `tests/generic-route-progress-replay-smoke.test.mjs` to run each fixture twice from a fresh engine/world and assert identical event/snapshot digests.
+3. Wired the replay smoke into `package.json` immediately after the atomic route-progress smoke.
+
+Status: implemented and guarded at the ProtoKit boundary. This does not prove local experiment JavaScript shrink until a checkpoint-heavy canonical route consumes `generic-route-progress-kit` through a browser-host bridge or executable route-domain replay.
