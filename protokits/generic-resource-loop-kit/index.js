@@ -1,4 +1,5 @@
 export const GENERIC_RESOURCE_LOOP_KIT_VERSION = "0.1.0";
+export const GENERIC_RESOURCE_LOOP_ENGINE_NAMESPACE = "genericResourceLoop";
 
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
@@ -10,6 +11,22 @@ function requireNexus(NexusRealtime) {
       throw new TypeError(`createGenericResourceLoopKit requires NexusRealtime.${key}.`);
     }
   }
+}
+
+function ensureEngineNamespace(engine) {
+  if (!engine || typeof engine !== "object") return null;
+  if (!engine.n || typeof engine.n !== "object") engine.n = {};
+  if (!engine.n[GENERIC_RESOURCE_LOOP_ENGINE_NAMESPACE] || typeof engine.n[GENERIC_RESOURCE_LOOP_ENGINE_NAMESPACE] !== "object") {
+    engine.n[GENERIC_RESOURCE_LOOP_ENGINE_NAMESPACE] = {};
+  }
+  return engine.n[GENERIC_RESOURCE_LOOP_ENGINE_NAMESPACE];
+}
+
+export function syncGenericResourceLoopEngineNamespace(engine) {
+  const namespace = ensureEngineNamespace(engine);
+  const facade = engine?.genericResourceLoop;
+  if (namespace && facade && typeof facade === "object") Object.assign(namespace, facade);
+  return namespace;
 }
 
 function normalizeThreshold(threshold = {}, index = 0) {
@@ -196,7 +213,7 @@ export function createGenericResourceLoopKit(NexusRealtime, config = {}) {
       world.setResource(ResourceLoopState, createState(config));
     },
     install({ engine, world }) {
-      engine.genericResourceLoop = {
+      const facade = {
         resources: { ResourceLoopState },
         events: { SpendRequested, RestoreRequested, RateChanged, LockChanged, Changed, ThresholdCrossed, Emptied, Filled, Rejected, Reset },
         spend(id, amount, reason = "spend") {
@@ -232,10 +249,21 @@ export function createGenericResourceLoopKit(NexusRealtime, config = {}) {
           return clone(world.getResource(ResourceLoopState)?.resourcesById?.[id] ?? null);
         }
       };
+
+      engine.genericResourceLoop = facade;
+      syncGenericResourceLoopEngineNamespace(engine);
     },
     metadata: {
+      engineNamespace: `engine.n.${GENERIC_RESOURCE_LOOP_ENGINE_NAMESPACE}`,
       purpose: "Generic deterministic resource meters for stamina, oxygen, oil, charge, hull, ink, tether tension, corruption, debt, or similar loops.",
-      boundary: "Owns resource values, rates, locks, threshold events, and reset state. Hosts provide fiction, controls, and renderer descriptors."
+      boundary: "Owns resource values, rates, locks, threshold events, and reset state. Hosts provide fiction, controls, and renderer descriptors.",
+      apiSurface: {
+        resources: ["genericResourceLoop.state"],
+        events: ["genericResource.spendRequested", "genericResource.restoreRequested", "genericResource.rateChanged", "genericResource.lockChanged", "genericResource.changed", "genericResource.thresholdCrossed", "genericResource.emptied", "genericResource.filled", "genericResource.rejected", "genericResource.reset"],
+        methods: ["engine.n.genericResourceLoop.spend", "engine.n.genericResourceLoop.restore", "engine.n.genericResourceLoop.drain", "engine.n.genericResourceLoop.setRate", "engine.n.genericResourceLoop.setLocked", "engine.n.genericResourceLoop.reset", "engine.n.genericResourceLoop.getState", "engine.n.genericResourceLoop.getResource", "engine.genericResourceLoop.spend", "engine.genericResourceLoop.restore", "engine.genericResourceLoop.drain", "engine.genericResourceLoop.setRate", "engine.genericResourceLoop.setLocked", "engine.genericResourceLoop.reset", "engine.genericResourceLoop.getState", "engine.genericResourceLoop.getResource"],
+        snapshots: ["resources", "resourcesById", "recentChanges", "tick"],
+        descriptors: []
+      }
     }
   });
 }
