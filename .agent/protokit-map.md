@@ -80,3 +80,13 @@ The defense split is pointing toward a higher-level `strategic-pressure-loop` do
 - `generic-route-cargo-extraction-kit` now builds snapshots and runs route/cargo/pressure commands through those three namespaced child DSKs first, preserving compatibility fallbacks for older hosts.
 - Test coverage: `tests/generic-promotion-gate-smoke.test.mjs`, `tests/generic-route-progress-kit-smoke.test.mjs`, `tests/generic-route-progress-replay-smoke.test.mjs`, and `tests/generic-route-cargo-extraction-kit-smoke.test.mjs` now prove the namespaced DSK surfaces are sufficient for the covered seams.
 - Promotion implication: the delivery/extraction loop has a clearer atomic-to-composite API ladder, but no Core-promotion claim should be made until `next-ledge` or another canonical route consumes the namespace and adds route-level fixed-tick replay evidence.
+
+## 2026-06-24 — Intent Miner spatial-platformer map update
+
+- New incubation suite: `vr-platformer-kit-suite`.
+- Child boundaries named by the suite README: `platformer-level-domain-kit`, `platformer-avatar-domain-kit`, `platformer-physics-system-kit`, `platformer-collision-domain-kit`, `platformer-object-domain-kit`, `platformer-camera-domain-kit`, `platformer-render-descriptor-kit`, `platformer-effects-domain-kit`, `platformer-parallax-domain-kit`, `platformer-objective-sequence-kit`, `xr-pose-domain-kit`, `xr-input-adapter-kit`, `spatial-anchor-domain-kit`, `spatial-game-board-domain-kit`, `xr-comfort-domain-kit`, and `xr-platformer-render-adapter-kit`.
+- Sibling descriptor kit: `stereoscopic-render-domain-kit` should compose beside the suite for left/right eye descriptors.
+- Boundary: kits may own platformer state, collision meaning, object events, 2D camera/render descriptors, XR pose/input descriptors, spatial board transforms, comfort policy, and XR render-plan descriptors. Hosts own Canvas/WebGL/Three drawing, actual WebXR/OpenXR sessions, raw runtime handles, frame presentation, assets, DOM input, audio, and route fiction.
+- Test coverage: `tests/vr-platformer-kit-suite-smoke.test.mjs` is wired into `npm test`; it checks kit identity, descriptor composition, and maximum-feature composition length.
+- Promotion readiness: incubation only. Add deterministic replay and promotion-determinism scanning before treating any child platformer/XR boundary as promotion-facing. Do not promote the maximum-feature suite as a Core DSK.
+- Experiment consumers: none yet. Do not add a canonical route only to satisfy the about-20 target; create one only when it proves local route JavaScript shrink or a distinct spatial-platformer validation need.
