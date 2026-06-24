@@ -6,6 +6,8 @@ import {
 
 export { GENERIC_DEFENSE_KITS_VERSION, createGenericDefenseLevel };
 
+export const GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE = "genericDefense";
+
 export const GENERIC_DEFENSE_DSK_BOUNDARIES = Object.freeze([
   Object.freeze({
     id: "map",
@@ -13,7 +15,14 @@ export const GENERIC_DEFENSE_DSK_BOUNDARIES = Object.freeze([
     kitId: "generic-defense-map-kit",
     resources: ["genericDefense.map.state"],
     events: ["genericDefense.reset", "genericDefense.vital.damaged"],
-    methods: ["engine.defenseMap.getState", "engine.defenseMap.samplePath", "engine.defenseMap.getSlot"],
+    methods: [
+      "engine.defenseMap.getState",
+      "engine.defenseMap.samplePath",
+      "engine.defenseMap.getSlot",
+      "engine.n.genericDefense.map.getState",
+      "engine.n.genericDefense.map.samplePath",
+      "engine.n.genericDefense.map.getSlot"
+    ],
     snapshots: ["map", "vital", "slots", "path"],
     descriptors: [],
     boundary: "Path, build-slot, and vital-target state."
@@ -24,7 +33,14 @@ export const GENERIC_DEFENSE_DSK_BOUNDARIES = Object.freeze([
     kitId: "generic-defense-economy-kit",
     resources: ["genericDefense.economy.state"],
     events: ["genericDefense.economy.credit", "genericDefense.economy.debit", "genericDefense.command.rejected"],
-    methods: ["engine.defenseEconomy.credit", "engine.defenseEconomy.debit", "engine.defenseEconomy.getState"],
+    methods: [
+      "engine.defenseEconomy.credit",
+      "engine.defenseEconomy.debit",
+      "engine.defenseEconomy.getState",
+      "engine.n.genericDefense.economyWallet.credit",
+      "engine.n.genericDefense.economyWallet.debit",
+      "engine.n.genericDefense.economyWallet.getState"
+    ],
     snapshots: ["economy.currency", "economy.transactions", "economy.rejected"],
     descriptors: [],
     boundary: "Idempotent wallet and transaction ledger."
@@ -35,7 +51,14 @@ export const GENERIC_DEFENSE_DSK_BOUNDARIES = Object.freeze([
     kitId: "generic-defense-structure-kit",
     resources: ["genericDefense.structure.state"],
     events: ["genericDefense.build.requested", "genericDefense.upgrade.requested", "genericDefense.structure.built", "genericDefense.structure.upgraded", "genericDefense.command.rejected"],
-    methods: ["engine.defenseStructures.build", "engine.defenseStructures.upgrade", "engine.defenseStructures.getState"],
+    methods: [
+      "engine.defenseStructures.build",
+      "engine.defenseStructures.upgrade",
+      "engine.defenseStructures.getState",
+      "engine.n.genericDefense.buildPlacement.build",
+      "engine.n.genericDefense.buildPlacement.upgrade",
+      "engine.n.genericDefense.buildPlacement.getState"
+    ],
     snapshots: ["structures.blueprints", "structures.structures"],
     descriptors: [],
     boundary: "Build-placement and structure-upgrade requests over map slots and wallet state."
@@ -46,7 +69,12 @@ export const GENERIC_DEFENSE_DSK_BOUNDARIES = Object.freeze([
     kitId: "generic-defense-agent-wave-kit",
     resources: ["genericDefense.agent.state"],
     events: ["genericDefense.wave.start", "genericDefense.wave.started", "genericDefense.wave.completed", "genericDefense.vital.damaged"],
-    methods: ["engine.defenseAgents.startWave", "engine.defenseAgents.getState"],
+    methods: [
+      "engine.defenseAgents.startWave",
+      "engine.defenseAgents.getState",
+      "engine.n.genericDefense.waveAgentDirector.startWave",
+      "engine.n.genericDefense.waveAgentDirector.getState"
+    ],
     snapshots: ["agents.waves", "agents.spawnQueue", "agents.active", "agents.waveActive"],
     descriptors: [],
     boundary: "Wave start, deterministic spawn queues, path-following agents, and vital breach output."
@@ -57,7 +85,7 @@ export const GENERIC_DEFENSE_DSK_BOUNDARIES = Object.freeze([
     kitId: "generic-defense-combat-kit",
     resources: ["genericDefense.combat.state"],
     events: ["genericDefense.enemy.killed", "genericDefense.economy.credit"],
-    methods: ["engine.defenseCombat.getState"],
+    methods: ["engine.defenseCombat.getState", "engine.n.genericDefense.combatResolver.getState"],
     snapshots: ["combat.projectiles", "combat.effects"],
     descriptors: ["projectile", "effect"],
     boundary: "Structure targeting, projectile motion, damage resolution, rewards, and combat feedback descriptors."
@@ -68,7 +96,22 @@ export const GENERIC_DEFENSE_DSK_BOUNDARIES = Object.freeze([
     kitId: "generic-defense-session-kit",
     resources: ["genericDefense.session.state"],
     events: ["genericDefense.reset", "genericDefense.select", "genericDefense.wave.start", "genericDefense.build.requested", "genericDefense.upgrade.requested", "genericDefense.command.rejected"],
-    methods: ["engine.genericDefense.startWave", "engine.genericDefense.build", "engine.genericDefense.upgrade", "engine.genericDefense.select", "engine.genericDefense.cycleBlueprint", "engine.genericDefense.restart", "engine.genericDefense.getSnapshot"],
+    methods: [
+      "engine.genericDefense.startWave",
+      "engine.genericDefense.build",
+      "engine.genericDefense.upgrade",
+      "engine.genericDefense.select",
+      "engine.genericDefense.cycleBlueprint",
+      "engine.genericDefense.restart",
+      "engine.genericDefense.getSnapshot",
+      "engine.n.genericDefense.sessionFacade.startWave",
+      "engine.n.genericDefense.sessionFacade.build",
+      "engine.n.genericDefense.sessionFacade.upgrade",
+      "engine.n.genericDefense.sessionFacade.select",
+      "engine.n.genericDefense.sessionFacade.cycleBlueprint",
+      "engine.n.genericDefense.sessionFacade.restart",
+      "engine.n.genericDefense.sessionFacade.getSnapshot"
+    ],
     snapshots: ["session", "level", "map", "economy", "structures", "agents", "combat", "render"],
     descriptors: [],
     boundary: "Small host-input facade and debug snapshot over the atomic defense DSKs."
@@ -79,7 +122,12 @@ export const GENERIC_DEFENSE_DSK_BOUNDARIES = Object.freeze([
     kitId: "generic-defense-render-descriptor-kit",
     resources: ["genericDefense.render.state"],
     events: [],
-    methods: ["engine.defenseRender.getState", "engine.defenseRender.getSnapshot"],
+    methods: [
+      "engine.defenseRender.getState",
+      "engine.defenseRender.getSnapshot",
+      "engine.n.genericDefense.renderDescriptors.getState",
+      "engine.n.genericDefense.renderDescriptors.getSnapshot"
+    ],
     snapshots: ["render.hud", "render.descriptors", "render.world"],
     descriptors: ["path", "vital", "build-slot", "structure", "agent", "projectile", "effect"],
     boundary: "Renderer-agnostic HUD and world descriptors with no DOM, Canvas, WebGL, audio, or asset loading ownership."
@@ -88,6 +136,16 @@ export const GENERIC_DEFENSE_DSK_BOUNDARIES = Object.freeze([
 
 const BOUNDARIES_BY_ID = new Map(GENERIC_DEFENSE_DSK_BOUNDARIES.map((boundary) => [boundary.id, boundary]));
 const BOUNDARIES_BY_KIT_ID = new Map(GENERIC_DEFENSE_DSK_BOUNDARIES.map((boundary) => [boundary.kitId, boundary]));
+
+const ENGINE_NAMESPACE_LEGACY_SURFACES = Object.freeze({
+  map: "defenseMap",
+  economyWallet: "defenseEconomy",
+  buildPlacement: "defenseStructures",
+  waveAgentDirector: "defenseAgents",
+  combatResolver: "defenseCombat",
+  sessionFacade: "genericDefense",
+  renderDescriptors: "defenseRender"
+});
 
 function boundaryIds(ids) {
   if (ids == null) return GENERIC_DEFENSE_DSK_BOUNDARIES.map((boundary) => boundary.id);
@@ -115,6 +173,56 @@ function resolveBoundary(id) {
   return boundary;
 }
 
+function ensureEngineNamespace(engine) {
+  if (!engine || typeof engine !== "object") return null;
+  if (!engine.n || typeof engine.n !== "object") engine.n = {};
+  if (!engine.n[GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE] || typeof engine.n[GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE] !== "object") {
+    engine.n[GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE] = {};
+  }
+  return engine.n[GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE];
+}
+
+export function syncGenericDefenseDskEngineNamespace(engine) {
+  const namespace = ensureEngineNamespace(engine);
+  if (!namespace) return null;
+
+  for (const boundary of GENERIC_DEFENSE_DSK_BOUNDARIES) {
+    const legacySurfaceName = ENGINE_NAMESPACE_LEGACY_SURFACES[boundary.id];
+    if (legacySurfaceName && engine[legacySurfaceName]) {
+      namespace[boundary.id] = engine[legacySurfaceName];
+    }
+  }
+
+  if (engine.genericDefense?.resources) namespace.resources = engine.genericDefense.resources;
+  if (engine.genericDefense?.events) namespace.events = engine.genericDefense.events;
+  return namespace;
+}
+
+function annotateBoundaryKit(kit, boundary) {
+  const originalInstall = kit.install;
+  return {
+    ...kit,
+    install(context = {}) {
+      const result = originalInstall?.call(this, context);
+      syncGenericDefenseDskEngineNamespace(context.engine);
+      return result;
+    },
+    metadata: {
+      ...(kit.metadata ?? {}),
+      boundary: boundary.boundary,
+      dskBoundary: boundary,
+      engineNamespace: `engine.n.${GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE}.${boundary.id}`,
+      apiSurface: {
+        resources: boundary.resources,
+        events: boundary.events,
+        methods: boundary.methods,
+        snapshots: boundary.snapshots,
+        descriptors: boundary.descriptors
+      }
+    }
+  };
+}
+
 export function getGenericDefenseDskBoundary(id) {
   return resolveBoundary(id);
 }
@@ -132,21 +240,7 @@ export function createGenericDefenseDskBundle(NexusRealtime, config = {}, ids) {
     if (!kit) {
       throw new Error(`Generic defense DSK boundary ${boundary.id} did not produce kit ${kitId}`);
     }
-    return {
-      ...kit,
-      metadata: {
-        ...(kit.metadata ?? {}),
-        boundary: boundary.boundary,
-        dskBoundary: boundary,
-        apiSurface: {
-          resources: boundary.resources,
-          events: boundary.events,
-          methods: boundary.methods,
-          snapshots: boundary.snapshots,
-          descriptors: boundary.descriptors
-        }
-      }
-    };
+    return annotateBoundaryKit(kit, boundary);
   });
 }
 
