@@ -54,3 +54,15 @@ Promotion/pruning implications:
 - Prune through migration: `generic-defense-aaa-dsk-bridge` should be the next import target for hosts that need both broad facade calls and atomic DSK aliases.
 - Do not promote yet: the broad AAA facade remains too large and game-host flavored for Core promotion.
 - Promote later only after proof: atomic map/economy/build/wave/combat/session/render boundaries once they have stable package/Core integration coverage and route consumption evidence.
+
+## 2026-06-23 — engine.n generic-defense namespace pruning note
+
+`generic-defense-dsk-boundaries` now mirrors installed atomic aliases into `engine.n.genericDefense.<boundary>` and exports `syncGenericDefenseDskEngineNamespace(engine)` for manual sync after custom install flows. This is still a compatibility-safe pruning step: it does not delete `engine.defense*` or `engine.genericDefense`, but it gives hosts and promotion review a smaller domain-shaped call surface.
+
+Promotion/pruning implications:
+
+- Build/keep: `engine.n.genericDefense.map`, `.economyWallet`, `.buildPlacement`, `.waveAgentDirector`, `.combatResolver`, `.sessionFacade`, and `.renderDescriptors` as the preferred future host call seams.
+- Keep compatible: legacy `engine.defenseMap`, `engine.defenseEconomy`, `engine.defenseStructures`, `engine.defenseAgents`, `engine.defenseCombat`, `engine.genericDefense`, and `engine.defenseRender` until browser hosts finish migration.
+- Prune through migration: the next Experiments patch should switch remaining Signal Bastion host convenience calls to `engine.n.genericDefense.<boundary>` where the facade guard and executable replay stay green.
+- Do not promote yet: generic defense remains a composite validation stack, and the broad AAA facade remains too large.
+- Promote later only after proof: atomic boundaries that have namespaced method calls, route consumption, smoke/replay coverage, and no browser/renderer ownership.
