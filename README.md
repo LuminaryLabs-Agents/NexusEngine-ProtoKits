@@ -63,6 +63,35 @@ Demo:
 protokits/action-input-kit/demo.html
 ```
 
+## Stereoscopic Render Domain Kit
+
+Renderer-agnostic XR stereo view descriptors. The kit converts a host camera/head pose into deterministic left/right eye descriptors without owning WebXR, OpenXR, swapchains, framebuffers, Canvas, Three.js, or native renderer objects.
+
+```js
+import { createStereoscopicRenderDomainKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/stereoscopic-render-domain-kit/index.js";
+
+const engine = NexusRealtime.createRealtimeGame({
+  kits: [
+    createStereoscopicRenderDomainKit(NexusRealtime, {
+      interpupillaryDistance: 0.064,
+      fovDegrees: 70,
+      textureLayout: "array-layer"
+    })
+  ]
+});
+
+engine.stereoscopicRender.updateFromCamera({
+  position: { x: 0, y: 1.6, z: 0 },
+  forward: { x: 0, y: 0, z: -1 },
+  up: { x: 0, y: 1, z: 0 }
+});
+```
+
+### XR Render Kit List
+
+- `createStereoscopicRenderDomainKit` — left/right eye position, orientation, viewport, render-target layer, off-axis projection descriptor, and stereo debug metadata.
+- `computeStereoscopicRenderSnapshot` — headless helper for tests, WebXR hosts, OpenXR bridges, and Three.js renderer adapters.
+
 ## Ocean Boat Kit
 
 ```js
