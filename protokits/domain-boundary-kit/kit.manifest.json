@@ -1,0 +1,18 @@
+{
+  "id": "domain-boundary-kit",
+  "domain": "domain-boundary",
+  "type": "atomic-domain-service-kit",
+  "status": "experimental",
+  "factory": "createDomainBoundaryKit",
+  "requires": [],
+  "provides": ["domain-boundary", "domain-boundary-registry", "boundary-metadata"],
+  "resources": ["domainBoundary.state"],
+  "events": ["domainBoundary.registered"],
+  "publicApi": ["engine.domainBoundaries.register", "engine.domainBoundaries.get", "engine.domainBoundaries.list", "engine.domainBoundaries.snapshot"],
+  "descriptors": [],
+  "rendererBoundary": { "outputsDescriptors": false, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": { "scalesWith": ["boundaryCount"], "telemetry": ["boundaryCount"], "degradationModes": [] },
+  "snapshot": { "supportsSnapshot": true, "supportsReset": false, "supportsLoadSnapshot": false },
+  "promotion": { "level": "experimental", "criteria": ["documented consumers", "boundary validation tests", "composition with at least one game-family kit"] },
+  "metadata": { "boundary": "Reusable domain boundary metadata and registry." }
+}
