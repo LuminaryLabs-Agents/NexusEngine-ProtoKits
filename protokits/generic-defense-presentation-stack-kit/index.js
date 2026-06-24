@@ -18,7 +18,7 @@ function sortedEntries(object = {}) {
 }
 
 function getSnapshot(engine) {
-  return engine?.genericDefense?.getSnapshot?.() ?? {};
+  return engine?.n?.genericDefense?.sessionFacade?.getSnapshot?.() ?? engine?.genericDefense?.getSnapshot?.() ?? {};
 }
 
 function getSelected(snapshot) {
@@ -258,7 +258,7 @@ export function createGenericPlacementProjectorKit(NexusRealtime, config = {}) {
           if (!state.active) return { accepted: false, reason: "inactive" };
           updateValidity(state.worldPoint);
           if (!state.valid || !state.slotId) return { accepted: false, reason: state.reason };
-          const result = engine.defenseBuild?.build?.(state.slotId, state.blueprintId, payload) ?? engine.genericDefense?.build?.(state.slotId, state.blueprintId, payload);
+          const result = engine.n?.genericDefense?.sessionFacade?.build?.(state.slotId, state.blueprintId, payload) ?? engine.defenseBuild?.build?.(state.slotId, state.blueprintId, payload) ?? engine.genericDefense?.build?.(state.slotId, state.blueprintId, payload);
           state.active = false;
           return { accepted: true, result };
         },
