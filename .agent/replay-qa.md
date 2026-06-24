@@ -59,10 +59,22 @@ Track scenario QA and deterministic replay coverage.
 - Nondeterminism risks: none intentionally included in the replayed `generic-defense-kits` DSK stack; browser, renderer, DOM, Canvas, WebGL, Three.js, pointer lock, audio, and asset loading remain outside the replay.
 - Status: covered by `tests/generic-defense-replay-smoke.test.mjs` and included in the default ProtoKits `npm test` script.
 
+### 2026-06-24 — Generic defense session-command smoke replay seam
+
+- Scenario: headless session-command replay seam for blueprint selection and structure sell/refund through namespaced generic-defense resources and events.
+- Kits: `generic-defense-dsk-boundaries` plus `generic-defense-session-command-kit`.
+- Seed: no RNG; deterministic command ids in `tests/generic-defense-session-command-kit-smoke.test.mjs`.
+- Inputs: `n.genericDefense.sessionFacade.setBlueprint("ember")`, `build("slot-a", "ember")`, fixed settlement ticks, `sell(structureId)` and duplicate sell rejection.
+- Fixed ticks: zero/short smoke-world ticks around build debit and sell refund settlement.
+- Expected events: build requested/built, economy debit, economy credit refund, command rejection for unknown blueprint as needed.
+- Expected snapshots: session blueprint id, one built structure before sell, zero structures after sell, and wallet currency increasing after refund settlement.
+- Nondeterminism risks: the smoke and promotion determinism guard block wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, and animation-frame dependencies from the new kit.
+- Status: covered by `tests/generic-defense-session-command-kit-smoke.test.mjs` and included in the default ProtoKits `npm test` script.
+
 ### 2026-06-23 — Promotion determinism guard
 
 - Scenario: static promotion gate for wall-clock/browser leakage in promotion-facing generic DSKs.
-- Kits: `generic-pressure-loop-kit`, `generic-resource-loop-kit`, `generic-action-window-kit`, `generic-affordance-descriptor-kit`, `generic-defense-dsk-boundaries`, and `generic-defense-aaa-dsk-bridge`.
+- Kits: `generic-pressure-loop-kit`, `generic-resource-loop-kit`, `generic-action-window-kit`, `generic-affordance-descriptor-kit`, `generic-defense-dsk-boundaries`, `generic-defense-aaa-dsk-bridge`, and `generic-defense-session-command-kit`.
 - Seed: none; this is a source-level determinism guard.
 - Inputs: promotion-facing source files plus the broad `generic-defense-aaa-kits` compatibility facade as a known exception file.
 - Fixed ticks: none.
@@ -87,14 +99,14 @@ Track scenario QA and deterministic replay coverage.
 ### 2026-06-23 — Signal Bastion executable route replay in Experiments
 
 - Scenario: browserless route-domain replay for the canonical `signal-bastion` strategic-pressure lane.
-- Kits: real Core `nexusrealtime` plus ProtoKits `@luminarylabs/nexusrealtime-protokits` generic-defense DSK aliases.
+- Kits: real Core `nexusrealtime` plus ProtoKits `@luminarylabs/nexusrealtime-protokits` generic-defense DSK aliases and `generic-defense-session-command-kit`.
 - Seed/config: Signal Bastion debug preset from `LuminaryLabs-Agents/NexusRealtime-Experiments`, not copied ProtoKit fixtures.
-- Inputs: semantic build, upgrade, wave-start, and snapshot bridge calls from `experiments/signal-bastion-route-domain-replay.json`.
+- Inputs: semantic blueprint selection, build, upgrade, wave-start, sell-method availability, and snapshot bridge calls from `experiments/signal-bastion-route-domain-replay.json`.
 - Fixed ticks: 30 ticks at `0.1s` using the checked strategic-pressure route contract.
 - Expected snapshots: map/vital, economy, structures, agents, combat, and render descriptor digest equality across fresh runs.
 - Nondeterminism risks: DOM, Canvas, WebGL, Three.js, requestAnimationFrame, browser audio, asset loading, and route-local simulation copies remain excluded.
 - Status: covered downstream by `LuminaryLabs-Agents/NexusRealtime-Experiments` `tests/signal-bastion-executable-route-replay-smoke.mjs`.
-- Promotion implication: `generic-defense-dsk-boundaries` now has route-level consumption proof beyond ProtoKits-local replay, but the browser route still needs migration from the broad compatibility facade to the smallest DSK aliases before local JavaScript shrink is complete.
+- Promotion implication: `generic-defense-dsk-boundaries` plus `generic-defense-session-command-kit` now have route-level consumption proof beyond ProtoKits-local smoke, and the browser route can remove broad build/wave compatibility facades while staying on namespaced DSK calls.
 
 ## Open gaps
 
@@ -128,3 +140,16 @@ Replay closure pushed to ProtoKits `main`:
 3. Wired the replay smoke into `package.json` immediately after the atomic route-progress smoke.
 
 Status: implemented and guarded at the ProtoKit boundary. This does not prove local experiment JavaScript shrink until a checkpoint-heavy canonical route consumes `generic-route-progress-kit` through a browser-host bridge or executable route-domain replay.
+
+## 2026-06-24 — Deterministic Replay QA session-command closure
+
+`generic-defense-session-command-kit` adds a narrow command boundary over existing generic-defense session, structure, and wallet resources. It keeps the Signal Bastion setBlueprint/sell behavior reusable without promoting the broad AAA build facade.
+
+Replay closure pushed to ProtoKits `main`:
+
+1. Added `protokits/generic-defense-session-command-kit/index.js` as an additive DSK-style command kit that extends `engine.n.genericDefense.sessionFacade` and exposes `engine.n.genericDefense.sessionCommands`.
+2. Added `tests/generic-defense-session-command-kit-smoke.test.mjs` to prove blueprint selection, build, sell/refund, duplicate command rejection, and deterministic/browserless source constraints.
+3. Added the package export and wired the smoke into `npm test`.
+4. Added the source to `promotion-determinism-guard-smoke` so the new command boundary stays headless and deterministic.
+
+Status: implemented and guarded at the ProtoKit boundary, with downstream Signal Bastion route consumption recorded in Experiments. The next safe step is a CI/deploy check pass and then pruning any stale route memory that still describes `defenseBuild` or `defenseWaves` as necessary.
