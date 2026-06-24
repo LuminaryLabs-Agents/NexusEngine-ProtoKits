@@ -8,7 +8,8 @@ This kit owns ordered checkpoint state, completion events, active objective snap
 
 - Resource: `genericRouteProgress.state`
 - Events: `genericRouteProgress.checkpoint.entered`, `genericRouteProgress.checkpoint.completed`, `genericRouteProgress.advanced`, `genericRouteProgress.completed`, `genericRouteProgress.reset`, `genericRouteProgress.rejected`
-- Methods: `engine.genericRouteProgress.enter`, `.complete`, `.advance`, `.reset`, `.setRoute`, `.getState`, `.getActiveCheckpoint`, `.getDescriptors`
+- Preferred methods: `engine.n.genericRouteProgress.enter`, `.complete`, `.advance`, `.reset`, `.setRoute`, `.getState`, `.getActiveCheckpoint`, `.getDescriptors`
+- Compatibility methods: `engine.genericRouteProgress.enter`, `.complete`, `.advance`, `.reset`, `.setRoute`, `.getState`, `.getActiveCheckpoint`, `.getDescriptors`
 - Snapshots/descriptors: route id/status, active checkpoint, completed ids, and `route-checkpoint` descriptors
 
 ## Example
@@ -29,8 +30,8 @@ const engine = NexusRealtime.createRealtimeGame({
   ]
 });
 
-engine.genericRouteProgress.complete("pickup", { commandId: "pickup:1" });
-const descriptors = engine.genericRouteProgress.getDescriptors();
+engine.n.genericRouteProgress.complete("pickup", { commandId: "pickup:1" });
+const descriptors = engine.n.genericRouteProgress.getDescriptors();
 ```
 
 Use this kit when a route wants to shrink route-local JavaScript that only tracks ordered objectives, active checkpoint, completion, and checkpoint descriptors. Compose it with cargo, hazard, pressure, scan/survey, or traversal domains rather than embedding those domains here.
