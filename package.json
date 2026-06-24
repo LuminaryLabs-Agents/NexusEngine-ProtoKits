@@ -55,6 +55,8 @@
     "./interaction-domain-service-kit": "./protokits/spatial-authoring-kits/index.js",
     "./persistence-dsk": "./protokits/spatial-authoring-kits/index.js",
     "./persistence-domain-service-kit": "./protokits/spatial-authoring-kits/index.js",
+    "./generic-defense-project-kits": "./protokits/generic-defense-project-kits/index.js",
+    "./generic-defense-project-bridge": "./protokits/generic-defense-project-bridge/index.js",
     "./generic-defense-aaa-dsk-bridge": "./protokits/generic-defense-aaa-dsk-bridge/index.js",
     "./generic-defense-dsk-boundaries": "./protokits/generic-defense-dsk-boundaries/index.js",
     "./generic-defense-map-dsk": "./protokits/generic-defense-dsk-boundaries/index.js",
@@ -64,6 +66,7 @@
     "./generic-defense-combat-resolver-dsk": "./protokits/generic-defense-dsk-boundaries/index.js",
     "./generic-defense-session-facade-dsk": "./protokits/generic-defense-dsk-boundaries/index.js",
     "./generic-defense-render-descriptor-dsk": "./protokits/generic-defense-dsk-boundaries/index.js",
+    "./project-batch-deploy-bridge": "./protokits/project-batch-deploy-bridge/index.js",
     "./*": "./protokits/*/index.js"
   },
   "files": ["KITS.md", "README-DSM-ADDENDUM.md", "docs", "protokits", "apps", "scripts", "tests"],
