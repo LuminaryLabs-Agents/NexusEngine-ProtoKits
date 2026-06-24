@@ -6,6 +6,10 @@ This document summarizes the additive composition layer introduced by the master
 
 Composition kits make multi-scene and multi-app experiences configurable without moving gameplay rules into hosts or one-off routes.
 
+## Naming rule
+
+High-fidelity and desktop-fidelity are quality targets, not kit names, bridge names, family names, or domain boundaries. Use project batch, generated project, vertical slice, polished route, and composition-ready app language for normal project organization.
+
 ## New kits
 
 ```txt
@@ -42,8 +46,8 @@ session-facade-kit
 kit-registry
   pure helper registry for machine-readable kit manifests
 
-aaa-batch-deploy-bridge
-  compatibility bridge from existing AAA batch specs to deploy manifests
+project-batch-deploy-bridge
+  compatibility bridge from existing project batch specs to deploy manifests
 
 gallery-registry-bridge
   compatibility bridge from gallery route entries to deploy manifests
@@ -51,6 +55,10 @@ gallery-registry-bridge
 generated-route-host-bridge
   compatibility bridge from generated route hosts to host-shell contracts
 ```
+
+## Legacy aliases
+
+Older bridge paths remain only for compatibility and should not be used for new docs or new imports.
 
 ## Composition rule
 
