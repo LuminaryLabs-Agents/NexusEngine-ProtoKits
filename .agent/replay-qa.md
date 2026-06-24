@@ -153,3 +153,16 @@ Replay closure pushed to ProtoKits `main`:
 4. Added the source to `promotion-determinism-guard-smoke` so the new command boundary stays headless and deterministic.
 
 Status: implemented and guarded at the ProtoKit boundary, with downstream Signal Bastion route consumption recorded in Experiments. The next safe step is a CI/deploy check pass and then pruning any stale route memory that still describes `defenseBuild` or `defenseWaves` as necessary.
+
+## 2026-06-24 — Deterministic Replay QA route-cargo extraction replay closure
+
+`generic-route-cargo-extraction-kit` now has fixed-tick composite replay coverage beyond the existing one-shot smoke. The replay confirms the higher-level delivery/extraction boundary can coordinate `engine.n.genericRouteProgress`, `engine.n.genericResourceLoop`, and `engine.n.genericPressureLoop` after all broad child facades are poisoned.
+
+Replay closure pushed to ProtoKits `main`:
+
+1. Added `tests/fixtures/generic-route-cargo-extraction-replay-fixtures.mjs` with deterministic delivery/extraction and rejection/reset scenarios.
+2. Added `tests/generic-route-cargo-extraction-replay-smoke.test.mjs` to run each fixture twice from a fresh engine/world and assert identical route/cargo/pressure snapshot plus event digests.
+3. Wired the replay smoke into `package.json` immediately after `tests/generic-route-cargo-extraction-kit-smoke.test.mjs`.
+4. Added `generic-route-progress-kit` and `generic-route-cargo-extraction-kit` to `tests/promotion-determinism-guard-smoke.test.mjs` so both route/cargo promotion-facing surfaces stay free of wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, and animation-frame APIs.
+
+Status: implemented and guarded at the ProtoKit boundary. This strengthens the delivery/extraction higher-level domain but still does not prove local experiment JavaScript shrink until `next-ledge` or another canonical route consumes the composite through route-level code and replay.
