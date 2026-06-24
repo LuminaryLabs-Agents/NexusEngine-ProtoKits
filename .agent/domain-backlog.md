@@ -32,3 +32,15 @@ This file tracks reusable domain opportunities and higher-level domains discover
 ## Open items
 
 Scheduled tasks should append durable findings here.
+
+## 2026-06-24 — Atomic Domain Kit Expander route-progress finding
+
+`generic-route-progress-kit` now covers the smallest reusable route/checkpoint/objective-progress boundary before cargo, hazards, pressure, or scan/survey are mixed in. This should reduce route-local JavaScript in Harbor Salvage, Cargo Chain, Sky Courier, Trainyard Switcher, Dungeon Relay, Floodplain Rescue, and any survey/extraction route that currently owns ordered checkpoint state locally.
+
+Boundary scope:
+
+- Owns ordered checkpoints, active checkpoint, completed checkpoint ids, route status, reset, completion, advance/rejection events, deterministic tick stamp, and `route-checkpoint` descriptors.
+- Does not own renderer, browser input, collision/hit testing, camera, DOM, Canvas, WebGL, Three.js, audio, asset loading, cargo inventory, hazard simulation, zone fields, or route fiction.
+- Composes upward into delivery/extraction loop when paired with cargo + hazards, survey pressure loop when paired with scan/survey + pressure/zones, and aerial/open traversal when paired with flight/corridor/camera descriptors.
+
+Next backlog item: add a thin Experiments manifest/spec note for one checkpoint-heavy canonical route before migrating host code, so local JavaScript shrink can be measured instead of assumed.
