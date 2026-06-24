@@ -23,6 +23,7 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 
 - `tests/generic-promotion-gate-smoke.test.mjs` covers `generic-pressure-loop-kit`, `generic-resource-loop-kit`, `generic-action-window-kit`, and `generic-affordance-descriptor-kit` as renderer-agnostic DSK promotion candidates. It asserts resources, events, systems, metadata boundaries, headless ticks/methods, and observable events for each surface.
 - `tests/generic-promotion-replay-smoke.test.mjs` plus `tests/fixtures/generic-promotion-replay-fixtures.mjs` adds deterministic fixed-tick replay coverage for the same four generic DSKs. The replay fixtures assert resource snapshots, event counts, method calls, descriptor availability, and fixed frame/tick results without DOM, Canvas, WebGL, browser input, or renderer ownership.
+- `tests/promotion-determinism-guard-smoke.test.mjs` now keeps the promotion-facing generic DSK candidates and `generic-defense-dsk-boundaries`/`generic-defense-aaa-dsk-bridge` free of wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, and animation-frame ownership. It also makes the remaining `generic-defense-aaa-kits` wall-clock/browser-timing compatibility exceptions explicit so they cannot be mistaken for Core-promotion-ready surfaces.
 
 ## 2026-06-23 — Headless Tick Smoke Builder findings
 
@@ -56,8 +57,15 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - The headless install path now verifies `engine.n.genericDefense.map`, `.economyWallet`, `.buildPlacement`, `.waveAgentDirector`, `.combatResolver`, `.sessionFacade`, and `.renderDescriptors` are populated from the installed DSKs, while `resources` and `events` remain discoverable from the session facade.
 - The smoke drives the replay through `engine.n.genericDefense.sessionFacade` and reads descriptors from `engine.n.genericDefense.renderDescriptors`, proving the pruned namespace can replace broad call sites without DOM/Canvas ownership.
 
+## 2026-06-23 — Promotion determinism guard update
+
+- `tests/promotion-determinism-guard-smoke.test.mjs` is now part of the default `npm test` script.
+- The guard makes promotion review stricter: promotion candidates must not rely on wall-clock time, RNG, browser timing, DOM, Canvas, WebGL, browser audio, pointer, or animation-frame APIs.
+- The guard records `generic-defense-aaa-kits` as a known compatibility exception rather than a promotion-ready boundary because its broad facades still use wall-clock/browser timing in ledger/presentation convenience paths.
+
 ## Open gaps
 
+- Replace `generic-defense-aaa-kits` wall-clock ledger/presentation stamps with tick/command-derived deterministic stamps or keep the AAA facade outside promotion-facing surfaces.
 - After the boundary-alias smoke stays green, replace or supplement compatibility facade calls in Experiments with the smallest relevant generic-defense DSK aliases and namespaced `engine.n.genericDefense.<boundary>` calls.
 - Route-level replay manifests now exist in Experiments, and `signal-bastion` has the first executable route-domain replay. Add equivalent executable replays for other lanes only after a real reusable ProtoKit boundary exists.
 - Add a Core-backed integration smoke inside ProtoKits once the repo/package wiring exposes a stable local Core import path in this workspace.
