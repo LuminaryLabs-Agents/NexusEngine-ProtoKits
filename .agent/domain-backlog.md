@@ -20,6 +20,8 @@ This file tracks reusable domain opportunities and higher-level domains discover
 - Camera, visual descriptor, and audio feedback descriptor layers.
 - Procedural content, object residency, streaming, and static batching.
 - Scenario QA, deterministic replay, and headless validation.
+- Platformer level/avatar/physics/collision/objective state.
+- XR pose/input descriptors, spatial anchors, spatial board transforms, comfort policy, and stereo/render-plan descriptors.
 
 ## Higher-level domains to look for
 
@@ -28,6 +30,7 @@ This file tracks reusable domain opportunities and higher-level domains discover
 - Scan + zones + timed pressure = survey pressure loop.
 - Terrain + flight + world patches = open traversal loop.
 - Agent groups + hazards + resources = survival ecology loop.
+- Platformer progression + avatar physics/collision + spatial board + XR pose/input + comfort/render descriptors = spatial platformer loop.
 
 ## Open items
 
@@ -44,3 +47,15 @@ Boundary scope:
 - Composes upward into delivery/extraction loop when paired with cargo + hazards, survey pressure loop when paired with scan/survey + pressure/zones, and aerial/open traversal when paired with flight/corridor/camera descriptors.
 
 Next backlog item: add a thin Experiments manifest/spec note for one checkpoint-heavy canonical route before migrating host code, so local JavaScript shrink can be measured instead of assumed.
+
+## 2026-06-24 — Intent Miner spatial-platformer finding
+
+`vr-platformer-kit-suite` introduces a reusable spatial-platformer incubation family for a 2D platformer presented as a 6DOF VR/spatial board. Treat the higher-level domain as `spatial-platformer-loop`, not as a Core-promotion-ready monolith.
+
+Boundary scope:
+
+- Owns platformer level/avatar/physics/collision/object/objective sequence state, 2D camera/render/effects/parallax descriptors, XR pose/input descriptors, spatial anchor/board transforms, comfort policy, and XR render-plan descriptors.
+- Composes beside `stereoscopic-render-domain-kit` for left/right eye descriptors.
+- Does not own Canvas/WebGL/Three drawing, actual WebXR/OpenXR sessions, raw runtime handles, frame presentation, DOM/browser input plumbing, assets, audio, route fiction, or product routes.
+
+Next backlog item: add deterministic replay for at least one child boundary or suite-level fixture before treating this as promotion-facing, then use a thin Experiments host only if it proves local route JavaScript reduction or a distinct canonical validation need.
