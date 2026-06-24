@@ -31,6 +31,10 @@ export function createSmokeWorld() {
       elapsed: 0
     },
 
+    hasResource(resource) {
+      return resources.has(resource?.name ?? String(resource));
+    },
+
     setResource(resource, value) {
       resources.set(resource?.name ?? String(resource), value);
     },
