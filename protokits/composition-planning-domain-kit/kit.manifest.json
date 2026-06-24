@@ -1,0 +1,17 @@
+{
+  "id": "composition-planning-domain-kit",
+  "domain": "composition-planning",
+  "parentDomain": "domain-control-plane",
+  "scope": "control-domain",
+  "extendsBase": "DomainServiceKit",
+  "composes": ["capability-graph-domain-kit"],
+  "requires": ["domain:capability-graph"],
+  "provides": ["domain:composition-planning", "domain:install-plan", "domain:dependency-gap-report"],
+  "ownsLoop": false,
+  "snapshotPolicy": "serializable",
+  "resetPolicy": "engine-reset-aware",
+  "exportPath": "./composition-planning-domain-kit",
+  "sourcePath": "protokits/composition-planning-domain-kit/index.js",
+  "testPaths": ["tests/domain-composition-planning-smoke.test.mjs"],
+  "status": "experimental"
+}
