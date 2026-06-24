@@ -104,3 +104,15 @@ Promotion/pruning implications:
 - Keep compatible: legacy `engine.genericRouteProgress`, `engine.genericResourceLoop`, `engine.genericPressureLoop`, and `engine.genericRouteCargoExtraction` facades while Experiments migrate.
 - Prune through migration: `next-ledge` should consume `engine.n.genericRouteProgress` first, then consider the route-cargo composite only if its cargo/pressure state can be removed from the host.
 - Do not promote yet: route progress and route-cargo extraction still need downstream Experiments route consumption proof and executable fixed-tick replay evidence.
+
+## 2026-06-24 — Signal Bastion session command promotion note
+
+`generic-defense-session-command-kit` now exists as a narrow reusable command boundary for the remaining Signal Bastion browser-host convenience seams: blueprint selection and structure sell/refund. It extends `engine.n.genericDefense.sessionFacade` and also exposes `engine.n.genericDefense.sessionCommands`, without owning DOM, Canvas, renderer state, assets, audio, browser timing, or route-local collections.
+
+Promotion/pruning implications:
+
+- Build/keep: `generic-defense-session-command-kit` as an incubating generic-defense command extension while Signal Bastion consumes it downstream.
+- Merge later: fold `setBlueprint` and `sell` into the core `sessionFacade` DSK only if compatibility risk is low and smoke/replay stays green; until then the standalone command kit is a safer additive boundary.
+- Prune now: Signal Bastion no longer needs the broad `createGenericDefenseBuildKit` or `createGenericDefenseWaveKit` compatibility facades for setBlueprint, sell, or wave preview.
+- Keep compatible: `generic-defense-aaa-kits` remains available but should not be used as a promotion-facing dependency for route-host command seams.
+- Promote later only after proof: route-level executable replay should keep importing the package export and proving `n.genericDefense.sessionFacade.setBlueprint/sell` before any Core promotion consideration.
