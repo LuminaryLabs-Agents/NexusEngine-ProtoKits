@@ -1,0 +1,17 @@
+{
+  "id": "save-delta-kit",
+  "domain": "save-delta",
+  "type": "composition-kit",
+  "status": "experimental",
+  "factory": "createSaveDeltaKit",
+  "requires": [],
+  "provides": ["save-delta", "scene-delta", "delta-only-save"],
+  "resources": ["saveDelta.state"],
+  "events": ["saveDelta.patched", "saveDelta.reset"],
+  "publicApi": ["engine.saveDelta.patch", "engine.saveDelta.merge", "engine.saveDelta.resetScene", "engine.saveDelta.snapshot"],
+  "descriptors": [],
+  "rendererBoundary": { "outputsDescriptors": false, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": { "scalesWith": ["patchCount", "changedObjectCount"], "telemetry": ["sceneDeltaCount", "patchCount"], "degradationModes": ["compactPatchHistory"] },
+  "snapshot": { "supportsSnapshot": true, "supportsReset": true, "supportsLoadSnapshot": false },
+  "promotion": { "level": "experimental", "criteria": ["merge semantics stabilized", "scene graph composition", "replay-safe command IDs"] }
+}
