@@ -1,0 +1,17 @@
+{
+  "id": "deploy-registry-kit",
+  "domain": "deploy-registry",
+  "type": "composition-kit",
+  "status": "experimental",
+  "factory": "createDeployRegistryKit",
+  "requires": ["deploy-manifest"],
+  "provides": ["deploy-registry", "scene-registry", "deploy-kit-stack-resolution"],
+  "resources": ["deployRegistry.state"],
+  "events": ["deployRegistry.registered", "deployRegistry.rejected"],
+  "publicApi": ["engine.deployRegistry.register", "engine.deployRegistry.get", "engine.deployRegistry.list", "engine.deployRegistry.resolveKitStack", "engine.deployRegistry.listScenes", "engine.deployRegistry.listApps", "engine.deployRegistry.listAssetPacks", "engine.deployRegistry.snapshot"],
+  "descriptors": [],
+  "rendererBoundary": { "outputsDescriptors": false, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": { "scalesWith": ["manifestCount"], "telemetry": ["manifestCount", "sceneCount", "assetPackReferenceCount"], "degradationModes": [] },
+  "snapshot": { "supportsSnapshot": true, "supportsReset": false, "supportsLoadSnapshot": false },
+  "promotion": { "level": "experimental", "criteria": ["bridge coverage", "scene lifecycle composition", "asset pack resolution tests"] }
+}
