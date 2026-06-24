@@ -2,6 +2,26 @@
 
 All notable ProtoKits documentation, compatibility, and composition-layer changes are recorded here.
 
+## 2026-06-24 — Project/high-fidelity naming migration
+
+### Added
+
+- `project-batch-deploy-bridge` as the neutral bridge for project batch specs.
+- `generic-defense-project-kits` as a neutral path for generic defense project composition.
+- `generic-defense-project-bridge` as a neutral bridge for generic defense project composition plus DSK boundaries.
+- Neutral project batch APIs: `convertProjectBatchItemToDeployManifest`, `convertProjectBatchToDeployManifests`, and `createProjectBatchDeployBridge`.
+
+### Changed
+
+- User-facing docs should use high-fidelity, desktop-fidelity, project batch, vertical slice, and polished project language.
+- `composition-layer-smoke.test.mjs` imports the neutral project batch bridge and verifies compatibility aliases still resolve.
+
+### Compatibility
+
+- Existing bridge paths and functions remain available as aliases.
+- No existing exports were removed.
+- Quality-bar wording is not a domain category or future naming pattern.
+
 ## 2026-06-24 — Documentation and changelog operating manual
 
 ### Added
@@ -49,7 +69,7 @@ This pass records the reasoning and implementation path from game ideas to DSK c
 - `session-facade-kit`.
 - `scene-graph-domain-kit`.
 - `kit-registry`.
-- `aaa-batch-deploy-bridge`.
+- `project-batch-deploy-bridge`.
 - `gallery-registry-bridge`.
 - `generated-route-host-bridge`.
 - Manifest validators.
