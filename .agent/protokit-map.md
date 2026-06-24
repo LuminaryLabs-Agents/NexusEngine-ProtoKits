@@ -70,3 +70,12 @@ The defense split is pointing toward a higher-level `strategic-pressure-loop` do
 - Experiment consumers to consider next: Harbor Salvage, Cargo Chain, Sky Courier, Trainyard Switcher, Dungeon Relay, Floodplain Rescue, and survey/extraction routes that currently own ordered checkpoint state locally.
 - Higher-level domains unlocked: delivery/extraction loop (`route-progress + cargo + hazards`) and survey pressure loop (`route-progress + scan/survey + zones + pressure`).
 - Promotion readiness: incubating only. It has atomic headless smoke coverage, but needs at least one Experiments route consumption proof before Core-promotion review.
+
+## 2026-06-24 — API Surface Pruner route namespace map update
+
+- `generic-route-progress-kit` now exposes its preferred command/snapshot facade under `engine.n.genericRouteProgress` while preserving `engine.genericRouteProgress` compatibility.
+- `generic-resource-loop-kit` now exposes its preferred meter facade under `engine.n.genericResourceLoop` while preserving `engine.genericResourceLoop` compatibility.
+- `generic-pressure-loop-kit` now exposes its preferred channel facade under `engine.n.genericPressureLoop` while preserving `engine.genericPressureLoop` compatibility.
+- `generic-route-cargo-extraction-kit` now builds snapshots and runs route/cargo/pressure commands through those three namespaced child DSKs first, preserving compatibility fallbacks for older hosts.
+- Test coverage: `tests/generic-promotion-gate-smoke.test.mjs`, `tests/generic-route-progress-kit-smoke.test.mjs`, and `tests/generic-route-cargo-extraction-kit-smoke.test.mjs` now poison the broad compatibility surfaces for the covered seams and prove the namespaced DSK surfaces are sufficient.
+- Promotion implication: the delivery/extraction loop has a clearer atomic-to-composite API ladder, but no Core-promotion claim should be made until `next-ledge` or another canonical route consumes the namespace and adds route-level fixed-tick replay evidence.
