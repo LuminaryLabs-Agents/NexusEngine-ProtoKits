@@ -9,15 +9,16 @@ A DSM is a reusable module that defines a domain and exposes services/API that m
 ## Required reading for any major change
 
 1. `docs/START-HERE.md`
-2. `docs/DSM-ARCHITECTURE.md`
-3. `docs/DSM-AUTHORING-GUIDE.md`
-4. `docs/DSM-AGENT-WORKFLOW.md`
-5. `docs/DSM-SPLIT-RULES.md`
-6. `docs/DSM-DATA-CONTRACTS.md`
-7. `docs/DSM-TESTING-GUIDE.md`
-8. `docs/DSM-PROMOTION-GUIDE.md`
-9. `docs/DSM-CATALOG.md`
-10. `docs/templates/DSM-SPEC.md`
+2. `docs/MAINLINE-GUIDED-KITS-MASTER-PLAN.md`
+3. `docs/DSM-ARCHITECTURE.md`
+4. `docs/DSM-AUTHORING-GUIDE.md`
+5. `docs/DSM-AGENT-WORKFLOW.md`
+6. `docs/DSM-SPLIT-RULES.md`
+7. `docs/DSM-DATA-CONTRACTS.md`
+8. `docs/DSM-TESTING-GUIDE.md`
+9. `docs/DSM-PROMOTION-GUIDE.md`
+10. `docs/DSM-CATALOG.md`
+11. `docs/templates/DSM-SPEC.md`
 
 ## Non-negotiable rules
 
@@ -29,6 +30,12 @@ A DSM is a reusable module that defines a domain and exposes services/API that m
 - Do keep data serializable and deterministic.
 - Do add headless tests for reusable behavior.
 - Do document domain meaning and services/API before or alongside implementation.
+
+## Mainline guided kit track
+
+For guided kit authoring, model/agent adapter boundaries, harness canonicalization, and promotion readiness work, follow `docs/MAINLINE-GUIDED-KITS-MASTER-PLAN.md`.
+
+Important: this is a **mainline** implementation track. Do not create a `v3` branch, `v3` package namespace, or parallel ProtoKits core for this work.
 
 ## Agent loop
 
