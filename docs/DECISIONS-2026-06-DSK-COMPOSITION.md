@@ -47,3 +47,9 @@
 **Decision:** Documentation coverage checks should warn on legacy gaps and fail only for required new composition-layer docs.
 
 **Reason:** The rollout must improve documentation without turning existing undocumented legacy kits into immediate blockers.
+
+## ADR 009 — Quality targets are not naming categories
+
+**Decision:** Use project batch, generated project, vertical slice, polished project, high-fidelity, and desktop-fidelity language for future-facing docs and APIs. Do not use quality-bar wording as a kit name, bridge name, family name, or domain boundary.
+
+**Reason:** A project can target higher quality without becoming a separate architecture category. Existing quality-tier names remain only as compatibility aliases until consumers migrate.
