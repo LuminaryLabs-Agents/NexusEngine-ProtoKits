@@ -1,0 +1,17 @@
+{
+  "id": "scene-transition-kit",
+  "domain": "scene-transition",
+  "type": "composition-kit",
+  "status": "experimental",
+  "factory": "createSceneTransitionKit",
+  "requires": ["scene-lifecycle"],
+  "provides": ["scene-transition", "transition-preload-contract"],
+  "resources": ["sceneTransition.state"],
+  "events": ["sceneTransition.requested", "sceneTransition.completed", "sceneTransition.cancelled"],
+  "publicApi": ["engine.sceneTransition.request", "engine.sceneTransition.complete", "engine.sceneTransition.cancel", "engine.sceneTransition.snapshot"],
+  "descriptors": [],
+  "rendererBoundary": { "outputsDescriptors": false, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": { "scalesWith": ["transitionHistoryLength"], "telemetry": ["activeTransition", "transitionHistoryLength"], "degradationModes": ["skipOptionalPreload"] },
+  "snapshot": { "supportsSnapshot": true, "supportsReset": false, "supportsLoadSnapshot": false },
+  "promotion": { "level": "experimental", "criteria": ["host transition bridge", "asset preload consumer", "scene lifecycle tests"] }
+}
