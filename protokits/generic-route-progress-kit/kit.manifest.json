@@ -1,0 +1,67 @@
+{
+  "id": "generic-route-progress-kit",
+  "domain": "route-progress",
+  "type": "domain-service-kit",
+  "status": "proto",
+  "requires": [],
+  "provides": [
+    "route:progress",
+    "checkpoint:ledger",
+    "objective:descriptors"
+  ],
+  "resources": [
+    "genericRouteProgress.state"
+  ],
+  "events": [
+    "genericRouteProgress.checkpoint.entered",
+    "genericRouteProgress.checkpoint.completed",
+    "genericRouteProgress.advanced",
+    "genericRouteProgress.completed",
+    "genericRouteProgress.reset",
+    "genericRouteProgress.rejected"
+  ],
+  "publicApi": [
+    "createGenericRouteProgressKit",
+    "normalizeRouteCheckpoint",
+    "engine.genericRouteProgress.enter",
+    "engine.genericRouteProgress.complete",
+    "engine.genericRouteProgress.advance",
+    "engine.genericRouteProgress.reset",
+    "engine.genericRouteProgress.setRoute",
+    "engine.genericRouteProgress.getState",
+    "engine.genericRouteProgress.getActiveCheckpoint",
+    "engine.genericRouteProgress.getDescriptors"
+  ],
+  "descriptors": [
+    "route-checkpoint"
+  ],
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "forbidden": [
+      "DOM",
+      "Canvas",
+      "WebGL",
+      "Three.js",
+      "browser audio",
+      "asset loading",
+      "pointer lock"
+    ],
+    "notes": "The kit emits route-checkpoint descriptors only. Hosts own hit testing, rendering, camera, audio, assets, and browser input."
+  },
+  "performance": {
+    "tickCost": "O(checkpoints)",
+    "allocationNotes": "Descriptor snapshots clone checkpoint descriptor payloads; expected checkpoint counts are small route/objective ledgers."
+  },
+  "snapshot": {
+    "stable": true,
+    "fields": [
+      "id",
+      "status",
+      "activeId",
+      "completedIds",
+      "checkpoints",
+      "descriptors",
+      "updatedAtTick"
+    ]
+  }
+}
