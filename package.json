@@ -68,9 +68,10 @@
   },
   "files": ["KITS.md", "README-DSM-ADDENDUM.md", "docs", "protokits", "apps", "scripts", "tests"],
   "scripts": {
-    "check": "npm run check:syntax && npm run check:manifests && npm test",
+    "check": "npm run check:syntax && npm run check:manifests && npm run check:docs && npm test",
     "check:syntax": "node scripts/check-all-js.mjs",
     "check:manifests": "node scripts/validate-kit-manifests.mjs && node scripts/check-domain-boundaries.mjs && node scripts/validate-performance-contracts.mjs",
+    "check:docs": "node scripts/check-doc-coverage.mjs",
     "generate:kit-inventory": "node scripts/generate-kit-inventory.mjs",
     "test": "node tests/scoped-rpg-domain-kits-batch-02.test.mjs && node tests/generic-promotion-gate-smoke.test.mjs && node tests/generic-promotion-replay-smoke.test.mjs && node tests/promotion-determinism-guard-smoke.test.mjs && node tests/generic-defense-dsk-boundaries-smoke.test.mjs && node tests/generic-defense-replay-smoke.test.mjs && node tests/composition-layer-smoke.test.mjs"
   },
