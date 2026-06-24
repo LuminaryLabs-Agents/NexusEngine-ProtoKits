@@ -18,8 +18,12 @@ function assertPromotionBoundary(kit, surfaceName) {
     channels: [{ id: "oxygen", initial: 6, min: 0, max: 10, warningAt: 7, failAt: 9, risePerSecond: 4 }]
   });
   assertPromotionBoundary(kit, "generic pressure loop");
+  assert.equal(kit.metadata?.engineNamespace, "engine.n.genericPressureLoop", "generic pressure loop declares namespace");
+  const pressureLoop = engine.n?.genericPressureLoop;
+  assert.equal(Boolean(pressureLoop), true, "generic pressure loop installs namespace alias");
+  engine.genericPressureLoop = null;
   tick(1);
-  assert.equal(engine.genericPressureLoop.getChannel("oxygen").status, "failed", "pressure channel peaks deterministically");
+  assert.equal(pressureLoop.getChannel("oxygen").status, "failed", "pressure channel peaks deterministically through namespace");
   assert.equal(world.getEvents(kit.events.PressureWarning).length, 1, "pressure emits warning transition");
   assert.equal(world.getEvents(kit.events.PressurePeaked).length, 1, "pressure emits peaked transition");
 }
@@ -29,11 +33,15 @@ function assertPromotionBoundary(kit, surfaceName) {
     resources: [{ id: "stamina", initial: 5, min: 0, max: 10, thresholds: [{ id: "low", value: 2, direction: "below" }] }]
   });
   assertPromotionBoundary(kit, "generic resource loop");
-  const meter = engine.genericResourceLoop.spend("stamina", 4, "sprint");
-  assert.equal(meter.value, 1, "resource spend updates meter headlessly");
+  assert.equal(kit.metadata?.engineNamespace, "engine.n.genericResourceLoop", "generic resource loop declares namespace");
+  const resourceLoop = engine.n?.genericResourceLoop;
+  assert.equal(Boolean(resourceLoop), true, "generic resource loop installs namespace alias");
+  engine.genericResourceLoop = null;
+  const meter = resourceLoop.spend("stamina", 4, "sprint");
+  assert.equal(meter.value, 1, "resource spend updates meter headlessly through namespace");
   assert.equal(world.getEvents(kit.events.ThresholdCrossed).length, 1, "resource threshold crossing is observable");
-  engine.genericResourceLoop.restore("stamina", 3, "rest");
-  assert.equal(engine.genericResourceLoop.getResource("stamina").value, 4, "resource restore is deterministic");
+  resourceLoop.restore("stamina", 3, "rest");
+  assert.equal(resourceLoop.getResource("stamina").value, 4, "resource restore is deterministic");
 }
 
 {
