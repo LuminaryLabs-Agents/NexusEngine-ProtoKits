@@ -24,6 +24,8 @@ New Composite Domain Kit Builder focus: `generic-route-cargo-extraction-kit` now
 
 New API Surface Pruner focus: the route/cargo/extraction family now has preferred atomic child namespaces: `engine.n.genericRouteProgress`, `engine.n.genericResourceLoop`, and `engine.n.genericPressureLoop`. The route-cargo composite now uses those child namespaces first, so Experiments can migrate one boundary at a time instead of depending on broad `engine.generic*` facades.
 
+New Intent Miner focus: treat `vr-platformer-kit-suite` as an incubation suite for a possible `spatial-platformer-loop` higher-level domain, not as a Core-promotion-ready maximum-feature blob. Its child platformer/XR/spatial-board/comfort/render-descriptor boundaries need deterministic replay and downstream Experiments consumption proof before promotion-facing claims.
+
 ## Current pruning focus
 
 Keep `generic-defense-kits` and `generic-defense-aaa-kits` compatible while shifting future imports and host calls toward `generic-defense-dsk-boundaries`, `generic-defense-aaa-dsk-bridge`, and the seven named atomic aliases: map, economy wallet, build placement, wave/agent director, combat resolver, session facade, and render descriptors.
@@ -31,6 +33,8 @@ Keep `generic-defense-kits` and `generic-defense-aaa-kits` compatible while shif
 New route-progress pruning rule: keep `generic-route-progress-kit` atomic. Do not fold cargo ledgers, hazard fields, pressure meters, scan targets, browser collision, DOM input, Canvas hit tests, or route fiction into the route-progress kit. Compose those through higher-level domains only after each boundary has resources/events/methods/snapshots/descriptors and headless coverage.
 
 New route-cargo-extraction pruning rule: keep `generic-route-cargo-extraction-kit` as a composite coordinator only. It may install and snapshot route-progress/resource/pressure child DSKs, but it must not absorb browser collision, route fiction, renderer camera, DOM input, Canvas/WebGL, asset loading, inventory fiction, or hazard simulation.
+
+New spatial-platformer pruning rule: keep the maximum-feature VR platformer suite from becoming a monolithic game kit. Child platformer, XR, spatial-board, comfort, and descriptor domains may incubate in ProtoKits, but hosts must retain Canvas/WebGL/Three drawing, WebXR/OpenXR session handles, raw runtime handles, frame presentation, assets, DOM input, and route fiction.
 
 New host code should prefer `engine.n.genericDefense.map`, `engine.n.genericDefense.economyWallet`, `engine.n.genericDefense.buildPlacement`, `engine.n.genericDefense.waveAgentDirector`, `engine.n.genericDefense.combatResolver`, `engine.n.genericDefense.sessionFacade`, and `engine.n.genericDefense.renderDescriptors` after DSK install. The older `engine.defense*` and `engine.genericDefense` surfaces remain compatibility aliases.
 
@@ -48,6 +52,8 @@ Run `generic-defense-placement-projector-namespace-smoke.test.mjs` before `gener
 
 The placement smoke installs the seven DSK aliases plus the reusable projector, syncs `engine.n.genericDefense`, disables the broad `engine.genericDefense` and `engine.defenseBuild` compatibility facades, then confirms placement through `namespace.sessionFacade.build` and asserts the resulting structure/wallet snapshot without DOM, Canvas, or browser frame timing.
 
+Run `vr-platformer-kit-suite-smoke.test.mjs` near the end of the default suite as incubation coverage only. It checks platformer level/avatar/physics/spatial-board/stereoscopic descriptor composition and the sixteen-kit maximum-feature suite, but it is not deterministic replay and should not be used as a Core-promotion signal by itself.
+
 ## Current promotion candidates
 
 See `promotion-candidates.md` / `candidate-promotions.md`.
@@ -61,6 +67,8 @@ See `route-canonicalization.md`.
 See `smoke-tests.md` and `replay-qa.md`.
 
 ## Last meaningful cycle report
+
+Latest Intent Miner update: `.agent/cycle-reports/2026-06-24-intent-miner-1200.md` records the new `vr-platformer-kit-suite` as a spatial-platformer-loop incubation finding. This is ProtoKits map/memory alignment only; no Experiments JavaScript shrink is claimed, no Core promotion is claimed, and Core `.agent/intent.md` is still blocked by integration permissions.
 
 Latest Deterministic Replay QA update: `tests/fixtures/generic-route-progress-replay-fixtures.mjs`, `tests/generic-route-progress-replay-smoke.test.mjs`, `package.json`, and `.agent/cycle-reports/2026-06-24-deterministic-replay-qa-route-progress-replay.md` now close the atomic fixed-tick replay gap for `generic-route-progress-kit`. This is reusable ProtoKit QA only; no Experiments route JavaScript shrink is claimed until a checkpoint-heavy canonical route consumes the boundary.
 
