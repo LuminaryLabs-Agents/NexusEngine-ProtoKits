@@ -23,6 +23,7 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 
 - `tests/generic-promotion-gate-smoke.test.mjs` covers `generic-pressure-loop-kit`, `generic-resource-loop-kit`, `generic-action-window-kit`, and `generic-affordance-descriptor-kit` as renderer-agnostic DSK promotion candidates. It asserts resources, events, systems, metadata boundaries, headless ticks/methods, and observable events for each surface.
 - `tests/generic-promotion-replay-smoke.test.mjs` plus `tests/fixtures/generic-promotion-replay-fixtures.mjs` adds deterministic fixed-tick replay coverage for the same four generic DSKs. The replay fixtures assert resource snapshots, event counts, method calls, descriptor availability, and fixed frame/tick results without DOM, Canvas, WebGL, browser input, or renderer ownership.
+- `tests/generic-route-progress-kit-smoke.test.mjs` covers `generic-route-progress-kit` as an atomic route/checkpoint/objective-progress boundary. It asserts state resources, checkpoint entered/completed events, route advanced/completed/reset/rejected events, ordered active checkpoint snapshots, out-of-order rejection, deterministic tick stamping, and renderer-agnostic `route-checkpoint` descriptors.
 - `tests/promotion-determinism-guard-smoke.test.mjs` now keeps the promotion-facing generic DSK candidates and `generic-defense-dsk-boundaries`/`generic-defense-aaa-dsk-bridge` free of wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, and animation-frame ownership. It also makes the remaining `generic-defense-aaa-kits` wall-clock/browser-timing compatibility exceptions explicit so they cannot be mistaken for Core-promotion-ready surfaces.
 - `tests/generic-defense-placement-projector-namespace-smoke.test.mjs` now guards the reusable placement projector's transition from broad compatibility facades to `engine.n.genericDefense.sessionFacade` for snapshot/build semantics. It poisons `engine.genericDefense` and `engine.defenseBuild` after namespace sync and confirms a valid placement through the namespaced DSK session facade without DOM, Canvas, or browser frame timing.
 
@@ -62,7 +63,7 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 
 - `tests/promotion-determinism-guard-smoke.test.mjs` is now part of the default `npm test` script.
 - The guard makes promotion review stricter: promotion candidates must not rely on wall-clock time, RNG, browser timing, DOM, Canvas, WebGL, browser audio, pointer, or animation-frame APIs.
-- The guard records `generic-defense-aaa-kits` as a known compatibility exception rather than a promotion-ready boundary because its broad facades still use wall-clock/browser timing in ledger/presentation convenience paths.
+- The guard records `generic-defense-aaa-kits` as a known compatibility exception rather than a promotion-ready boundary because its broad facades still use wall-clock/browser-timing in ledger/presentation convenience paths.
 
 ## 2026-06-24 — Headless Tick Smoke Builder bridge drift finding
 
@@ -71,9 +72,17 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - The ProtoKits patch is now implemented: `createGenericPlacementProjectorKit()` prefers `engine.n?.genericDefense?.sessionFacade?.getSnapshot()` and `.build(...)`, with compatibility fallbacks still present.
 - `tests/generic-defense-placement-projector-namespace-smoke.test.mjs` guards this by installing the DSK aliases plus the projector, poisoning `engine.genericDefense` and `engine.defenseBuild`, and confirming a valid placement through `engine.n.genericDefense.sessionFacade` without DOM/Canvas/browser timing.
 
+## 2026-06-24 — Atomic Domain Kit Expander route-progress smoke update
+
+- `generic-route-progress-kit` now has its first headless smoke in the default `npm test` script.
+- The smoke keeps the new route/checkpoint boundary rendererless and deterministic: no DOM, Canvas, WebGL, Three.js, browser audio, pointer lock, browser input, asset loading, wall-clock, or RNG is involved.
+- This closes an atomic ProtoKit gap for route/checkpoint/objective-progress state, but it does not yet close local experiment JavaScript shrink because no Experiments host has consumed it yet.
+- Safest next smoke patch: add an Experiments manifest/spec smoke for one checkpoint-heavy canonical route, then migrate only the ordered checkpoint ledger into `generic-route-progress-kit` while leaving renderer hit tests and route fiction in the host.
+
 ## Open gaps
 
 - Replace `generic-defense-aaa-kits` wall-clock ledger/presentation stamps with tick/command-derived deterministic stamps or keep the AAA facade outside promotion-facing surfaces.
 - After the placement/projector namespace smoke and boundary-alias smoke stay green, replace or supplement compatibility facade calls in Experiments with the smallest relevant generic-defense DSK aliases and namespaced `engine.n.genericDefense.<boundary>` calls.
 - Route-level replay manifests now exist in Experiments, and `signal-bastion` has the first executable route-domain replay. Add equivalent executable replays for other lanes only after a real reusable ProtoKit boundary exists.
 - Add a Core-backed integration smoke inside ProtoKits once the repo/package wiring exposes a stable local Core import path in this workspace.
+- Add downstream route consumption proof for `generic-route-progress-kit`; until then it is an atomic ProtoKit scaffold with headless smoke coverage, not a proven local-JS reduction in Experiments.
