@@ -95,6 +95,8 @@ export function createTerrainHorizonLodKit(nexusRealtime = {}, options = {}) {
         compressFarHeight(height = 0, distance = 0) { return compressFarHeight(height, distance, state().config); },
         fogBlend(distance = 0) { return fogBlend(distance, state().config); },
         buildHorizonRing(center = {}, band = 0) { return buildHorizonRings(center, state().config)[Math.max(0, Math.floor(number(band)))] ?? null; },
+        getRingDescriptors(center = {}) { return buildHorizonRings(center, state().config).map(clone); },
+        listBands(center = {}) { return this.getRingDescriptors(center); },
         buildHorizonRings(center = {}) {
           const current = state();
           const rings = buildHorizonRings(center, current.config);
@@ -103,8 +105,6 @@ export function createTerrainHorizonLodKit(nexusRealtime = {}, options = {}) {
           world.emit(TerrainHorizonRingsBuilt, { center: clone(center), rings: clone(rings) });
           return rings.map(clone);
         },
-        getRingDescriptors(center = {}) { return this.buildHorizonRings(center); },
-        listBands(center = {}) { return this.buildHorizonRings(center); },
         snapshot: () => clone(state())
       };
     },
