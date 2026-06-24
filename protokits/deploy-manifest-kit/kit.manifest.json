@@ -1,0 +1,17 @@
+{
+  "id": "deploy-manifest-kit",
+  "domain": "deploy-manifest",
+  "type": "composition-kit",
+  "status": "experimental",
+  "factory": "createDeployManifestKit",
+  "requires": [],
+  "provides": ["deploy-manifest", "deploy-manifest-validation"],
+  "resources": ["deployManifest.state"],
+  "events": ["deployManifest.registered", "deployManifest.rejected"],
+  "publicApi": ["engine.deployManifests.register", "engine.deployManifests.validate", "engine.deployManifests.get", "engine.deployManifests.list", "engine.deployManifests.snapshot"],
+  "descriptors": [],
+  "rendererBoundary": { "outputsDescriptors": false, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": { "scalesWith": ["manifestCount"], "telemetry": ["manifestCount", "rejectedManifestCount"], "degradationModes": [] },
+  "snapshot": { "supportsSnapshot": true, "supportsReset": false, "supportsLoadSnapshot": false },
+  "promotion": { "level": "experimental", "criteria": ["used by deploy registry", "validated against generated route bridge", "manifest schema stability"] }
+}
