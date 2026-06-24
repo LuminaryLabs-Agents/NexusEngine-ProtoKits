@@ -13,7 +13,7 @@ const promotionCandidatePaths = [
 
 const forbiddenPromotionRuntimeApis = [
   /\bDate\.now\s*\(/,
-  /\bperformance\??\.now\??\.\s*\(/,
+  /\bperformance(?:\?\.)?now(?:\?\.)?\s*\(/,
   /\bMath\.random\s*\(/,
   /\bcrypto\.getRandomValues\s*\(/,
   /\brequestAnimationFrame\b/,
@@ -43,7 +43,7 @@ const knownCompatibilityExceptions = [
   },
   {
     label: "generic-defense AAA presentation facade still uses browser performance timing",
-    pattern: /\bperformance\??\.now\??\.\s*\(/
+    pattern: /\bperformance(?:\?\.)?now(?:\?\.)?\s*\(/
   }
 ];
 
