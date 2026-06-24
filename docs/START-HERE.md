@@ -15,16 +15,18 @@ In this repo, DSMs are built and shipped as `-kit` implementations.
 
 ## Required reading order for agents
 
-1. `docs/DSM-ARCHITECTURE.md` — understand the DSM mental model.
-2. `docs/DSM-KIT-NAMING.md` — use correct `-kit` implementation names.
-3. `docs/DSM-AUTHORING-GUIDE.md` — learn how to build a DSM-shaped ProtoKit.
-4. `docs/DSM-AGENT-WORKFLOW.md` — follow the exact implementation workflow.
-5. `docs/DSM-SPLIT-RULES.md` — decide whether to create, refine, or split modules.
-6. `docs/DSM-DATA-CONTRACTS.md` — keep behavior data-driven.
-7. `docs/DSM-TESTING-GUIDE.md` — add headless tests and smoke checks.
-8. `docs/DSM-PROMOTION-GUIDE.md` — understand the bar for promoting to stable NexusRealtime.
-9. `docs/DSM-CATALOG.md` — reuse or extend existing domain/service families.
-10. `docs/templates/DSM-SPEC.md` — write the spec for any significant new kit.
+1. `docs/START-HERE.md` — this orientation.
+2. `docs/MAINLINE-GUIDED-KITS-MASTER-PLAN.md` — current mainline implementation plan for guided, agent, model, and harness kits.
+3. `docs/DSM-ARCHITECTURE.md` — understand the DSM mental model.
+4. `docs/DSM-KIT-NAMING.md` — use correct `-kit` implementation names.
+5. `docs/DSM-AUTHORING-GUIDE.md` — learn how to build a DSM-shaped ProtoKit.
+6. `docs/DSM-AGENT-WORKFLOW.md` — follow the exact implementation workflow.
+7. `docs/DSM-SPLIT-RULES.md` — decide whether to create, refine, or split modules.
+8. `docs/DSM-DATA-CONTRACTS.md` — keep behavior data-driven.
+9. `docs/DSM-TESTING-GUIDE.md` — add headless tests and smoke checks.
+10. `docs/DSM-PROMOTION-GUIDE.md` — understand the bar for promoting to stable NexusRealtime.
+11. `docs/DSM-CATALOG.md` — reuse or extend existing domain/service families.
+12. `docs/templates/DSM-SPEC.md` — write the spec for any significant new kit.
 
 ## Agent operating rule
 
