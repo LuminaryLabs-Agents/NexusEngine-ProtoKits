@@ -75,7 +75,7 @@ Track scenario QA and deterministic replay coverage.
 ### 2026-06-23 — Signal Bastion executable route replay in Experiments
 
 - Scenario: browserless route-domain replay for the canonical `signal-bastion` strategic-pressure lane.
-- Kits: real Core `nexusrealtime` plus ProtoKits `generic-defense-dsk-boundaries` package alias surface.
+- Kits: real Core `nexusrealtime` plus ProtoKits `@luminarylabs/nexusrealtime-protokits` generic-defense DSK aliases.
 - Seed/config: Signal Bastion debug preset from `LuminaryLabs-Agents/NexusRealtime-Experiments`, not copied ProtoKit fixtures.
 - Inputs: semantic build, upgrade, wave-start, and snapshot bridge calls from `experiments/signal-bastion-route-domain-replay.json`.
 - Fixed ticks: 30 ticks at `0.1s` using the checked strategic-pressure route contract.
@@ -103,3 +103,15 @@ Replay closure pushed to ProtoKits `main`:
 4. Wired that smoke into `package.json` before generic-defense boundary/replay checks.
 
 Status: implemented and guarded. The next Experiments cycle can update its memory to claim the placement seam has shrunk from compatibility facades to the DSK namespace, then consider replacing Signal Bastion browser-host placement calls only where its bridge/spec/executable/facade smokes stay green.
+
+## 2026-06-24 — Atomic route-progress replay gap
+
+`generic-route-progress-kit` now has atomic headless smoke coverage, but not yet a multi-tick replay fixture pack. It is deterministic by construction in the current smoke: no RNG, wall-clock, DOM, Canvas, WebGL, Three.js, pointer lock, browser audio, asset loading, or requestAnimationFrame are involved; state advances only through explicit `enter`, `complete`, `advance`, `reset`, and fixed tick calls.
+
+Replay gap to close after first route consumption proof:
+
+- Scenario: delivery/extraction route ledger with pickup, hazard crossing, cargo handoff, and dropoff checkpoints.
+- Kits: `generic-route-progress-kit` plus a future cargo/logistics DSK and optional pressure/hazard DSKs.
+- Expected events: checkpoint entered/completed, route advanced/completed, cargo loaded/delivered, hazard/pressure deltas if composed.
+- Expected snapshots: active checkpoint, completed ids, cargo ledger, route-checkpoint descriptors, and deterministic digest equality across fresh runs.
+- Status: open; do not claim local experiment JavaScript shrink until at least one Experiments route consumes the route-progress boundary.
