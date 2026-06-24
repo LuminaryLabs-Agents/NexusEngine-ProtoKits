@@ -49,8 +49,15 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - The smoke imports real Core plus the package export `@luminarylabs/nexusrealtime-protokits/generic-defense-dsk-boundaries`, composes the Signal Bastion debug preset through the seven named DSK aliases, advances fixed ticks, and compares deterministic resource/snapshot/descriptor digests across fresh runs.
 - This gives `generic-defense-dsk-boundaries` route-level consumption proof without moving reusable implementation into Experiments.
 
+## 2026-06-23 — engine.n generic-defense namespace smoke update
+
+- `tests/generic-defense-dsk-boundaries-smoke.test.mjs` now asserts every boundary descriptor includes at least one `engine.n.genericDefense.<boundary>` method alias.
+- Individual DSK aliases now carry `metadata.engineNamespace`, and the smoke checks the expected namespace for all seven atomic boundaries.
+- The headless install path now verifies `engine.n.genericDefense.map`, `.economyWallet`, `.buildPlacement`, `.waveAgentDirector`, `.combatResolver`, `.sessionFacade`, and `.renderDescriptors` are populated from the installed DSKs, while `resources` and `events` remain discoverable from the session facade.
+- The smoke drives the replay through `engine.n.genericDefense.sessionFacade` and reads descriptors from `engine.n.genericDefense.renderDescriptors`, proving the pruned namespace can replace broad call sites without DOM/Canvas ownership.
+
 ## Open gaps
 
-- After the boundary-alias smoke stays green, replace or supplement compatibility facade calls in Experiments with the smallest relevant generic-defense DSK aliases.
+- After the boundary-alias smoke stays green, replace or supplement compatibility facade calls in Experiments with the smallest relevant generic-defense DSK aliases and namespaced `engine.n.genericDefense.<boundary>` calls.
 - Route-level replay manifests now exist in Experiments, and `signal-bastion` has the first executable route-domain replay. Add equivalent executable replays for other lanes only after a real reusable ProtoKit boundary exists.
 - Add a Core-backed integration smoke inside ProtoKits once the repo/package wiring exposes a stable local Core import path in this workspace.
