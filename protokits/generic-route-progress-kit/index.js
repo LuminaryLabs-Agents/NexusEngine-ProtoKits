@@ -1,4 +1,5 @@
 export const GENERIC_ROUTE_PROGRESS_KIT_VERSION = "0.1.0";
+export const GENERIC_ROUTE_PROGRESS_ENGINE_NAMESPACE = "genericRouteProgress";
 
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
@@ -10,6 +11,22 @@ function requireNexus(NexusRealtime) {
       throw new TypeError(`createGenericRouteProgressKit requires NexusRealtime.${key}.`);
     }
   }
+}
+
+function ensureEngineNamespace(engine) {
+  if (!engine || typeof engine !== "object") return null;
+  if (!engine.n || typeof engine.n !== "object") engine.n = {};
+  if (!engine.n[GENERIC_ROUTE_PROGRESS_ENGINE_NAMESPACE] || typeof engine.n[GENERIC_ROUTE_PROGRESS_ENGINE_NAMESPACE] !== "object") {
+    engine.n[GENERIC_ROUTE_PROGRESS_ENGINE_NAMESPACE] = {};
+  }
+  return engine.n[GENERIC_ROUTE_PROGRESS_ENGINE_NAMESPACE];
+}
+
+export function syncGenericRouteProgressEngineNamespace(engine) {
+  const namespace = ensureEngineNamespace(engine);
+  const facade = engine?.genericRouteProgress;
+  if (namespace && facade && typeof facade === "object") Object.assign(namespace, facade);
+  return namespace;
 }
 
 function stableId(value, fallback) {
@@ -185,7 +202,7 @@ export function createGenericRouteProgressKit(NexusRealtime, config = {}) {
         return { accepted: true, completed: done, checkpoint: clone(checkpoint), activeCheckpoint: clone(nextActive), state: clone(next) };
       }
 
-      engine.genericRouteProgress = {
+      const facade = {
         resources: { RouteProgressState },
         events: { CheckpointEntered, CheckpointCompleted, RouteAdvanced, RouteCompleted, RouteReset, Rejected },
         enter,
@@ -208,15 +225,19 @@ export function createGenericRouteProgressKit(NexusRealtime, config = {}) {
           return clone(currentState().descriptors);
         }
       };
+
+      engine.genericRouteProgress = facade;
+      syncGenericRouteProgressEngineNamespace(engine);
     },
     metadata: {
       version: GENERIC_ROUTE_PROGRESS_KIT_VERSION,
+      engineNamespace: `engine.n.${GENERIC_ROUTE_PROGRESS_ENGINE_NAMESPACE}`,
       purpose: "Generic deterministic route, checkpoint, and objective-progress ledger for delivery, extraction, traversal, survey, and encounter routes.",
       boundary: "Owns ordered checkpoint state, completion events, active objective snapshots, and renderer-agnostic checkpoint descriptors. Hosts own input capture, collision/hit testing, camera, rendering, and route fiction.",
       apiSurface: {
         resources: ["genericRouteProgress.state"],
         events: ["genericRouteProgress.checkpoint.entered", "genericRouteProgress.checkpoint.completed", "genericRouteProgress.advanced", "genericRouteProgress.completed", "genericRouteProgress.reset", "genericRouteProgress.rejected"],
-        methods: ["engine.genericRouteProgress.enter", "engine.genericRouteProgress.complete", "engine.genericRouteProgress.advance", "engine.genericRouteProgress.reset", "engine.genericRouteProgress.setRoute", "engine.genericRouteProgress.getState", "engine.genericRouteProgress.getActiveCheckpoint", "engine.genericRouteProgress.getDescriptors"],
+        methods: ["engine.n.genericRouteProgress.enter", "engine.n.genericRouteProgress.complete", "engine.n.genericRouteProgress.advance", "engine.n.genericRouteProgress.reset", "engine.n.genericRouteProgress.setRoute", "engine.n.genericRouteProgress.getState", "engine.n.genericRouteProgress.getActiveCheckpoint", "engine.n.genericRouteProgress.getDescriptors", "engine.genericRouteProgress.enter", "engine.genericRouteProgress.complete", "engine.genericRouteProgress.advance", "engine.genericRouteProgress.reset", "engine.genericRouteProgress.setRoute", "engine.genericRouteProgress.getState", "engine.genericRouteProgress.getActiveCheckpoint", "engine.genericRouteProgress.getDescriptors"],
         snapshots: ["route", "activeCheckpoint", "completedIds", "descriptors"],
         descriptors: ["route-checkpoint"]
       }
