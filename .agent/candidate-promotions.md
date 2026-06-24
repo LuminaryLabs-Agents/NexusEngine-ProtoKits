@@ -76,3 +76,15 @@ Promotion/pruning implications:
 - Promote/keep incubating: generic pressure, resource, action-window, affordance, and generic-defense DSK boundary aliases only while they stay free of wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, and animation-frame ownership.
 - Keep compatible but do not promote: `generic-defense-aaa-kits` still has wall-clock/browser-timing convenience paths in broad ledger/presentation facades. It should remain a migration/host compatibility surface, not a Core-promotion candidate.
 - Safest next patch: replace the AAA compatibility timestamps with tick/command-derived deterministic stamps, or keep pruning browser hosts toward `engine.n.genericDefense.<boundary>` and route-level presentation descriptors so the AAA facade becomes less necessary.
+
+## 2026-06-24 — Atomic route-progress promotion note
+
+`generic-route-progress-kit` is now an incubating ProtoKit for ordered route/checkpoint/objective progress. It is not a Core-promotion candidate yet, but it is the cleanest atomic boundary for several canonical experiment lanes that currently need route-local progress ledgers.
+
+Promotion/pruning implications:
+
+- Build/keep: `generic-route-progress-kit` as the smallest reusable route/checkpoint/objective-progress DSK surface.
+- Merge later: combine with future cargo/logistics, hazards, pressure, scan/survey, or camera descriptor kits only through higher-level domains such as delivery/extraction loop or survey pressure loop.
+- Do not overgrow: do not add browser collision, DOM input, canvas hit testing, renderer camera, cargo inventory, hazard simulation, or route fiction to this kit.
+- Promote later only after proof: at least one Experiments route must consume it, show local JavaScript reduction, and add deterministic route-level replay or manifest/spec smoke coverage.
+- Safest next patch: use Experiments to mark one checkpoint-heavy canonical route as the first consumer candidate, then migrate only its ordered checkpoint ledger while preserving renderer-only host presentation.
