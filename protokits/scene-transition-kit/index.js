@@ -7,10 +7,10 @@ export function createSceneTransitionState(options = {}) {
 }
 
 export function createSceneTransitionRequest(input = {}) {
-  const id = String(input.id ?? `transition-${Date.now?.() ?? 0}`).trim();
   const fromSceneId = input.fromSceneId ?? null;
   const toSceneId = String(input.toSceneId ?? input.targetSceneId ?? "").trim();
   if (!toSceneId) throw new TypeError("Scene transition requires toSceneId.");
+  const id = String(input.id ?? `transition:${fromSceneId ?? "none"}->${toSceneId}`).trim();
   return {
     id,
     fromSceneId,
