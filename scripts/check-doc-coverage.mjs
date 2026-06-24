@@ -16,9 +16,14 @@ const REQUIRED_COMPOSITION_KITS = new Set([
   "session-facade-kit",
   "scene-graph-domain-kit",
   "kit-registry",
-  "aaa-batch-deploy-bridge",
+  "project-batch-deploy-bridge",
   "gallery-registry-bridge",
   "generated-route-host-bridge"
+]);
+
+const LEGACY_ALIAS_KITS = new Set([
+  "aaa-batch-deploy-bridge",
+  "generic-defense-aaa-dsk-bridge"
 ]);
 
 const errors = [];
@@ -33,8 +38,9 @@ if (existsSync(PROTOKITS)) {
       if (!readme) errors.push(`${entry.name}: composition kit requires README.md`);
       if (!manifest && !entry.name.endsWith("bridge") && entry.name !== "kit-registry") errors.push(`${entry.name}: composition kit requires kit.manifest.json`);
     } else {
-      if (!readme) warnings.push(`${entry.name}: README.md pending`);
-      if (!manifest) warnings.push(`${entry.name}: kit.manifest.json pending`);
+      const prefix = LEGACY_ALIAS_KITS.has(entry.name) ? "deprecated alias" : entry.name;
+      if (!readme) warnings.push(`${prefix}: README.md pending`);
+      if (!manifest) warnings.push(`${prefix}: kit.manifest.json pending`);
     }
   }
 }
