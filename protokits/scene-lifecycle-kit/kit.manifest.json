@@ -1,0 +1,17 @@
+{
+  "id": "scene-lifecycle-kit",
+  "domain": "scene-lifecycle",
+  "type": "composition-kit",
+  "status": "experimental",
+  "factory": "createSceneLifecycleKit",
+  "requires": ["deploy-manifest"],
+  "provides": ["scene-lifecycle", "scene-enter-exit", "scene-state-snapshot"],
+  "resources": ["sceneLifecycle.state"],
+  "events": ["sceneLifecycle.entered", "sceneLifecycle.paused", "sceneLifecycle.resumed", "sceneLifecycle.exited", "sceneLifecycle.disposed"],
+  "publicApi": ["engine.sceneLifecycle.enter", "engine.sceneLifecycle.pause", "engine.sceneLifecycle.resume", "engine.sceneLifecycle.exit", "engine.sceneLifecycle.dispose", "engine.sceneLifecycle.snapshot"],
+  "descriptors": [],
+  "rendererBoundary": { "outputsDescriptors": false, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": { "scalesWith": ["sceneHistoryLength"], "telemetry": ["currentSceneId", "status"], "degradationModes": [] },
+  "snapshot": { "supportsSnapshot": true, "supportsReset": false, "supportsLoadSnapshot": false },
+  "promotion": { "level": "experimental", "criteria": ["used by deploy registry", "transition bridge test", "save-delta composition"] }
+}
