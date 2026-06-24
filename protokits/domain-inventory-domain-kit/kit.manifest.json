@@ -1,0 +1,17 @@
+{
+  "id": "domain-inventory-domain-kit",
+  "domain": "domain-inventory",
+  "parentDomain": "domain-control-plane",
+  "scope": "control-domain",
+  "extendsBase": "DomainServiceKit",
+  "composes": ["domain-manifest-registry-domain-kit", "domain-taxonomy-domain-kit"],
+  "requires": ["n:runtime.engine"],
+  "provides": ["domain:inventory", "domain:discovery-report"],
+  "ownsLoop": false,
+  "snapshotPolicy": "serializable",
+  "resetPolicy": "engine-reset-aware",
+  "exportPath": "./domain-inventory-domain-kit",
+  "sourcePath": "protokits/domain-inventory-domain-kit/index.js",
+  "testPaths": ["tests/domain-control-plane-smoke.test.mjs"],
+  "status": "experimental"
+}
