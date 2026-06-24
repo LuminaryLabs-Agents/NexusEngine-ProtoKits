@@ -18,6 +18,7 @@ export {
 } from "../generic-defense-aaa-kits/index.js";
 
 export {
+  GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE,
   GENERIC_DEFENSE_DSK_BOUNDARIES,
   createGenericDefenseDskBundle,
   createGenericDefenseMapDsk,
@@ -28,7 +29,8 @@ export {
   createGenericDefenseSessionFacadeDsk,
   createGenericDefenseRenderDescriptorDsk,
   getGenericDefenseDskBoundary,
-  listGenericDefenseDskBoundaries
+  listGenericDefenseDskBoundaries,
+  syncGenericDefenseDskEngineNamespace
 } from "../generic-defense-dsk-boundaries/index.js";
 
 export { default } from "../generic-defense-aaa-kits/index.js";
