@@ -18,7 +18,7 @@ Use the generic-defense DSK boundary aliases, AAA DSK bridge, and `engine.n.gene
 
 The previous Twenty Game Refiner seam in `createGenericPlacementProjectorKit().confirm()` is now closed for the reusable projector path: `protokits/generic-defense-presentation-stack-kit/index.js` prefers `engine.n.genericDefense.sessionFacade.getSnapshot()` for reusable presentation snapshots and `engine.n.genericDefense.sessionFacade.build(...)` for placement confirmation before falling back to compatibility facades.
 
-New Atomic Domain Kit Expander focus: `generic-route-progress-kit` now exists as the smallest reusable route/checkpoint/objective-progress boundary. It should be used to test whether checkpoint-heavy canonical routes can shrink local route JavaScript without mixing in cargo, hazards, pressure, scan/survey, camera, renderer, or browser input responsibilities.
+New Atomic Domain Kit Expander focus: `generic-route-progress-kit` now exists as the smallest reusable route/checkpoint/objective-progress boundary. It has both atomic smoke coverage and fixed-tick replay coverage through `engine.n.genericRouteProgress`; it should now be used to test whether checkpoint-heavy canonical routes can shrink local route JavaScript without mixing in cargo, hazards, pressure, scan/survey, camera, renderer, or browser input responsibilities.
 
 New Composite Domain Kit Builder focus: `generic-route-cargo-extraction-kit` now exists as the first lightweight composite above route progress, cargo/resource ledger, and pressure channels. It should be used to test traversal/cargo and delivery/extraction routes without creating route-local checkpoint/cargo/pressure state machines or a monolithic game engine.
 
@@ -38,13 +38,15 @@ New traversal/cargo host code should prefer `engine.n.genericRouteProgress`, `en
 
 ## Current validation focus
 
-Run `generic-route-progress-kit-smoke.test.mjs` after the generic promotion replay smoke and before promotion determinism/defense smokes. It asserts the route-progress boundary exposes state resources, checkpoint enter/complete events, route advance/complete/reset/reject events, active/completed checkpoint snapshots, deterministic tick stamping, renderer-agnostic `route-checkpoint` descriptors, and now namespace-only command/snapshot access through `engine.n.genericRouteProgress` after the broad facade is poisoned.
+Run `generic-route-progress-kit-smoke.test.mjs` after the generic promotion replay smoke and before the route-progress replay. It asserts the route-progress boundary exposes state resources, checkpoint enter/complete events, route advance/complete/reset/reject events, active/completed checkpoint snapshots, deterministic tick stamping, renderer-agnostic `route-checkpoint` descriptors, and namespace-only command/snapshot access through `engine.n.genericRouteProgress` after the broad facade is disabled.
 
-Run `generic-route-cargo-extraction-kit-smoke.test.mjs` immediately after the route-progress smoke. It asserts the composite DSK installs route-progress, resource-loop, and pressure-loop child surfaces; exposes `engine.n.genericRouteCargoExtraction`; drives cargo pickup/delivery, checkpoint completion, pressure adjustment, fixed tick snapshot refresh, completion, reset, and renderer-agnostic route/cargo/pressure descriptors through namespaced child boundaries after broad child facades are poisoned.
+Run `generic-route-progress-replay-smoke.test.mjs` immediately after the atomic route-progress smoke. It asserts deterministic delivery/checkpoint and rejection/reset replay fixtures through `engine.n.genericRouteProgress`, expected event counts, route/descriptor snapshots, fresh-run digest equality, and absence of wall-clock/RNG/browser/renderer tokens in the reusable route-progress source.
+
+Run `generic-route-cargo-extraction-kit-smoke.test.mjs` immediately after the route-progress replay smoke. It asserts the composite DSK installs route-progress, resource-loop, and pressure-loop child surfaces; exposes `engine.n.genericRouteCargoExtraction`; drives cargo pickup/delivery, checkpoint completion, pressure adjustment, fixed tick snapshot refresh, completion, reset, and renderer-agnostic route/cargo/pressure descriptors through namespaced child boundaries after broad child facades are disabled.
 
 Run `generic-defense-placement-projector-namespace-smoke.test.mjs` before `generic-defense-dsk-boundaries-smoke.test.mjs` and the existing generic-defense replay so the placement projector's namespace preference is checked before broader boundary/replay coverage.
 
-The placement smoke installs the seven DSK aliases plus the reusable projector, syncs `engine.n.genericDefense`, poisons the broad `engine.genericDefense` and `engine.defenseBuild` compatibility facades, then confirms placement through `namespace.sessionFacade.build` and asserts the resulting structure/wallet snapshot without DOM, Canvas, or browser frame timing.
+The placement smoke installs the seven DSK aliases plus the reusable projector, syncs `engine.n.genericDefense`, disables the broad `engine.genericDefense` and `engine.defenseBuild` compatibility facades, then confirms placement through `namespace.sessionFacade.build` and asserts the resulting structure/wallet snapshot without DOM, Canvas, or browser frame timing.
 
 ## Current promotion candidates
 
@@ -60,7 +62,9 @@ See `smoke-tests.md` and `replay-qa.md`.
 
 ## Last meaningful cycle report
 
-Latest API Surface Pruner update: `generic-route-progress-kit`, `generic-resource-loop-kit`, and `generic-pressure-loop-kit` now mirror their facades under `engine.n.genericRouteProgress`, `engine.n.genericResourceLoop`, and `engine.n.genericPressureLoop`; `generic-route-cargo-extraction-kit` now prefers those namespaced child boundaries for snapshots and commands. Smoke coverage now poisons broad route/resource/pressure facades for the covered seams. This is reusable ProtoKit API pruning only; no Experiments route JavaScript shrink is claimed yet.
+Latest Deterministic Replay QA update: `tests/fixtures/generic-route-progress-replay-fixtures.mjs`, `tests/generic-route-progress-replay-smoke.test.mjs`, `package.json`, and `.agent/cycle-reports/2026-06-24-deterministic-replay-qa-route-progress-replay.md` now close the atomic fixed-tick replay gap for `generic-route-progress-kit`. This is reusable ProtoKit QA only; no Experiments route JavaScript shrink is claimed until a checkpoint-heavy canonical route consumes the boundary.
+
+Latest API Surface Pruner update: `generic-route-progress-kit`, `generic-resource-loop-kit`, and `generic-pressure-loop-kit` now mirror their facades under `engine.n.genericRouteProgress`, `engine.n.genericResourceLoop`, and `engine.n.genericPressureLoop`; `generic-route-cargo-extraction-kit` now prefers those namespaced child boundaries for snapshots and commands. Smoke coverage now disables broad route/resource/pressure facades for the covered seams. This is reusable ProtoKit API pruning only; no Experiments route JavaScript shrink is claimed yet.
 
 Latest Composite Domain Kit Builder update: `protokits/generic-route-cargo-extraction-kit/index.js`, `README.md`, `kit.manifest.json`, `tests/generic-route-cargo-extraction-kit-smoke.test.mjs`, `package.json`, and `.agent/cycle-reports/2026-06-24-composite-domain-kit-builder-0100.md` now add a lightweight composite DSK for route/cargo/extraction over `generic-route-progress-kit`, `generic-resource-loop-kit`, and `generic-pressure-loop-kit`. This is reusable ProtoKit implementation only; no Experiments route has consumed it yet, so local JavaScript shrink remains the next patch rather than a completed claim.
 
