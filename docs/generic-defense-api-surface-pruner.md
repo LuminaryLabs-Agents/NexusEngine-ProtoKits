@@ -45,6 +45,29 @@ Boundary map:
 | `sessionFacade` | `createGenericDefenseSessionFacadeDsk` | host-facing semantic commands and cumulative snapshots |
 | `renderDescriptors` | `createGenericDefenseRenderDescriptorDsk` | renderer-agnostic HUD/world descriptors |
 
+## Pruned engine namespace
+
+The atomic DSK aliases still preserve the older compatibility methods such as `engine.defenseMap` and `engine.genericDefense`, but every installed DSK is also mirrored into the pruned namespace:
+
+```js
+engine.n.genericDefense.map;
+engine.n.genericDefense.economyWallet;
+engine.n.genericDefense.buildPlacement;
+engine.n.genericDefense.waveAgentDirector;
+engine.n.genericDefense.combatResolver;
+engine.n.genericDefense.sessionFacade;
+engine.n.genericDefense.renderDescriptors;
+```
+
+This lets host code move toward `engine.n.genericDefense.<boundary>` one seam at a time without deleting compatibility calls. `syncGenericDefenseDskEngineNamespace(engine)` can be called after manual install order changes, and the DSK wrappers call it automatically during `install()`.
+
+Prefer the namespaced surface in new host code because it makes the boundary explicit at the call site:
+
+```js
+engine.n.genericDefense.sessionFacade.build("slot-a", "bolt", { commandId: "host:build:1" });
+const descriptors = engine.n.genericDefense.renderDescriptors.getSnapshot().descriptors;
+```
+
 ## AAA compatibility plus DSK aliases
 
 Use `@luminarylabs/nexusrealtime-protokits/generic-defense-aaa-dsk-bridge` when a route still needs the current broad AAA facade while it migrates toward smaller DSK boundaries:
@@ -55,7 +78,8 @@ import {
   createGenericDefenseAuthoringQaKit,
   createGenericDefenseMapDsk,
   createGenericDefenseRenderDescriptorDsk,
-  createGenericDefenseDskBundle
+  createGenericDefenseDskBundle,
+  syncGenericDefenseDskEngineNamespace
 } from "@luminarylabs/nexusrealtime-protokits/generic-defense-aaa-dsk-bridge";
 ```
 
@@ -77,4 +101,4 @@ If yes, consume the smallest DSK alias or the AAA DSK bridge. Keep the route cod
 
 ## Validation
 
-`tests/generic-defense-dsk-boundaries-smoke.test.mjs` checks the boundary descriptors, individual aliases, the `generic-defense-aaa-dsk-bridge`, headless installation, semantic methods, snapshots, and DOM/Canvas exclusion before `tests/generic-defense-replay-smoke.test.mjs` runs the broader deterministic defense replay.
+`tests/generic-defense-dsk-boundaries-smoke.test.mjs` checks the boundary descriptors, individual aliases, the `generic-defense-aaa-dsk-bridge`, `engine.n.genericDefense.<boundary>` namespace mirroring, headless installation, semantic methods, snapshots, and DOM/Canvas exclusion before `tests/generic-defense-replay-smoke.test.mjs` runs the broader deterministic defense replay.
