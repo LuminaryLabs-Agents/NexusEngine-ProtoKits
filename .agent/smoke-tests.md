@@ -63,6 +63,13 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - The guard makes promotion review stricter: promotion candidates must not rely on wall-clock time, RNG, browser timing, DOM, Canvas, WebGL, browser audio, pointer, or animation-frame APIs.
 - The guard records `generic-defense-aaa-kits` as a known compatibility exception rather than a promotion-ready boundary because its broad facades still use wall-clock/browser timing in ledger/presentation convenience paths.
 
+## 2026-06-24 — Headless Tick Smoke Builder bridge drift finding
+
+- Experiments now specifies Signal Bastion placement input as `placementProjector.confirm` bridged to `engine.n.genericDefense.sessionFacade.build`, but the reusable `generic-defense-presentation-stack-kit` still resolves placement confirmation through `engine.defenseBuild?.build` and then legacy `engine.genericDefense?.build`.
+- This is not a route-local simulation leak, but it is namespace drift: the route is ready to shrink toward namespaced DSK calls faster than the reusable presentation projector currently does.
+- Safest next ProtoKits patch: update `createGenericPlacementProjectorKit()` so `confirm()` prefers `engine.n?.genericDefense?.sessionFacade?.build`, then falls back to `engine.defenseBuild?.build` and legacy `engine.genericDefense?.build` only for compatibility hosts. Add a headless smoke that poisons/reassigns `engine.genericDefense` after DSK namespace sync and proves the projector can still build through `engine.n.genericDefense.sessionFacade` without DOM or Canvas.
+- Do not add the smoke before the implementation change, because the current projector would fail it.
+
 ## Open gaps
 
 - Replace `generic-defense-aaa-kits` wall-clock ledger/presentation stamps with tick/command-derived deterministic stamps or keep the AAA facade outside promotion-facing surfaces.
