@@ -1,0 +1,78 @@
+{
+  "id": "generic-route-cargo-extraction-kit",
+  "domain": "route-cargo-extraction",
+  "type": "domain-service-kit",
+  "status": "proto",
+  "requires": [
+    "generic-route-progress-kit",
+    "generic-resource-loop-kit",
+    "generic-pressure-loop-kit"
+  ],
+  "provides": [
+    "route-cargo:extraction",
+    "route:progress",
+    "cargo:resource-ledger",
+    "pressure:extraction"
+  ],
+  "resources": [
+    "genericRouteCargoExtraction.state",
+    "genericRouteCargoExtraction.routeProgress.state",
+    "genericRouteCargoExtraction.cargo.state",
+    "genericRouteCargoExtraction.pressure.state"
+  ],
+  "events": [
+    "genericRouteCargoExtraction.snapshot.updated",
+    "genericRouteCargoExtraction.cargo.changed",
+    "genericRouteCargoExtraction.pressure.changed",
+    "genericRouteCargoExtraction.completed",
+    "genericRouteCargoExtraction.rejected"
+  ],
+  "publicApi": [
+    "createGenericRouteCargoExtractionKit",
+    "engine.genericRouteCargoExtraction.enterCheckpoint",
+    "engine.genericRouteCargoExtraction.completeCheckpoint",
+    "engine.genericRouteCargoExtraction.advance",
+    "engine.genericRouteCargoExtraction.pickupCargo",
+    "engine.genericRouteCargoExtraction.deliverCargo",
+    "engine.genericRouteCargoExtraction.adjustPressure",
+    "engine.genericRouteCargoExtraction.recoverPressure",
+    "engine.genericRouteCargoExtraction.reset",
+    "engine.genericRouteCargoExtraction.getSnapshot",
+    "engine.genericRouteCargoExtraction.getDescriptors",
+    "engine.n.genericRouteCargoExtraction.getSnapshot"
+  ],
+  "descriptors": [
+    "route-checkpoint",
+    "cargo-resource",
+    "extraction-pressure-channel"
+  ],
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "forbidden": [
+      "DOM",
+      "Canvas",
+      "WebGL",
+      "Three.js",
+      "browser audio",
+      "asset loading",
+      "pointer lock"
+    ],
+    "notes": "The kit emits composite route/cargo/pressure descriptors only. Hosts own hit testing, browser input, camera, rendering, route fiction, audio, assets, and physics."
+  },
+  "performance": {
+    "tickCost": "O(checkpoints + cargoResources + pressureChannels)",
+    "allocationNotes": "The composite snapshot clones child route/resource/pressure snapshots and descriptors. Expected counts are small route/extraction ledgers."
+  },
+  "snapshot": {
+    "stable": true,
+    "fields": [
+      "id",
+      "status",
+      "route",
+      "cargo",
+      "pressure",
+      "descriptors",
+      "updatedAtTick"
+    ]
+  }
+}
