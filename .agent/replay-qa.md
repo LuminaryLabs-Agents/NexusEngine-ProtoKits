@@ -79,3 +79,17 @@ Track scenario QA and deterministic replay coverage.
 - Split or alias `generic-defense-kits` into clearer atomic DSK boundaries after the compatibility replay stays green: path/slot/vital-target, economy wallet, build-placement, structure runtime, wave/agent director, projectile/combat resolver, and render-descriptor output.
 - Keep Experiments route-level replay manifests aligned with ProtoKit coverage; the first executable route-domain replay now exists for `signal-bastion`, while other lanes remain contract-only.
 - Add a Core-backed integration replay once the package wiring exposes a stable local Core import path for headless smoke runs inside ProtoKits itself, not only downstream Experiments.
+
+## 2026-06-24 — Deterministic Replay QA placement-projector namespace seam
+
+Re-checked the latest Experiments and ProtoKits `.agent/` memory plus the current `generic-defense-presentation-stack-kit` implementation. The remaining strategic-pressure replay seam is now precise: `createGenericPlacementProjectorKit().confirm()` still resolves build confirmation through `engine.defenseBuild?.build` before `engine.genericDefense?.build`, while Experiments records the Signal Bastion route bridge as `placementProjector.confirm -> engine.n.genericDefense.sessionFacade.build`.
+
+Replay implication: Signal Bastion is not re-owning simulation, but the reusable presentation projector has not fully caught up to the namespaced DSK boundary that the executable replay and browser host are moving toward. The next safe implementation patch is in ProtoKits, not Experiments:
+
+1. Update `protokits/generic-defense-presentation-stack-kit/index.js` so the shared snapshot helper prefers `engine.n?.genericDefense?.sessionFacade?.getSnapshot()` before legacy `engine.genericDefense?.getSnapshot()`.
+2. Update `createGenericPlacementProjectorKit().confirm()` so build confirmation prefers `engine.n?.genericDefense?.sessionFacade?.build(...)`, then falls back to `engine.defenseBuild?.build(...)` and legacy `engine.genericDefense?.build(...)` for compatibility hosts.
+3. Add `tests/generic-defense-placement-projector-namespace-smoke.test.mjs` that installs the seven generic-defense DSK aliases plus `createGenericPlacementProjectorKit()`, syncs `engine.n.genericDefense`, then reassigns/poisons `engine.genericDefense` and `engine.defenseBuild` while keeping the synced namespace alive. The smoke should begin placement, move to a valid slot, confirm, assert one built structure through `namespace.sessionFacade.getSnapshot()`, and assert DOM/Canvas/browser globals are absent.
+4. Wire that smoke into `package.json` before `generic-defense-replay-smoke.test.mjs` so the namespace bridge is guarded before compatibility replay runs.
+5. Only then update Experiments memory to claim the placement seam has shrunk from compatibility facades to the DSK namespace.
+
+Status: patch plan recorded, not implemented in this run because replacing the large presentation-stack source file through the connector without local test execution would be riskier than leaving the exact main-branch patch plan durable for the next scoped push.
