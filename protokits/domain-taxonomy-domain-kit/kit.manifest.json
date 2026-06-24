@@ -1,0 +1,17 @@
+{
+  "id": "domain-taxonomy-domain-kit",
+  "domain": "domain-taxonomy",
+  "parentDomain": "domain-control-plane",
+  "scope": "control-domain",
+  "extendsBase": "DomainServiceKit",
+  "composes": ["domain-manifest-registry-domain-kit"],
+  "requires": ["n:runtime.engine"],
+  "provides": ["domain:taxonomy", "domain:scope-policy", "domain:naming-policy"],
+  "ownsLoop": false,
+  "snapshotPolicy": "serializable",
+  "resetPolicy": "engine-reset-aware",
+  "exportPath": "./domain-taxonomy-domain-kit",
+  "sourcePath": "protokits/domain-taxonomy-domain-kit/index.js",
+  "testPaths": ["tests/domain-control-plane-smoke.test.mjs"],
+  "status": "experimental"
+}
