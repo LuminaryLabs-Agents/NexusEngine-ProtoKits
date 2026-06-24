@@ -19,9 +19,15 @@ assert.deepEqual(kit.metadata?.composes, ["generic-route-progress-kit", "generic
 assert.equal(Boolean(engine.genericRouteProgress), true);
 assert.equal(Boolean(engine.genericResourceLoop), true);
 assert.equal(Boolean(engine.genericPressureLoop), true);
+assert.equal(Boolean(engine.n?.genericRouteProgress), true);
+assert.equal(Boolean(engine.n?.genericResourceLoop), true);
+assert.equal(Boolean(engine.n?.genericPressureLoop), true);
 assert.equal(Boolean(engine.n?.genericRouteCargoExtraction), true);
 
 const facade = engine.n.genericRouteCargoExtraction;
+engine.genericRouteProgress = null;
+engine.genericResourceLoop = null;
+engine.genericPressureLoop = null;
 assert.equal(facade.getSnapshot().route.activeId, "dock");
 assert.equal(facade.getSnapshot().cargo.resourcesById.cargo.value, 0);
 assert.equal(facade.getSnapshot().pressure.channelsById.storm.value, 5);
