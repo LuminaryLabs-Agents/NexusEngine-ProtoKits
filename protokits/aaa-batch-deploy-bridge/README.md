@@ -1,35 +1,32 @@
 # aaa-batch-deploy-bridge
 
-## Domain
+## Status
 
-Compatibility bridge from AAA batch game specs to deploy manifests.
+Deprecated compatibility alias.
+
+Use `project-batch-deploy-bridge` for all new code and documentation.
 
 ## Purpose
 
-This bridge converts existing AAA batch registry entries into the new deploy manifest shape without rewriting the current experiment routes.
+This path remains available so existing consumers do not break. It re-exports the neutral project batch deploy bridge API and keeps the old function names as aliases.
 
-## Kit type
+## Preferred replacement
 
-Bridge kit / compatibility helper.
+```js
+import {
+  convertProjectBatchItemToDeployManifest,
+  convertProjectBatchToDeployManifests,
+  createProjectBatchDeployBridge
+} from "../project-batch-deploy-bridge/index.js";
+```
 
-## Public API
+## Legacy aliases retained
 
 - `convertAaaBatchGameToDeployManifest(game)`
 - `convertAaaBatchGamesToDeployManifests(games)`
 - `createAaaBatchDeployBridge(games)`
+- `AAA_BATCH_DEPLOY_BRIDGE_VERSION`
 
-## Input shape
+## Compatibility rule
 
-Existing AAA batch specs may include `id`, `title`, `route`, `fantasy`, `verb`, `pressureLoop`, `visualIdentity`, `controls`, `kitStack`, `palette`, and `smoke`.
-
-## Output shape
-
-A normalized deploy manifest using `deploy-manifest-kit`.
-
-## Renderer boundary
-
-No runtime or renderer ownership. This bridge only converts metadata.
-
-## Promotion status
-
-Experimental compatibility bridge.
+Do not remove this path until all existing consumers have migrated. New docs should use project batch / high-fidelity / vertical-slice language instead of AAA as a naming category.
