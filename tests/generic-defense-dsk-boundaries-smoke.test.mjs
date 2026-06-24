@@ -2,6 +2,7 @@
 import { assert, createMockNexusRealtime, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
 import {
   GENERIC_DEFENSE_DSK_BOUNDARIES,
+  GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE,
   createGenericDefenseBuildPlacementDsk,
   createGenericDefenseCombatResolverDsk,
   createGenericDefenseDskBundle,
@@ -11,15 +12,18 @@ import {
   createGenericDefenseSessionFacadeDsk,
   createGenericDefenseWaveAgentDirectorDsk,
   getGenericDefenseDskBoundary,
-  listGenericDefenseDskBoundaries
+  listGenericDefenseDskBoundaries,
+  syncGenericDefenseDskEngineNamespace
 } from "../protokits/generic-defense-dsk-boundaries/index.js";
 import {
+  GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE as GENERIC_DEFENSE_AAA_BRIDGE_DSK_ENGINE_NAMESPACE,
   createGenericDefenseAuthoringQaKit,
   createGenericDefenseBuildKit,
   createGenericDefenseDskBundle as createGenericDefenseAaaBridgeDskBundle,
   createGenericDefenseKits as createGenericDefenseAaaBridgeKits,
   createGenericDefenseMapDsk as createGenericDefenseAaaBridgeMapDsk,
-  listGenericDefenseDskBoundaries as listGenericDefenseAaaBridgeDskBoundaries
+  listGenericDefenseDskBoundaries as listGenericDefenseAaaBridgeDskBoundaries,
+  syncGenericDefenseDskEngineNamespace as syncGenericDefenseAaaBridgeDskEngineNamespace
 } from "../protokits/generic-defense-aaa-dsk-bridge/index.js";
 
 const expectedBoundaryIds = [
@@ -31,6 +35,18 @@ const expectedBoundaryIds = [
   "sessionFacade",
   "renderDescriptors"
 ];
+
+assert.equal(
+  GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE,
+  "genericDefense",
+  "generic defense DSKs expose a stable engine.n domain namespace"
+);
+
+assert.equal(
+  GENERIC_DEFENSE_AAA_BRIDGE_DSK_ENGINE_NAMESPACE,
+  GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE,
+  "AAA DSK bridge re-exports the same engine.n domain namespace"
+);
 
 assert.deepEqual(
   GENERIC_DEFENSE_DSK_BOUNDARIES.map((boundary) => boundary.id),
@@ -57,26 +73,28 @@ for (const boundary of GENERIC_DEFENSE_DSK_BOUNDARIES) {
   assert.equal(Array.isArray(boundary.resources), true, `${boundary.id}: resources are explicit`);
   assert.equal(Array.isArray(boundary.events), true, `${boundary.id}: events are explicit`);
   assert.equal(Array.isArray(boundary.methods), true, `${boundary.id}: methods are explicit`);
+  assert.equal(boundary.methods.some((method) => method.startsWith("engine.n.genericDefense.")), true, `${boundary.id}: methods include pruned engine.n namespace alias`);
   assert.equal(Array.isArray(boundary.snapshots), true, `${boundary.id}: snapshots are explicit`);
   assert.equal(Array.isArray(boundary.descriptors), true, `${boundary.id}: descriptors are explicit`);
   assert.equal(String(boundary.boundary).length > 0, true, `${boundary.id}: boundary is documented`);
 }
 
 const individualFactories = [
-  ["generic-defense-map-kit", createGenericDefenseMapDsk],
-  ["generic-defense-economy-kit", createGenericDefenseEconomyWalletDsk],
-  ["generic-defense-structure-kit", createGenericDefenseBuildPlacementDsk],
-  ["generic-defense-agent-wave-kit", createGenericDefenseWaveAgentDirectorDsk],
-  ["generic-defense-combat-kit", createGenericDefenseCombatResolverDsk],
-  ["generic-defense-session-kit", createGenericDefenseSessionFacadeDsk],
-  ["generic-defense-render-descriptor-kit", createGenericDefenseRenderDescriptorDsk]
+  ["generic-defense-map-kit", "map", createGenericDefenseMapDsk],
+  ["generic-defense-economy-kit", "economyWallet", createGenericDefenseEconomyWalletDsk],
+  ["generic-defense-structure-kit", "buildPlacement", createGenericDefenseBuildPlacementDsk],
+  ["generic-defense-agent-wave-kit", "waveAgentDirector", createGenericDefenseWaveAgentDirectorDsk],
+  ["generic-defense-combat-kit", "combatResolver", createGenericDefenseCombatResolverDsk],
+  ["generic-defense-session-kit", "sessionFacade", createGenericDefenseSessionFacadeDsk],
+  ["generic-defense-render-descriptor-kit", "renderDescriptors", createGenericDefenseRenderDescriptorDsk]
 ];
 
-for (const [kitId, factory] of individualFactories) {
+for (const [kitId, boundaryId, factory] of individualFactories) {
   const kit = factory(createMockNexusRealtime());
   assert.equal(kit.id, kitId, `${kitId}: individual DSK alias returns the backing kit`);
   assert.equal(Boolean(kit.metadata?.dskBoundary), true, `${kitId}: individual alias annotates DSK boundary metadata`);
   assert.equal(Boolean(kit.metadata?.apiSurface), true, `${kitId}: individual alias annotates API surface metadata`);
+  assert.equal(kit.metadata?.engineNamespace, `engine.n.genericDefense.${boundaryId}`, `${kitId}: individual alias annotates pruned engine namespace`);
 }
 
 const bridgeMapKit = createGenericDefenseAaaBridgeMapDsk(createMockNexusRealtime());
@@ -122,8 +140,21 @@ assert.equal(typeof engine.defenseCombat.getState, "function", "combat DSK expos
 assert.equal(typeof engine.genericDefense.getSnapshot, "function", "session facade exposes cumulative snapshot method");
 assert.equal(typeof engine.defenseRender.getSnapshot, "function", "render descriptor DSK exposes descriptor snapshot method");
 
-engine.genericDefense.build("slot-a", "bolt", { commandId: "boundary-smoke:build" });
-engine.genericDefense.startWave({ commandId: "boundary-smoke:start" });
+const namespace = engine.n?.genericDefense;
+assert.equal(namespace, syncGenericDefenseDskEngineNamespace(engine), "namespace sync returns the existing engine.n.genericDefense object");
+assert.equal(namespace, syncGenericDefenseAaaBridgeDskEngineNamespace(engine), "AAA bridge namespace sync returns the same engine.n.genericDefense object");
+assert.equal(typeof namespace.map.getState, "function", "map DSK is mirrored under engine.n.genericDefense.map");
+assert.equal(typeof namespace.economyWallet.credit, "function", "economy DSK is mirrored under engine.n.genericDefense.economyWallet");
+assert.equal(typeof namespace.buildPlacement.build, "function", "build-placement DSK is mirrored under engine.n.genericDefense.buildPlacement");
+assert.equal(typeof namespace.waveAgentDirector.startWave, "function", "wave-agent DSK is mirrored under engine.n.genericDefense.waveAgentDirector");
+assert.equal(typeof namespace.combatResolver.getState, "function", "combat DSK is mirrored under engine.n.genericDefense.combatResolver");
+assert.equal(typeof namespace.sessionFacade.getSnapshot, "function", "session facade DSK is mirrored under engine.n.genericDefense.sessionFacade");
+assert.equal(typeof namespace.renderDescriptors.getSnapshot, "function", "render descriptor DSK is mirrored under engine.n.genericDefense.renderDescriptors");
+assert.equal(namespace.resources, engine.genericDefense.resources, "session facade resources stay discoverable from the pruned namespace");
+assert.equal(namespace.events, engine.genericDefense.events, "session facade events stay discoverable from the pruned namespace");
+
+namespace.sessionFacade.build("slot-a", "bolt", { commandId: "boundary-smoke:build" });
+namespace.sessionFacade.startWave({ commandId: "boundary-smoke:start" });
 for (let i = 0; i < 4; i += 1) {
   world.advance(0.25);
   for (const kit of kits) {
@@ -131,11 +162,11 @@ for (let i = 0; i < 4; i += 1) {
   }
 }
 
-const snapshot = engine.genericDefense.getSnapshot();
+const snapshot = namespace.sessionFacade.getSnapshot();
 assert.equal(snapshot.map.vital.id, "core", "snapshot keeps vital target state renderer-agnostic");
 assert.equal(snapshot.economy.currency < 130, true, "wallet state reflects build debit through DSK events");
 assert.equal(Object.keys(snapshot.structures.structures).length, 1, "build-placement state owns structure runtime data");
 assert.equal(snapshot.agents.waveActive, true, "wave-agent director owns wave state");
-assert.equal(Array.isArray(snapshot.render.descriptors), true, "render DSK exposes descriptors instead of DOM rendering");
+assert.equal(Array.isArray(namespace.renderDescriptors.getSnapshot().descriptors), true, "render DSK exposes descriptors instead of DOM rendering");
 assert.equal(typeof globalThis.document, "undefined", "boundary smoke does not require DOM state");
 assert.equal(typeof globalThis.HTMLCanvasElement, "undefined", "boundary smoke does not require Canvas state");
