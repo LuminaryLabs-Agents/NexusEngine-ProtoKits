@@ -44,10 +44,14 @@ const cross = (a = {}, b = {}) => ({
 });
 const dot = (a = {}, b = {}) => number(a.x) * number(b.x) + number(a.y) * number(b.y) + number(a.z) * number(b.z);
 
+function configOverrides(options = {}) {
+  return options.stereoscopicRender ?? options.stereo ?? options.config ?? options;
+}
+
 function configFrom(options = {}) {
   return {
     ...DEFAULT_STEREOSCOPIC_RENDER_CONFIG,
-    ...(options.stereoscopicRender ?? options.stereo ?? options.config ?? options)
+    ...configOverrides(options)
   };
 }
 
@@ -163,7 +167,7 @@ function makeEyeDescriptor(eye, sign, camera, config, frameId) {
 }
 
 export function computeStereoscopicRenderSnapshot(previous = {}, camera = {}, dt = 1 / 60, options = {}) {
-  const config = { ...DEFAULT_STEREOSCOPIC_RENDER_CONFIG, ...(previous.config ?? {}), ...configFrom(options) };
+  const config = { ...DEFAULT_STEREOSCOPIC_RENDER_CONFIG, ...(previous.config ?? {}), ...configOverrides(options) };
   const normalizedCamera = normalizeStereoCameraInput(camera, config);
   const frameId = number(camera.frameId ?? previous.frameId, 0) + 1;
   const left = makeEyeDescriptor("left", -1, normalizedCamera, config, frameId);
