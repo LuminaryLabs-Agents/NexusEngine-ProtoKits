@@ -116,3 +116,14 @@ Promotion/pruning implications:
 - Prune now: Signal Bastion no longer needs the broad `createGenericDefenseBuildKit` or `createGenericDefenseWaveKit` compatibility facades for setBlueprint, sell, or wave preview.
 - Keep compatible: `generic-defense-aaa-kits` remains available but should not be used as a promotion-facing dependency for route-host command seams.
 - Promote later only after proof: route-level executable replay should keep importing the package export and proving `n.genericDefense.sessionFacade.setBlueprint/sell` before any Core promotion consideration.
+
+## 2026-06-24 — Intent Miner spatial-platformer promotion hold
+
+`vr-platformer-kit-suite` is a useful incubation suite for a possible `spatial-platformer-loop`, but it is not a Core-promotion candidate as a maximum-feature bundle. Review child domains separately after they have resources/events/methods/snapshots/descriptors, deterministic replay, promotion-determinism guard coverage, and downstream Experiments consumption proof.
+
+Promotion/pruning implications:
+
+- Build/keep: child platformer/XR/spatial-board/comfort/render-descriptor boundaries in ProtoKits while they remain rendererless and deterministic.
+- Merge later: combine platformer physics/progression, spatial-board/XR pose/input, comfort policy, and stereo/render descriptors as a higher-level `spatial-platformer-loop` only after child boundaries are independently clear.
+- Do not promote: the full `vr-platformer-kit-suite` maximum-feature composition, Canvas/WebGL/Three drawing, actual WebXR/OpenXR session handling, raw runtime handles, frame presentation, DOM input, assets, audio, route fiction, or product routes.
+- Safest next patch: add deterministic replay for one child platformer boundary or a suite-level fixed-tick replay fixture, then add the suite source to a promotion-determinism guard only when promotion-facing.
