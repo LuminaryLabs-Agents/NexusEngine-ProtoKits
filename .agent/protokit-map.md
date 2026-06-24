@@ -59,3 +59,14 @@ The defense split is pointing toward a higher-level `strategic-pressure-loop` do
 - The AAA bridge re-exports the namespace helper so browser hosts that already import `generic-defense-aaa-dsk-bridge` do not need a second module to move calls toward the smaller DSK namespace.
 - Test coverage: `tests/generic-defense-dsk-boundaries-smoke.test.mjs` now asserts the namespaced methods, metadata, resources, events, semantic commands, snapshots, descriptors, and DOM/Canvas exclusion.
 - Promotion implication: the atomic boundaries are clearer, but the broad AAA facade is still not a Core-promotion candidate. Promotion review should look at the seven `engine.n.genericDefense.<boundary>` seams after route consumption proves them.
+
+## 2026-06-24 — Atomic route-progress map update
+
+- New atomic kit: `generic-route-progress-kit`.
+- Boundary: ordered route/checkpoint/objective progress through `genericRouteProgress.state`, checkpoint entered/completed, route advanced/completed/reset/rejected events, host methods on `engine.genericRouteProgress`, snapshots for active/completed checkpoints, and renderer-agnostic `route-checkpoint` descriptors.
+- Package exposure: available through the package wildcard as `@luminarylabs/nexusrealtime-protokits/generic-route-progress-kit`.
+- Docs/manifest: `protokits/generic-route-progress-kit/README.md` and `kit.manifest.json` define the renderer/browser exclusion boundary.
+- Test coverage: `tests/generic-route-progress-kit-smoke.test.mjs` is now wired into `npm test` after the generic promotion replay smoke and before promotion determinism/defense smokes.
+- Experiment consumers to consider next: Harbor Salvage, Cargo Chain, Sky Courier, Trainyard Switcher, Dungeon Relay, Floodplain Rescue, and survey/extraction routes that currently own ordered checkpoint state locally.
+- Higher-level domains unlocked: delivery/extraction loop (`route-progress + cargo + hazards`) and survey pressure loop (`route-progress + scan/survey + zones + pressure`).
+- Promotion readiness: incubating only. It has atomic headless smoke coverage, but needs at least one Experiments route consumption proof before Core-promotion review.
