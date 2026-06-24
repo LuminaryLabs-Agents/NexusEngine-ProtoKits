@@ -27,7 +27,7 @@ No Experiments code changed in this push, so local experiment JavaScript did not
 - Updated `protokits/generic-defense-presentation-stack-kit/index.js`:
   - shared presentation `getSnapshot(engine)` now prefers `engine.n?.genericDefense?.sessionFacade?.getSnapshot()`;
   - `createGenericPlacementProjectorKit().confirm()` now prefers `engine.n?.genericDefense?.sessionFacade?.build(...)` before compatibility fallback APIs.
-- Added `tests/generic-defense-placement-projector-namespace-smoke.test.mjs`:
+- Added and stabilized `tests/generic-defense-placement-projector-namespace-smoke.test.mjs`:
   - installs the seven generic-defense DSK aliases plus the placement projector;
   - syncs `engine.n.genericDefense`;
   - poisons `engine.genericDefense` and `engine.defenseBuild`;
@@ -68,6 +68,8 @@ Commit groups:
 5. `agent: record placement projector replay closure`
 6. `agent: record placement projector smoke closure`
 7. `agent: add placement namespace cycle report`
+8. `test: stabilize placement projector namespace smoke`
+9. `agent: update placement namespace cycle report`
 
 Files affected:
 
@@ -92,7 +94,7 @@ The connector environment did not provide local execution, so tests were not run
 
 ## Rollback notes
 
-Revert the seven pushed commits above together if the namespace smoke fails. The compatibility fallbacks remain in the implementation, so the expected rollback risk is limited to the new namespace preference and smoke ordering.
+Revert the nine pushed commits above together if the namespace smoke fails. The compatibility fallbacks remain in the implementation, so the expected rollback risk is limited to the new namespace preference and smoke ordering.
 
 ## What remains for the next cycle
 
