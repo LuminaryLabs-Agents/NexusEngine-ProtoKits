@@ -66,3 +66,13 @@ Promotion/pruning implications:
 - Prune through migration: the next Experiments patch should switch remaining Signal Bastion host convenience calls to `engine.n.genericDefense.<boundary>` where the facade guard and executable replay stay green.
 - Do not promote yet: generic defense remains a composite validation stack, and the broad AAA facade remains too large.
 - Promote later only after proof: atomic boundaries that have namespaced method calls, route consumption, smoke/replay coverage, and no browser/renderer ownership.
+
+## 2026-06-23 — Promotion determinism guard
+
+`tests/promotion-determinism-guard-smoke.test.mjs` now keeps promotion-facing generic DSKs and the generic-defense DSK bridge on the deterministic/headless side of the promotion gate.
+
+Promotion/pruning implications:
+
+- Promote/keep incubating: generic pressure, resource, action-window, affordance, and generic-defense DSK boundary aliases only while they stay free of wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, and animation-frame ownership.
+- Keep compatible but do not promote: `generic-defense-aaa-kits` still has wall-clock/browser-timing convenience paths in broad ledger/presentation facades. It should remain a migration/host compatibility surface, not a Core-promotion candidate.
+- Safest next patch: replace the AAA compatibility timestamps with tick/command-derived deterministic stamps, or keep pruning browser hosts toward `engine.n.genericDefense.<boundary>` and route-level presentation descriptors so the AAA facade becomes less necessary.
