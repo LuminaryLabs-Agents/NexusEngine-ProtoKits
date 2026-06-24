@@ -45,6 +45,9 @@ const yawed = computeStereoscopicRenderSnapshot(snapshot, {
 }, 1 / 60);
 assert.equal(yawed.eyes.left.position.z.toFixed(3), "-4.032");
 assert.equal(yawed.eyes.right.position.z.toFixed(3), "-3.968");
+assert.equal(yawed.config.viewportLayout, "side-by-side");
+assert.equal(yawed.config.textureLayout, "side-by-side");
+assert.equal(yawed.config.convergenceDistance, 8);
 
 const basis = basisFromForwardUp({ x: 0, y: 0, z: -1 }, { x: 0, y: 1, z: 0 });
 assert.deepEqual(basis.right, { x: 1, y: -0, z: 0 });
