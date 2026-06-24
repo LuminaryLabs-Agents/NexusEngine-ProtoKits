@@ -16,7 +16,7 @@ Grow reusable DSK-based ProtoKits while shrinking local experiment JavaScript.
 
 Use the generic-defense DSK boundary aliases, AAA DSK bridge, and `engine.n.genericDefense.<boundary>` namespace as compatibility-safe paths from broad composite APIs toward smaller resources/events/methods/snapshots/descriptors surfaces.
 
-The current Twenty Game Refiner seam remains `createGenericPlacementProjectorKit().confirm()` in `protokits/generic-defense-presentation-stack-kit/index.js`: Experiments treats placement confirmation as a semantic bridge into `engine.n.genericDefense.sessionFacade.build`, but the reusable projector still prefers `engine.defenseBuild?.build` before legacy `engine.genericDefense?.build`. The next safe implementation patch should move the shared snapshot helper and projector confirmation to prefer `engine.n.genericDefense.sessionFacade`, then add a headless namespace smoke before claiming the seam is shrunk.
+The previous Twenty Game Refiner seam in `createGenericPlacementProjectorKit().confirm()` is now closed for the reusable projector path: `protokits/generic-defense-presentation-stack-kit/index.js` prefers `engine.n.genericDefense.sessionFacade.getSnapshot()` for reusable presentation snapshots and `engine.n.genericDefense.sessionFacade.build(...)` for placement confirmation before falling back to compatibility facades.
 
 ## Current pruning focus
 
@@ -26,9 +26,9 @@ New host code should prefer `engine.n.genericDefense.map`, `engine.n.genericDefe
 
 ## Current validation focus
 
-Run `generic-defense-dsk-boundaries-smoke.test.mjs` before the existing generic-defense replay so API shape, AAA-bridge compatibility, and `engine.n.genericDefense.<boundary>` namespace mirroring are checked before compatibility behavior.
+Run `generic-defense-placement-projector-namespace-smoke.test.mjs` before `generic-defense-dsk-boundaries-smoke.test.mjs` and the existing generic-defense replay so the placement projector's namespace preference is checked before broader boundary/replay coverage.
 
-Next validation patch: add `tests/generic-defense-placement-projector-namespace-smoke.test.mjs` after updating the reusable projector implementation. The smoke should install the seven DSK aliases plus the placement projector, reassign/poison legacy `engine.genericDefense` and `engine.defenseBuild`, confirm a valid placement through the synced namespace, assert the built structure through `namespace.sessionFacade.getSnapshot()`, and keep DOM/Canvas/browser APIs absent.
+The placement smoke installs the seven DSK aliases plus the reusable projector, syncs `engine.n.genericDefense`, poisons the broad `engine.genericDefense` and `engine.defenseBuild` compatibility facades, then confirms placement through `namespace.sessionFacade.build` and asserts the resulting structure/wallet snapshot without DOM, Canvas, or browser frame timing.
 
 ## Current promotion candidates
 
@@ -44,8 +44,10 @@ See `smoke-tests.md` and `replay-qa.md`.
 
 ## Last meaningful cycle report
 
-Latest Twenty Game Refiner update: `.agent/cycle-reports/2026-06-24-twenty-game-refiner-0328.md` records the cross-repo confirmation that no second canonical executable lane should be claimed yet; the safest next patch is the ProtoKits placement-projector namespace implementation plus smoke/package wiring.
+Latest Cycle Report Push Planner update: `protokits/generic-defense-presentation-stack-kit/index.js`, `tests/generic-defense-placement-projector-namespace-smoke.test.mjs`, and `package.json` now close and guard the placement-projector namespace seam recorded by the prior Twenty Game Refiner/Deterministic Replay QA notes.
 
-Previous Deterministic Replay QA update: `.agent/replay-qa.md` records the exact placement-projector namespace patch plan and why the implementation/test push should be scoped to ProtoKits.
+Latest Twenty Game Refiner update: `.agent/cycle-reports/2026-06-24-twenty-game-refiner-0328.md` records the cross-repo confirmation that no second canonical executable lane should be claimed yet; the safest next patch was the ProtoKits placement-projector namespace implementation plus smoke/package wiring, now completed.
+
+Previous Deterministic Replay QA update: `.agent/replay-qa.md` recorded the exact placement-projector namespace patch plan and why the implementation/test push should be scoped to ProtoKits.
 
 Previous report: `.agent/cycle-reports/2026-06-23-api-surface-pruner-2030.md`.
