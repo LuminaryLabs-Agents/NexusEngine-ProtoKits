@@ -1,0 +1,18 @@
+{
+  "id": "scene-graph-domain-kit",
+  "domain": "scene-graph",
+  "type": "atomic-domain-service-kit",
+  "status": "experimental",
+  "factory": "createSceneGraphDomainKit",
+  "requires": [],
+  "provides": ["scene-graph", "scene-objects", "scene-patches", "scene-dirty-set"],
+  "resources": ["sceneGraph.state"],
+  "events": ["sceneGraph.patched"],
+  "publicApi": ["engine.sceneGraph.createObject", "engine.sceneGraph.updateObject", "engine.sceneGraph.removeObject", "engine.sceneGraph.applyPatch", "engine.sceneGraph.getObject", "engine.sceneGraph.listObjects", "engine.sceneGraph.snapshot"],
+  "descriptors": ["scene-object"],
+  "rendererBoundary": { "outputsDescriptors": true, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": { "scalesWith": ["objectCount", "patchCount", "dirtyObjectCount"], "telemetry": ["objectCount", "dirtyObjectCount", "patchCount"], "degradationModes": ["sleepFarObjects", "compactPatchHistory"] },
+  "snapshot": { "supportsSnapshot": true, "supportsReset": false, "supportsLoadSnapshot": false },
+  "promotion": { "level": "experimental", "criteria": ["save-delta composition", "renderer descriptor bridge", "multi-scene consumer"] },
+  "metadata": { "boundary": "General scene object graph and patch boundary." }
+}
