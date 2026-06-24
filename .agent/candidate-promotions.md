@@ -88,3 +88,19 @@ Promotion/pruning implications:
 - Do not overgrow: do not add browser collision, DOM input, canvas hit testing, renderer camera, cargo inventory, hazard simulation, or route fiction to this kit.
 - Promote later only after proof: at least one Experiments route must consume it, show local JavaScript reduction, and add deterministic route-level replay or manifest/spec smoke coverage.
 - Safest next patch: use Experiments to mark one checkpoint-heavy canonical route as the first consumer candidate, then migrate only its ordered checkpoint ledger while preserving renderer-only host presentation.
+
+## 2026-06-24 — API Surface Pruner route namespace note
+
+The route/cargo/extraction family now has smaller `engine.n` surfaces for the atomic child boundaries before browser hosts consume the composite:
+
+- `generic-route-progress-kit` mirrors its ordered checkpoint facade under `engine.n.genericRouteProgress` and exports `GENERIC_ROUTE_PROGRESS_ENGINE_NAMESPACE` plus `syncGenericRouteProgressEngineNamespace(engine)`.
+- `generic-resource-loop-kit` mirrors its meter facade under `engine.n.genericResourceLoop` and exports `syncGenericResourceLoopEngineNamespace(engine)`.
+- `generic-pressure-loop-kit` mirrors its channel facade under `engine.n.genericPressureLoop` and exports `syncGenericPressureLoopEngineNamespace(engine)`.
+- `generic-route-cargo-extraction-kit` now prefers the three namespaced child DSK facades when building snapshots and handling route/cargo/pressure commands, with legacy `engine.generic*` fallbacks preserved.
+
+Promotion/pruning implications:
+
+- Build/keep: route progress, resource loop, and pressure loop as independent atomic namespaces; do not require the route-cargo composite when a host only needs one boundary.
+- Keep compatible: legacy `engine.genericRouteProgress`, `engine.genericResourceLoop`, `engine.genericPressureLoop`, and `engine.genericRouteCargoExtraction` facades while Experiments migrate.
+- Prune through migration: `next-ledge` should consume `engine.n.genericRouteProgress` first, then consider the route-cargo composite only if its cargo/pressure state can be removed from the host.
+- Do not promote yet: route progress and route-cargo extraction still need downstream Experiments route consumption proof and executable fixed-tick replay evidence.
