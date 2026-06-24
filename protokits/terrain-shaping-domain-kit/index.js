@@ -109,9 +109,7 @@ export function createTerrainShapingDomainKit(nexusRealtime = {}, options = {}) 
         const slope = clamp(1 - number(normal.y, 1), 0, 1);
         const biome = baseBiome(x, z);
         const color = terrainColor(biome, height, slope, x, z, config);
-        const sample = { x: number(x), z: number(z), height, normal, slope, biome, color, hydrology, band: context.band ?? distanceBand(context.distance, config) };
-        world.emit(TerrainShapingSampled, { x: sample.x, z: sample.z, sample: clone(sample) });
-        return sample;
+        return { x: number(x), z: number(z), height, normal, slope, biome, color, hydrology, band: context.band ?? distanceBand(context.distance, config) };
       }
 
       function sampleNormal(x = 0, z = 0, context = {}) {
@@ -137,6 +135,11 @@ export function createTerrainShapingDomainKit(nexusRealtime = {}, options = {}) 
         sampleBiome: baseBiome,
         sampleVisual: sampleAt,
         sampleAt,
+        traceSample(x = 0, z = 0, context = {}) {
+          const sample = sampleAt(number(x), number(z), context);
+          world.emit(TerrainShapingSampled, { x: sample.x, z: sample.z, sample: clone(sample) });
+          return sample;
+        },
         getPatchDescriptor(px, pz, patchSize = 500) {
           const cx = number(px) * patchSize;
           const cz = number(pz) * patchSize;
