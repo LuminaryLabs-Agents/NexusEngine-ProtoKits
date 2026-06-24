@@ -1,0 +1,17 @@
+{
+  "id": "session-facade-kit",
+  "domain": "session-facade",
+  "type": "composition-kit",
+  "status": "experimental",
+  "factory": "createSessionFacadeKit",
+  "requires": [],
+  "provides": ["session-facade", "host-input-facade", "validation-snapshot", "smoke-runner-contract"],
+  "resources": ["sessionFacade.state"],
+  "events": ["sessionFacade.commandDispatched", "sessionFacade.snapshotCaptured", "sessionFacade.restarted"],
+  "publicApi": ["engine.sessionFacade.dispatch", "engine.sessionFacade.capture", "engine.sessionFacade.restart", "engine.sessionFacade.runSmoke", "engine.sessionFacade.getValidationState", "engine.sessionFacade.getSnapshot"],
+  "descriptors": [],
+  "rendererBoundary": { "outputsDescriptors": false, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": { "scalesWith": ["commandHistoryLength", "snapshotHistoryLength"], "telemetry": ["commandCount", "snapshotCount"], "degradationModes": ["compactHistory"] },
+  "snapshot": { "supportsSnapshot": true, "supportsReset": true, "supportsLoadSnapshot": false },
+  "promotion": { "level": "experimental", "criteria": ["host bridge consumer", "smoke test parity", "validation surface stability"] }
+}
