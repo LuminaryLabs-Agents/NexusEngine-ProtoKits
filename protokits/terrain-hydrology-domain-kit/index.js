@@ -86,7 +86,10 @@ export function createTerrainHydrologyDomainKit(nexusRealtime = {}, options = {}
       engine.terrainHydrology = {
         getState: state,
         sampleAt(x = 0, z = 0) {
-          const sample = sampleHydrology(number(x), number(z), state().config);
+          return sampleHydrology(number(x), number(z), state().config);
+        },
+        traceSample(x = 0, z = 0) {
+          const sample = this.sampleAt(x, z);
           world.emit(TerrainHydrologySampled, { x: number(x), z: number(z), sample: clone(sample) });
           return sample;
         },
