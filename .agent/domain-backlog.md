@@ -56,6 +56,17 @@ Boundary scope:
 
 - Owns platformer level/avatar/physics/collision/object/objective sequence state, 2D camera/render/effects/parallax descriptors, XR pose/input descriptors, spatial anchor/board transforms, comfort policy, and XR render-plan descriptors.
 - Composes beside `stereoscopic-render-domain-kit` for left/right eye descriptors.
-- Does not own Canvas/WebGL/Three drawing, actual WebXR/OpenXR sessions, raw runtime handles, frame presentation, DOM/browser input plumbing, assets, audio, route fiction, or product routes.
+- Does not own Canvas/WebGL/Three drawing, actual WebXR/OpenXR sessions, raw runtime handles, frame presentation, DOM input plumbing, assets, audio, route fiction, or product routes.
 
 Next backlog item: add deterministic replay for at least one child boundary or suite-level fixture before treating this as promotion-facing, then use a thin Experiments host only if it proves local route JavaScript reduction or a distinct canonical validation need.
+
+## 2026-06-24 — Atomic Domain Kit Expander downstream route-progress correction
+
+`next-ledge` now supplies the first downstream route-progress consumption proof for `generic-route-progress-kit` in Experiments: it imports the kit, builds route checkpoints from climb anchors, drives `engine.n.genericRouteProgress`, exposes `domain.routeProgress`, and guards the partial seam with a route-progress replay spec smoke.
+
+Backlog correction:
+
+- Do not build another route/checkpoint/objective kit; that would duplicate the existing atomic boundary.
+- Treat route-progress consumption as partially proven downstream, but not as a full traversal/cargo executable lane.
+- Keep `generic-route-cargo-extraction-kit` as the next delivery/extraction pressure target because cargo/resource/pressure still lacks downstream route consumption proof.
+- The next useful backlog item is a narrow `next-ledge` cargo/resource/pressure consumption plan that keeps tether physics, collision/hit testing, camera, browser input, renderer presentation, assets, and route fiction in Experiments.
