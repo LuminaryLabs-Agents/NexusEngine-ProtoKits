@@ -38,7 +38,7 @@ Move toward composable DSK-style kits that let hosts stay close to import/config
 - Compatibility composite: `generic-defense-kits` remains the safe all-in-one Signal Bastion validation bundle.
 - Pruned DSK alias surface: `generic-defense-dsk-boundaries` exports descriptors and factory aliases for `map`, `economyWallet`, `buildPlacement`, `waveAgentDirector`, `combatResolver`, `sessionFacade`, and `renderDescriptors`.
 - Package aliases now point to the pruned surface: `generic-defense-map-dsk`, `generic-defense-economy-wallet-dsk`, `generic-defense-build-placement-dsk`, `generic-defense-wave-agent-director-dsk`, `generic-defense-combat-resolver-dsk`, `generic-defense-session-facade-dsk`, and `generic-defense-render-descriptor-dsk`.
-- Test coverage: `tests/generic-defense-dsk-boundaries-smoke.test.mjs` asserts the alias descriptors expose resources, events, methods, snapshots, descriptors, metadata, and rendererless headless behavior before the existing defense replay runs.
+- Test coverage: `tests/generic-defense-dsk-boundaries-smoke.test.mjs` asserts the alias descriptors expose resources, events, methods, snapshots, descriptors, export names, backing kit IDs, DSK metadata, and rendererless headless behavior before the existing defense replay runs.
 
 ### Higher-level domain pressure
 
@@ -51,3 +51,11 @@ The defense split is pointing toward a higher-level `strategic-pressure-loop` do
 - Package export: `@luminarylabs/nexusrealtime-protokits/generic-defense-aaa-dsk-bridge`.
 - Docs: `docs/generic-defense-api-surface-pruner.md` records the migration rule: prefer the smallest boundary before writing route-local state machines.
 - Test coverage: `tests/generic-defense-dsk-boundaries-smoke.test.mjs` now verifies the bridge keeps compatibility exports and can return a smallest requested DSK subset without forcing the broad compatibility bundle.
+
+## 2026-06-23 — engine.n generic-defense namespace pruning map update
+
+- `generic-defense-dsk-boundaries` now exports `GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE` and `syncGenericDefenseDskEngineNamespace(engine)`.
+- Each installed atomic DSK alias mirrors its compatibility method surface under `engine.n.genericDefense.<boundary>` while preserving older `engine.defenseMap`, `engine.defenseEconomy`, `engine.defenseStructures`, `engine.defenseAgents`, `engine.defenseCombat`, `engine.genericDefense`, and `engine.defenseRender` surfaces.
+- The AAA bridge re-exports the namespace helper so browser hosts that already import `generic-defense-aaa-dsk-bridge` do not need a second module to move calls toward the smaller DSK namespace.
+- Test coverage: `tests/generic-defense-dsk-boundaries-smoke.test.mjs` now asserts the namespaced methods, metadata, resources, events, semantic commands, snapshots, descriptors, and DOM/Canvas exclusion.
+- Promotion implication: the atomic boundaries are clearer, but the broad AAA facade is still not a Core-promotion candidate. Promotion review should look at the seven `engine.n.genericDefense.<boundary>` seams after route consumption proves them.
