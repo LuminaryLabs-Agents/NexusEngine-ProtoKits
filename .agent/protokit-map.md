@@ -90,3 +90,10 @@ The defense split is pointing toward a higher-level `strategic-pressure-loop` do
 - Test coverage: `tests/vr-platformer-kit-suite-smoke.test.mjs` is wired into `npm test`; it checks kit identity, descriptor composition, and maximum-feature composition length.
 - Promotion readiness: incubation only. Add deterministic replay and promotion-determinism scanning before treating any child platformer/XR boundary as promotion-facing. Do not promote the maximum-feature suite as a Core DSK.
 - Experiment consumers: none yet. Do not add a canonical route only to satisfy the about-20 target; create one only when it proves local route JavaScript shrink or a distinct spatial-platformer validation need.
+
+## 2026-06-24 — Atomic Domain Kit Expander downstream consumption map update
+
+- `next-ledge` is now the first downstream route-progress consumer. Experiments imports `createGenericRouteProgressKit`, derives checkpoints from climb anchors, syncs anchor completion through `engine.n.genericRouteProgress`, and exposes `domain.routeProgress` in route snapshots.
+- Route-side guard: `tests/next-ledge-route-progress-replay-spec-smoke.mjs` checks the partial route-progress DSK seam and blocks a premature `generic-route-cargo-extraction-kit` claim.
+- Promotion implication: `generic-route-progress-kit` has partial downstream consumption/spec proof now, but still lacks a full traversal/cargo executable route replay and should not move to Core promotion review yet.
+- Composite implication: `generic-route-cargo-extraction-kit` has ProtoKits smoke/replay coverage, but still lacks downstream route consumption proof. The safest next delivery/extraction patch is a narrow `next-ledge` cargo/resource/pressure plan, not a new atomic route-progress kit.
