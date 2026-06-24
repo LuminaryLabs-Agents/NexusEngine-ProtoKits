@@ -1,6 +1,6 @@
 import { clamp, clone, createDefinitionFactory, defineInjectedRuntimeKit, ensureResource, number } from "../protokit-core/index.js";
 
-export const FLIGHT_CAMERA_DOMAIN_KIT_VERSION = "0.1.0";
+export const FLIGHT_CAMERA_DOMAIN_KIT_VERSION = "0.1.1";
 
 export const DEFAULT_FLIGHT_CAMERA_CONFIG = Object.freeze({
   mode: "bird-follow",
@@ -8,17 +8,22 @@ export const DEFAULT_FLIGHT_CAMERA_CONFIG = Object.freeze({
   speedFovBoost: 10,
   diveFovBoost: 6,
   maxSpeed: 164,
-  followDistance: 28,
-  followHeight: 8.5,
-  lookAhead: 34,
-  verticalLookAhead: 8,
-  positionLag: 0.08,
-  targetLag: 0.1,
-  headingLag: 0.07,
-  velocityLeadWeight: 0.16,
-  carveLookWeight: 0.12,
-  rollFrameWeight: 0.08,
-  horizonStabilization: 0.82
+  followDistance: 4.2,
+  followHeight: 1.5,
+  lookAhead: 5.5,
+  verticalLookAhead: 0.65,
+  positionLag: 0.16,
+  targetLag: 0.14,
+  headingLag: 0.1,
+  velocityLeadWeight: 0.12,
+  carveLookWeight: 0.08,
+  rollFrameWeight: 0.04,
+  horizonStabilization: 0.86,
+  shakeBase: 0.006,
+  shakeSpeed: 0.09,
+  shakeDive: 0.07,
+  shakeBoost: 0.11,
+  shakeFrequency: 10.5
 });
 
 const add = (a = {}, b = {}, scale = 1) => ({ x: number(a.x) + number(b.x) * scale, y: number(a.y) + number(b.y) * scale, z: number(a.z) + number(b.z) * scale });
@@ -30,6 +35,7 @@ const norm = (v = {}, fallback = { x: 0, y: 0, z: -1 }) => {
   const l = len(v);
   return l > 0.000001 ? scale(v, 1 / l) : clone(fallback);
 };
+const cross = (a = {}, b = {}) => ({ x: number(a.y) * number(b.z) - number(a.z) * number(b.y), y: number(a.z) * number(b.x) - number(a.x) * number(b.z), z: number(a.x) * number(b.y) - number(a.y) * number(b.x) });
 
 export function forwardFromRotation(rotation = {}) {
   const pitch = number(rotation.pitch);
@@ -60,9 +66,11 @@ export function createFlightCameraState(options = {}) {
       desiredLookAt: { x: 0, y: 0, z: -1 }
     },
     metadata: {
-      velocityLeadWeight: number(config.velocityLeadWeight, 0.16),
-      carveLookWeight: number(config.carveLookWeight, 0.12),
-      horizonStabilization: number(config.horizonStabilization, 0.82)
+      velocityLeadWeight: number(config.velocityLeadWeight, 0.12),
+      carveLookWeight: number(config.carveLookWeight, 0.08),
+      horizonStabilization: number(config.horizonStabilization, 0.86),
+      shakePhase: 0,
+      shakeAmplitude: 0
     }
   };
 }
@@ -82,26 +90,35 @@ export function computeFlightCameraSnapshot(previous = {}, motion = {}, dt = 1 /
   const horizon = clamp(config.horizonStabilization, 0, 1);
   const lookDirection = norm({ x: lookDirectionRaw.x, y: mix(lookDirectionRaw.y, birdForward.y * 0.55, horizon * 0.62), z: lookDirectionRaw.z }, lookDirectionRaw);
   const roll = number(motion.rotation?.roll, 0);
-  const rollOffset = { x: Math.sin(roll) * number(config.rollFrameWeight, 0.08) * number(config.followDistance, 28), y: 0, z: 0 };
+  const rollOffset = { x: Math.sin(roll) * number(config.rollFrameWeight, 0.04) * number(config.followDistance, 4.2), y: 0, z: 0 };
 
-  const desiredPosition = add(add(position, followDirection, -number(config.followDistance, 28)), { x: 0, y: 1, z: 0 }, number(config.followHeight, 8.5));
+  const desiredPosition = add(add(position, followDirection, -number(config.followDistance, 4.2)), { x: 0, y: 1, z: 0 }, number(config.followHeight, 1.5));
   desiredPosition.x += rollOffset.x;
-  const desiredLookAt = add(add(position, lookDirection, number(config.lookAhead, 34)), { x: 0, y: 1, z: 0 }, number(config.verticalLookAhead, 8));
+  const desiredLookAt = add(add(position, lookDirection, number(config.lookAhead, 5.5)), { x: 0, y: 1, z: 0 }, number(config.verticalLookAhead, 0.65));
   const speedRatio = clamp(number(motion.speed, len(motion.velocity)) / Math.max(1, number(config.maxSpeed, 164)), 0, 1);
   const dive = clamp(Math.max(0, -number(motion.velocity?.y, 0) / 72), 0, 1);
+  const boost = motion.control?.lastInput?.boost ? 1 : 0;
   const desiredFov = number(config.baseFov, 64) + speedRatio * number(config.speedFovBoost, 10) + dive * number(config.diveFovBoost, 6);
 
   const initialized = Boolean(previous.initialized);
   const positionT = initialized ? lagAmount(config.positionLag, dt) : 1;
   const targetT = initialized ? lagAmount(config.targetLag, dt) : 1;
+  const phase = number(previous.metadata?.shakePhase, 0) + number(dt, 1 / 60) * number(config.shakeFrequency, 10.5) * (1 + speedRatio * 1.8 + boost * 0.8);
+  const shakeAmplitude = number(config.shakeBase, 0.006) + speedRatio * number(config.shakeSpeed, 0.09) + dive * number(config.shakeDive, 0.07) + boost * number(config.shakeBoost, 0.11);
+  const right = norm(cross(followDirection, { x: 0, y: 1, z: 0 }), { x: 1, y: 0, z: 0 });
+  const up = { x: 0, y: 1, z: 0 };
+  const shake = add(scale(right, Math.sin(phase * 1.7) * shakeAmplitude), up, Math.cos(phase * 2.3) * shakeAmplitude * 0.62);
+
+  const smoothedPosition = initialized ? vecMix(previous.position, desiredPosition, positionT) : desiredPosition;
+  const smoothedLookAt = initialized ? vecMix(previous.lookAt, desiredLookAt, targetT) : desiredLookAt;
 
   return {
     version: FLIGHT_CAMERA_DOMAIN_KIT_VERSION,
     mode: config.mode,
     config,
     initialized: true,
-    position: initialized ? vecMix(previous.position, desiredPosition, positionT) : desiredPosition,
-    lookAt: initialized ? vecMix(previous.lookAt, desiredLookAt, targetT) : desiredLookAt,
+    position: add(smoothedPosition, shake, 1),
+    lookAt: add(smoothedLookAt, shake, 0.42),
     followDirection,
     lookDirection,
     velocityForward,
@@ -109,12 +126,15 @@ export function computeFlightCameraSnapshot(previous = {}, motion = {}, dt = 1 /
     fov: initialized ? mix(previous.fov, desiredFov, targetT) : desiredFov,
     anchors: { bird: position, desiredPosition, desiredLookAt },
     metadata: {
-      velocityLeadWeight: number(config.velocityLeadWeight, 0.16),
-      carveLookWeight: number(config.carveLookWeight, 0.12),
-      rollFrameWeight: number(config.rollFrameWeight, 0.08),
-      horizonStabilization: number(config.horizonStabilization, 0.82),
+      velocityLeadWeight: number(config.velocityLeadWeight, 0.12),
+      carveLookWeight: number(config.carveLookWeight, 0.08),
+      rollFrameWeight: number(config.rollFrameWeight, 0.04),
+      horizonStabilization: number(config.horizonStabilization, 0.86),
       speedRatio,
       dive,
+      boost,
+      shakePhase: phase,
+      shakeAmplitude,
       positionLagApplied: positionT,
       targetLagApplied: targetT
     }
@@ -131,7 +151,7 @@ export function createFlightCameraDomainKit(nexusRealtime = {}, options = {}) {
     id: options.id ?? "flight-camera-domain-kit",
     resources: { FlightCameraState },
     events: { FlightCameraUpdated },
-    provides: ["flight-camera", "bird-follow-camera", "camera-rig-state"],
+    provides: ["flight-camera", "bird-follow-camera", "camera-rig-state", "speed-reactive-camera-shake"],
     initWorld({ world }) { ensureResource(world, FlightCameraState, initial); },
     install({ engine, world }) {
       const state = () => ensureResource(world, FlightCameraState, initial);
@@ -158,7 +178,7 @@ export function createFlightCameraDomainKit(nexusRealtime = {}, options = {}) {
         snapshot: () => clone(state())
       };
     },
-    metadata: { version: FLIGHT_CAMERA_DOMAIN_KIT_VERSION, purpose: "Persistent trailing bird-flight camera with follow anchor, look anchor, lag, horizon stabilization, and low carve authority." }
+    metadata: { version: FLIGHT_CAMERA_DOMAIN_KIT_VERSION, purpose: "Persistent close trailing bird-flight camera with follow anchor, look anchor, lag, horizon stabilization, low carve authority, and speed-reactive shake." }
   });
 }
 
