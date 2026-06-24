@@ -8,7 +8,8 @@ const promotionCandidatePaths = [
   "protokits/generic-action-window-kit/index.js",
   "protokits/generic-affordance-descriptor-kit/index.js",
   "protokits/generic-defense-dsk-boundaries/index.js",
-  "protokits/generic-defense-aaa-dsk-bridge/index.js"
+  "protokits/generic-defense-aaa-dsk-bridge/index.js",
+  "protokits/generic-defense-session-command-kit/index.js"
 ];
 
 const forbiddenPromotionRuntimeApis = [
