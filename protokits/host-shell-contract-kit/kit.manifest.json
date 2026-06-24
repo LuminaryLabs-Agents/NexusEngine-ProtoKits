@@ -1,0 +1,17 @@
+{
+  "id": "host-shell-contract-kit",
+  "domain": "host-shell-contract",
+  "type": "composition-kit",
+  "status": "experimental",
+  "factory": "createHostShellContractKit",
+  "requires": [],
+  "provides": ["host-shell-contract", "hud-descriptor-contract", "frame-loop-contract"],
+  "resources": ["hostShellContract.state"],
+  "events": ["hostShellContract.updated"],
+  "publicApi": ["engine.hostShellContract.configure", "engine.hostShellContract.describe", "engine.hostShellContract.snapshot"],
+  "descriptors": ["host-shell", "hud", "error-surface"],
+  "rendererBoundary": { "outputsDescriptors": true, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": { "scalesWith": ["descriptorHistoryLength"], "telemetry": ["targetFps", "maxDelta"], "degradationModes": ["reduceHudReadoutFrequency"] },
+  "snapshot": { "supportsSnapshot": true, "supportsReset": false, "supportsLoadSnapshot": false },
+  "promotion": { "level": "experimental", "criteria": ["generated-route bridge consumer", "Electron host consumer", "HUD descriptor tests"] }
+}
