@@ -1,4 +1,6 @@
 import { clamp, clone, createDefinitionFactory, defineInjectedRuntimeKit, ensureResource, number } from "../protokit-core/index.js";
+import { sampleTerrainMaterialPaint } from "../terrain-material-paint-domain-kit/index.js";
+import { applyCelShade } from "../cel-shading-domain-kit/index.js";
 
 export const TERRAIN_SHAPING_DOMAIN_KIT_VERSION = "0.1.0";
 
@@ -22,7 +24,9 @@ export const DEFAULT_TERRAIN_SHAPING_CONFIG = Object.freeze({
   snowLine: 180,
   baseLevel: 0,
   midDistance: 2400,
-  farDistance: 7000
+  farDistance: 7000,
+  materialPaint: {},
+  celShading: {}
 });
 
 const PALETTES = Object.freeze({
@@ -50,7 +54,7 @@ function terraceForBand(band, config = {}) {
   return { step: number(config.terraceStepNear, 6), strength: number(config.terraceStrengthNear, 0.08) };
 }
 
-function terrainColor(biome = "forest", height = 0, slope = 0, x = 0, z = 0, config = {}) {
+function fallbackTerrainColor(biome = "forest", height = 0, slope = 0, x = 0, z = 0, config = {}) {
   const palette = height > number(config.snowLine, 180) ? PALETTES.snow : (PALETTES[biome] ?? PALETTES.forest);
   const elevation = clamp((height + 140) / 360, 0, 1);
   const base = elevation < 0.52 ? rgbMix(palette.low, palette.mid, elevation / 0.52) : rgbMix(palette.mid, palette.high, (elevation - 0.52) / 0.48);
@@ -93,7 +97,7 @@ export function createTerrainShapingDomainKit(nexusRealtime = {}, options = {}) 
     id: options.id ?? "terrain-shaping-domain-kit",
     resources: { TerrainShapingState },
     events: { TerrainShapingSampled },
-    provides: ["terrain:shaping", "terrain:mountain-form", "terrain:visual-sample"],
+    provides: ["terrain:shaping", "terrain:mountain-form", "terrain:visual-sample", "terrain:material-painted", "terrain:cel-shaded"],
     initWorld({ world }) { ensureResource(world, TerrainShapingState, initial); },
     install({ engine, world }) {
       const state = () => ensureResource(world, TerrainShapingState, initial);
@@ -108,8 +112,11 @@ export function createTerrainShapingDomainKit(nexusRealtime = {}, options = {}) 
         const normal = sampleNormal(x, z, context);
         const slope = clamp(1 - number(normal.y, 1), 0, 1);
         const biome = baseBiome(x, z);
-        const color = terrainColor(biome, height, slope, x, z, config);
-        return { x: number(x), z: number(z), height, normal, slope, biome, color, hydrology, band: context.band ?? distanceBand(context.distance, config) };
+        const unpainted = fallbackTerrainColor(biome, height, slope, x, z, config);
+        const paint = sampleTerrainMaterialPaint({ x: number(x), z: number(z), height, normal, slope, biome, hydrology }, { ...(config.materialPaint ?? {}), snowLine: config.materialPaint?.snowLine ?? config.snowLine });
+        const paintedColor = paint?.color ?? unpainted;
+        const color = applyCelShade(paintedColor, { x: number(x), z: number(z), height, normal, slope, biome, hydrology }, config.celShading ?? {});
+        return { x: number(x), z: number(z), height, normal, slope, biome, color, paint, hydrology, band: context.band ?? distanceBand(context.distance, config) };
       }
 
       function sampleNormal(x = 0, z = 0, context = {}) {
@@ -149,7 +156,7 @@ export function createTerrainShapingDomainKit(nexusRealtime = {}, options = {}) 
         snapshot: () => clone(state())
       };
     },
-    metadata: { version: TERRAIN_SHAPING_DOMAIN_KIT_VERSION, purpose: "Distance-aware mountain shaping, terraces, ridges, valleys, slope color, and terrain visual samples." }
+    metadata: { version: TERRAIN_SHAPING_DOMAIN_KIT_VERSION, purpose: "Distance-aware mountain shaping, hydrology carve, material painting, cel shading, and terrain visual samples." }
   });
 }
 
