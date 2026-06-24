@@ -1,4 +1,5 @@
 export const GENERIC_PRESSURE_LOOP_KIT_VERSION = "0.1.0";
+export const GENERIC_PRESSURE_LOOP_ENGINE_NAMESPACE = "genericPressureLoop";
 
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
@@ -10,6 +11,22 @@ function requireNexus(NexusRealtime) {
       throw new TypeError(`createGenericPressureLoopKit requires NexusRealtime.${key}.`);
     }
   }
+}
+
+function ensureEngineNamespace(engine) {
+  if (!engine || typeof engine !== "object") return null;
+  if (!engine.n || typeof engine.n !== "object") engine.n = {};
+  if (!engine.n[GENERIC_PRESSURE_LOOP_ENGINE_NAMESPACE] || typeof engine.n[GENERIC_PRESSURE_LOOP_ENGINE_NAMESPACE] !== "object") {
+    engine.n[GENERIC_PRESSURE_LOOP_ENGINE_NAMESPACE] = {};
+  }
+  return engine.n[GENERIC_PRESSURE_LOOP_ENGINE_NAMESPACE];
+}
+
+export function syncGenericPressureLoopEngineNamespace(engine) {
+  const namespace = ensureEngineNamespace(engine);
+  const facade = engine?.genericPressureLoop;
+  if (namespace && facade && typeof facade === "object") Object.assign(namespace, facade);
+  return namespace;
 }
 
 export function normalizePressureChannel(channel = {}, index = 0) {
@@ -131,7 +148,7 @@ export function createGenericPressureLoopKit(NexusRealtime, config = {}) {
         world.setResource(PressureLoopState, nextState);
         return nextState.channelsById[id] ?? null;
       }
-      engine.genericPressureLoop = {
+      const facade = {
         resources: { PressureLoopState },
         events: { PressureAdjusted, PressureWarning, PressurePeaked, PressureRecovered, PressureReset },
         setChannels,
@@ -149,10 +166,21 @@ export function createGenericPressureLoopKit(NexusRealtime, config = {}) {
           return clone(world.getResource(PressureLoopState)?.channelsById?.[id] ?? null);
         }
       };
+
+      engine.genericPressureLoop = facade;
+      syncGenericPressureLoopEngineNamespace(engine);
     },
     metadata: {
+      engineNamespace: `engine.n.${GENERIC_PRESSURE_LOOP_ENGINE_NAMESPACE}`,
       purpose: "Generic deterministic pressure channels for heat, storm, alert, oxygen debt, radiation, corruption, collapse, or similar loops.",
-      boundary: "Owns pressure state, thresholds, and transition events. Hosts render descriptors and game-specific fiction elsewhere."
+      boundary: "Owns pressure state, thresholds, and transition events. Hosts render descriptors and game-specific fiction elsewhere.",
+      apiSurface: {
+        resources: ["genericPressureLoop.state"],
+        events: ["genericPressureLoop.adjusted", "genericPressureLoop.warning", "genericPressureLoop.peaked", "genericPressureLoop.recovered", "genericPressureLoop.reset"],
+        methods: ["engine.n.genericPressureLoop.setChannels", "engine.n.genericPressureLoop.adjust", "engine.n.genericPressureLoop.recover", "engine.n.genericPressureLoop.reset", "engine.n.genericPressureLoop.getState", "engine.n.genericPressureLoop.getChannel", "engine.genericPressureLoop.setChannels", "engine.genericPressureLoop.adjust", "engine.genericPressureLoop.recover", "engine.genericPressureLoop.reset", "engine.genericPressureLoop.getState", "engine.genericPressureLoop.getChannel"],
+        snapshots: ["channels", "channelsById", "status", "lastEvents", "updatedAtTick"],
+        descriptors: []
+      }
     }
   });
 }
