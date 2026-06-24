@@ -1,0 +1,17 @@
+{
+  "id": "domain-manifest-registry-domain-kit",
+  "domain": "domain-manifest-registry",
+  "parentDomain": "domain-control-plane",
+  "scope": "control-domain",
+  "extendsBase": "DomainServiceKit",
+  "composes": [],
+  "requires": ["n:runtime.engine"],
+  "provides": ["domain:manifest-registry", "domain:metadata-index"],
+  "ownsLoop": false,
+  "snapshotPolicy": "serializable",
+  "resetPolicy": "engine-reset-aware",
+  "exportPath": "./domain-manifest-registry-domain-kit",
+  "sourcePath": "protokits/domain-manifest-registry-domain-kit/index.js",
+  "testPaths": ["tests/domain-control-plane-smoke.test.mjs"],
+  "status": "experimental"
+}
