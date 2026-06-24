@@ -76,7 +76,7 @@
     "check:manifests": "node scripts/validate-kit-manifests.mjs && node scripts/check-domain-boundaries.mjs && node scripts/validate-performance-contracts.mjs",
     "check:docs": "node scripts/check-doc-coverage.mjs",
     "generate:kit-inventory": "node scripts/generate-kit-inventory.mjs",
-    "test": "node tests/scoped-rpg-domain-kits-batch-02.test.mjs && node tests/generic-promotion-gate-smoke.test.mjs && node tests/generic-promotion-replay-smoke.test.mjs && node tests/promotion-determinism-guard-smoke.test.mjs && node tests/generic-defense-placement-projector-namespace-smoke.test.mjs && node tests/generic-defense-dsk-boundaries-smoke.test.mjs && node tests/generic-defense-replay-smoke.test.mjs && node tests/composition-layer-smoke.test.mjs"
+    "test": "node tests/scoped-rpg-domain-kits-batch-02.test.mjs && node tests/generic-promotion-gate-smoke.test.mjs && node tests/generic-promotion-replay-smoke.test.mjs && node tests/generic-route-progress-kit-smoke.test.mjs && node tests/promotion-determinism-guard-smoke.test.mjs && node tests/generic-defense-placement-projector-namespace-smoke.test.mjs && node tests/generic-defense-dsk-boundaries-smoke.test.mjs && node tests/generic-defense-replay-smoke.test.mjs && node tests/composition-layer-smoke.test.mjs"
   },
   "license": "MIT"
 }
