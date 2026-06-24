@@ -21,9 +21,9 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 
 ## Current coverage notes
 
-- `tests/generic-promotion-gate-smoke.test.mjs` covers `generic-pressure-loop-kit`, `generic-resource-loop-kit`, `generic-action-window-kit`, and `generic-affordance-descriptor-kit` as renderer-agnostic DSK promotion candidates. It asserts resources, events, systems, metadata boundaries, headless ticks/methods, and observable events for each surface.
+- `tests/generic-promotion-gate-smoke.test.mjs` covers `generic-pressure-loop-kit`, `generic-resource-loop-kit`, `generic-action-window-kit`, and `generic-affordance-descriptor-kit` as renderer-agnostic DSK promotion candidates. It asserts resources, events, systems, metadata boundaries, headless ticks/methods, and observable events for each surface; it now also proves the pressure/resource loops can run through `engine.n.genericPressureLoop` and `engine.n.genericResourceLoop` after broad compatibility facades are poisoned.
 - `tests/generic-promotion-replay-smoke.test.mjs` plus `tests/fixtures/generic-promotion-replay-fixtures.mjs` adds deterministic fixed-tick replay coverage for the same four generic DSKs. The replay fixtures assert resource snapshots, event counts, method calls, descriptor availability, and fixed frame/tick results without DOM, Canvas, WebGL, browser input, or renderer ownership.
-- `tests/generic-route-progress-kit-smoke.test.mjs` covers `generic-route-progress-kit` as an atomic route/checkpoint/objective-progress boundary. It asserts state resources, checkpoint entered/completed events, route advanced/completed/reset/rejected events, ordered active checkpoint snapshots, out-of-order rejection, deterministic tick stamping, and renderer-agnostic `route-checkpoint` descriptors.
+- `tests/generic-route-progress-kit-smoke.test.mjs` covers `generic-route-progress-kit` as an atomic route/checkpoint/objective-progress boundary. It asserts state resources, checkpoint entered/completed events, route advanced/completed/reset/rejected events, ordered active checkpoint snapshots, out-of-order rejection, deterministic tick stamping, renderer-agnostic `route-checkpoint` descriptors, and the preferred `engine.n.genericRouteProgress` namespace after the legacy `engine.genericRouteProgress` facade is poisoned.
 - `tests/promotion-determinism-guard-smoke.test.mjs` now keeps the promotion-facing generic DSK candidates and `generic-defense-dsk-boundaries`/`generic-defense-aaa-dsk-bridge` free of wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, and animation-frame ownership. It also makes the remaining `generic-defense-aaa-kits` wall-clock/browser-timing compatibility exceptions explicit so they cannot be mistaken for Core-promotion-ready surfaces.
 - `tests/generic-defense-placement-projector-namespace-smoke.test.mjs` now guards the reusable placement projector's transition from broad compatibility facades to `engine.n.genericDefense.sessionFacade` for snapshot/build semantics. It poisons `engine.genericDefense` and `engine.defenseBuild` after namespace sync and confirms a valid placement through the namespaced DSK session facade without DOM, Canvas, or browser frame timing.
 
@@ -79,6 +79,13 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - This closes an atomic ProtoKit gap for route/checkpoint/objective-progress state, but it does not yet close local experiment JavaScript shrink because no Experiments host has consumed it yet.
 - Safest next smoke patch: add an Experiments manifest/spec smoke for one checkpoint-heavy canonical route, then migrate only the ordered checkpoint ledger into `generic-route-progress-kit` while leaving renderer hit tests and route fiction in the host.
 
+## 2026-06-24 — API Surface Pruner route namespace smoke update
+
+- `tests/generic-route-progress-kit-smoke.test.mjs` now checks `GENERIC_ROUTE_PROGRESS_ENGINE_NAMESPACE`, `syncGenericRouteProgressEngineNamespace(engine)`, `metadata.engineNamespace`, and all semantic route-progress calls through `engine.n.genericRouteProgress` after poisoning `engine.genericRouteProgress`.
+- `tests/generic-promotion-gate-smoke.test.mjs` now checks `engine.n.genericPressureLoop` and `engine.n.genericResourceLoop` for the pressure/resource promotion candidates after poisoning the broad compatibility facades.
+- `tests/generic-route-cargo-extraction-kit-smoke.test.mjs` now confirms the route-cargo composite can snapshot, complete checkpoints, pick up/deliver cargo, adjust pressure, tick, complete, and reset through namespaced child DSKs after `engine.genericRouteProgress`, `engine.genericResourceLoop`, and `engine.genericPressureLoop` are poisoned.
+- This closes a namespace-drift gap before Experiments route-host migration: the composite delivery/extraction path no longer depends on broad child facades when the smaller `engine.n` boundaries are installed.
+
 ## Open gaps
 
 - Replace `generic-defense-aaa-kits` wall-clock ledger/presentation stamps with tick/command-derived deterministic stamps or keep the AAA facade outside promotion-facing surfaces.
@@ -86,3 +93,4 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - Route-level replay manifests now exist in Experiments, and `signal-bastion` has the first executable route-domain replay. Add equivalent executable replays for other lanes only after a real reusable ProtoKit boundary exists.
 - Add a Core-backed integration smoke inside ProtoKits once the repo/package wiring exposes a stable local Core import path in this workspace.
 - Add downstream route consumption proof for `generic-route-progress-kit`; until then it is an atomic ProtoKit scaffold with headless smoke coverage, not a proven local-JS reduction in Experiments.
+- Add downstream route consumption proof for `generic-route-cargo-extraction-kit`; until then the composite has cleaner namespaced child boundaries, but no Experiments JavaScript shrink should be claimed.
