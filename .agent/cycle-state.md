@@ -22,6 +22,8 @@ New Atomic Domain Kit Expander focus: `generic-route-progress-kit` now exists as
 
 New Composite Domain Kit Builder focus: `generic-route-cargo-extraction-kit` now exists as the first lightweight composite above route progress, cargo/resource ledger, and pressure channels. It should be used to test traversal/cargo and delivery/extraction routes without creating route-local checkpoint/cargo/pressure state machines or a monolithic game engine.
 
+New API Surface Pruner focus: the route/cargo/extraction family now has preferred atomic child namespaces: `engine.n.genericRouteProgress`, `engine.n.genericResourceLoop`, and `engine.n.genericPressureLoop`. The route-cargo composite now uses those child namespaces first, so Experiments can migrate one boundary at a time instead of depending on broad `engine.generic*` facades.
+
 ## Current pruning focus
 
 Keep `generic-defense-kits` and `generic-defense-aaa-kits` compatible while shifting future imports and host calls toward `generic-defense-dsk-boundaries`, `generic-defense-aaa-dsk-bridge`, and the seven named atomic aliases: map, economy wallet, build placement, wave/agent director, combat resolver, session facade, and render descriptors.
@@ -32,11 +34,13 @@ New route-cargo-extraction pruning rule: keep `generic-route-cargo-extraction-ki
 
 New host code should prefer `engine.n.genericDefense.map`, `engine.n.genericDefense.economyWallet`, `engine.n.genericDefense.buildPlacement`, `engine.n.genericDefense.waveAgentDirector`, `engine.n.genericDefense.combatResolver`, `engine.n.genericDefense.sessionFacade`, and `engine.n.genericDefense.renderDescriptors` after DSK install. The older `engine.defense*` and `engine.genericDefense` surfaces remain compatibility aliases.
 
+New traversal/cargo host code should prefer `engine.n.genericRouteProgress`, `engine.n.genericResourceLoop`, `engine.n.genericPressureLoop`, and then `engine.n.genericRouteCargoExtraction` only when it needs a composed delivery/extraction session facade. The older `engine.genericRouteProgress`, `engine.genericResourceLoop`, `engine.genericPressureLoop`, and `engine.genericRouteCargoExtraction` surfaces remain compatibility aliases.
+
 ## Current validation focus
 
-Run `generic-route-progress-kit-smoke.test.mjs` after the generic promotion replay smoke and before promotion determinism/defense smokes. It asserts the route-progress boundary exposes state resources, checkpoint enter/complete events, route advance/complete/reset/reject events, active/completed checkpoint snapshots, deterministic tick stamping, and renderer-agnostic `route-checkpoint` descriptors.
+Run `generic-route-progress-kit-smoke.test.mjs` after the generic promotion replay smoke and before promotion determinism/defense smokes. It asserts the route-progress boundary exposes state resources, checkpoint enter/complete events, route advance/complete/reset/reject events, active/completed checkpoint snapshots, deterministic tick stamping, renderer-agnostic `route-checkpoint` descriptors, and now namespace-only command/snapshot access through `engine.n.genericRouteProgress` after the broad facade is poisoned.
 
-Run `generic-route-cargo-extraction-kit-smoke.test.mjs` immediately after the route-progress smoke. It asserts the composite DSK installs route-progress, resource-loop, and pressure-loop child surfaces; exposes `engine.n.genericRouteCargoExtraction`; drives cargo pickup/delivery, checkpoint completion, pressure adjustment, fixed tick snapshot refresh, completion, reset, and renderer-agnostic route/cargo/pressure descriptors.
+Run `generic-route-cargo-extraction-kit-smoke.test.mjs` immediately after the route-progress smoke. It asserts the composite DSK installs route-progress, resource-loop, and pressure-loop child surfaces; exposes `engine.n.genericRouteCargoExtraction`; drives cargo pickup/delivery, checkpoint completion, pressure adjustment, fixed tick snapshot refresh, completion, reset, and renderer-agnostic route/cargo/pressure descriptors through namespaced child boundaries after broad child facades are poisoned.
 
 Run `generic-defense-placement-projector-namespace-smoke.test.mjs` before `generic-defense-dsk-boundaries-smoke.test.mjs` and the existing generic-defense replay so the placement projector's namespace preference is checked before broader boundary/replay coverage.
 
@@ -56,6 +60,8 @@ See `smoke-tests.md` and `replay-qa.md`.
 
 ## Last meaningful cycle report
 
+Latest API Surface Pruner update: `generic-route-progress-kit`, `generic-resource-loop-kit`, and `generic-pressure-loop-kit` now mirror their facades under `engine.n.genericRouteProgress`, `engine.n.genericResourceLoop`, and `engine.n.genericPressureLoop`; `generic-route-cargo-extraction-kit` now prefers those namespaced child boundaries for snapshots and commands. Smoke coverage now poisons broad route/resource/pressure facades for the covered seams. This is reusable ProtoKit API pruning only; no Experiments route JavaScript shrink is claimed yet.
+
 Latest Composite Domain Kit Builder update: `protokits/generic-route-cargo-extraction-kit/index.js`, `README.md`, `kit.manifest.json`, `tests/generic-route-cargo-extraction-kit-smoke.test.mjs`, `package.json`, and `.agent/cycle-reports/2026-06-24-composite-domain-kit-builder-0100.md` now add a lightweight composite DSK for route/cargo/extraction over `generic-route-progress-kit`, `generic-resource-loop-kit`, and `generic-pressure-loop-kit`. This is reusable ProtoKit implementation only; no Experiments route has consumed it yet, so local JavaScript shrink remains the next patch rather than a completed claim.
 
 Latest Atomic Domain Kit Expander update: `protokits/generic-route-progress-kit/index.js`, `README.md`, `kit.manifest.json`, `tests/generic-route-progress-kit-smoke.test.mjs`, `package.json`, and `.agent` notes now add an atomic rendererless route/checkpoint/objective-progress DSK surface. This is reusable ProtoKit implementation only; no Experiments route has consumed it yet, so local JavaScript shrink is a clear next patch rather than a completed claim.
@@ -66,4 +72,4 @@ Latest Twenty Game Refiner update: `.agent/cycle-reports/2026-06-24-twenty-game-
 
 Previous Deterministic Replay QA update: `.agent/replay-qa.md` recorded the exact placement-projector namespace patch plan and why the implementation/test push should be scoped to ProtoKits.
 
-Previous report: `.agent/cycle-reports/2026-06-23-api-surface-pruner-2030.md`.
+Previous API Surface Pruner report: `.agent/cycle-reports/2026-06-23-api-surface-pruner-2030.md`.
