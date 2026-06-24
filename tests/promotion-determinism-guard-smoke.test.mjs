@@ -7,6 +7,8 @@ const promotionCandidatePaths = [
   "protokits/generic-resource-loop-kit/index.js",
   "protokits/generic-action-window-kit/index.js",
   "protokits/generic-affordance-descriptor-kit/index.js",
+  "protokits/generic-route-progress-kit/index.js",
+  "protokits/generic-route-cargo-extraction-kit/index.js",
   "protokits/generic-defense-dsk-boundaries/index.js",
   "protokits/generic-defense-aaa-dsk-bridge/index.js",
   "protokits/generic-defense-session-command-kit/index.js"
