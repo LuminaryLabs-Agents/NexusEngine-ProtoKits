@@ -16,7 +16,9 @@ Owned here:
 
 - Composite snapshot resource: `genericRouteCargoExtraction.state`.
 - Composite events for snapshot updates, cargo changes, pressure changes, completion, and rejection.
-- Composite facade methods on `engine.genericRouteCargoExtraction` and `engine.n.genericRouteCargoExtraction`.
+- Preferred composite facade methods on `engine.n.genericRouteCargoExtraction`.
+- Compatibility composite facade methods on `engine.genericRouteCargoExtraction`.
+- Child boundary calls prefer `engine.n.genericRouteProgress`, `engine.n.genericResourceLoop`, and `engine.n.genericPressureLoop`, with compatibility fallbacks for older hosts.
 - Renderer-agnostic descriptors: `route-checkpoint`, `cargo-resource`, and `extraction-pressure-channel`.
 
 Not owned here:
