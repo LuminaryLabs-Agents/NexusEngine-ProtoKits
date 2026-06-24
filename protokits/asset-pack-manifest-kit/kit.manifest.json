@@ -1,0 +1,17 @@
+{
+  "id": "asset-pack-manifest-kit",
+  "domain": "asset-pack-manifest",
+  "type": "composition-kit",
+  "status": "experimental",
+  "factory": "createAssetPackManifestKit",
+  "requires": [],
+  "provides": ["asset-pack-manifest", "lazy-asset-pack-registry"],
+  "resources": ["assetPackManifest.state"],
+  "events": ["assetPackManifest.registered"],
+  "publicApi": ["engine.assetPacks.register", "engine.assetPacks.get", "engine.assetPacks.list", "engine.assetPacks.resolve", "engine.assetPacks.snapshot"],
+  "descriptors": [],
+  "rendererBoundary": { "outputsDescriptors": false, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": { "scalesWith": ["assetPackCount", "assetReferenceCount"], "telemetry": ["assetPackCount"], "degradationModes": ["deferOptionalAssetPacks"] },
+  "snapshot": { "supportsSnapshot": true, "supportsReset": false, "supportsLoadSnapshot": false },
+  "promotion": { "level": "experimental", "criteria": ["deploy registry composition", "host loader consumer", "asset budget validation"] }
+}
