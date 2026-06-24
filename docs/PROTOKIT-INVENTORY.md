@@ -17,9 +17,13 @@ This inventory tracks current documentation and composition status. It started a
 | `protokits/session-facade-kit` | `session-facade-kit` | session-facade | composition-kit | experimental | README | manifest | Host-facing session API for dispatch/snapshot/smoke. |
 | `protokits/scene-graph-domain-kit` | `scene-graph-domain-kit` | scene-graph | atomic-domain-service-kit | experimental | README | manifest | General scene object graph and patch state. |
 | `protokits/kit-registry` | `kit-registry` | kit-registry | tooling-kit | experimental | README | no manifest | Pure registry helpers for kit manifests. |
-| `protokits/aaa-batch-deploy-bridge` | `aaa-batch-deploy-bridge` | compatibility-bridge | bridge-kit | experimental | README | no manifest | Convert AAA batch specs into deploy manifests. |
+| `protokits/project-batch-deploy-bridge` | `project-batch-deploy-bridge` | compatibility-bridge | bridge-kit | experimental | README | no manifest | Convert project batch specs into deploy manifests. |
 | `protokits/gallery-registry-bridge` | `gallery-registry-bridge` | compatibility-bridge | bridge-kit | experimental | README | no manifest | Convert gallery app entries into deploy manifests. |
 | `protokits/generated-route-host-bridge` | `generated-route-host-bridge` | compatibility-bridge | bridge-kit | experimental | README | no manifest | Represent generated route hosts as host-shell contracts. |
+
+## Deprecated compatibility aliases
+
+Legacy quality-tier bridge paths remain in the repo only so existing consumers do not break. New docs and code should use project/high-fidelity naming instead.
 
 ## Public legacy families
 
@@ -27,7 +31,7 @@ This inventory tracks current documentation and composition status. It started a
 |---|---|---|---|
 | `aerial-canyon-kits` | canyon terrain, flight corridor, powered aerial flight, vegetation, procedural objects, projectile, combat, encounter, camera, mission | Existing README is strong | Add individual manifests and promotion evidence. |
 | `aerial-biome-fidelity-kits` | aerial biome fidelity family | README stub | Extract APIs/resources/events and add manifests. |
-| `aerial-cel-flight-feel-kits` | aerial cel flight feel family | Needs README | Add family README and source inventory. |
+| `aerial-cel-flight-feel-kits` | aerial cel flight feel family | README stub | Add source inventory and manifests. |
 | `aerial-render-bundle-kits` | render bundle family | README stub | Add descriptor inventory and performance contract. |
 | `aerial-ui-interaction-kits` | aerial UI/interaction family | README stub | Add input/interaction contract docs. |
 | `environment-kits` | environment/fidelity family | README stub | Add terrain/weather/vegetation/visual target docs. |
@@ -53,8 +57,8 @@ This inventory tracks current documentation and composition status. It started a
 | `scripts/check-domain-boundaries.mjs` | domain boundary validation | added |
 | `scripts/validate-performance-contracts.mjs` | performance contract validation | added |
 | `scripts/check-doc-coverage.mjs` | warning-first README/manifest coverage | added |
-| `tests/composition-layer-smoke.test.mjs` | composition layer smoke test | added |
+| `tests/composition-layer-smoke.test.mjs` | composition layer smoke test | updated for project batch bridge |
 
 ## Rollout rule
 
-Legacy undocumented kits warn. New composition kits require README coverage, and runtime/domain kits in the composition layer require manifests.
+Legacy undocumented kits warn. New composition kits require README coverage, and runtime/domain kits in the composition layer require manifests. Quality target words should not become kit names, bridge names, family names, or domain boundaries.
