@@ -30,6 +30,7 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - `tests/promotion-determinism-guard-smoke.test.mjs` now keeps the promotion-facing generic DSK candidates, route-progress/route-cargo candidates, `generic-defense-dsk-boundaries`/`generic-defense-aaa-dsk-bridge`, and the new `generic-defense-session-command-kit` free of wall-clock, RNG, DOM, Canvas, WebGL, browser audio, pointer, and animation-frame ownership. It also makes the remaining `generic-defense-aaa-kits` wall-clock/browser-timing compatibility exceptions explicit so they cannot be mistaken for Core-promotion-ready surfaces.
 - `tests/generic-defense-placement-projector-namespace-smoke.test.mjs` now guards the reusable placement projector's transition from broad compatibility facades to `engine.n.genericDefense.sessionFacade` for snapshot/build semantics. It poisons `engine.genericDefense` and `engine.defenseBuild` after namespace sync and confirms a valid placement through the namespaced DSK session facade without DOM, Canvas, or browser frame timing.
 - `tests/generic-defense-session-command-kit-smoke.test.mjs` covers `generic-defense-session-command-kit` as a rendererless command boundary for blueprint selection and structure sell/refund. It installs the seven generic-defense DSK aliases plus the command kit, proves `engine.n.genericDefense.sessionFacade.setBlueprint/sell` and `engine.n.genericDefense.sessionCommands.setBlueprint/sell`, verifies economy refund settlement through the wallet event/resource boundary, and excludes wall-clock, RNG, DOM, Canvas, WebGL, browser audio, and animation-frame APIs.
+- `tests/vr-platformer-kit-suite-smoke.test.mjs` covers `vr-platformer-kit-suite` as incubation smoke only. It checks the platformer level/avatar/physics/spatial-board kit ids, basic deterministic `simulatePlatformerStep()` movement/jump behavior, stereoscopic descriptor sibling composition, and the sixteen-kit maximum-feature composition. It is not yet deterministic replay and should not be treated as Core-promotion evidence.
 
 ## 2026-06-23 — Headless Tick Smoke Builder findings
 
@@ -109,6 +110,12 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - The replay proves the higher-level delivery/extraction boundary through `engine.n.genericRouteCargoExtraction` while broad `engine.genericRouteCargoExtraction`, `engine.genericRouteProgress`, `engine.genericResourceLoop`, and `engine.genericPressureLoop` are poisoned.
 - The promotion determinism guard now scans both `generic-route-progress-kit` and `generic-route-cargo-extraction-kit` so route/cargo promotion-facing surfaces cannot drift into wall-clock or browser/renderer ownership.
 
+## 2026-06-24 — Intent Miner spatial-platformer smoke update
+
+- `tests/vr-platformer-kit-suite-smoke.test.mjs` is wired into the default ProtoKits `npm test` script.
+- The smoke checks deterministic `simulatePlatformerStep()` behavior, key platformer and spatial-board kit ids, `stereoscopic-render-domain-kit` descriptor sibling composition, and sixteen-kit maximum-feature composition.
+- This is useful incubation coverage, but it is not fixed-tick replay. Add replay fixtures and determinism guard scanning before treating `vr-platformer-kit-suite` or any child platformer/XR boundary as promotion-facing.
+
 ## Open gaps
 
 - Replace `generic-defense-aaa-kits` wall-clock ledger/presentation stamps with tick/command-derived deterministic stamps or keep the AAA facade outside promotion-facing surfaces.
@@ -116,3 +123,4 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - Route-level replay manifests now exist in Experiments, and `signal-bastion` has the first executable route-domain replay. Add equivalent executable replays for other lanes only after a real reusable ProtoKit boundary exists.
 - Add a Core-backed integration smoke inside ProtoKits once the repo/package wiring exposes a stable local Core import path in this workspace.
 - Add downstream route consumption proof for `generic-route-progress-kit` and `generic-route-cargo-extraction-kit`; until then they have stronger ProtoKit-local replay coverage but only partial or no proven local-JS reduction in Experiments.
+- Add deterministic replay and promotion-determinism guard coverage for `vr-platformer-kit-suite` or its child platformer/XR domains before any promotion-facing claim.
