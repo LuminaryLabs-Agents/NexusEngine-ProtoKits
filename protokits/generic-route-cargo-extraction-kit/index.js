@@ -92,10 +92,22 @@ function classifyStatus(route, pressure) {
   return "active";
 }
 
+function routeProgressBoundary(engine) {
+  return engine?.n?.genericRouteProgress ?? engine?.genericRouteProgress;
+}
+
+function resourceLoopBoundary(engine) {
+  return engine?.n?.genericResourceLoop ?? engine?.genericResourceLoop;
+}
+
+function pressureLoopBoundary(engine) {
+  return engine?.n?.genericPressureLoop ?? engine?.genericPressureLoop;
+}
+
 function createSnapshot(config, engine, world) {
-  const route = engine.genericRouteProgress?.getState?.() ?? null;
-  const cargo = engine.genericResourceLoop?.getState?.() ?? null;
-  const pressure = engine.genericPressureLoop?.getState?.() ?? null;
+  const route = routeProgressBoundary(engine)?.getState?.() ?? null;
+  const cargo = resourceLoopBoundary(engine)?.getState?.() ?? null;
+  const pressure = pressureLoopBoundary(engine)?.getState?.() ?? null;
   return {
     version: GENERIC_ROUTE_CARGO_EXTRACTION_KIT_VERSION,
     id: String(config.stateId ?? config.id ?? config.routeId ?? "generic-route-cargo-extraction"),
@@ -215,48 +227,48 @@ export function createGenericRouteCargoExtractionKit(NexusRealtime, config = {})
         resources: { RouteCargoExtractionState },
         events: { SnapshotUpdated, CargoChanged, PressureChanged, Completed, Rejected },
         enterCheckpoint(checkpointId, payload = {}) {
-          const result = engine.genericRouteProgress?.enter?.(checkpointId, payload);
+          const result = routeProgressBoundary(engine)?.enter?.(checkpointId, payload);
           if (!result) return reject(world, "route-progress-unavailable", { checkpointId, commandId: payload.commandId });
           return { ...result, snapshot: refresh(world, engine, "enter-checkpoint", true) };
         },
         completeCheckpoint(checkpointId, payload = {}) {
-          const result = engine.genericRouteProgress?.complete?.(checkpointId, payload);
+          const result = routeProgressBoundary(engine)?.complete?.(checkpointId, payload);
           if (!result) return reject(world, "route-progress-unavailable", { checkpointId, commandId: payload.commandId });
           const snapshot = refresh(world, engine, "complete-checkpoint", true);
           if (result.completed) world.emit(Completed, { routeId: snapshot.route?.id, completedIds: snapshot.route?.completedIds ?? [], commandId: payload.commandId });
           return { ...result, snapshot };
         },
         advance(payload = {}) {
-          return this.completeCheckpoint(engine.genericRouteProgress?.getState?.()?.activeId, payload);
+          return this.completeCheckpoint(routeProgressBoundary(engine)?.getState?.()?.activeId, payload);
         },
         pickupCargo(resourceId = config.cargoId ?? "cargo", amount = 1, payload = {}) {
-          const cargo = engine.genericResourceLoop?.restore?.(resourceId, amount, payload.reason ?? "pickup-cargo");
+          const cargo = resourceLoopBoundary(engine)?.restore?.(resourceId, amount, payload.reason ?? "pickup-cargo");
           if (!cargo) return reject(world, "cargo-resource-unavailable", { resourceId, commandId: payload.commandId });
           world.emit(CargoChanged, { resourceId, amount: Math.abs(toNumber(amount, 0)), mode: "pickup", commandId: payload.commandId });
           return { accepted: true, cargo, snapshot: refresh(world, engine, "pickup-cargo", true) };
         },
         deliverCargo(resourceId = config.cargoId ?? "cargo", amount = 1, payload = {}) {
-          const cargo = engine.genericResourceLoop?.spend?.(resourceId, amount, payload.reason ?? "deliver-cargo");
+          const cargo = resourceLoopBoundary(engine)?.spend?.(resourceId, amount, payload.reason ?? "deliver-cargo");
           if (!cargo) return reject(world, "cargo-resource-unavailable", { resourceId, commandId: payload.commandId });
           world.emit(CargoChanged, { resourceId, amount: -Math.abs(toNumber(amount, 0)), mode: "deliver", commandId: payload.commandId });
           return { accepted: true, cargo, snapshot: refresh(world, engine, "deliver-cargo", true) };
         },
         adjustPressure(channelId = config.pressureId ?? "extraction-pressure", amount = 0, payload = {}) {
-          const pressure = engine.genericPressureLoop?.adjust?.(channelId, amount, payload.reason ?? "extraction-pressure");
+          const pressure = pressureLoopBoundary(engine)?.adjust?.(channelId, amount, payload.reason ?? "extraction-pressure");
           if (!pressure) return reject(world, "pressure-channel-unavailable", { channelId, commandId: payload.commandId });
           world.emit(PressureChanged, { channelId, amount: toNumber(amount, 0), mode: "adjust", commandId: payload.commandId });
           return { accepted: true, pressure, snapshot: refresh(world, engine, "adjust-pressure", true) };
         },
         recoverPressure(channelId = config.pressureId ?? "extraction-pressure", amount = 0, payload = {}) {
-          const pressure = engine.genericPressureLoop?.recover?.(channelId, amount, payload.reason ?? "recover-pressure");
+          const pressure = pressureLoopBoundary(engine)?.recover?.(channelId, amount, payload.reason ?? "recover-pressure");
           if (!pressure) return reject(world, "pressure-channel-unavailable", { channelId, commandId: payload.commandId });
           world.emit(PressureChanged, { channelId, amount: -Math.abs(toNumber(amount, 0)), mode: "recover", commandId: payload.commandId });
           return { accepted: true, pressure, snapshot: refresh(world, engine, "recover-pressure", true) };
         },
         reset(payload = {}) {
-          engine.genericRouteProgress?.reset?.({ route: payload.route ?? config.route, reason: payload.reason ?? "composite-reset" });
-          engine.genericResourceLoop?.reset?.({ resources: payload.resources ?? normalizeCargoResources(config), reason: payload.reason ?? "composite-reset" });
-          engine.genericPressureLoop?.reset?.({ channels: payload.pressureChannels ?? normalizePressureChannels(config), reason: payload.reason ?? "composite-reset" });
+          routeProgressBoundary(engine)?.reset?.({ route: payload.route ?? config.route, reason: payload.reason ?? "composite-reset" });
+          resourceLoopBoundary(engine)?.reset?.({ resources: payload.resources ?? normalizeCargoResources(config), reason: payload.reason ?? "composite-reset" });
+          pressureLoopBoundary(engine)?.reset?.({ channels: payload.pressureChannels ?? normalizePressureChannels(config), reason: payload.reason ?? "composite-reset" });
           return refresh(world, engine, "reset", true);
         },
         getSnapshot() {
@@ -282,7 +294,7 @@ export function createGenericRouteCargoExtractionKit(NexusRealtime, config = {})
       apiSurface: {
         resources: ["genericRouteCargoExtraction.state", "genericRouteCargoExtraction.routeProgress.state", "genericRouteCargoExtraction.cargo.state", "genericRouteCargoExtraction.pressure.state"],
         events: ["genericRouteCargoExtraction.snapshot.updated", "genericRouteCargoExtraction.cargo.changed", "genericRouteCargoExtraction.pressure.changed", "genericRouteCargoExtraction.completed", "genericRouteCargoExtraction.rejected"],
-        methods: ["engine.genericRouteCargoExtraction.enterCheckpoint", "engine.genericRouteCargoExtraction.completeCheckpoint", "engine.genericRouteCargoExtraction.advance", "engine.genericRouteCargoExtraction.pickupCargo", "engine.genericRouteCargoExtraction.deliverCargo", "engine.genericRouteCargoExtraction.adjustPressure", "engine.genericRouteCargoExtraction.recoverPressure", "engine.genericRouteCargoExtraction.reset", "engine.genericRouteCargoExtraction.getSnapshot", "engine.genericRouteCargoExtraction.getDescriptors", "engine.n.genericRouteCargoExtraction.getSnapshot"],
+        methods: ["engine.n.genericRouteCargoExtraction.enterCheckpoint", "engine.n.genericRouteCargoExtraction.completeCheckpoint", "engine.n.genericRouteCargoExtraction.advance", "engine.n.genericRouteCargoExtraction.pickupCargo", "engine.n.genericRouteCargoExtraction.deliverCargo", "engine.n.genericRouteCargoExtraction.adjustPressure", "engine.n.genericRouteCargoExtraction.recoverPressure", "engine.n.genericRouteCargoExtraction.reset", "engine.n.genericRouteCargoExtraction.getSnapshot", "engine.n.genericRouteCargoExtraction.getDescriptors", "engine.n.genericRouteProgress.*", "engine.n.genericResourceLoop.*", "engine.n.genericPressureLoop.*", "engine.genericRouteCargoExtraction.enterCheckpoint", "engine.genericRouteCargoExtraction.completeCheckpoint", "engine.genericRouteCargoExtraction.advance", "engine.genericRouteCargoExtraction.pickupCargo", "engine.genericRouteCargoExtraction.deliverCargo", "engine.genericRouteCargoExtraction.adjustPressure", "engine.genericRouteCargoExtraction.recoverPressure", "engine.genericRouteCargoExtraction.reset", "engine.genericRouteCargoExtraction.getSnapshot", "engine.genericRouteCargoExtraction.getDescriptors"],
         snapshots: ["route", "cargo", "pressure", "status", "descriptors"],
         descriptors: ["route-checkpoint", "cargo-resource", "extraction-pressure-channel"]
       }
