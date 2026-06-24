@@ -42,7 +42,7 @@ engine.defenseBuild = {
 };
 
 const begin = engine.placementProjector.begin(blueprintId);
-assert.equal(begin.valid, false, "begin waits for a world point before confirming placement");
+assert.equal(begin.active, true, "begin activates projector state before confirmation");
 const moved = engine.placementProjector.moveTo({ x: slot.x, y: slot.y });
 assert.equal(moved.valid, true, "projector validates placement from namespaced snapshot data");
 assert.equal(moved.slotId, slot.id, "projector resolves the intended slot from the namespaced snapshot");
