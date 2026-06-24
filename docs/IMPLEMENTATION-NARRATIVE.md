@@ -2,11 +2,11 @@
 
 This document records the reasoning path that led to the additive DSK composition layer in `NexusRealtime-ProtoKits`.
 
-## 1. From game ideas to AAA candidates
+## 1. From game ideas to high-fidelity candidates
 
-The discussion started with broad video game seeds. Those were reframed as AAA vertical-slice candidates by identifying player fantasy, core loop, world structure, signature systems, visual fidelity target, and a ten-minute proof slice.
+The discussion started with broad video game seeds. Those were reframed as high-fidelity vertical-slice candidates by identifying player fantasy, core loop, world structure, signature systems, visual fidelity target, and a ten-minute proof slice.
 
-## 2. From AAA candidates to proven game shapes
+## 2. From high-fidelity candidates to proven game shapes
 
 The ideas were then mapped onto familiar popular game structures: open-world action, extraction, cozy simulation, survival management, horror, racing, tactical defense, and action RPG. The desired shape became familiar loop plus one strong gimmick.
 
@@ -30,7 +30,11 @@ A house was used as the test case. A specific house is content. A reusable house
 
 The repo audit found that the core ideas already existed: DSM architecture docs, Deploy Kit doctrine, performance-budget seeds, spatial scene graph/persistence seeds, generic defense boundaries, and experiment route registries. The implementation added the missing composition layer without removing existing behavior.
 
-## 8. Why documentation became the next required step
+## 8. From quality label to project naming
+
+The naming pass clarified that quality targets are not architecture categories. New docs and APIs should use project batch, vertical slice, polished project, generated project, high-fidelity, and desktop-fidelity language. Legacy quality-tier names remain only as compatibility aliases.
+
+## 9. Why documentation became the next required step
 
 After the additive composition layer landed, the repo needed a full changelog, implementation narrative, documentation index, decision records, documentation backlog, compatibility guarantee, family overview docs, README stubs, and doc coverage tooling. Without that, future agents would see files but not the architectural story behind them.
 
@@ -43,4 +47,5 @@ Scenes do not become engines.
 Hosts do not own gameplay.
 Renderers consume descriptors.
 Kits make behavior measurable and reusable.
+Quality targets do not become domain names.
 ```
