@@ -11,6 +11,7 @@ import { createSaveDeltaState, recordScenePatch, mergeSceneDelta } from "../prot
 import { createHostShellDescriptor } from "../protokits/host-shell-contract-kit/index.js";
 import { createSessionFacadeState, recordSessionCommand, recordSessionSnapshot, createValidationSnapshot } from "../protokits/session-facade-kit/index.js";
 import { createKitRegistry } from "../protokits/kit-registry/index.js";
+import { convertProjectBatchItemToDeployManifest } from "../protokits/project-batch-deploy-bridge/index.js";
 import { convertAaaBatchGameToDeployManifest } from "../protokits/aaa-batch-deploy-bridge/index.js";
 import { convertGalleryAppToDeployManifest } from "../protokits/gallery-registry-bridge/index.js";
 import { createGeneratedRouteHostBridge } from "../protokits/generated-route-host-bridge/index.js";
@@ -63,8 +64,9 @@ assert.equal(createValidationSnapshot(session).commandCount, 1);
 const kitRegistry = createKitRegistry([{ id: "house-domain-kit", provides: ["house-domain"] }, { id: "living-house-deploy", type: "deploy-kit", requires: ["house-domain"] }]);
 assert.equal(kitRegistry.findCompatibleKits("living-house-deploy")[0].id, "house-domain-kit");
 
-const aaaDeploy = convertAaaBatchGameToDeployManifest({ id: "ember-rail", title: "Ember Rail", kitStack: ["resource-pressure-kit"], smoke: ["vent"] });
-assert.equal(aaaDeploy.uses[0], "resource-pressure-kit");
+const projectDeploy = convertProjectBatchItemToDeployManifest({ id: "ember-rail", title: "Ember Rail", kitStack: ["resource-pressure-kit"] });
+assert.equal(projectDeploy.uses[0], "resource-pressure-kit");
+assert.equal(convertAaaBatchGameToDeployManifest, convertProjectBatchItemToDeployManifest);
 
 const galleryDeploy = convertGalleryAppToDeployManifest({ id: "fogline", title: "Fogline", kind: "experiment", route: "./experiments/fogline/" });
 assert.equal(galleryDeploy.kind, "experiment-deploy-kit");
