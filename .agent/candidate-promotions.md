@@ -2,6 +2,21 @@
 
 Record reusable behavior that should move into ProtoKits.
 
+## 2026-06-25 — ProtoKits master pipeline bootstrap
+
+`protokits/kit-status-matrix.json` is now the current classification layer for high-signal ProtoKits. It turns the broad inventory into a gated pipeline: atomic DSKs, atomic DSK families, composite coordinators, compatibility bridges, game-family kits, renderer-descriptor kits, and incubation suites.
+
+Promotion/pruning implications:
+
+- Promotion-facing after proof: `generic-pressure-loop-kit`, `generic-resource-loop-kit`, `generic-action-window-kit`, and `generic-affordance-descriptor-kit` remain the cleanest atomic DSK candidates after replay, multi-config usage, docs, and promotion review.
+- Incubating with downstream proof needed: `generic-route-progress-kit` stays atomic and must not absorb cargo, hazard, pressure, collision, DOM input, Canvas hit testing, renderer camera, or route fiction.
+- Blocked until downstream route consumption: `generic-route-cargo-extraction-kit` remains a composite coordinator over route progress, resource loop, and pressure loop. Do not claim it as a full traversal/cargo-pressure lane until a route such as `next-ledge` consumes cargo/resource/pressure through it and adds route replay proof.
+- Strongest promotion pipeline, not one bundle: `generic-defense-dsk-boundaries` gives the atomic map/economy/build/wave/combat/session/render child surfaces. The broad generic-defense compatibility and AAA bridge surfaces remain migration tools, not Core-promotion candidates.
+- Split required: vertical climb, arcade race, open-world flight, and other game-family stacks should promote only proven child domains, not branded or family-wide bundles.
+- Promotion hold: `vr-platformer-kit-suite` remains an incubation suite for a possible spatial-platformer-loop; child domains need deterministic replay and downstream proof before promotion-facing claims.
+
+Safest next patch: run `tests/kit-status-matrix-smoke.test.mjs`, then either add downstream `next-ledge` consumption proof for `generic-route-cargo-extraction-kit` or add deterministic replay for one child boundary inside `vr-platformer-kit-suite`.
+
 ## 2026-06-23 — ProtoKit Promotion Gate
 
 Promotion lens: reusable behavior is ready for ProtoKits when it forms a renderer-agnostic domain communication boundary through resources, events, methods, snapshots/descriptors, presets/config, and headless tick coverage.
