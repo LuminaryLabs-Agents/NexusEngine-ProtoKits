@@ -4,6 +4,14 @@
 
 Grow reusable DSK-based ProtoKits while shrinking local experiment JavaScript.
 
+## Agent operating contract
+
+- Start each meaningful ProtoKits turn at `.agent/START_HERE.md`.
+- Treat `.agent/cycle-state.md` as the current compact repo state.
+- Check `.agent/candidate-promotions.md` and `protokits/kit-status-matrix.json` before promotion, split, hold, archive, or Core-handoff claims.
+- Use `.agent/turn-ledger/` for meaningful per-turn records.
+- Keep changes bounded to the current kit ledge unless explicitly directed.
+
 ## Standing cycle constraints
 
 - Review `.agent/` before every decision.
@@ -40,7 +48,11 @@ New host code should prefer `engine.n.genericDefense.map`, `engine.n.genericDefe
 
 New traversal/cargo host code should prefer `engine.n.genericRouteProgress`, `engine.n.genericResourceLoop`, `engine.n.genericPressureLoop`, and then `engine.n.genericRouteCargoExtraction` only when it needs a composed delivery/extraction session facade. The older `engine.genericRouteProgress`, `engine.genericResourceLoop`, `engine.genericPressureLoop`, and `engine.genericRouteCargoExtraction` surfaces remain compatibility aliases.
 
+New promotion-pipeline pruning rule: `protokits/kit-status-matrix.json` is now the current classification layer for high-signal kits. Broad game-family suites, compatibility bridges, renderer descriptor domains, and composite coordinators must not become Core-promotion candidates by assumption; promote only atomic child boundaries after proof.
+
 ## Current validation focus
+
+Run `tests/kit-status-matrix-smoke.test.mjs` before promotion-facing smokes when classification, promotion status, split/hold decisions, or matrix entries change. It guards required high-signal kits, keeps `generic-route-progress-kit` atomic, keeps `generic-route-cargo-extraction-kit` blocked on downstream consumption, and prevents broad families or `vr-platformer-kit-suite` from becoming promotion-facing bundles.
 
 Run `generic-route-progress-kit-smoke.test.mjs` after the generic promotion replay smoke and before the route-progress replay. It asserts the route-progress boundary exposes state resources, checkpoint enter/complete events, route advance/complete/reset/reject events, active/completed checkpoint snapshots, deterministic tick stamping, renderer-agnostic `route-checkpoint` descriptors, and namespace-only command/snapshot access through `engine.n.genericRouteProgress` after the broad facade is disabled.
 
@@ -56,7 +68,7 @@ Run `vr-platformer-kit-suite-smoke.test.mjs` near the end of the default suite a
 
 ## Current promotion candidates
 
-See `promotion-candidates.md` / `candidate-promotions.md`.
+See `protokits/kit-status-matrix.json`, `docs/protokit-promotion-pipeline.md`, and `.agent/candidate-promotions.md`.
 
 ## Current route/canonicalization concerns
 
@@ -67,6 +79,8 @@ See `route-canonicalization.md`.
 See `smoke-tests.md` and `replay-qa.md`.
 
 ## Last meaningful cycle report
+
+Latest ProtoKits Pipeline Bootstrap update: `.agent/START_HERE.md`, `.agent/PROCESS.md`, `.agent/turn-ledger/README.md`, `.agent/templates/ledger-entry-template.md`, `.agent/templates/dsk-boundary-template.md`, `.agent/templates/promotion-review-template.md`, `.agent/turn-ledger/2026-06-25-protokits-master-plan.md`, `protokits/kit-status-matrix.json`, `tests/kit-status-matrix-smoke.test.mjs`, and `docs/protokit-promotion-pipeline.md` now formalize the current ProtoKits inventory as a ranked DSK/domain incubation pipeline. This is classification/process/test scaffolding only; no kit runtime behavior, package exports, downstream consumption claims, or Core promotion claims changed.
 
 Latest Atomic Domain Kit Expander update: `.agent/cycle-reports/2026-06-24-atomic-domain-kit-expander-1228.md` reconciles ProtoKits memory with the current downstream Experiments state. `next-ledge` now gives `generic-route-progress-kit` partial downstream consumption/spec proof through `engine.n.genericRouteProgress`, so the next atomic-domain move is not another route-progress kit; it is a scoped cargo/resource/pressure consumption plan for `generic-route-cargo-extraction-kit` while keeping tether physics, collision, camera, browser input, rendering, assets, and route fiction in Experiments.
 
