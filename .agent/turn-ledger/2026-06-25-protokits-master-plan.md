@@ -35,11 +35,16 @@ Added a ProtoKits `.agent` operating entry point and process, templates for DSK 
 - `protokits/kit-status-matrix.json`
 - `tests/kit-status-matrix-smoke.test.mjs`
 - `docs/protokit-promotion-pipeline.md`
-- `package.json`
 
 ## Checks Run
 
-No local runtime checks were run from this interface. The new `tests/kit-status-matrix-smoke.test.mjs` is wired into `npm test` and should be run with the rest of the suite.
+No local runtime checks were run from this interface. The new `tests/kit-status-matrix-smoke.test.mjs` should be run directly with:
+
+```bash
+node tests/kit-status-matrix-smoke.test.mjs
+```
+
+A later patch should wire it into `npm test` if the package script update is available.
 
 ## Decision Notes
 
@@ -53,7 +58,7 @@ The second risk is accidentally promoting broad bundles. The matrix intentionall
 
 ## Next Ledge
 
-Run `npm test` and then add a narrower replay or downstream-consumption patch for one promotion-facing boundary, preferably `generic-route-cargo-extraction-kit` downstream consumption through `next-ledge` or deterministic replay for one held spatial-platformer child boundary.
+Run `node tests/kit-status-matrix-smoke.test.mjs`, then wire it into `npm test` and add a narrower replay or downstream-consumption patch for one promotion-facing boundary, preferably `generic-route-cargo-extraction-kit` downstream consumption through `next-ledge` or deterministic replay for one held spatial-platformer child boundary.
 
 ## Do Not Do Next
 
