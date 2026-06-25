@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "nexusrealtime.protokits.kit-status-matrix.v1",
+  "updated": "2026-06-25",
+  "purpose": "Classify current ProtoKits into a gated DSK/domain incubation pipeline.",
+  "classificationTypes": [
+    "atomic-dsk",
+    "atomic-dsk-family",
+    "composite-dsk",
+    "game-family-kit",
+    "renderer-descriptor-kit",
+    "compatibility-bridge",
+    "incubation-suite"
+  ],
+  "promotionStatuses": [
+    "promotion-candidate-after-proof",
+    "incubating-downstream-proof-needed",
+    "blocked-downstream-consumption-needed",
+    "split-required",
+    "promotion-hold",
+    "compatibility-only"
+  ],
+  "entries": [
+    {
+      "id": "generic-pressure-loop-kit",
+      "classification": "atomic-dsk",
+      "promotionStatus": "promotion-candidate-after-proof",
+      "currentAction": "Keep as a renderer-agnostic pressure-channel DSK and verify replay plus multi-config usage before Core review.",
+      "nextLedge": "Keep smoke and replay coverage green and identify the next downstream consumer.",
+      "doNotDoNext": "Do not merge route fiction or renderer feedback into this atomic boundary."
+    },
+    {
+      "id": "generic-resource-loop-kit",
+      "classification": "atomic-dsk",
+      "promotionStatus": "promotion-candidate-after-proof",
+      "currentAction": "Keep as a reusable meter/resource DSK.",
+      "nextLedge": "Use it as a child boundary where route/cargo/extraction or survival pressure needs resource state.",
+      "doNotDoNext": "Do not turn it into a whole economy, inventory, or mode kit."
+    },
+    {
+      "id": "generic-action-window-kit",
+      "classification": "atomic-dsk",
+      "promotionStatus": "promotion-candidate-after-proof",
+      "currentAction": "Keep as a reusable timing window and cooldown DSK.",
+      "nextLedge": "Preserve deterministic fixtures for accepted and rejected timing windows.",
+      "doNotDoNext": "Do not add game-specific tutorial timing or renderer feedback."
+    },
+    {
+      "id": "generic-affordance-descriptor-kit",
+      "classification": "atomic-dsk",
+      "promotionStatus": "promotion-candidate-after-proof",
+      "currentAction": "Keep as a renderer-agnostic target availability and prompt descriptor DSK.",
+      "nextLedge": "Use as a scan, survey, or interaction child boundary where Experiments need affordance descriptors.",
+      "doNotDoNext": "Do not let prompt descriptors become UI rendering or game-specific tutorial copy."
+    },
+    {
+      "id": "generic-route-progress-kit",
+      "classification": "atomic-dsk",
+      "promotionStatus": "incubating-downstream-proof-needed",
+      "currentAction": "Keep as the smallest reusable route/checkpoint/objective-progress boundary.",
+      "mustNotOwn": ["cargo ledger", "hazard simulation", "pressure meters", "browser collision", "DOM input", "Canvas hit testing", "renderer camera", "route fiction"],
+      "nextLedge": "Keep next-ledge partial consumption stable and add route-level replay before any Core promotion claim.",
+      "doNotDoNext": "Do not build another route/checkpoint atom or fold cargo/resource/pressure into this kit."
+    },
+    {
+      "id": "generic-route-cargo-extraction-kit",
+      "classification": "composite-dsk",
+      "promotionStatus": "blocked-downstream-consumption-needed",
+      "currentAction": "Keep as a composite coordinator over route progress, resource loop, and pressure loop child DSKs.",
+      "composes": ["generic-route-progress-kit", "generic-resource-loop-kit", "generic-pressure-loop-kit"],
+      "requiresDownstreamConsumption": true,
+      "nextLedge": "Consume one cargo/resource/pressure source from next-ledge through this composite before claiming a full traversal/cargo-pressure lane.",
+      "doNotDoNext": "Do not promote the composite or claim a second executable lane before downstream route proof."
+    },
+    {
+      "id": "generic-defense-dsk-boundaries",
+      "classification": "atomic-dsk-family",
+      "promotionStatus": "incubating-downstream-proof-needed",
+      "currentAction": "Use as the preferred atomic alias surface for generic-defense route-host migration.",
+      "children": ["map", "economyWallet", "buildPlacement", "waveAgentDirector", "combatResolver", "sessionFacade", "renderDescriptors"],
+      "preferredNamespace": "engine.n.genericDefense",
+      "nextLedge": "Keep Signal Bastion consuming the namespaced child boundaries while preserving compatibility aliases.",
+      "doNotDoNext": "Do not promote the broad generic-defense bundle as a single Core kit."
+    },
+    {
+      "id": "generic-defense-aaa-dsk-bridge",
+      "classification": "compatibility-bridge",
+      "promotionStatus": "compatibility-only",
+      "currentAction": "Keep as a migration bridge for hosts that need broad compatibility plus atomic DSK aliases.",
+      "nextLedge": "Use it to keep hosts working while route calls migrate toward engine.n.genericDefense child boundaries.",
+      "doNotDoNext": "Do not treat the AAA bridge as Core-promotion-ready."
+    },
+    {
+      "id": "generic-defense-session-command-kit",
+      "classification": "composite-dsk",
+      "promotionStatus": "incubating-downstream-proof-needed",
+      "currentAction": "Keep as a narrow command extension for setBlueprint and sell/refund while compatibility risk remains.",
+      "nextLedge": "Keep Signal Bastion proving package import and n.genericDefense session command calls.",
+      "doNotDoNext": "Do not fold into Core or sessionFacade until compatibility risk is low and replay stays green."
+    },
+    {
+      "id": "vertical-climb-family",
+      "classification": "game-family-kit",
+      "promotionStatus": "split-required",
+      "currentAction": "Keep as a game-family incubation stack whose atomic children prove climb, swing, risk, input, camera, and feedback boundaries separately.",
+      "children": ["ledge-route-kit", "simple-swing-kit", "climb-risk-kit", "climb-input-kit", "climb-camera-kit", "diegetic-feedback-kit", "next-ledge-kit"],
+      "nextLedge": "Preserve Next Ledge as preset/composition while identifying which child boundary has the cleanest promotion path.",
+      "doNotDoNext": "Do not promote next-ledge-kit as a branded whole-game kit."
+    },
+    {
+      "id": "arcade-race-family",
+      "classification": "game-family-kit",
+      "promotionStatus": "split-required",
+      "currentAction": "Keep as a generic racing family stack and review child domains separately.",
+      "children": ["downhill-race-kit", "slope-traversal-kit", "racer-ai-kit", "difficulty-curve-kit", "race-hazard-kit", "boost-path-kit", "racer-contact-kit", "race-pacing-kit", "course-director-kit", "arcade-race-visual-kit"],
+      "nextLedge": "Classify slope traversal, boost path, racer contact, and race hazard as separate promotion-facing child candidates only after proof.",
+      "doNotDoNext": "Do not promote the full arcade race family as one Core kit."
+    },
+    {
+      "id": "open-world-flight-family",
+      "classification": "game-family-kit",
+      "promotionStatus": "split-required",
+      "currentAction": "Split environment descriptors, world patching, flight traversal, and renderer-facing batch descriptors into independently reviewed domains.",
+      "children": ["terrain-sampler-kit", "world-patch-kit", "scatter-placement-kit", "material-palette-kit", "lighting-descriptor-kit", "sky-atmosphere-kit", "flight-motion-kit", "updraft-volume-kit", "checkpoint-volume-kit", "instanced-render-kit", "actor-render-kit"],
+      "nextLedge": "Separate simulation/state domains from descriptor-only domains in future promotion reviews.",
+      "doNotDoNext": "Do not promote the whole open-world flight stack as one Core capability."
+    },
+    {
+      "id": "stereoscopic-render-domain-kit",
+      "classification": "renderer-descriptor-kit",
+      "promotionStatus": "incubating-downstream-proof-needed",
+      "currentAction": "Keep as a renderer-agnostic stereo descriptor domain for host adapters.",
+      "nextLedge": "Keep descriptor-only tests green and avoid adding raw platform session ownership.",
+      "doNotDoNext": "Do not turn descriptor state into a renderer adapter or platform runtime."
+    },
+    {
+      "id": "render-layer-kit",
+      "classification": "renderer-descriptor-kit",
+      "promotionStatus": "incubating-downstream-proof-needed",
+      "currentAction": "Keep as visual descriptor and layer-state output for hosts, not a drawing engine.",
+      "nextLedge": "Keep visual pipeline descriptor-only while consumers prove host renderer separation.",
+      "doNotDoNext": "Do not move renderer implementation or gameplay outcomes into visual descriptor kits."
+    },
+    {
+      "id": "vr-platformer-kit-suite",
+      "classification": "incubation-suite",
+      "promotionStatus": "promotion-hold",
+      "currentAction": "Hold as a maximum-feature spatial-platformer-loop incubation suite and review child domains separately.",
+      "children": ["platformer physics/progression", "spatial-board/XR pose/input", "comfort policy", "stereo/render descriptors"],
+      "doNotPromoteAsBundle": true,
+      "nextLedge": "Add deterministic replay for one child platformer boundary or a suite-level fixed-tick fixture before any promotion-facing claim.",
+      "doNotDoNext": "Do not promote the full suite or use suite smoke coverage as a Core-promotion signal."
+    }
+  ]
+}
