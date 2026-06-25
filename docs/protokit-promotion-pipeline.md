@@ -133,8 +133,9 @@ protokits/kit-status-matrix.json update
 After this bootstrap, the safest next implementation patches are:
 
 ```txt
-1. Run npm test and confirm kit-status-matrix-smoke passes.
-2. Add downstream next-ledge consumption proof for generic-route-cargo-extraction-kit.
-3. Add deterministic replay for one child boundary inside vr-platformer-kit-suite.
-4. Add per-boundary promotion reviews for generic-defense DSK child aliases.
+1. Run node tests/kit-status-matrix-smoke.test.mjs directly.
+2. Wire kit-status-matrix-smoke into npm test when the package script can be updated safely.
+3. Add downstream next-ledge consumption proof for generic-route-cargo-extraction-kit.
+4. Add deterministic replay for one child boundary inside vr-platformer-kit-suite.
+5. Add per-boundary promotion reviews for generic-defense DSK child aliases.
 ```
