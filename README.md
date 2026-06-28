@@ -1,12 +1,257 @@
 # NexusRealtime ProtoKits
 
-Prototype game kits for NexusRealtime.
+NexusRealtime ProtoKits is the proving ground for the NexusRealtime operating system.
 
-These kits are intentionally separate from the core NexusRealtime package. They are used to prove game features before promoting stable surfaces into the main engine.
+This repository exists so agents and humans can build, split, test, and refine reusable game and simulation domains before stable capabilities promote into the core `NexusRealtime` engine.
 
-## NexusRealtime DSK Contract
+ProtoKits is not a loose demo pile. It is not a place for game-specific feature blobs. It is the experimental domain foundry for a realtime-first, kit-first AI engine.
 
-First-wave DSK ProtoKits now import `nexusrealtime` directly and return `defineDomainServiceKit()` kits when the core runtime is available. The old `createXKit(NexusRealtime, config)` call style remains as a migration shim, but the target path is `createNXKit(config)` or `createXKit(config)`.
+```txt
+idea
+-> scoped domain
+-> ProtoKit
+-> composed proof
+-> deterministic validation
+-> reconciliation
+-> promotion candidate
+-> NexusRealtime core capability
+```
+
+## Core Rule
+
+```txt
+Everything meaningful becomes a kit.
+Every kit belongs to a domain.
+Every domain can compose with more domains.
+Every stable capability can promote.
+Every world can keep expanding.
+```
+
+ProtoKits applies this rule before the capability is stable enough for core.
+
+The core engine gives agents the realtime substrate. ProtoKits gives agents the exploratory domain layer.
+
+## What ProtoKits Is For
+
+Use this repository to develop capabilities that need room to evolve before promotion.
+
+A ProtoKit can represent:
+
+- an atomic mechanic
+- a scoped domain
+- a composite domain
+- a renderer-agnostic descriptor layer
+- an adapter bridge
+- a proof harness
+- an interaction model
+- a simulation subsystem
+- a game composition layer
+- a future Domain Service Kit candidate
+
+The goal is not to write one-off game code. The goal is to discover reusable domain boundaries.
+
+## Domain-First Composition
+
+ProtoKits should make the shape of a system visible from the tree.
+
+A large kit should not become a hidden `src/` folder. A large kit should become a composition of smaller kits.
+
+```txt
+kits/
+└─ connected-card-graph/
+   ├─ README.md
+   ├─ kit.json
+   ├─ package.json
+   ├─ index.ts
+   └─ kits/
+      ├─ graph-model/
+      ├─ graph-registry/
+      ├─ graph-selection/
+      ├─ graph-layout/
+      ├─ graph-validation/
+      ├─ graph-snapshot/
+      └─ graph-events/
+```
+
+This is the mental model for the repository. From the tree alone, an agent should be able to see where the model lives, where registry behavior lives, where selection lives, where layout lives, where validation lives, where snapshots live, and where events live.
+
+The app is not the architecture. The kit graph is the architecture.
+
+## Boundless Domains Through Composition
+
+ProtoKits is built for domains that can keep expanding.
+
+A feature can start small:
+
+```txt
+jump
+wind boost
+object pickup
+camera follow
+terrain patch
+```
+
+Then it can expand into a scoped domain:
+
+```txt
+locomotion
+├─ walk
+├─ jump
+├─ climb
+├─ swim
+└─ fly
+```
+
+Then it can compose with other domains:
+
+```txt
+embodied-control
+├─ input intent
+├─ locomotion
+├─ physics
+├─ camera
+├─ animation pose
+└─ interaction affordances
+```
+
+Then it can become a larger simulation layer:
+
+```txt
+open-world-simulation
+├─ terrain
+├─ weather
+├─ navigation
+├─ wildlife
+├─ rendering
+├─ persistence
+└─ embodied agents
+```
+
+Boundless does not mean infinite active compute. Boundless means the structure can keep expanding through domains, descriptors, seeds, snapshots, ledgers, and kits while the runtime only simulates the active slice.
+
+## Domain Service Module / Domain Service Kit Track
+
+ProtoKits uses domain-first architecture.
+
+A Domain Service Module is a reusable module that defines a domain and exposes the services or APIs that make that domain happen. Games compose those domains through data, presets, bridges, and hosts. Games should not define reusable architecture directly.
+
+When a ProtoKit is ready to install into the NexusRealtime runtime, it should move toward the Domain Service Kit contract:
+
+```txt
+ProtoKit
+-> Domain Service Module
+-> Domain Service Kit
+-> promoted NexusRealtime core kit
+```
+
+A promoted DSK should define:
+
+- stable domain ID
+- machine-readable metadata
+- runtime installation path
+- resources
+- events
+- systems
+- required/provided capabilities
+- reset behavior
+- snapshot behavior
+- validation path
+- version/stability notes
+- human README
+- agent-readable contract
+
+First-wave DSK ProtoKits may import `nexusrealtime` directly and return `defineDomainServiceKit()` kits when the core runtime is available. Migration shims may remain while older call styles are still being reconciled, but the target is direct kit creation and clear domain contracts.
+
+## Realtime-Proved Behavior
+
+ProtoKits should not only compile.
+
+A ProtoKit should prove behavior through the smallest useful validation path:
+
+```txt
+install kit
+-> tick engine
+-> inspect state
+-> validate snapshot
+-> reconcile docs
+-> report domain result
+```
+
+Prefer headless tests and smoke tests over renderer-only proof. Reusable domains should not depend on DOM, Canvas, Three.js, WebGL, browser input, `fetch`, `localStorage`, `Date.now`, or unseeded randomness unless the kit is explicitly an adapter or host bridge.
+
+## Current Kit Families
+
+ProtoKits currently contains reusable domains across several families.
+
+### Input and interaction
+
+- action input routing
+- contextual input bindings
+- XR ray and hand interaction
+- selection and transform domains
+- widget and persistence domains
+
+### Rendering descriptors
+
+- stereoscopic render descriptors
+- render layer and visual pipeline descriptors
+- material libraries
+- fog and volumetric descriptors
+- renderer-facing instanced batches
+
+### Arcade and traversal
+
+- downhill racing
+- slope traversal
+- racer AI
+- race hazards
+- boost paths
+- racer contact
+- race pacing
+- course direction
+- vertical climb
+- endless ascent
+- climb input
+- climb camera
+- diegetic feedback
+- climb risk
+
+### Generic open-world and flight
+
+- terrain sampler
+- world patch lifecycle
+- scatter placement
+- performance budgets
+- sky and atmosphere
+- lighting descriptors
+- material palettes
+- flight motion
+- actor rendering
+- flock agents
+- updraft volumes
+- checkpoint volumes
+
+### RPG, simulation, and spatial authoring
+
+- dialogue lines
+- relationship state
+- NPC schedules
+- shop inventory
+- quest threads
+- enemy objects and agents
+- health and damage
+- guards and parry windows
+- mana and status effects
+- vegetation placement
+- route clearance
+- terrain ground contact
+- world zones
+- hand adapters
+- spatial scene graphs
+
+These are not just feature buckets. They are the starting vocabulary for larger domain composition.
+
+## Example: Composing A ProtoKit With NexusRealtime
 
 ```js
 import { createRealtimeGame } from "nexusrealtime";
@@ -19,228 +264,20 @@ const engine = createRealtimeGame({
 });
 
 engine.n.scanSurvey.registerTarget({ id: "relay-1", x: 2, y: 0 });
+engine.tick();
+
+console.log(engine.n.scanSurvey.snapshot());
 ```
 
-Browser CDN hosts need an import map for the bare `nexusrealtime` import:
+The important part is not only that the code runs. The important part is that the domain is named, installed through a kit, exposed through a stable API, and inspectable through runtime state.
 
-```html
-<script type="importmap">
-{
-  "imports": {
-    "nexusrealtime": "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@0.0.2/src/index.js"
-  }
-}
-</script>
-```
-
-## Action Input Kit
-
-Contextual action routing for browser hosts and subscribed gameplay kits. The host captures platform input, calls the `engine.actionInput` API, and this ProtoKit emits semantic action events only when held state, axis, aim, or button edges change.
-
-```js
-import { createActionInputKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/action-input-kit/index.js";
-
-const engine = NexusRealtime.createRealtimeGame({
-  kits: [
-    createActionInputKit(NexusRealtime, {
-      context: "next-ledge-grapple",
-      bindings: {
-        left: ["a", "arrowleft"],
-        right: ["d", "arrowright"],
-        primary: [" ", "space", "pointer0"],
-        restart: ["r"]
-      }
-    })
-  ]
-});
-```
-
-Events include `actionInput.pressed`, `actionInput.released`, `actionInput.axisChanged`, `actionInput.aimChanged`, and `actionInput.cleared`. Hosts can subscribe those actions together and route them into game-specific kit APIs without putting gameplay rules in the HTML.
-
-Demo:
-
-```txt
-protokits/action-input-kit/demo.html
-```
-
-## Stereoscopic Render Domain Kit
-
-Renderer-agnostic XR stereo view descriptors. The kit converts a host camera/head pose into deterministic left/right eye descriptors without owning WebXR, OpenXR, swapchains, framebuffers, Canvas, Three.js, or native renderer objects.
-
-```js
-import { createStereoscopicRenderDomainKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/stereoscopic-render-domain-kit/index.js";
-
-const engine = NexusRealtime.createRealtimeGame({
-  kits: [
-    createStereoscopicRenderDomainKit(NexusRealtime, {
-      interpupillaryDistance: 0.064,
-      fovDegrees: 70,
-      textureLayout: "array-layer"
-    })
-  ]
-});
-
-engine.stereoscopicRender.updateFromCamera({
-  position: { x: 0, y: 1.6, z: 0 },
-  forward: { x: 0, y: 0, z: -1 },
-  up: { x: 0, y: 1, z: 0 }
-});
-```
-
-### XR Render Kit List
-
-- `createStereoscopicRenderDomainKit` — left/right eye position, orientation, viewport, render-target layer, off-axis projection descriptor, and stereo debug metadata.
-- `computeStereoscopicRenderSnapshot` — headless helper for tests, WebXR hosts, OpenXR bridges, and Three.js renderer adapters.
-
-## Ocean Boat Kit
-
-```js
-import { createOceanBoatKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/ocean-boat-kit/index.js";
-
-const oceanBoatKit = createOceanBoatKit(NexusRealtime);
-```
-
-Demo:
-
-```txt
-protokits/ocean-boat-kit/demo.html
-```
-
-## Render Layer / Visual Pipeline Kit
-
-Renderer-agnostic visual composition kits for mesh layering, material-library state, fog volumes, and cheap volumetric-light descriptors.
-
-These kits do not draw to Canvas, WebGL, or Three.js. They output stable resources that a host renderer can consume.
-
-```js
-import {
-  createRenderLayerKit,
-  createVisualPipelineKit,
-  createFoglineVisualPreset
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/render-layer-kit/index.js";
-
-const realismKit = NexusRealtime.createRealismKit({
-  preset: createFoglineVisualPreset(),
-  quality: "adaptive"
-});
-
-const renderLayerKit = createRenderLayerKit(NexusRealtime, {
-  renderDescriptorResource: NexusRealtime.RenderDescriptorState,
-  realismSnapshotResource: realismKit.definitions.resources.RealismSnapshot,
-  preset: createFoglineVisualPreset()
-});
-```
-
-### Visual Pipeline Kit List
-
-- `createRenderLayerKit` / `createVisualPipelineKit` — stable render buckets, material library, fog-volume state, volumetric-light descriptors, and visual validation.
-- `createFoglineVisualPreset` — a dark forest visual preset for high-fidelity Fogline-style Canvas/WebGL/Three hosts.
-- `createRenderLayerSnapshot` — headless helper for descriptor sorting and bucket inspection.
-- `createMaterialLibrarySnapshot` — headless helper for material-library inspection.
-
-## Arcade Race Kits
-
-Generic ECS racing kits for downhill arcade racing, kart-like pack pacing, sliding traversal, AI driving, hazards, boosts, contact, procedural course pacing, and renderer-agnostic low-poly descriptors.
-
-These kits are generic by design. A game such as `Penguin Prix` should be a preset/theme/configuration over these kits, not a set of penguin-specific engine modules.
+## Example: Generic World / Flight Composition
 
 ```js
 import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
-import { createRealtimeGame } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
-
-import { createCourseDirectorKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/course-director-kit/index.js";
-import { createDownhillRaceKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/downhill-race-kit/index.js";
-import { createSlopeTraversalKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/slope-traversal-kit/index.js";
-import { createDifficultyCurveKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/difficulty-curve-kit/index.js";
-import { createRacerAIKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/racer-ai-kit/index.js";
-import { createRaceHazardKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/race-hazard-kit/index.js";
-import { createBoostPathKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/boost-path-kit/index.js";
-import { createRacerContactKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/racer-contact-kit/index.js";
-import { createRacePacingKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/race-pacing-kit/index.js";
-import { createArcadeRaceVisualKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/arcade-race-visual-kit/index.js";
-
-const game = createRealtimeGame({
-  kits: [
-    createCourseDirectorKit(NexusRealtime, { seed: "penguin-prix", materializeHazards: true, materializeBoosts: true }),
-    createDownhillRaceKit(NexusRealtime, { countdownSeconds: 3, finish: 1200 }),
-    createSlopeTraversalKit(NexusRealtime, { maxSpeed: 46, slopeAcceleration: 18 }),
-    createDifficultyCurveKit(NexusRealtime, { softCapRound: 24 }),
-    createRacerAIKit(NexusRealtime),
-    createRaceHazardKit(NexusRealtime),
-    createBoostPathKit(NexusRealtime),
-    createRacerContactKit(NexusRealtime),
-    createRacePacingKit(NexusRealtime),
-    createArcadeRaceVisualKit(NexusRealtime)
-  ]
-});
-```
-
-### Kit List
-
-- `createDownhillRaceKit` — countdown, racer registration, finish detection, placements, rounds, win/loss events.
-- `createSlopeTraversalKit` — slope acceleration, sliding friction, surface grip, snow/ice drag, drift, high-speed crash state.
-- `createRacerAIKit` — route choice, obstacle avoidance, boost targeting, mistake injection, aggression, scalable driving skill.
-- `createDifficultyCurveKit` — logarithmic round scaling, skill modifiers, mistake-rate modifiers, aggression modifiers, pacing modifiers.
-- `createRaceHazardKit` — obstacle descriptors, crash zones, slowdown zones, hazard density, readable danger placement, collision events.
-- `createBoostPathKit` — boost pads, boost lanes, risky shortcuts, duration, cooldowns, stacking rules.
-- `createRacerContactKit` — bumping, blocking, shoving, spinout thresholds, recovery windows, fairness limits.
-- `createRacePacingKit` — pack pressure, near-misses, comeback pressure, AI backing off, late-round intensity, close-finish tuning.
-- `createCourseDirectorKit` — calm sections, hazard clusters, shortcut branches, boost sections, final sprint sections, procedural pacing.
-- `createArcadeRaceVisualKit` — low-poly render descriptors, trail effects, crash effects, boost effects, gates, signs, finish arch.
-- `arcade-race-core` — shared definitions and helpers for the race kits.
-
-## Vertical Climb / Next Ledge Kits
-
-Composable ECS kits for endless 2.5D climb games with static, seeded, or hybrid content. These are designed so a game can stay close to `import + configure + run` while complexity is added by installing another kit instead of writing more app code.
-
-```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
-import {
-  createNextLedgeCloudClimb
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/next-ledge-kit/cloud-climb-preset.js";
-
-const game = createNextLedgeCloudClimb(NexusRealtime, {
-  seed: "clouds-forever-001",
-  overlayUi: false,
-  mode: "hybrid"
-});
-```
-
-Advanced hosts can import `createNextLedgeCloudClimbKits()` from the same preset file and pass the returned kit list into `NexusRealtime.createRealtimeGame()`.
-
-### Vertical Climb Kit List
-
-- `protokit-core` — shared deterministic helpers, seeded random, runtime-kit injection fallback, resource helpers.
-- `content-palette-kit` — static/seeded/hybrid content palette picking for rocks, ledges, clouds, and attachments.
-- `layered-object-kit` — generic layered objects, sockets, attachments, interactive objects, pruning, and batching descriptors.
-- `vertical-climb-core` — shared climb components, resources, events, base state, and `engine.verticalClimb` surface.
-- `ledge-route-kit` — route graph, reachability, target windows, chunk registration, and pruning.
-- `simple-swing-kit` — simple A/D rope swing momentum that only affects state while attached.
-- `endless-ascent-kit` — seeded vertical chunk generation, ahead/behind chunk windows, and materialization hooks.
-- `cloud-zone-kit` — height-based fog, wind, theme, and cloud-band state.
-- `climb-input-kit` — renderer-agnostic click, hover, restart, and swing intent routing.
-- `climb-camera-kit` — side-on vertical camera descriptor state for follow, swing, fall, and cloud reveal modes.
-- `diegetic-feedback-kit` — no-overlay world feedback signals for target glow, rope tension, cloud cues, and stamina pressure.
-- `climb-risk-kit` — reach, stamina cost, momentum, and risk evaluation without forcing a HUD.
-- `next-ledge-kit` — high-level click-to-climb and rope-swing game coordinator.
-
-## Generic Open-World / Flight Kits
-
-Composable renderer-agnostic kits for open-world games, flight games, traversal games, and seeded procedural worlds.
-
-These kits are generic by design. A game should keep its own preset/data in the app or experiment that consumes the kits.
-
-```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
-import {
-  createFlightMotionKit
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/flight-motion-kit/index.js";
-import {
-  createTerrainSamplerKit
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/terrain-sampler-kit/index.js";
-import {
-  createWorldPatchKit
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/world-patch-kit/index.js";
+import { createFlightMotionKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/flight-motion-kit/index.js";
+import { createTerrainSamplerKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/terrain-sampler-kit/index.js";
+import { createWorldPatchKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/world-patch-kit/index.js";
 
 const game = NexusRealtime.createRealtimeGame({
   kits: [
@@ -249,25 +286,94 @@ const game = NexusRealtime.createRealtimeGame({
     createFlightMotionKit(NexusRealtime, { actorId: "player" })
   ]
 });
+
+game.tick();
 ```
 
-Hosts compose the generic kits manually and keep game-specific data outside ProtoKits.
+Hosts compose generic kits manually and keep game-specific data outside reusable ProtoKits.
 
-### Generic World / Flight Kit List
+## Example: Arcade Race Composition
 
-- `data-registry-kit` — one root static/seeded/hybrid `GameData` registry with scoped seeds, namespaces, overrides, and snapshots.
-- `performance-budget-kit` — adaptive quality tiers, patch radius, instance budgets, shadow budgets, LOD flags, and debug metrics.
-- `sky-atmosphere-kit` — sky dome, sun, fog, haze, and cloud layer descriptors.
-- `lighting-descriptor-kit` — warm sun, hemisphere fill, shadows, fog, tone mapping, and renderer quality descriptors.
-- `material-palette-kit` — reusable material descriptors for terrain, trees, rocks, actors, clouds, rings, and effects.
-- `terrain-sampler-kit` — one canonical terrain height, normal, biome, and patch descriptor query surface.
-- `world-patch-kit` — patch/chunk lifecycle, nearby patch loading, distant patch pruning, and seeded patch descriptors.
-- `scatter-placement-kit` — seeded patch-aware object placement for trees, rocks, clouds, pickups, hazards, and props.
-- `instanced-render-kit` — renderer-facing instanced batch descriptors grouped by layer, kind, archetype, and material.
-- `flight-motion-kit` — generic glider-style pitch, roll, yaw, lift, drag, boost, stall, and terrain collision state.
-- `actor-render-kit` — actor part, socket, pose, bank, speed, wing, and trail descriptors.
-- `flock-agent-kit` — generic companion swarm/follow agents for birds, drones, fish, boats, or cars.
-- `updraft-volume-kit` — generic wind/current/lift force volumes and visual descriptors.
-- `checkpoint-volume-kit` — generic ring, gate, pickup, checkpoint, and boost-trigger volumes.
+A themed game such as `Penguin Prix` should usually be a preset, theme, or configuration over generic racing kits, not a set of penguin-specific engine modules.
 
-## Structure
+```txt
+arcade-race
+├─ course-director-kit
+├─ downhill-race-kit
+├─ slope-traversal-kit
+├─ difficulty-curve-kit
+├─ racer-ai-kit
+├─ race-hazard-kit
+├─ boost-path-kit
+├─ racer-contact-kit
+├─ race-pacing-kit
+└─ arcade-race-visual-kit
+```
+
+The generic racing domain can then be reused for snow racing, desert racing, downhill carts, hoverboards, boats, or future traversal games.
+
+## Required Agent Guidance
+
+Agent-specific rules live in `AGENTS.md`.
+
+Every agent working in this repository must preserve the kit-first operating model:
+
+```txt
+inspect
+-> classify request
+-> identify domain
+-> find nearest kit
+-> compose before rewriting
+-> make changes idempotent
+-> validate through state
+-> reconcile docs and exports
+-> report the exact kit changed
+```
+
+For major changes, agents should read the domain-first docs under `docs/`, especially:
+
+- `docs/START-HERE.md`
+- `docs/DOMAIN-FIRST-COMPOSITION-MASTER-PLAN.md`
+- `docs/DOMAIN-SCOPE-TAXONOMY.md`
+- `docs/MAINLINE-GUIDED-KITS-MASTER-PLAN.md`
+- `docs/DSM-ARCHITECTURE.md`
+- `docs/DSM-AUTHORING-GUIDE.md`
+- `docs/DSM-AGENT-WORKFLOW.md`
+- `docs/DSM-SPLIT-RULES.md`
+- `docs/DSM-DATA-CONTRACTS.md`
+- `docs/DSM-TESTING-GUIDE.md`
+- `docs/DSM-PROMOTION-GUIDE.md`
+- `docs/DSM-CATALOG.md`
+
+## What Not To Do
+
+Do not make ProtoKits into:
+
+- a pile of demos
+- game-specific feature blobs
+- vague helper packages
+- hidden app-shell logic
+- renderer-owned domain rules
+- unseeded nondeterministic systems
+- untested reusable behavior
+- parallel architecture tracks that bypass the mainline kit model
+
+If a capability is reusable, name its domain and make it a kit.
+
+If a capability is only a bridge, call it a bridge.
+
+If a capability is only a host route, keep it in the host.
+
+If a capability is stable enough for core, prepare it for promotion instead of duplicating it.
+
+## Core Principle
+
+```txt
+Everything meaningful becomes a kit.
+Every kit belongs to a domain.
+Every domain can compose with more domains.
+Every stable capability can promote.
+Every world can keep expanding.
+```
+
+ProtoKits is where that operating model learns, proves, and prepares domains for NexusRealtime core.
