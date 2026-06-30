@@ -1,0 +1,29 @@
+{
+  "id": "banded-infinite-terrain-kit",
+  "version": "0.1.0",
+  "domain": "banded-infinite-terrain",
+  "kind": "composite-domain",
+  "stability": "prototype",
+  "provides": [
+    "terrain:banded-infinite-terrain",
+    "terrain:band-policy",
+    "terrain:stable-origin",
+    "terrain:radial-topology",
+    "terrain:shader-field",
+    "terrain:render-contract"
+  ],
+  "requires": [],
+  "entry": "index.js",
+  "summary": "Readable top-level bundle for GPU-first player-centered infinite terrain with stable origin rebasing and banded radial density.",
+  "validation": {
+    "smoke": "tests/banded-infinite-terrain-kit-smoke.test.mjs",
+    "proves": [
+      "one terrain render contract",
+      "no square patch LOD",
+      "no CPU mesh rebuild on camera movement",
+      "snapped terrain origin",
+      "smoothed density pose",
+      "shader-owned displacement"
+    ]
+  }
+}
