@@ -1,0 +1,12 @@
+{
+  "id": "webgpu-render-kit",
+  "name": "WebGPU Render Kit",
+  "version": "0.1.0",
+  "stability": "prototype",
+  "type": "composite-protokit",
+  "entry": "./index.js",
+  "provides": ["webgpu-render"],
+  "runtimeSurface": ["engine.n.webgpuRender"],
+  "kitGraph": ["webgpu-device-kit", "webgpu-canvas-context-kit", "webgpu-pipeline-cache-kit", "webgpu-uniform-buffer-kit", "webgpu-storage-buffer-kit", "webgpu-fallback-kit", "webgpu-no-black-screen-kit"],
+  "validation": { "headless": "tests/webgpu-render-kit-check.mjs" }
+}
