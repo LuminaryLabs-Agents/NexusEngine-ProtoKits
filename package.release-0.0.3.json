@@ -1,0 +1,20 @@
+{
+  "name": "@luminarylabs/nexusrealtime-protokits",
+  "version": "0.0.3",
+  "type": "module",
+  "description": "0.0.3 compatibility overlay for NexusRealtime ProtoKits.",
+  "peerDependencies": {
+    "nexusrealtime": "^0.0.3"
+  },
+  "devDependencies": {
+    "@luminarylabs/nexusrealtime-kits": "^0.0.3"
+  },
+  "scripts": {
+    "check:promotion": "node scripts/check-promotion-readiness.mjs",
+    "test:release": "node tests/protokits-0.0.3-runtime-compat.mjs"
+  },
+  "releaseNotes": {
+    "sourcePackage": "package.json remains the canonical package until the long export map is safely reconciled.",
+    "nextStep": "merge these version, peer dependency, and script fields into package.json during the final package-surface pass."
+  }
+}
