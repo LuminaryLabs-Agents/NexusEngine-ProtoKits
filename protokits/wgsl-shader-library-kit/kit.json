@@ -1,0 +1,12 @@
+{
+  "id": "wgsl-shader-library-kit",
+  "name": "WGSL Shader Library Kit",
+  "version": "0.1.0",
+  "stability": "prototype",
+  "type": "composite-protokit",
+  "entry": "./index.js",
+  "provides": ["wgsl-shader-library"],
+  "runtimeSurface": ["engine.n.wgslShaderLibrary"],
+  "kitGraph": ["wgsl-inline-shader-kit", "wgsl-shader-module-kit", "wgsl-binding-check-kit", "wgsl-entrypoint-check-kit", "wgsl-uniform-layout-kit", "wgsl-shader-diagnostics-kit"],
+  "validation": { "headless": "tests/wgsl-shader-library-check.mjs" }
+}
