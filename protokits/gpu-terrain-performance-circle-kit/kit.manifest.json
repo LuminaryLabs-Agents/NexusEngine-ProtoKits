@@ -1,0 +1,162 @@
+{
+  "id": "gpu-terrain-performance-circle-kit",
+  "domain": "gpu-terrain-rendering",
+  "type": "composite-protokit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "description": "GPU-first terrain density and draw-plan ProtoKit that replaces square patch LOD with one player-centered radial performance-circle mesh contract.",
+  "requires": [],
+  "provides": [
+    "terrain:performance-circle-policy",
+    "terrain:density-policy",
+    "gpu-terrain:radial-mesh-descriptor",
+    "shader-terrain:height-displacement-contract",
+    "shader-terrain:density-debug-contract",
+    "nexus-terrain:runtime-bridge"
+  ],
+  "resources": [
+    "gpuTerrainPerformanceCircle.state"
+  ],
+  "events": [
+    "gpuTerrainPerformanceCircle.frameUpdated",
+    "gpuTerrainPerformanceCircle.policyChanged"
+  ],
+  "publicApi": [
+    "engine.gpuTerrainPerformanceCircle.getState",
+    "engine.gpuTerrainPerformanceCircle.getSnapshot",
+    "engine.gpuTerrainPerformanceCircle.updateFrame",
+    "engine.gpuTerrainPerformanceCircle.enqueueFrame",
+    "engine.gpuTerrainPerformanceCircle.setPolicy",
+    "engine.gpuTerrainPerformanceCircle.scoreAt",
+    "engine.gpuTerrainPerformanceCircle.bandAt",
+    "engine.gpuTerrainPerformanceCircle.getDrawPlan",
+    "engine.gpuTerrainPerformanceCircle.validate",
+    "engine.gpuTerrainPerformanceCircle.runSmoke"
+  ],
+  "descriptors": [
+    "gpu-terrain-performance-circle-draw-plan",
+    "gpu-terrain-radial-mesh-descriptor",
+    "terrain-density-policy-snapshot"
+  ],
+  "rendererBoundary": {
+    "ownsDom": false,
+    "ownsCanvas": false,
+    "ownsThreeObjects": false,
+    "ownsWebGpuDevice": false,
+    "ownsWebGlContext": false,
+    "adapterOnly": false,
+    "rendererConsumesDescriptors": true,
+    "hostConcernsForbidden": [
+      "DOM",
+      "Canvas",
+      "Three.js",
+      "WebGL object mutation",
+      "WebGPU device creation",
+      "requestAnimationFrame",
+      "keyboard listeners",
+      "fetch",
+      "localStorage",
+      "Date.now",
+      "unseeded-random"
+    ]
+  },
+  "performance": {
+    "scalesWith": [
+      "density band count",
+      "radial ring count",
+      "dirty paint region count",
+      "renderer adapter capability tier"
+    ],
+    "telemetry": [
+      "densityScore",
+      "selectedBand",
+      "verticesEstimate",
+      "trianglesEstimate",
+      "dirtyRegionCount",
+      "cpuGeometryRebuild:false",
+      "stableGpuBuffers:true"
+    ],
+    "degradationModes": [
+      "reduce focus radius",
+      "increase peripheral spacing",
+      "collapse horizon skirt",
+      "disable density debug tint",
+      "use WebGL shader-displacement fallback when WebGPU compute is unavailable"
+    ],
+    "forbiddenWork": [
+      "CPU terrain vertex generation per frame",
+      "CPU terrain normal generation per frame",
+      "chunk LOD system",
+      "BufferGeometry disposal/recreation on camera movement",
+      "terrain patch entity iteration",
+      "full terrain texture readback"
+    ]
+  },
+  "snapshot": {
+    "serializable": true,
+    "contains": [
+      "version",
+      "namingRules",
+      "firstBatchKits",
+      "laterWebGpuBatchKits",
+      "context",
+      "policy",
+      "drawPlan",
+      "validation",
+      "frame"
+    ]
+  },
+  "validation": {
+    "headless": "tests/gpu-terrain-performance-circle-kit-smoke.test.mjs",
+    "mustProve": [
+      "front-of-camera density outranks behind-camera density",
+      "near terrain outranks horizon terrain",
+      "draw plan declares exactly one mesh",
+      "CPU geometry rebuild is false",
+      "square patch LOD is false",
+      "brush updates produce dirty GPU paint regions"
+    ]
+  },
+  "metadata": {
+    "boundary": true,
+    "rendererNeutral": true,
+    "promotionTrack": "ProtoKit -> Domain Service Module -> Domain Service Kit",
+    "replaces": [
+      "legacy-terrain-patch-lod-kit"
+    ],
+    "firstBatchKits": [
+      "terrain-performance-circle-kit",
+      "terrain-density-policy-kit",
+      "gpu-terrain-radial-mesh-kit",
+      "shader-terrain-height-displacement-kit",
+      "shader-terrain-density-debug-kit",
+      "gpu-terrain-paint-field-kit",
+      "shader-terrain-paint-blend-kit",
+      "shader-terrain-slope-material-kit",
+      "webgl-terrain-render-adapter-kit",
+      "webgpu-terrain-capability-probe-kit",
+      "validate-terrain-no-cpu-rebuild-kit",
+      "validate-terrain-single-mesh-kit",
+      "validate-terrain-performance-circle-kit",
+      "smoke-terrain-gpu-render-kit",
+      "nexus-terrain-runtime-bridge-kit"
+    ],
+    "laterWebGpuBatchKits": [
+      "webgpu-terrain-render-adapter-kit",
+      "webgpu-terrain-compute-adapter-kit",
+      "compute-terrain-normal-pass-kit",
+      "compute-terrain-density-field-kit",
+      "compute-terrain-paint-apply-kit",
+      "compute-terrain-visibility-field-kit",
+      "compute-terrain-screen-error-pass-kit",
+      "compute-terrain-indirect-draw-plan-kit",
+      "gpu-terrain-storage-buffer-kit",
+      "gpu-terrain-storage-texture-kit",
+      "gpu-pipeline-cache-kit",
+      "gpu-bind-group-cache-kit",
+      "gpu-frame-budget-kit",
+      "gpu-profiler-kit",
+      "validate-terrain-no-readback-stall-kit"
+    ]
+  }
+}
