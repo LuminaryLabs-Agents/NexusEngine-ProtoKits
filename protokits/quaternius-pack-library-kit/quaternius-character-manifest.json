@@ -1,0 +1,10 @@
+{
+  "id": "quaternius-character-manifest",
+  "version": "0.1.0",
+  "baseCharacters": ["regular-female", "regular-male", "teen-female", "teen-male", "superhero-female", "superhero-male"],
+  "hairStyleCount": 20,
+  "skinColors": ["fair", "warm-light", "warm-medium", "tan", "brown", "deep"],
+  "eyeColors": ["brown", "blue", "green", "gray", "amber"],
+  "outfitSlots": ["torso", "legs", "boots", "gloves", "cape", "helmet", "belt"],
+  "equipmentSlots": ["rightHand", "leftHand"]
+}
