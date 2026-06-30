@@ -1,0 +1,14 @@
+{
+  "id": "quaternius-pack-manifest",
+  "version": "0.1.0",
+  "packs": [
+    { "id": "quaternius-universal-base-characters", "family": "characters", "license": "CC0", "formats": ["fbx", "gltf"], "features": ["base-bodies", "hair-styles", "skin-colors", "eye-colors", "humanoid-rig", "ual-compatible"] },
+    { "id": "quaternius-modular-character-outfits-fantasy", "family": "outfits", "license": "CC0", "formats": ["fbx", "gltf"], "features": ["outfit-slots", "modular-parts", "texture-variants", "humanoid-rig", "ual-compatible"] },
+    { "id": "quaternius-universal-animation-library-one", "family": "animations", "license": "CC0", "formats": ["fbx", "gltf", "blend"], "features": ["idle", "walk", "run", "sprint", "crawl", "swim", "sit", "combat", "gun", "emote", "death"] },
+    { "id": "quaternius-universal-animation-library-two", "family": "animations", "license": "CC0", "formats": ["fbx", "gltf", "blend"], "features": ["melee-combo", "armed-combo", "parkour", "farming", "fishing", "zombie", "recoveries"] },
+    { "id": "quaternius-stylized-nature-megakit", "family": "world-pieces", "license": "CC0", "formats": ["fbx", "gltf", "blend"], "features": ["trees", "plants", "rocks", "grass", "biome-decoration"] },
+    { "id": "quaternius-downtown-city-megakit", "family": "world-pieces", "license": "CC0", "formats": ["fbx", "gltf", "blend"], "features": ["city-buildings", "streets", "fake-interiors", "simple-collisions"] },
+    { "id": "quaternius-modular-scifi-megakit", "family": "world-pieces", "license": "CC0", "formats": ["fbx", "gltf", "blend"], "features": ["rooms", "corridors", "doors", "panels", "emissive", "shader-masks"] },
+    { "id": "quaternius-fantasy-props-megakit", "family": "props", "license": "CC0", "formats": ["fbx", "gltf", "blend"], "features": ["furniture", "tools", "weapons", "books", "potions", "breakables"] }
+  ]
+}
