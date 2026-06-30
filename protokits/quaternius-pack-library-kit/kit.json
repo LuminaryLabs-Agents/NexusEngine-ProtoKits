@@ -1,0 +1,48 @@
+{
+  "id": "quaternius-pack-library-kit",
+  "name": "Quaternius Pack Library Kit",
+  "version": "0.1.0",
+  "stability": "prototype",
+  "type": "composite-protokit",
+  "description": "Quaternius pack catalog, character creator, outfit builder, animation bank, rig/retarget checks, runtime promotion, and WebGPU shader descriptors.",
+  "entry": "./index.js",
+  "provides": ["quaternius-pack-library", "quaternius-pack-query"],
+  "runtimeSurface": ["engine.n.quaterniusPackLibrary"],
+  "manifests": ["quaternius-pack-manifest.json", "quaternius-character-manifest.json", "quaternius-animation-manifest.json"],
+  "validation": {
+    "headless": [
+      "tests/quaternius-pack-library-check.mjs",
+      "tests/quaternius-character-creator-check.mjs",
+      "tests/quaternius-animation-bank-check.mjs",
+      "tests/quaternius-rig-binding-check.mjs",
+      "tests/quaternius-real-asset-playback-check.mjs"
+    ],
+    "browser": "tests/quaternius-pack-library-playwright-check.py"
+  },
+  "kitGraph": [
+    "quaternius-pack-catalog-kit",
+    "quaternius-license-receipt-kit",
+    "quaternius-file-index-kit",
+    "quaternius-runtime-promotion-kit",
+    "quaternius-base-character-kit",
+    "quaternius-character-creator-kit",
+    "quaternius-outfit-builder-kit",
+    "quaternius-equipment-builder-kit",
+    "quaternius-animation-library-one-kit",
+    "quaternius-animation-library-two-kit",
+    "quaternius-animation-clip-index-kit",
+    "quaternius-animation-bank-kit",
+    "quaternius-rig-profile-kit",
+    "quaternius-rig-binding-kit",
+    "quaternius-retarget-check-kit",
+    "quaternius-root-motion-policy-kit",
+    "quaternius-real-asset-playback-check-kit",
+    "quaternius-material-atlas-kit",
+    "quaternius-prop-library-kit",
+    "quaternius-world-piece-library-kit",
+    "quaternius-creature-library-kit",
+    "quaternius-vehicle-library-kit",
+    "quaternius-webgpu-character-shader-kit",
+    "quaternius-webgpu-terrain-shader-kit"
+  ]
+}
