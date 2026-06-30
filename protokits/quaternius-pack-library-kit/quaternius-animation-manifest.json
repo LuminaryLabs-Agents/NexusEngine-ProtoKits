@@ -1,0 +1,10 @@
+{
+  "id": "quaternius-animation-manifest",
+  "version": "0.1.0",
+  "banks": [
+    { "id": "quaternius-animation-library-one", "label": "Universal Animation Library 1", "semantics": ["idle", "walk", "run", "sprint", "crawl", "swim", "sit", "death", "combat", "gun", "emote"] },
+    { "id": "quaternius-animation-library-two", "label": "Universal Animation Library 2", "semantics": ["melee-combo", "armed-combo", "parkour", "farming", "fishing", "zombie"] }
+  ],
+  "requiredPlayable": ["idle", "walk", "run"],
+  "rootMotionPolicies": ["in-place", "root-motion", "explicit", "ignore", "unknown"]
+}
