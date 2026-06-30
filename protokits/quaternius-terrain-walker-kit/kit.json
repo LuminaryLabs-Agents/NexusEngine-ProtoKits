@@ -13,7 +13,7 @@
   "rendererOwnership": "host-only",
   "hostConcernsForbiddenInReusableKit": ["DOM", "Canvas", "Three.js", "WebGL", "GLTFLoader", "fetch", "localStorage", "Date.now", "unseeded-random"],
   "validation": {
-    "headless": "tests/quaternius-terrain-walker-kit-smoke.test.mjs",
+    "headless": "tests/quaternius-terrain-walker-check.mjs",
     "mustProve": [
       "kit suite creates installable runtime kits",
       "semantic idle/walk/run clips can be registered",
