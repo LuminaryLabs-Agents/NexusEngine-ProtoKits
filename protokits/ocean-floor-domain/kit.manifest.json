@@ -1,0 +1,34 @@
+{
+  "id": "ocean-floor-domain",
+  "domain": "ocean-floor",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic ocean floor domain with bumpy heightfield, island influence, sea-floor rock/reef/coral placement, and water material intent.",
+  "requires": [],
+  "provides": [
+    "ocean:floor-heightfield",
+    "ocean:island-floor-influence",
+    "ocean:floor-object-placement",
+    "render:ocean-floor-contract"
+  ],
+  "resources": ["oceanFloor.state"],
+  "publicApi": [
+    "createOceanFloorDomainKit",
+    "createOceanFloorState",
+    "createOceanFloorRenderContract",
+    "createOceanFloorHeightfield",
+    "createOceanFloorObjectPlacements",
+    "sampleOceanFloorHeight"
+  ],
+  "rendererBoundary": {
+    "ownsRendererObjects": false,
+    "importsThree": false,
+    "importsDom": false,
+    "adapterRequired": true
+  },
+  "snapshot": {
+    "deterministic": true,
+    "rendererStateExcluded": true
+  }
+}
