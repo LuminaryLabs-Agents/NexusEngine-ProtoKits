@@ -1,0 +1,26 @@
+{
+  "id": "meadow-webgl-render-kit",
+  "domain": "meadow-webgl-render",
+  "type": "renderer-adapter-kit",
+  "status": "experimental",
+  "requires": ["render:meadow-area-plan"],
+  "provides": ["renderer:meadow-webgl", "adapter:webgl-render-plan"],
+  "resources": [],
+  "events": [],
+  "publicApi": ["createMeadowWebglRenderKit", "createMeadowWebglRenderer", "render", "resize", "dispose", "getSnapshot"],
+  "descriptors": ["meadow-area-render-plan"],
+  "rendererBoundary": {
+    "ownsRenderer": true,
+    "emitsRenderPlan": false,
+    "requiresCanvas": true,
+    "requiresWebGL": true
+  },
+  "performance": {
+    "rebuildsMeshPerRender": true,
+    "intendedFor": "proof scenes and WebGL adapter validation"
+  },
+  "snapshot": {
+    "serializable": true,
+    "reset": "dispose-and-rerender"
+  }
+}
