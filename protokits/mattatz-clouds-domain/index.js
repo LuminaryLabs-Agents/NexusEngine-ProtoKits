@@ -30,6 +30,10 @@ export function clampMattatzCloudCount(count = 12) {
   return Math.round(clamp(count, MATTAZ_CLOUD_COUNT_MIN, MATTAZ_CLOUD_COUNT_MAX));
 }
 
+export function clampMattatzLayerCloudCount(count = 0) {
+  return Math.round(clamp(count, 0, MATTAZ_CLOUD_COUNT_MAX));
+}
+
 export const MATTAZ_CLOUD_WEATHER_PRESETS = Object.freeze({
   clear: Object.freeze({
     name: "clear",
@@ -133,27 +137,27 @@ export function createMattatzCloudPrimitiveDescriptor(options = {}) {
     position: v3(options.position, { x: 0, y: 900, z: 0 }),
     scale: v3(options.scale, { x: 220, y: 90, z: 140 }),
     bounds: v3(options.bounds, options.scale ?? { x: 220, y: 90, z: 140 }),
-    density: clamp(options.density, 0, 1),
-    softness: clamp(options.softness, 0, 1),
-    opacity: clamp(options.opacity, 0, 1),
-    coverage: clamp(options.coverage, 0, 1),
+    density: clamp(options.density ?? 0.5, 0, 1),
+    softness: clamp(options.softness ?? 0.6, 0, 1),
+    opacity: clamp(options.opacity ?? 0.8, 0, 1),
+    coverage: clamp(options.coverage ?? 0.5, 0, 1),
     color: clone(options.color ?? { r: 1, g: 1, b: 1 }),
     undersideColor: clone(options.undersideColor ?? { r: 0.44, g: 0.47, b: 0.52 }),
     scattering: {
-      forward: clamp(options.scattering?.forward, 0, 1),
-      silverLining: clamp(options.scattering?.silverLining, 0, 1),
-      ambient: clamp(options.scattering?.ambient, 0, 1)
+      forward: clamp(options.scattering?.forward ?? 0.65, 0, 1),
+      silverLining: clamp(options.scattering?.silverLining ?? 0.45, 0, 1),
+      ambient: clamp(options.scattering?.ambient ?? 0.35, 0, 1)
     },
     noise: {
       seed,
-      octaves: Math.round(clamp(options.noise?.octaves, 1, 8)),
+      octaves: Math.round(clamp(options.noise?.octaves ?? 5, 1, 8)),
       scale: number(options.noise?.scale, 1),
-      turbulence: clamp(options.noise?.turbulence, 0, 2),
-      billow: clamp(options.noise?.billow, 0, 1)
+      turbulence: clamp(options.noise?.turbulence ?? 0.5, 0, 2),
+      billow: clamp(options.noise?.billow ?? 0.75, 0, 1)
     },
     raymarch: {
-      steps: Math.round(clamp(options.raymarch?.steps, 4, 96)),
-      shadowSteps: Math.round(clamp(options.raymarch?.shadowSteps, 0, 32)),
+      steps: Math.round(clamp(options.raymarch?.steps ?? 28, 4, 96)),
+      shadowSteps: Math.round(clamp(options.raymarch?.shadowSteps ?? 6, 0, 32)),
       earlyExit: options.raymarch?.earlyExit !== false
     },
     drift: unit2(options.drift, { x: 1, z: 0 }),
@@ -170,10 +174,10 @@ export function createMattatzCloudLayerDescriptor(options = {}) {
     altitudeMin: number(options.altitudeMin, 250),
     altitudeMax: number(options.altitudeMax, 600),
     thickness: Math.max(1, number(options.thickness, 160)),
-    cloudCount: clampMattatzCloudCount(options.cloudCount ?? 4),
-    coverage: clamp(options.coverage, 0, 1),
-    density: clamp(options.density, 0, 1),
-    softness: clamp(options.softness, 0, 1),
+    cloudCount: clampMattatzLayerCloudCount(options.cloudCount ?? 4),
+    coverage: clamp(options.coverage ?? 0.5, 0, 1),
+    density: clamp(options.density ?? 0.5, 0, 1),
+    softness: clamp(options.softness ?? 0.6, 0, 1),
     driftSpeed: number(options.driftSpeed, 0.05),
     spreadRadius: Math.max(1, number(options.spreadRadius, 900)),
     scale: v3(options.scale, { x: 260, y: 80, z: 160 }),
@@ -196,7 +200,7 @@ export function createDefaultMattatzCloudLayers(options = {}) {
       altitudeMin: 220,
       altitudeMax: 520,
       thickness: 180,
-      cloudCount: Math.max(1, low),
+      cloudCount: low,
       coverage,
       density,
       softness,
@@ -211,7 +215,7 @@ export function createDefaultMattatzCloudLayers(options = {}) {
       altitudeMin: 720,
       altitudeMax: 1200,
       thickness: 260,
-      cloudCount: Math.max(0, mid),
+      cloudCount: mid,
       coverage: coverage * 0.92,
       density: density * 0.94,
       softness: Math.min(1, softness + 0.04),
@@ -226,7 +230,7 @@ export function createDefaultMattatzCloudLayers(options = {}) {
       altitudeMin: 1750,
       altitudeMax: 2950,
       thickness: 190,
-      cloudCount: Math.max(0, high),
+      cloudCount: high,
       coverage: coverage * 0.68,
       density: density * 0.62,
       softness: Math.min(1, softness + 0.14),
@@ -257,10 +261,10 @@ export function createMattatzCloudsState(options = {}) {
       intensity: number(options.sun?.intensity, 1.15)
     },
     lighting: {
-      rim: clamp(options.lighting?.rim, 0, 2),
-      silverLining: clamp(options.lighting?.silverLining, 0, 2),
-      undersideDarkness: clamp(options.lighting?.undersideDarkness, 0, 2),
-      atmosphericFade: clamp(options.lighting?.atmosphericFade, 0, 1)
+      rim: clamp(options.lighting?.rim ?? 0.7, 0, 2),
+      silverLining: clamp(options.lighting?.silverLining ?? 0.55, 0, 2),
+      undersideDarkness: clamp(options.lighting?.undersideDarkness ?? 0.65, 0, 2),
+      atmosphericFade: clamp(options.lighting?.atmosphericFade ?? 0.35, 0, 1)
     },
     layers: clone(options.layers ?? createDefaultMattatzCloudLayers({
       weather: preset.name,
@@ -275,11 +279,11 @@ export function createMattatzCloudsState(options = {}) {
       midDistance: number(options.lod?.midDistance, 2200),
       farDistance: number(options.lod?.farDistance, 5200),
       horizonBand: options.lod?.horizonBand !== false,
-      maxRaymarchSteps: Math.round(clamp(options.lod?.maxRaymarchSteps, 8, 96))
+      maxRaymarchSteps: Math.round(clamp(options.lod?.maxRaymarchSteps ?? 32, 8, 96))
     },
     shadows: {
       enabled: options.shadows?.enabled !== false,
-      opacity: clamp(options.shadows?.opacity, 0, 1),
+      opacity: clamp(options.shadows?.opacity ?? 0.28, 0, 1),
       driftScale: number(options.shadows?.driftScale, 1)
     }
   };
@@ -356,8 +360,8 @@ function cumulonimbusDescriptors(state, time = 0) {
       baseAltitude: 420,
       topAltitude: rng.range(4200, 6200),
       coreScale: { x: rng.range(360, 620), y: rng.range(1800, 2900), z: rng.range(360, 700) },
-      anvil: clamp(config.anvil, 0, 1),
-      rainShaft: clamp(config.rainShaft, 0, 1),
+      anvil: clamp(config.anvil ?? 0.72, 0, 1),
+      rainShaft: clamp(config.rainShaft ?? 0, 0, 1),
       lightningHooks: Boolean(config.lightningHooks),
       undersideDarkness: 0.86,
       density: 0.92,
