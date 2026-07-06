@@ -1,0 +1,35 @@
+{
+  "id": "island-object-library-domain",
+  "domain": "island-object-library",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic nested island object graph library for palms, broadleaf trees, coconuts, understory, rocks, driftwood, reefs, and coral.",
+  "requires": [],
+  "provides": [
+    "island:object-library",
+    "island:nested-object-graph",
+    "island:palm-tree-object",
+    "island:coconut-object",
+    "render:island-object-descriptors"
+  ],
+  "resources": ["islandObjectLibrary.state"],
+  "publicApi": [
+    "createIslandObjectLibraryDomainKit",
+    "createPalmTreeObject",
+    "createBroadleafTreeObject",
+    "createCoconutObject",
+    "resolveIslandObjectSpawnRequest",
+    "resolveIslandObjectGraph"
+  ],
+  "rendererBoundary": {
+    "ownsRendererObjects": false,
+    "importsThree": false,
+    "importsDom": false,
+    "adapterRequired": true
+  },
+  "snapshot": {
+    "deterministic": true,
+    "rendererStateExcluded": true
+  }
+}
