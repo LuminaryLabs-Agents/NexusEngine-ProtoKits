@@ -1,0 +1,36 @@
+{
+  "id": "island-foliage-domain",
+  "domain": "island-foliage",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Purpose-driven foliage generation domain for a 200m dense cozy island with central grove, path clearance, nested tree objects, palms, coconuts, understory, and render descriptors.",
+  "requires": ["island-object-library-domain"],
+  "provides": [
+    "island:foliage-density",
+    "island:central-grove",
+    "island:path-clearance",
+    "island:foliage-object-placement",
+    "render:island-foliage-descriptors"
+  ],
+  "resources": ["islandFoliage.state"],
+  "publicApi": [
+    "createIslandFoliageDomainKit",
+    "createIslandPathNetwork",
+    "distanceToIslandPath",
+    "createDenseIslandSpawnRequests",
+    "createDenseCozyIslandObjectGraph",
+    "createDenseCozyIslandRenderContract",
+    "DENSE_COZY_200M_ISLAND_PRESET"
+  ],
+  "rendererBoundary": {
+    "ownsRendererObjects": false,
+    "importsThree": false,
+    "importsDom": false,
+    "adapterRequired": true
+  },
+  "snapshot": {
+    "deterministic": true,
+    "rendererStateExcluded": true
+  }
+}
