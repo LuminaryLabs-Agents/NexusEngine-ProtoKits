@@ -1,0 +1,33 @@
+{
+  "id": "mattatz-cloud-suite-demo-v1",
+  "domain": "mattatz-clouds",
+  "purpose": "Example host composition for a small terrain scene with three cloud layers and 1 to 20 drifting cloud descriptors.",
+  "import": "@luminarylabs/nexusrealtime-protokits/mattatz-clouds-domain",
+  "kits": [
+    "mattatz-cloud-core-kit",
+    "mattatz-cloud-layer-kit",
+    "mattatz-cloud-weather-kit",
+    "mattatz-cumulonimbus-kit",
+    "mattatz-cloud-lighting-kit",
+    "mattatz-cloud-lod-kit"
+  ],
+  "initialState": {
+    "seed": "cloud-suite-terrain-v1",
+    "weather": "scattered",
+    "cloudCount": 12,
+    "wind": {
+      "direction": { "x": 1, "z": 0.18 },
+      "speed": 0.075
+    },
+    "sun": {
+      "direction": { "x": -0.35, "y": 0.72, "z": 0.46 },
+      "intensity": 1.15
+    }
+  },
+  "rendererAdapterNotes": [
+    "Map near mattatz-cloud-primitive descriptors to THREE.Cloud-style box volumes.",
+    "Map mid descriptors to fewer raymarch steps.",
+    "Map far descriptors to impostor cards or a horizon cloud band.",
+    "Keep terrain, camera, DOM, and WebGL setup in the host app."
+  ]
+}
