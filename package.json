@@ -20,6 +20,8 @@
     "./aerial-encounter-director-kit": "./protokits/aerial-encounter-director-kit/index.js",
     "./aerial-camera-rig-domain-kit": "./protokits/aerial-camera-rig-domain-kit/index.js",
     "./aerial-mission-sequence-kit": "./protokits/aerial-mission-sequence-kit/index.js",
+    "./meadow-area-kit": "./protokits/meadow-area-kit/index.js",
+    "./meadow-webgl-render-kit": "./protokits/meadow-webgl-render-kit/index.js",
     "./environment-kits": "./protokits/environment-kits/index.js",
     "./stereoscopic-render-domain-kit": "./protokits/stereoscopic-render-domain-kit/index.js",
     "./dialogue-line-domain-kit": "./protokits/rpg-social-domain-kits/index.js",
@@ -82,7 +84,15 @@
     "./terrain-erosion-solver-domain-kit": "./protokits/terrain-erosion-solver-domain-kit/index.js",
     "./*": "./protokits/*/index.js"
   },
-  "files": ["KITS.md", "README-DSM-ADDENDUM.md", "docs", "protokits", "apps", "scripts", "tests"],
+  "files": [
+    "KITS.md",
+    "README-DSM-ADDENDUM.md",
+    "docs",
+    "protokits",
+    "apps",
+    "scripts",
+    "tests"
+  ],
   "scripts": {
     "check": "npm run check:syntax && npm run check:manifests && npm run check:docs && npm test",
     "check:syntax": "node scripts/check-all-js.mjs",
