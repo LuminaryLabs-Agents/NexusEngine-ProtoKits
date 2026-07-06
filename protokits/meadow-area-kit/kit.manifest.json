@@ -1,0 +1,27 @@
+{
+  "id": "meadow-area-kit",
+  "domain": "meadow-area",
+  "type": "domain-service-kit",
+  "status": "experimental",
+  "requires": [],
+  "provides": ["environment:meadow-area", "render:meadow-area-plan", "service:meadow-area-query"],
+  "resources": [],
+  "events": [],
+  "publicApi": ["createMeadowAreaKit", "createMeadowArea", "getRenderPlan", "getSnapshot", "validate", "reset"],
+  "descriptors": ["meadow-area-render-plan", "grass-blade", "wildflower", "rock", "mushroom", "tree-line-tree", "focal-tree", "path", "atmosphere"],
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "emitsRenderPlan": true,
+    "requiresCanvas": false,
+    "requiresWebGL": false
+  },
+  "performance": {
+    "deterministicFromSeed": true,
+    "defaultGrassBudget": 3600,
+    "defaultObjectBudget": "configurable"
+  },
+  "snapshot": {
+    "serializable": true,
+    "reset": "deterministic-from-config"
+  }
+}
