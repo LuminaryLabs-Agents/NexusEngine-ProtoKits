@@ -1,0 +1,43 @@
+{
+  "id": "island-cloud-suite-composition-v1",
+  "purpose": "Example host composition for an ocean island landform with a water plane and mattatz cloud suite descriptors.",
+  "domains": [
+    "ocean-island-landform-domain",
+    "mattatz-clouds-domain",
+    "external-ocean-water-host-adapter",
+    "external-three-renderer-host"
+  ],
+  "island": {
+    "import": "@luminarylabs/nexusrealtime-protokits/ocean-island-landform-domain",
+    "factory": "createOceanIslandLandformDomainKit",
+    "initialState": {
+      "seed": "island-weather-dome-001",
+      "preset": "tropical-small-island",
+      "position": { "x": 0, "y": 0, "z": 0 },
+      "radius": 420,
+      "seaLevel": 0,
+      "objectPalette": ["palm", "bush", "rock", "boulder", "driftwood", "reef"]
+    }
+  },
+  "clouds": {
+    "import": "@luminarylabs/nexusrealtime-protokits/mattatz-clouds-domain",
+    "factory": "createMattatzCloudsDomainKit",
+    "initialState": {
+      "seed": "island-weather-dome-clouds-001",
+      "weather": "scattered",
+      "cloudCount": 18,
+      "wind": {
+        "direction": { "x": 1, "z": 0.18 },
+        "speed": 0.075
+      }
+    }
+  },
+  "hostResponsibilities": [
+    "Build terrain mesh from island render contract heightfield samples.",
+    "Render water plane externally at island seaLevel.",
+    "Use island waterInterface shoreline/foam descriptors to place shore foam and wave break masks.",
+    "Map island object descriptors to renderer-side assets or placeholders.",
+    "Map mattatz cloud descriptors to volumetric boxes, impostors, or horizon cloud bands.",
+    "Keep camera, controls, DOM, Canvas, Three.js, and asset loading in the experiment host."
+  ]
+}
