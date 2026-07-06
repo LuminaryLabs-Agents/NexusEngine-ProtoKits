@@ -1,0 +1,64 @@
+{
+  "id": "ocean-island-landform-domain",
+  "domain": "ocean-island-landform",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic insertable island landform objects for ocean scenes, with sea-level-aware heightfields, shoreline masks, object descriptors, and water-interface contracts.",
+  "requires": [],
+  "provides": [
+    "terrain:ocean-island-landform",
+    "terrain:island-heightfield",
+    "terrain:island-shoreline",
+    "terrain:island-surface-masks",
+    "terrain:island-object-placement",
+    "water:island-interface",
+    "render:island-landform-contract"
+  ],
+  "resources": [
+    "oceanIslandLandform.state"
+  ],
+  "events": [
+    "oceanIslandLandform.updated"
+  ],
+  "publicApi": [
+    "createOceanIslandLandformDomainKit",
+    "createOceanIslandLandformState",
+    "createOceanIslandLandformRenderContract",
+    "createIslandFootprint",
+    "createIslandHeightfield",
+    "createIslandObjectPlacements",
+    "sampleIslandHeight",
+    "sampleIslandMasks",
+    "validateOceanIslandLandform"
+  ],
+  "descriptors": [
+    "ocean-island-landform-render-contract",
+    "island-heightfield",
+    "island-shoreline",
+    "island-water-interface",
+    "island-object-placement",
+    "island-biome-profile"
+  ],
+  "rendererBoundary": {
+    "ownsRendererObjects": false,
+    "importsThree": false,
+    "importsDom": false,
+    "importsCanvas": false,
+    "adapterRequired": true,
+    "oceanRendererExternal": true,
+    "terrainRendererExternal": true
+  },
+  "performance": {
+    "defaultHeightfieldResolution": 49,
+    "defaultShorelineSegments": 96,
+    "objectPlacementIsDescriptorOnly": true,
+    "lodPolicy": "near/mid/far descriptor spacing supplied to host renderer"
+  },
+  "snapshot": {
+    "deterministic": true,
+    "seeded": true,
+    "mutableStateResource": "oceanIslandLandform.state",
+    "rendererStateExcluded": true
+  }
+}
