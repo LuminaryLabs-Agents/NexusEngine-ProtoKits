@@ -1,0 +1,60 @@
+{
+  "id": "mattatz-clouds-domain",
+  "domain": "mattatz-clouds",
+  "type": "composite-domain",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic cloud suite domain inspired by mattatz/THREE.Cloud box-volume raymarching, expanded into layers, weather, storm towers, lighting, and LOD policy.",
+  "requires": [],
+  "provides": [
+    "rendering:cloud-primitive-descriptor",
+    "rendering:cloud-layer-descriptor",
+    "rendering:cloud-weather-presets",
+    "rendering:cumulonimbus-descriptor",
+    "rendering:cloud-lighting-descriptor",
+    "rendering:cloud-lod-policy",
+    "weather:cloud-suite"
+  ],
+  "resources": [
+    "mattatzClouds.state"
+  ],
+  "events": [
+    "mattatzClouds.updated",
+    "mattatzClouds.weatherChanged"
+  ],
+  "publicApi": [
+    "createMattatzCloudsDomainKit",
+    "createMattatzCloudsState",
+    "createMattatzCloudRenderContract",
+    "createMattatzCloudPrimitiveDescriptor",
+    "createMattatzCloudLayerDescriptor",
+    "resolveMattatzCloudWeatherPreset"
+  ],
+  "descriptors": [
+    "mattatz-cloud-primitive",
+    "mattatz-cloud-layer",
+    "mattatz-cloud-render-contract",
+    "mattatz-cumulonimbus-tower",
+    "mattatz-cloud-lod-policy"
+  ],
+  "rendererBoundary": {
+    "ownsRendererObjects": false,
+    "importsThree": false,
+    "importsDom": false,
+    "adapterRequired": true,
+    "adapterHint": "A renderer may map mattatz-cloud-primitive descriptors to THREE.Cloud-style BoxGeometry raymarch volumes, impostor cards, shader planes, or WebGPU volumes."
+  },
+  "performance": {
+    "cloudCountRange": [1, 20],
+    "nearMode": "volumetric-descriptor",
+    "midMode": "reduced-raymarch-descriptor",
+    "farMode": "impostor-or-horizon-band-descriptor",
+    "pooling": "stable descriptor IDs allow renderer-side pooling"
+  },
+  "snapshot": {
+    "deterministic": true,
+    "seeded": true,
+    "hostTimeExternal": true,
+    "mutableStateResource": "mattatzClouds.state"
+  }
+}
