@@ -1,0 +1,14 @@
+{
+  "id": "camera-mode-domain",
+  "domain": "camera-mode",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic camera mode descriptors for orbit, inspection, and first-person zoom transitions.",
+  "requires": [],
+  "provides": ["camera:mode-descriptor", "camera:first-person-mode", "camera:zoom-transition"],
+  "resources": ["cameraMode.state"],
+  "publicApi": ["createCameraModeDomainKit", "createCameraModeDescriptor", "createCameraModeState", "resolveCameraMode"],
+  "rendererBoundary": { "ownsRendererObjects": false, "ownsCamera": false, "importsThree": false, "importsDom": false, "adapterRequired": true },
+  "snapshot": { "deterministic": true, "rendererStateExcluded": true }
+}
