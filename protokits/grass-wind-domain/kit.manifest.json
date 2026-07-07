@@ -1,0 +1,14 @@
+{
+  "id": "grass-wind-domain",
+  "domain": "grass-wind",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic grass wind descriptors for sway, gust response, per-patch phase, and sheltering hints.",
+  "requires": [],
+  "provides": ["grass:wind-field", "grass:sway-phase", "render:grass-wind-descriptor"],
+  "resources": ["grassWind.state"],
+  "publicApi": ["createGrassWindDomainKit", "createGrassWindState", "createGrassWindDescriptor"],
+  "rendererBoundary": { "ownsRendererObjects": false, "ownsShaders": false, "importsThree": false, "importsDom": false, "adapterRequired": true },
+  "snapshot": { "deterministic": true, "rendererStateExcluded": true }
+}
