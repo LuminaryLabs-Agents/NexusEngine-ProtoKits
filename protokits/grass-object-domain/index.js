@@ -56,6 +56,14 @@ function distanceToObjects(point, objects = [], types = ["palm-tree", "broadleaf
   return best;
 }
 
+function insideExclusionZone(point, zones = []) {
+  return zones.some((zone) => {
+    const center = zone.center ?? zone.position ?? { x: 0, z: 0 };
+    const radius = number(zone.radius ?? zone.radiusMeters, 0);
+    return Math.hypot(number(point.x) - number(center.x), number(point.z) - number(center.z)) < radius;
+  });
+}
+
 export function createGrassPatchObject(request = {}) {
   const id = request.id ?? stableId("grass-patch", request.seed, request.index, request.position?.x, request.position?.z);
   const template = request.template ?? (request.index % 3 === 0 ? "dense-a" : request.index % 3 === 1 ? "dense-b" : "dense-c");
@@ -107,17 +115,19 @@ export function createGrassPatchPlacementContract(options = {}) {
   const sampleMasks = options.sampleMasks ?? (() => ({ grass: 1, beach: 0, water: 0, rock: 0, cliff: 0, wetSand: 0 }));
   const pathNetwork = options.pathNetwork;
   const avoidObjects = options.avoidObjects ?? [];
+  const exclusionZones = options.exclusionZones ?? [];
   const pathClearance = number(options.pathClearance, 3.6);
   const objectClearance = number(options.objectClearance, 1.1);
   const patches = [];
   let tries = 0;
-  while (patches.length < count && tries < count * 60 + 300) {
+  while (patches.length < count && tries < count * 70 + 400) {
     tries += 1;
     const angle = random() * TWO_PI;
     const r = (12 + (radius * 0.78 - 12) * Math.sqrt(random()));
     const point = { x: Math.cos(angle) * r, z: Math.sin(angle) * r };
     const masks = sampleMasks(point) ?? {};
     if (masks.water || masks.beach || masks.wetSand || masks.rock || masks.cliff) continue;
+    if (insideExclusionZone(point, exclusionZones)) continue;
     if (distanceToPath(point, pathNetwork) < pathClearance) continue;
     if (distanceToObjects(point, avoidObjects) < objectClearance) continue;
     const y = sampleHeight(point);
@@ -144,6 +154,7 @@ export function createGrassPatchPlacementContract(options = {}) {
     requestedCount: count,
     patchCount: patches.length,
     patches,
+    exclusionZones: clone(exclusionZones),
     batchKeys: [...new Set(patches.map((patch) => patch.render.batchKey))]
   };
 }
