@@ -1,0 +1,14 @@
+{
+  "id": "campfire-object-domain",
+  "domain": "campfire-object",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic campfire object graph with firewood, embers, flame, smoke anchor, warm light, interaction, and collision descriptors.",
+  "requires": [],
+  "provides": ["campfire:object-graph", "campfire:render-descriptor", "campfire:collision-descriptor"],
+  "resources": ["campfireObject.state"],
+  "publicApi": ["createCampfireObjectDomainKit", "createCampfireObjectGraph", "createCampfireObject", "createCampfireState"],
+  "rendererBoundary": { "ownsRendererObjects": false, "importsThree": false, "importsDom": false, "adapterRequired": true },
+  "snapshot": { "deterministic": true, "rendererStateExcluded": true }
+}
