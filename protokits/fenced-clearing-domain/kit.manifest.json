@@ -1,0 +1,14 @@
+{
+  "id": "fenced-clearing-domain",
+  "domain": "fenced-clearing",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic fenced campfire clearing object graph with fence posts, rails, gate, walkable area, first-person camera anchor, movement bounds, and grass exclusion zones.",
+  "requires": [],
+  "provides": ["clearing:fenced-object-graph", "clearing:first-person-bounds", "clearing:camera-anchor", "clearing:grass-exclusion-zones"],
+  "resources": ["fencedClearing.state"],
+  "publicApi": ["createFencedClearingDomainKit", "createFencedClearingGraph", "createFencedClearingState"],
+  "rendererBoundary": { "ownsRendererObjects": false, "importsThree": false, "importsDom": false, "adapterRequired": true },
+  "snapshot": { "deterministic": true, "rendererStateExcluded": true }
+}
