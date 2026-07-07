@@ -4,11 +4,11 @@
   "type": "renderer-adapter-kit",
   "status": "experimental",
   "requires": ["render:meadow-area-plan"],
-  "provides": ["renderer:meadow-webgl", "adapter:webgl-render-plan"],
+  "provides": ["renderer:meadow-webgl", "adapter:webgl-render-plan", "terrain:meadow-surface-renderer"],
   "resources": [],
   "events": [],
   "publicApi": ["createMeadowWebglRenderKit", "createMeadowWebglRenderer", "render", "resize", "dispose", "getSnapshot"],
-  "descriptors": ["meadow-area-render-plan"],
+  "descriptors": ["meadow-area-render-plan", "terrain-surface", "path-terrain-layer"],
   "rendererBoundary": {
     "ownsRenderer": true,
     "emitsRenderPlan": false,
@@ -17,6 +17,7 @@
   },
   "performance": {
     "rebuildsMeshPerRender": true,
+    "synthesizesTerrainSurface": true,
     "intendedFor": "proof scenes and WebGL adapter validation"
   },
   "snapshot": {
