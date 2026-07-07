@@ -1,0 +1,14 @@
+{
+  "id": "grass-texture-domain",
+  "domain": "grass-texture",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic procedural grass texture descriptors for color ramps, blade alpha profiles, dry variation, and atlas hints.",
+  "requires": [],
+  "provides": ["grass:texture-descriptor", "grass:blade-color-ramp", "render:grass-texture-contract"],
+  "resources": ["grassTexture.state"],
+  "publicApi": ["createGrassTextureDomainKit", "createGrassTextureState", "createGrassTextureDescriptor"],
+  "rendererBoundary": { "ownsRendererObjects": false, "ownsTextures": false, "importsThree": false, "importsDom": false, "adapterRequired": true },
+  "snapshot": { "deterministic": true, "rendererStateExcluded": true }
+}
