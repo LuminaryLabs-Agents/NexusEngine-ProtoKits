@@ -1,0 +1,14 @@
+{
+  "id": "grass-object-domain",
+  "domain": "grass-object",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic grass patch object descriptors, placement contracts, triangle budgets, and static batch descriptors.",
+  "requires": [],
+  "provides": ["grass:patch-object", "grass:patch-placement", "render:grass-static-batch-descriptor"],
+  "resources": ["grassObject.state"],
+  "publicApi": ["createGrassObjectDomainKit", "createGrassPatchObject", "createGrassPatchPlacementContract", "createGrassPatchBatchDescriptors"],
+  "rendererBoundary": { "ownsRendererObjects": false, "importsThree": false, "importsDom": false, "adapterRequired": true },
+  "snapshot": { "deterministic": true, "rendererStateExcluded": true }
+}
