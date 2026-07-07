@@ -1,0 +1,14 @@
+{
+  "id": "smoke-particle-domain",
+  "domain": "smoke-particle",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic wind-reactive smoke particle emitter descriptors for campfires and other soft smoke sources.",
+  "requires": [],
+  "provides": ["smoke:particle-emitter", "smoke:wind-response", "render:smoke-particle-descriptor"],
+  "resources": ["smokeParticle.state"],
+  "publicApi": ["createSmokeParticleDomainKit", "createSmokeParticleDescriptor", "createSmokeParticleState"],
+  "rendererBoundary": { "ownsRendererObjects": false, "ownsParticles": false, "importsThree": false, "importsDom": false, "adapterRequired": true },
+  "snapshot": { "deterministic": true, "rendererStateExcluded": true }
+}
