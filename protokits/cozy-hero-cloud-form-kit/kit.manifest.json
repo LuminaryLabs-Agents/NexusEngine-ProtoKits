@@ -1,0 +1,12 @@
+{
+  "id": "cozy-hero-cloud-form-kit",
+  "domain": "cloud-form",
+  "type": "domain-service-kit",
+  "status": "prototype",
+  "version": "0.1.0",
+  "summary": "Renderer-agnostic single hero puff cloud form descriptor for Cozy Island.",
+  "requires": ["mattatz-cloud-core-kit", "mattatz-cloud-layer-kit"],
+  "provides": ["cloud:hero-form", "cloud:single-puff-silhouette", "render:cached-point-cloud-puff-descriptor"],
+  "publicApi": ["createCozyHeroCloudFormDescriptor", "createCozyHeroCloudLayerDescriptor", "createCozyHeroCloudRenderContract"],
+  "rendererBoundary": { "ownsRendererObjects": false, "importsThree": false, "importsDom": false, "adapterRequired": true }
+}
