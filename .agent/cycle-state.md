@@ -24,6 +24,8 @@ Grow reusable DSK-based ProtoKits while shrinking local experiment JavaScript.
 
 Registry control-plane promotion focus: the repository/kit registry, capability graph, and composition planner are now separate native DSK owners with real NexusEngine composition, exact snapshot/reset, strict collision, missing/cycle, deterministic ordering, bundle/domain expansion, and 1,000-manifest proof. Stable Kits installer adapters are the next ledge.
 
+ProtoKit-core compatibility focus: the complete old utility API is now wrapped as a native stateless DSK. Its stable fate is deprecated compatibility, while NexusEngine remains the canonical runtime/math/random/serialization owner.
+
 Resource-meter promotion focus: `generic-resource-loop-kit` is now the canonical native resource-meter collection under `engine.n.resourceMeter`, with legacy aliases preserved. Its experiment purge keeps pressure policy and resource-pressure compatibility behavior separate; only the stable Kits catalog placeholder is eligible for replacement in this cycle.
 
 Use the generic-defense DSK boundary aliases, AAA DSK bridge, and `engine.n.genericDefense.<boundary>` namespace as compatibility-safe paths from broad composite APIs toward smaller resources/events/methods/snapshots/descriptors surfaces.

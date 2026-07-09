@@ -2,6 +2,15 @@
 
 Record reusable behavior that should move into ProtoKits.
 
+## 2026-07-09 - ProtoKit core compatibility resolution
+
+`protokit-core` is ready only for a deprecated NexusEngine-Kits promotion. Its full utility API and deterministic semantics remain available through a native stateless compatibility DSK, but canonical ownership belongs to NexusEngine runtime definitions, core utility math, foundation seeded random, and serializable state.
+
+- Preserve: package imports, utility functions, fallback definitions, resource initialization, seeded/weighted replay, and exact compatibility snapshots.
+- Replace ownership claims: runtime, math, random, serialization, snapshot, and clock contracts belong to NexusEngine.
+- Do not promote as official: this is an aggregate compatibility bridge, not a foundation catch-all.
+- Do not add new behavior: migrate source consumers toward canonical owners or narrow local helpers.
+
 ## 2026-07-09 - Registry control-plane purge and promotion gate
 
 Three native DSKs are ready for stable Kits promotion as an approved addition set:

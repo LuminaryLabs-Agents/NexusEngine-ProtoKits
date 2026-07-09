@@ -14,7 +14,8 @@ const promotionCandidatePaths = [
   "protokits/generic-defense-session-command-kit/index.js",
   "protokits/kit-registry-domain-kit/index.js",
   "protokits/capability-graph-domain-kit/index.js",
-  "protokits/composition-planning-domain-kit/index.js"
+  "protokits/composition-planning-domain-kit/index.js",
+  "protokits/protokit-core/index.js"
 ];
 
 const forbiddenPromotionRuntimeApis = [

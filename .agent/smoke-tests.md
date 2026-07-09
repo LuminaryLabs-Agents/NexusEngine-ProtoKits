@@ -33,6 +33,7 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - `tests/vr-platformer-kit-suite-smoke.test.mjs` covers `vr-platformer-kit-suite` as incubation smoke only. It checks the platformer level/avatar/physics/spatial-board kit ids, basic deterministic `simulatePlatformerStep()` movement/jump behavior, stereoscopic descriptor sibling composition, and the sixteen-kit maximum-feature composition. It is not yet deterministic replay and should not be treated as Core-promotion evidence.
 - `protokits/webxr-hit-test-adapter-domain-kit/tests/webxr-hit-test-adapter-domain-kit.test.mjs` uses actual NexusEngine to prove plain pose and structural frame/result input, positive-Y normal derivation, bounded result processing, stable wall selection, anchor composition, reset/load, deterministic replay, and renderer/global boundaries.
 - `protokits/generic-anchor-descriptor-kit/tests/generic-anchor-descriptor-kit.test.mjs` proves the canonical `engine.n.anchorDescriptors` DSK API, legacy alias, tick-scoped commands, configured reset, snapshot validation, and exact restoration.
+- `protokits/protokit-core/tests/protokit-core.test.mjs` proves the full compatibility utility surface, NexusEngine replacement parity, deterministic 1,000-sample random and weighted-choice replay, fallback definitions, resource initialization, native DSK install, reset, and exact snapshots.
 
 ## 2026-06-23 — Headless Tick Smoke Builder findings
 
@@ -119,6 +120,12 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 - This is useful incubation coverage, but it is not fixed-tick replay. Add replay fixtures and determinism guard scanning before treating `vr-platformer-kit-suite` or any child platformer/XR boundary as promotion-facing.
 
 ## Open gaps
+
+## 2026-07-09 - ProtoKit core compatibility closure
+
+- `protokit-core` is rendererless, stateless, and deterministic.
+- The promotion determinism guard scans its source.
+- Stable promotion is allowed only as deprecated compatibility; NexusEngine remains the canonical runtime/math/random/serialization owner.
 
 ## 2026-07-09 - Registry control-plane promotion smoke
 

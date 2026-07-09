@@ -1,4 +1,6 @@
-export const PROTOKIT_CORE_VERSION = "0.0.1";
+import { defineDomainServiceKit } from "nexusengine";
+
+export const PROTOKIT_CORE_VERSION = "1.0.0";
 
 export const number = (value, fallback = 0) => {
   const next = Number(value);
@@ -101,3 +103,78 @@ export function weightedChoice(items = [], rng = createSeededRandom(), weightKey
   }
   return list[list.length - 1];
 }
+
+export const PROTOKIT_CORE_REPLACEMENTS = Object.freeze({
+  runtimeDefinitions: "nexusengine defineRuntimeKit/defineDomainServiceKit/defineComponent/defineResource/defineEvent",
+  math: "nexusengine/core-kits core-utility transform math",
+  random: "nexusengine foundation seeded-random",
+  serialization: "nexusengine foundation serializable-state and snapshot",
+  compatibilityOnly: ["number", "approach", "asList", "distance2D", "clock accessors", "stableId", "byId", "weightedChoice", "ensureResource"]
+});
+
+function utilityApi() {
+  const api = {
+    number,
+    clamp,
+    lerp,
+    approach,
+    asList,
+    clone,
+    distance2D,
+    getClockDelta,
+    getClockElapsed,
+    createFallbackDefinition,
+    defineInjectedRuntimeKit,
+    createDefinitionFactory,
+    ensureResource,
+    hashString,
+    scopedSeed,
+    stableId,
+    byId,
+    createSeededRandom,
+    weightedChoice,
+    getSnapshot() {
+      return {
+        version: PROTOKIT_CORE_VERSION,
+        status: "deprecated-compatibility",
+        replacements: clone(PROTOKIT_CORE_REPLACEMENTS)
+      };
+    },
+    loadSnapshot(snapshot) {
+      if (snapshot?.version !== PROTOKIT_CORE_VERSION || snapshot?.status !== "deprecated-compatibility") {
+        throw new TypeError("Unsupported protokit-core compatibility snapshot.");
+      }
+      return api.getSnapshot();
+    },
+    reset() { return api.getSnapshot(); }
+  };
+  return Object.freeze(api);
+}
+
+export function createProtokitCore(config = {}) {
+  return defineDomainServiceKit({
+    id: config.id ?? config.kitId ?? "protokit-core",
+    domain: "protokit-core-compatibility",
+    domainPath: "n:compatibility:protokit-core",
+    parentDomainPath: "n:compatibility",
+    apiName: "protokitCore",
+    stability: "promotion-candidate",
+    version: PROTOKIT_CORE_VERSION,
+    services: ["deterministic-utility-compatibility", "replacement-map", "snapshot"],
+    provides: ["compatibility:protokit-core", "foundation:deterministic-utility-compatibility"],
+    createApi() { return utilityApi(); },
+    install({ engine }) { engine.protokitCore = engine.n.protokitCore; },
+    metadata: {
+      status: "promotion-candidate",
+      scope: "compatibility-bridge",
+      ownsLoop: false,
+      deprecatedTarget: true,
+      replacements: PROTOKIT_CORE_REPLACEMENTS,
+      boundary: "Preserves the old ProtoKit utility API while canonical math, random, serialization, and runtime definitions remain owned by NexusEngine."
+    }
+  });
+}
+
+export const createProtokitCoreCompatibilityKit = createProtokitCore;
+
+export default createProtokitCore;

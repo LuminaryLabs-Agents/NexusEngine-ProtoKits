@@ -56,6 +56,16 @@
       "purgeDecision": "kit-registry, kit-manifest-domain-kit, and domain-manifest-registry-domain-kit retain compatibility exports but delegate to this canonical state owner."
     },
     {
+      "id": "protokit-core",
+      "classification": "compatibility-bridge",
+      "promotionStatus": "promotion-ready-for-kits",
+      "targetStatus": "deprecated",
+      "currentAction": "Preserve the complete old utility import surface through a native stateless compatibility DSK while canonical ownership stays in NexusEngine.",
+      "nextLedge": "Promote only as a deprecated compatibility entry with exact replacement lineage, then migrate source kits toward native NexusEngine owners.",
+      "doNotDoNext": "Do not make protokit-core an official catch-all foundation domain or add new behavior to it.",
+      "purgeDecision": "Keep utility compatibility behavior, replace runtime/math/random/serialization ownership claims with NexusEngine contracts, and prevent default installation."
+    },
+    {
       "id": "capability-graph-domain-kit",
       "classification": "atomic-dsk",
       "promotionStatus": "promotion-ready-for-kits",

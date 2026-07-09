@@ -110,6 +110,10 @@ Track scenario QA and deterministic replay coverage.
 
 ## Open gaps
 
+## 2026-07-09 - ProtoKit core compatibility replay closure
+
+Two fresh seeded generators produce identical 1,000-sample sequences, and two weighted-choice runs produce identical 1,000-choice sequences. Native install, reset, load, and snapshot return the same stateless replacement descriptor. This closes compatibility replay without claiming a new canonical foundation owner.
+
 ## 2026-07-09 - Registry control-plane snapshot/replay closure
 
 Registry, capability graph, and composition planning snapshots are versioned and serializable. Registry restore reproduces exact source records, indexes, progress, revision, and reason; graph and planner restore normalized deterministic state without host objects, network handles, functions, or wall-clock data.

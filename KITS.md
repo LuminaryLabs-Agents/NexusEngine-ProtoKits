@@ -737,6 +737,7 @@ NexusEngine grows by turning repeated gameplay needs into clean domain services,
 - `kit-registry-domain-kit`: canonical repository and manifest metadata registry with strict collisions, indexes, search, progress, and snapshots.
 - `capability-graph-domain-kit`: registry-fed requires/provides/composes graph with missing dependencies, cycles, clusters, and deterministic ordering.
 - `composition-planning-domain-kit`: kit/domain/bundle recipe expansion and status-gated install-plan validation without installation side effects.
+- `protokit-core`: compatibility-only deterministic utility aggregate; its stable target is deprecated because NexusEngine owns the canonical runtime, math, random, and serialization domains.
 - `generic-pressure-loop-kit`: renderer-agnostic pressure channels, thresholds, and warning/peaked/recovered events.
 - `generic-resource-loop-kit`: canonical native resource-meter DSK collection under `engine.n.resourceMeter`, with rates, locks, bounded change history, one-shot/repeatable thresholds, empty/full transitions, deterministic reset/snapshot restore, and compatibility aliases.
 - `generic-action-window-kit`: renderer-agnostic action timing, perfect/good/miss judgment, cooldowns, rejection reasons, and deterministic reset.

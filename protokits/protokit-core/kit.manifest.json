@@ -1,0 +1,38 @@
+{
+  "id": "protokit-core",
+  "type": "compatibility-domain-service-kit",
+  "domain": "protokit-core-compatibility",
+  "domainPath": "n:compatibility:protokit-core",
+  "parentDomain": "compatibility",
+  "scope": "compatibility-bridge",
+  "extendsBase": "DomainServiceKit",
+  "composes": [],
+  "requires": [],
+  "provides": ["compatibility:protokit-core", "foundation:deterministic-utility-compatibility"],
+  "ownsLoop": false,
+  "resources": [],
+  "events": [],
+  "publicApi": ["createProtokitCore", "createProtokitCoreCompatibilityKit", "number", "clamp", "lerp", "approach", "asList", "clone", "distance2D", "getClockDelta", "getClockElapsed", "createFallbackDefinition", "defineInjectedRuntimeKit", "createDefinitionFactory", "ensureResource", "hashString", "scopedSeed", "stableId", "byId", "createSeededRandom", "weightedChoice", "engine.n.protokitCore"],
+  "descriptors": ["protokit-core-replacement-map", "deprecated-compatibility-snapshot"],
+  "boundary": "Preserve the old utility import surface without becoming a canonical catch-all domain.",
+  "rendererBoundary": { "ownsRenderer": false, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": {
+    "lookupCost": "O(1) utility dispatch",
+    "randomCost": "O(1) per sample",
+    "weightedChoiceCost": "O(item count)",
+    "scalesWith": ["weightedChoiceItemCount"],
+    "telemetry": [],
+    "degradationModes": ["use canonical NexusEngine owners", "pre-index domain collections"]
+  },
+  "snapshot": { "stable": true, "version": "1.0.0", "fields": ["version", "status", "replacements"] },
+  "resetPolicy": "stateless exact compatibility descriptor",
+  "exportPath": "./protokit-core",
+  "sourcePath": "protokits/protokit-core/index.js",
+  "testPaths": ["protokits/protokit-core/tests/protokit-core.test.mjs"],
+  "status": "promotion-candidate",
+  "metadata": {
+    "deprecatedTarget": true,
+    "canonicalOwners": ["NexusEngine runtime definitions", "NexusEngine core utility", "NexusEngine foundation seeded-random", "NexusEngine foundation serializable-state"],
+    "doesNotOwn": ["gameplay", "renderer", "host", "simulation loop", "persistence", "canonical math", "canonical random", "canonical runtime definitions"]
+  }
+}
