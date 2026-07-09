@@ -47,6 +47,33 @@
       "doNotDoNext": "Do not absorb host XRAnchor lifecycle, persistence transport, surface discovery, rendering, or game-specific anchor meaning."
     },
     {
+      "id": "kit-registry-domain-kit",
+      "classification": "atomic-dsk",
+      "promotionStatus": "promotion-ready-for-kits",
+      "currentAction": "Use as the canonical serializable repository, kit, domain, and bundle manifest owner under engine.n.kitRegistry.",
+      "nextLedge": "Promote with capability graph and composition planning, then add repository transport and code-loading only in stable installer adapters.",
+      "doNotDoNext": "Do not absorb fetch, GitHub resolution, caching transport, module import, code execution, installation, filesystem writes, rendering, or game behavior.",
+      "purgeDecision": "kit-registry, kit-manifest-domain-kit, and domain-manifest-registry-domain-kit retain compatibility exports but delegate to this canonical state owner."
+    },
+    {
+      "id": "capability-graph-domain-kit",
+      "classification": "atomic-dsk",
+      "promotionStatus": "promotion-ready-for-kits",
+      "currentAction": "Use as the sole requires/provides/composes graph, missing-dependency, cycle, cluster, and deterministic install-order owner.",
+      "composes": ["kit-registry-domain-kit"],
+      "nextLedge": "Promote beside the canonical registry and keep batch registration plus 1,000-node proof green.",
+      "doNotDoNext": "Do not fetch registries, import modules, install kits, mutate files, or own child capability behavior."
+    },
+    {
+      "id": "composition-planning-domain-kit",
+      "classification": "composite-dsk",
+      "promotionStatus": "promotion-ready-for-kits",
+      "currentAction": "Use as the deterministic kit/domain/bundle selection and install-plan owner over registry and capability graph contracts.",
+      "composes": ["kit-registry-domain-kit", "capability-graph-domain-kit"],
+      "nextLedge": "Promote as the planning boundary consumed by the stable installer without moving installation side effects into the DSK.",
+      "doNotDoNext": "Do not fetch, import, execute, install, write files, render, or own child domain rules."
+    },
+    {
       "id": "generic-pressure-loop-kit",
       "classification": "atomic-dsk",
       "promotionStatus": "promotion-candidate-after-proof",

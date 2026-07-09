@@ -1,0 +1,43 @@
+{
+  "id": "kit-registry-domain-kit",
+  "type": "domain-service-kit",
+  "domain": "kit-registry",
+  "domainPath": "n:registry:kits",
+  "parentDomain": "registry",
+  "scope": "control-domain",
+  "extendsBase": "DomainServiceKit",
+  "composes": [],
+  "requires": [],
+  "provides": ["n:registry:kits", "registry:kits", "registry:repositories", "kit:manifest-registry", "domain:manifest-registry"],
+  "ownsLoop": false,
+  "resources": ["kitRegistry.state"],
+  "events": ["kitRegistry.registryRegistered", "kitRegistry.manifestRegistered", "kitRegistry.manifestValidated", "kitRegistry.registryRemoved", "kitRegistry.snapshotLoaded", "kitRegistry.reset"],
+  "publicApi": ["createKitRegistryDomainKit", "createRepositoryRegistry", "mergeRegistries", "normalizeKitManifest", "normalizeRepositoryRegistry", "validateKitManifest", "validateRepositoryRegistry", "engine.n.kitRegistry"],
+  "descriptors": ["repository-registry", "kit-manifest", "domain-manifest", "bundle-manifest", "registry-progress"],
+  "boundary": "Own serializable repository and capability metadata without fetching, importing, installing, writing files, rendering, or owning game behavior.",
+  "rendererBoundary": { "ownsRenderer": false, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
+  "performance": {
+    "lookupCost": "O(1) by stable kit id",
+    "mergeCost": "O(manifest count plus index keys)",
+    "searchCost": "O(manifest count)",
+    "scaleProof": "1,000 manifests in a real NexusEngine test",
+    "scalesWith": ["registryCount", "kitCount", "domainCount", "bundleCount"],
+    "telemetry": ["registryCount", "kitCount", "resolvedCount", "remainingCount", "revision"],
+    "degradationModes": ["filterBeforeSearch", "partitionRegistries", "cacheHostQueryResults"]
+  },
+  "snapshot": { "stable": true, "version": "1.0.0", "fields": ["registries", "registryOrder", "kits", "kitOrder", "domains", "bundles", "validations", "collisions", "revision", "trustedOwners"] },
+  "resetPolicy": "restore configured registries or an empty registry",
+  "exportPath": "./kit-registry-domain-kit",
+  "sourcePath": "protokits/kit-registry-domain-kit/index.js",
+  "testPaths": ["protokits/kit-registry-domain-kit/tests/kit-registry-domain-kit.test.mjs", "tests/domain-control-plane-smoke.test.mjs", "tests/composition-layer-smoke.test.mjs"],
+  "status": "promotion-candidate",
+  "metadata": {
+    "boundary": "registry/kits",
+    "sourceRepositories": ["LuminaryLabs-Agents/NexusEngine-ProtoKits", "LuminaryLabs-Dev/NexusEngine-Editor", "LuminaryLabs-Dev/NexusEngine-Kits"],
+    "sourceRevisions": {
+      "LuminaryLabs-Dev/NexusEngine-Editor": "12cd5555fb6db3a389e247f14869bc9f21c417ef",
+      "LuminaryLabs-Dev/NexusEngine-Kits": "9de5f99ed1ea61a317bb72e10eea2545bc5875c2"
+    },
+    "doesNotOwn": ["network fetch", "GitHub resolution", "cache transport", "module import", "code execution", "kit installation", "filesystem writes", "renderer", "game behavior"]
+  }
+}

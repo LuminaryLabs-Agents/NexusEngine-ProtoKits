@@ -1,5 +1,7 @@
 # domain-manifest-registry-domain-kit
 
+Compatibility factory for the canonical `kit-registry-domain-kit` state owner. It preserves `engine.domainManifestRegistry` queries while installing the same `engine.n.kitRegistry` service rather than a duplicate registry.
+
 ## Purpose
 
 Owns the manifest registry domain for domain-first ProtoKit composition.

@@ -1,5 +1,9 @@
 # kit-registry
 
+Compatibility pure-helper export for `kit-registry-domain-kit`.
+
+The canonical state owner is now `protokits/kit-registry-domain-kit` at `engine.n.kitRegistry`. This folder retains `createKitRegistry()` and manifest normalization/query imports without owning a second registry implementation.
+
 ## Domain
 
 Pure helper registry for kit manifests.

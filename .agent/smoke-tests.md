@@ -120,6 +120,13 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 
 ## Open gaps
 
+## 2026-07-09 - Registry control-plane promotion smoke
+
+- Real NexusEngine installs all three DSKs in dependency order and exposes `engine.n.kitRegistry`, `engine.n.capabilityGraph`, and `engine.n.compositionPlanning`.
+- Coverage includes trusted source metadata, pinned SHA validation, strict ID/domain-path/API collisions, search/index/progress queries, domain/bundle expansion, status opt-in, provider closure, cycles, exact snapshot restore, reset, and compatibility aliases.
+- A 1,000-manifest registry-to-graph case completes through batched registration; the initial per-node rebuild path was repaired before promotion.
+- Source scanning rejects DOM, window, local storage, fetch, wall-clock, unseeded random, Canvas, and Three.js ownership.
+
 ## 2026-07-09 - Resource-meter promotion smoke
 
 - The direct test installs the native DSK through real NexusEngine and exercises NexusEngine-core and Gold Rush-shaped configurations.

@@ -1,5 +1,5 @@
 {
-  "id": "domain-manifest-registry-domain-kit",
+  "id": "kit-manifest-domain-kit",
   "type": "compatibility-bridge",
   "domain": "kit-registry",
   "parentDomain": "registry",
@@ -7,11 +7,11 @@
   "extendsBase": "kit-registry-domain-kit",
   "composes": ["kit-registry-domain-kit"],
   "requires": [],
-  "provides": ["domain:manifest-registry", "domain:metadata-index"],
+  "provides": ["kit:manifest-registry", "kit:metadata"],
   "ownsLoop": false,
   "resources": ["kitRegistry.state via canonical owner"],
   "events": ["kitRegistry.manifestRegistered", "kitRegistry.manifestValidated", "kitRegistry.reset"],
-  "publicApi": ["createDomainManifestRegistryDomainKit", "normalizeManifest", "validateDomainManifest", "engine.domainManifestRegistry compatibility alias"],
+  "publicApi": ["createKitManifestDomainKit", "normalizeKitManifest", "validateKitManifest", "engine.kitManifest compatibility alias"],
   "boundary": "Compatibility factory only; canonical registry state belongs to kit-registry-domain-kit.",
   "rendererBoundary": { "ownsRenderer": false, "ownsDom": false, "ownsCanvas": false, "ownsThreeObjects": false },
   "performance": {
@@ -21,9 +21,9 @@
   },
   "snapshot": { "stable": true, "version": "1.0.0", "owner": "kit-registry-domain-kit" },
   "resetPolicy": "delegates to canonical registry service",
-  "exportPath": "./domain-manifest-registry-domain-kit",
-  "sourcePath": "protokits/domain-manifest-registry-domain-kit/index.js",
-  "testPaths": ["tests/domain-control-plane-smoke.test.mjs", "protokits/kit-registry-domain-kit/tests/kit-registry-domain-kit.test.mjs"],
+  "exportPath": "./kit-manifest-domain-kit",
+  "sourcePath": "protokits/kit-manifest-domain-kit/index.js",
+  "testPaths": ["tests/guided-kit-authoring-smoke.test.mjs", "protokits/kit-registry-domain-kit/tests/kit-registry-domain-kit.test.mjs"],
   "status": "compatibility-only",
   "metadata": { "boundary": "registry/kits/compatibility", "canonicalOwner": "kit-registry-domain-kit" }
 }

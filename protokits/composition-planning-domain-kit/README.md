@@ -1,42 +1,27 @@
 # composition-planning-domain-kit
 
-## Purpose
+Native NexusEngine composition planner at `n:registry:composition` and `engine.n.compositionPlanning`.
 
-Owns the composition planning domain for higher-scope domain recipes.
+## Owns
 
-It registers composition recipes, creates install plans, validates missing dependencies, suggests missing domains, and scores whether a composition is ready for simulation/proof.
+- Serializable recipes selecting kits, domains, and bundles.
+- Expansion of domain/bundle metadata through the registry contract.
+- Dependency provider inclusion through the capability graph.
+- Deterministic install plans, allowed-status gates, missing reports, cycle reports, validation, and readiness scoring.
+- Reset, snapshot, and exact restore.
 
-## Public API
+## Does not own
 
-```txt
-engine.compositionPlanning.registerRecipe(recipe)
-engine.compositionPlanning.planComposition(goal)
-engine.compositionPlanning.createInstallPlan(idOrRecipe)
-engine.compositionPlanning.validateComposition(idOrRecipe)
-engine.compositionPlanning.suggestMissingDomains(idOrRecipe)
-engine.compositionPlanning.scoreComposition(idOrRecipe)
-engine.compositionPlanning.getState()
-engine.compositionPlanning.reset()
+Registry fetch, Git/GitHub resolution, module import, code execution, kit installation, filesystem writes, renderer state, or child domain behavior.
+
+## API
+
+```text
+registerRecipe, planComposition, createInstallPlan
+validateComposition, suggestMissingDomains, scoreComposition
+getState, getSnapshot, loadSnapshot, reset
 ```
 
-## Boundary
+`engine.compositionPlanning` remains as a compatibility alias. New composition uses `engine.n.compositionPlanning`.
 
-Does own:
-
-```txt
-composition recipes
-install plans
-missing dependency reports
-composition validation
-composition readiness score
-```
-
-Does not own:
-
-```txt
-child domain gameplay rules
-agent proposals
-filesystem writes
-HTML hosts
-renderers
-```
+The real NexusEngine control-plane test proves kit/domain/bundle expansion, candidate opt-in, dependency ordering, missing/cycle rejection, and snapshot behavior.

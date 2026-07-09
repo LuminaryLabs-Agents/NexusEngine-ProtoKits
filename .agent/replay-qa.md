@@ -110,6 +110,10 @@ Track scenario QA and deterministic replay coverage.
 
 ## Open gaps
 
+## 2026-07-09 - Registry control-plane snapshot/replay closure
+
+Registry, capability graph, and composition planning snapshots are versioned and serializable. Registry restore reproduces exact source records, indexes, progress, revision, and reason; graph and planner restore normalized deterministic state without host objects, network handles, functions, or wall-clock data.
+
 ## 2026-07-09 - Resource-meter replay closure
 
 `generic-resource-loop-kit` now provides deterministic fixed-delta updates and versioned snapshot restore through `engine.n.resourceMeter`. Fresh engine installs, reset, and restored snapshots reproduce meter values, elapsed simulation time, threshold state, and bounded recent changes without wall-clock, RNG, DOM, Canvas, WebGL, or host-object ownership.

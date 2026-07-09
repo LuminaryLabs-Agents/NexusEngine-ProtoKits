@@ -22,6 +22,8 @@ Grow reusable DSK-based ProtoKits while shrinking local experiment JavaScript.
 
 ## Current expansion focus
 
+Registry control-plane promotion focus: the repository/kit registry, capability graph, and composition planner are now separate native DSK owners with real NexusEngine composition, exact snapshot/reset, strict collision, missing/cycle, deterministic ordering, bundle/domain expansion, and 1,000-manifest proof. Stable Kits installer adapters are the next ledge.
+
 Resource-meter promotion focus: `generic-resource-loop-kit` is now the canonical native resource-meter collection under `engine.n.resourceMeter`, with legacy aliases preserved. Its experiment purge keeps pressure policy and resource-pressure compatibility behavior separate; only the stable Kits catalog placeholder is eligible for replacement in this cycle.
 
 Use the generic-defense DSK boundary aliases, AAA DSK bridge, and `engine.n.genericDefense.<boundary>` namespace as compatibility-safe paths from broad composite APIs toward smaller resources/events/methods/snapshots/descriptors surfaces.
@@ -37,6 +39,8 @@ API Surface Pruner focus: the route/cargo/extraction family now has preferred at
 Intent Miner focus: treat `vr-platformer-kit-suite` as an incubation suite for a possible `spatial-platformer-loop` higher-level domain, not as a Core-promotion-ready maximum-feature blob. Its child platformer/XR/spatial-board/comfort/render-descriptor boundaries need deterministic replay and downstream Experiments consumption proof before promotion-facing claims.
 
 ## Current pruning focus
+
+Registry pruning rule: one canonical metadata registry owns repository, kit, domain, and bundle records. Capability graph and composition planning consume declared registry contracts. No control-plane DSK may fetch, import, execute, install, write files, render, or own game behavior.
 
 Resource-meter pruning rule: one service owns meter registration, bounded values, passive rates, locks, threshold transitions, change history, reset, and versioned snapshots. It must not own pressure policy, economy/inventory semantics, cargo fiction, host controls, rendering, or persistence transport.
 

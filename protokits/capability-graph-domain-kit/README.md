@@ -1,41 +1,28 @@
 # capability-graph-domain-kit
 
-## Purpose
+Native NexusEngine capability dependency graph at `n:registry:capabilities` and `engine.n.capabilityGraph`.
 
-Owns the capability graph domain for domain-first composition.
+## Owns
 
-It registers domain manifests as graph nodes, builds requires/provides/composes edges, finds missing requires, and discovers clusters by capability tokens.
+- Canonical capability nodes derived from kit manifests.
+- Requires/provides/composes edges and indexes.
+- External provider tokens, missing requirements, clusters, and cycle detection.
+- Deterministic dependency closure and topological install ordering.
+- Serializable reset, snapshot, and exact restore.
 
-## Public API
+## Does not own
 
-```txt
-engine.capabilityGraph.registerDomain(manifest)
-engine.capabilityGraph.registerMany(manifests)
-engine.capabilityGraph.buildGraph()
-engine.capabilityGraph.listByProvides(token)
-engine.capabilityGraph.listByDomain(domain)
-engine.capabilityGraph.findMissingRequires(id)
-engine.capabilityGraph.findClusters(seedTokens)
-engine.capabilityGraph.getState()
-engine.capabilityGraph.reset()
+Repository fetching, registry transport, module import, code execution, kit installation, child behavior, files, hosts, or rendering.
+
+## API
+
+```text
+registerDomain, registerManifest, registerMany, remove, syncRegistry
+setExternalProvides, buildGraph, listByProvides, listByDomain
+findMissingRequires, findCycles, createInstallOrder, findClusters
+getState, getSnapshot, loadSnapshot, reset
 ```
 
-## Boundary
+`engine.capabilityGraph` remains as a compatibility alias. New composition uses `engine.n.capabilityGraph`.
 
-Does own:
-
-```txt
-domain graph nodes
-requires/provides/composes edges
-missing dependency reports
-capability cluster reports
-```
-
-Does not own:
-
-```txt
-installing kits
-running simulation
-writing files
-rendering experiments
-```
+The real NexusEngine control-plane test proves registry synchronization, provider ordering, missing dependencies, cycles, snapshots, and 1,000-node scale.

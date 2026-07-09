@@ -1,141 +1,291 @@
-import { asList, clone, createDefinitionFactory, defineInjectedRuntimeKit, ensureResource } from "../protokit-core/index.js";
+import { defineDomainServiceKit, defineEvent, defineResource } from "nexusengine";
 
-export const COMPOSITION_PLANNING_DOMAIN_KIT_VERSION = "0.1.0";
+export const COMPOSITION_PLANNING_DOMAIN_KIT_VERSION = "1.0.0";
 
 export const manifest = Object.freeze({
   id: "composition-planning-domain-kit",
   domain: "composition-planning",
-  parentDomain: "domain-control-plane",
+  domainPath: "n:registry:composition",
+  parentDomain: "registry",
   scope: "control-domain",
   extendsBase: "DomainServiceKit",
-  composes: ["capability-graph-domain-kit"],
-  requires: ["domain:capability-graph"],
-  provides: ["domain:composition-planning", "domain:install-plan", "domain:dependency-gap-report"],
+  composes: ["kit-registry-domain-kit", "capability-graph-domain-kit"],
+  requires: ["n:registry:kits", "n:registry:capabilities"],
+  provides: ["n:registry:composition", "domain:composition-planning", "domain:install-plan", "domain:dependency-gap-report"],
   ownsLoop: false,
   snapshotPolicy: "serializable",
   resetPolicy: "engine-reset-aware",
   exportPath: "./composition-planning-domain-kit",
   sourcePath: "protokits/composition-planning-domain-kit/index.js",
-  testPaths: ["tests/domain-composition-planning-smoke.test.mjs"],
-  status: "experimental"
+  testPaths: ["protokits/kit-registry-domain-kit/tests/kit-registry-domain-kit.test.mjs", "tests/domain-composition-planning-smoke.test.mjs"],
+  status: "promotion-candidate"
 });
 
-const idOf = (value, fallback = "composition") => String(value ?? fallback).trim() || fallback;
+const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
+const asList = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
+const unique = (values) => [...new Set(values)];
 
-function createInitialState(options = {}) {
-  const recipes = Object.fromEntries(asList(options.recipes).map(normalizeRecipe).map((recipe) => [recipe.id, recipe]));
-  return { version: COMPOSITION_PLANNING_DOMAIN_KIT_VERSION, recipes, plans: {}, validations: {}, missingReports: {}, lastReason: "initialized" };
+function stableId(value, label = "Composition") {
+  const id = String(value ?? "").trim();
+  if (!id) throw new TypeError(`${label} requires a stable id.`);
+  return id;
 }
 
 export function normalizeRecipe(input = {}) {
-  const id = idOf(input.id ?? input.name, "domain-composition");
+  const id = stableId(input.id ?? input.name, "Composition recipe");
   return {
     id,
     type: String(input.type ?? "stack-domain"),
     goal: String(input.goal ?? id),
-    includes: asList(input.includes ?? input.domains).map(String),
-    requires: asList(input.requires).map(String),
-    provides: asList(input.provides).map(String),
+    includes: unique(asList(input.includes).map(String)),
+    kits: unique(asList(input.kits).map(String)),
+    domains: unique(asList(input.domains).map(String)),
+    bundles: unique(asList(input.bundles).map(String)),
+    requires: unique(asList(input.requires).map(String)),
+    provides: unique(asList(input.provides).map(String)),
+    allowStatuses: unique(asList(input.allowStatuses ?? ["official"]).map(String)),
     smoke: clone(input.smoke ?? {}),
     metadata: clone(input.metadata ?? {})
   };
 }
 
-function graphState(engine) {
-  return engine.capabilityGraph?.buildGraph?.() ?? engine.capabilityGraph?.getState?.() ?? { nodes: {}, indexes: { byProvides: {} } };
+function createInitialState(config = {}) {
+  const recipes = Object.fromEntries(asList(config.recipes).map(normalizeRecipe).map((recipe) => [recipe.id, recipe]));
+  return {
+    version: COMPOSITION_PLANNING_DOMAIN_KIT_VERSION,
+    status: "ready",
+    recipes,
+    plans: {},
+    validations: {},
+    missingReports: {},
+    revision: 0,
+    lastReason: "initialized"
+  };
 }
 
-function providersFor(graph, token) {
-  return asList(graph.indexes?.byProvides?.[token]).map((id) => graph.nodes?.[id]).filter(Boolean);
+function restoreState(snapshot) {
+  if (!snapshot || snapshot.version !== COMPOSITION_PLANNING_DOMAIN_KIT_VERSION || snapshot.status !== "ready") throw new TypeError("Unsupported composition planning snapshot.");
+  return {
+    ...createInitialState({ recipes: Object.values(snapshot.recipes ?? {}) }),
+    plans: clone(snapshot.plans ?? {}),
+    validations: clone(snapshot.validations ?? {}),
+    missingReports: clone(snapshot.missingReports ?? {}),
+    revision: Number(snapshot.revision ?? 0),
+    lastReason: String(snapshot.lastReason ?? "initialized")
+  };
 }
 
-export function createCompositionPlanningDomainKit(nexusEngine = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusEngine);
-  const CompositionPlanningState = resource(options.resourceName ?? "compositionPlanning.state");
-  const CompositionRecipeRegistered = event("compositionPlanning.recipeRegistered");
-  const CompositionPlanned = event("compositionPlanning.planned");
-  const CompositionValidated = event("compositionPlanning.validated");
-  const CompositionPlanningReset = event("compositionPlanning.reset");
+function expandSelection(recipe, registry) {
+  const kits = new Set([...recipe.includes, ...recipe.kits]);
+  const missing = [];
+  const visitedBundles = new Set();
 
-  return defineInjectedRuntimeKit(nexusEngine, {
-    id: options.id ?? options.kitId ?? "composition-planning-domain-kit",
-    resources: { CompositionPlanningState },
-    events: { CompositionRecipeRegistered, CompositionPlanned, CompositionValidated, CompositionPlanningReset },
-    requires: asList(options.requires),
-    provides: ["domain:composition-planning", "domain:install-plan", "domain:dependency-gap-report", ...asList(options.provides)],
-    initWorld({ world }) { ensureResource(world, CompositionPlanningState, () => createInitialState(options)); },
-    install({ engine, world }) {
-      const get = () => ensureResource(world, CompositionPlanningState, () => createInitialState(options));
-      const set = (next) => { world.setResource(CompositionPlanningState, next); return clone(next); };
-      const resolveRecipe = (idOrRecipe) => typeof idOrRecipe === "string" ? get().recipes[idOrRecipe] : normalizeRecipe(idOrRecipe);
-      engine[options.apiName ?? "compositionPlanning"] = {
-        registerRecipe(input = {}) {
-          const next = get();
-          const recipe = normalizeRecipe(input);
-          next.recipes[recipe.id] = recipe;
-          next.lastReason = "recipe-registered";
-          set(next);
-          world.emit(CompositionRecipeRegistered, { recipe: clone(recipe) });
-          return clone(recipe);
-        },
-        planComposition(goal = {}) {
-          const recipe = this.registerRecipe(goal);
-          return this.createInstallPlan(recipe.id);
-        },
-        createInstallPlan(idOrRecipe) {
-          const recipe = resolveRecipe(idOrRecipe);
-          if (!recipe) return null;
-          const graph = graphState(engine);
-          const install = [];
-          const missing = [];
-          for (const token of recipe.requires) {
-            const providers = providersFor(graph, token);
-            if (providers.length) for (const provider of providers) if (!install.includes(provider.id)) install.push(provider.id);
-            else missing.push(token);
-          }
-          for (const id of recipe.includes) if (!install.includes(id)) install.push(id);
-          const plan = { id: `${recipe.id}:install-plan`, recipeId: recipe.id, installOrder: install, missing, ok: missing.length === 0, provides: recipe.provides, smoke: clone(recipe.smoke) };
-          const next = get();
-          next.plans[recipe.id] = plan;
-          next.lastReason = plan.ok ? "install-plan-ready" : "install-plan-missing-dependencies";
-          set(next);
-          world.emit(CompositionPlanned, { plan: clone(plan) });
-          return clone(plan);
-        },
-        validateComposition(idOrRecipe) {
-          const recipe = resolveRecipe(idOrRecipe);
-          if (!recipe) return { ok: false, reason: "missing-recipe" };
-          const plan = this.createInstallPlan(recipe.id);
-          const graph = graphState(engine);
-          const missingIncludes = recipe.includes.filter((id) => graph.nodes && Object.keys(graph.nodes).length > 0 && !graph.nodes[id]);
-          const report = { id: `${recipe.id}:validation`, recipeId: recipe.id, ok: Boolean(plan?.ok) && missingIncludes.length === 0, missingRequires: plan?.missing ?? [], missingIncludes };
-          const next = get();
-          next.validations[recipe.id] = report;
-          next.lastReason = report.ok ? "composition-valid" : "composition-warning";
-          set(next);
-          world.emit(CompositionValidated, { report: clone(report) });
-          return clone(report);
-        },
-        suggestMissingDomains(idOrRecipe) {
-          const recipe = resolveRecipe(idOrRecipe);
-          if (!recipe) return [];
-          const plan = this.createInstallPlan(recipe.id);
-          const suggestions = asList(plan?.missing).map((token) => ({ token, suggestedId: `${token.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase()}-domain-kit`, reason: "missing-provider" }));
-          const next = get();
-          next.missingReports[recipe.id] = suggestions;
-          set(next);
-          return clone(suggestions);
-        },
-        scoreComposition(idOrRecipe) {
-          const report = this.validateComposition(idOrRecipe);
-          const penalty = (report.missingRequires?.length ?? 0) + (report.missingIncludes?.length ?? 0);
-          return { ...report, score: Math.max(0, 1 - penalty * 0.25) };
-        },
-        getState() { return clone(get()); },
-        reset(payload = {}) { const next = createInitialState({ ...options, ...payload }); world.setResource(CompositionPlanningState, next); world.emit(CompositionPlanningReset, { reason: payload.reason ?? "reset" }); return clone(next); }
-      };
-    },
-    metadata: { version: COMPOSITION_PLANNING_DOMAIN_KIT_VERSION, domain: "composition-planning", extendsBase: "DomainServiceKit", composes: ["capability-graph-domain-kit"], ownsLoop: false, manifest }
+  function includeDomain(domainId) {
+    const domain = registry.getDomain(domainId);
+    if (!domain) {
+      missing.push({ type: "missing-domain", id: domainId });
+      return;
+    }
+    for (const kitId of domain.kits) kits.add(kitId);
+  }
+
+  function includeBundle(bundleId) {
+    if (visitedBundles.has(bundleId)) return;
+    visitedBundles.add(bundleId);
+    const bundle = registry.getBundle(bundleId);
+    if (!bundle) {
+      missing.push({ type: "missing-bundle", id: bundleId });
+      return;
+    }
+    for (const kitId of bundle.kits) kits.add(kitId);
+    for (const domainId of bundle.domains) includeDomain(domainId);
+  }
+
+  for (const domainId of recipe.domains) includeDomain(domainId);
+  for (const bundleId of recipe.bundles) includeBundle(bundleId);
+  return { kits: [...kits].sort(), missing };
+}
+
+export function createInstallPlan(selection = {}, options = {}) {
+  const recipe = normalizeRecipe(selection.id ? selection : { id: options.id ?? "install-plan", ...selection });
+  const manifests = asList(options.manifests);
+  const byId = Object.fromEntries(manifests.map((manifest) => [manifest.id, manifest]));
+  const targets = unique([...recipe.includes, ...recipe.kits]).sort();
+  const missing = targets.filter((id) => !byId[id]).map((id) => ({ type: "missing-kit", id }));
+  return {
+    id: `${recipe.id}:install-plan`,
+    recipeId: recipe.id,
+    ok: missing.length === 0,
+    installOrder: targets.filter((id) => byId[id]),
+    missing,
+    cycles: [],
+    provides: recipe.provides,
+    smoke: recipe.smoke
+  };
+}
+
+export function createCompositionPlanningDomainKit(config = {}) {
+  const State = defineResource(config.resourceName ?? "compositionPlanning.state");
+  const RecipeRegistered = defineEvent("compositionPlanning.recipeRegistered");
+  const Planned = defineEvent("compositionPlanning.planned");
+  const Validated = defineEvent("compositionPlanning.validated");
+  const SnapshotLoaded = defineEvent("compositionPlanning.snapshotLoaded");
+  const Reset = defineEvent("compositionPlanning.reset");
+
+  function createApi(engine, world) {
+    const get = () => world.getResource(State) ?? createInitialState(config);
+    const set = (state) => (world.setResource(State, state), clone(state));
+    const resolveRecipe = (idOrRecipe) => typeof idOrRecipe === "string" ? get().recipes[idOrRecipe] : normalizeRecipe(idOrRecipe);
+
+    const api = {
+      registerRecipe(input = {}) {
+        const state = get();
+        const recipe = normalizeRecipe(input);
+        const existing = state.recipes[recipe.id];
+        if (existing && JSON.stringify(existing) !== JSON.stringify(recipe)) throw new TypeError(`composition recipe id collision: ${recipe.id}`);
+        if (existing) return clone(existing);
+        state.recipes[recipe.id] = recipe;
+        state.revision += 1;
+        state.lastReason = "recipe-registered";
+        set(state);
+        world.emit(RecipeRegistered, { recipe: clone(recipe) });
+        return clone(recipe);
+      },
+      planComposition(goal = {}) {
+        const recipe = api.registerRecipe(goal);
+        return api.createInstallPlan(recipe.id);
+      },
+      createInstallPlan(idOrRecipe) {
+        const recipe = resolveRecipe(idOrRecipe);
+        if (!recipe) return null;
+        const canonicalRegistry = engine.n?.kitRegistry;
+        const graphApi = engine.n?.capabilityGraph ?? engine.capabilityGraph;
+        const registry = canonicalRegistry ?? {
+          get: (id) => graphApi.getState().nodes[id] ?? null,
+          getDomain: () => null,
+          getBundle: () => null
+        };
+        if (canonicalRegistry) graphApi.syncRegistry();
+        const expanded = expandSelection(recipe, registry);
+        const graph = graphApi.buildGraph();
+        const requiredProviders = [];
+        const missingRequires = [];
+        for (const token of recipe.requires) {
+          const providers = graph.indexes.byProvides[token] ?? [];
+          if (providers.length) requiredProviders.push([...providers].sort()[0]);
+          else if (!graph.externalProvides.includes(token)) missingRequires.push({ type: "missing-require", token });
+        }
+        const targets = unique([...expanded.kits, ...requiredProviders]).sort();
+        const order = graphApi.createInstallOrder(targets);
+        const statusRejected = targets.flatMap((id) => {
+          const manifest = registry.get(id);
+          return canonicalRegistry && manifest && !recipe.allowStatuses.includes(manifest.status)
+            ? [{ type: "status-not-allowed", id, status: manifest.status }]
+            : [];
+        });
+        const missing = [...expanded.missing, ...missingRequires, ...order.missing, ...statusRejected];
+        const plan = {
+          id: `${recipe.id}:install-plan`,
+          recipeId: recipe.id,
+          ok: missing.length === 0 && order.cycles.length === 0,
+          installOrder: order.installOrder,
+          requestedKits: targets,
+          missing,
+          cycles: order.cycles,
+          provides: recipe.provides,
+          allowStatuses: recipe.allowStatuses,
+          smoke: clone(recipe.smoke)
+        };
+        const state = get();
+        state.plans[recipe.id] = plan;
+        state.revision += 1;
+        state.lastReason = plan.ok ? "install-plan-ready" : "install-plan-blocked";
+        set(state);
+        world.emit(Planned, { plan: clone(plan) });
+        return clone(plan);
+      },
+      validateComposition(idOrRecipe) {
+        const recipe = resolveRecipe(idOrRecipe);
+        if (!recipe) return { ok: false, reason: "missing-recipe" };
+        const plan = api.createInstallPlan(recipe.id);
+        const report = {
+          id: `${recipe.id}:validation`,
+          recipeId: recipe.id,
+          ok: Boolean(plan?.ok),
+          missing: clone(plan?.missing ?? []),
+          missingRequires: (plan?.missing ?? []).filter((entry) => entry.type === "missing-require").map((entry) => entry.token),
+          missingIncludes: (plan?.missing ?? []).filter((entry) => entry.type === "missing-kit").map((entry) => entry.id),
+          cycles: clone(plan?.cycles ?? [])
+        };
+        const state = get();
+        state.validations[recipe.id] = report;
+        state.revision += 1;
+        state.lastReason = report.ok ? "composition-valid" : "composition-invalid";
+        set(state);
+        world.emit(Validated, { report: clone(report) });
+        return clone(report);
+      },
+      suggestMissingDomains(idOrRecipe) {
+        const recipe = resolveRecipe(idOrRecipe);
+        if (!recipe) return [];
+        const plan = api.createInstallPlan(recipe.id);
+        const suggestions = plan.missing.map((entry) => {
+          const token = entry.token ?? entry.id;
+          return { token, suggestedId: `${String(token).replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase()}-domain-kit`, reason: entry.type };
+        });
+        const state = get();
+        state.missingReports[recipe.id] = suggestions;
+        set(state);
+        return clone(suggestions);
+      },
+      scoreComposition(idOrRecipe) {
+        const report = api.validateComposition(idOrRecipe);
+        const penalty = (report.missing?.length ?? 0) + (report.cycles?.length ?? 0);
+        return { ...report, score: Math.max(0, 1 - penalty * 0.25) };
+      },
+      getState() { return clone(get()); },
+      getSnapshot() { return clone(get()); },
+      snapshot() { return clone(get()); },
+      loadSnapshot(snapshot) {
+        const next = restoreState(snapshot);
+        set(next);
+        world.emit(SnapshotLoaded, { recipeCount: Object.keys(next.recipes).length });
+        return clone(next);
+      },
+      reset(payload = {}) {
+        const next = createInitialState({ ...config, ...payload });
+        set(next);
+        world.emit(Reset, { reason: payload.reason ?? "reset" });
+        return clone(next);
+      }
+    };
+    return api;
+  }
+
+  return defineDomainServiceKit({
+    id: config.kitId ?? config.id ?? "composition-planning-domain-kit",
+    domain: "composition-planning",
+    domainPath: "n:registry:composition",
+    parentDomainPath: "n:registry",
+    apiName: "compositionPlanning",
+    stability: "promotion-candidate",
+    version: COMPOSITION_PLANNING_DOMAIN_KIT_VERSION,
+    services: ["recipes", "selection-expansion", "install-plans", "validation", "snapshot"],
+    requires: ["n:registry:kits", "n:registry:capabilities"],
+    provides: ["domain:composition-planning", "domain:install-plan", "domain:dependency-gap-report"],
+    resources: { State },
+    events: { RecipeRegistered, Planned, Validated, SnapshotLoaded, Reset },
+    initWorld({ world }) { world.setResource(State, createInitialState(config)); },
+    createApi({ engine, world }) { return createApi(engine, world); },
+    install({ engine }) { engine.compositionPlanning = engine.n.compositionPlanning; },
+    bindings: { State },
+    metadata: {
+      status: "promotion-candidate",
+      parentDomain: "registry",
+      scope: "control-domain",
+      ownsLoop: false,
+      boundary: "Owns deterministic install-plan data and validation. It does not fetch registries, import modules, install kits, mutate files, render, or own child behavior."
+    }
   });
 }
 

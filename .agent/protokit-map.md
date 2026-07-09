@@ -24,6 +24,14 @@ Scheduled tasks should keep this file current by recording:
 
 Move toward composable DSK-style kits that let hosts stay close to import/configure/tick/render.
 
+## 2026-07-09 - Registry control-plane canonicalization
+
+- Registry metadata owner: `kit-registry-domain-kit` / `n:registry:kits` / `engine.n.kitRegistry`.
+- Dependency graph owner: `capability-graph-domain-kit` / `n:registry:capabilities` / `engine.n.capabilityGraph`.
+- Plan owner: `composition-planning-domain-kit` / `n:registry:composition` / `engine.n.compositionPlanning`.
+- Compatibility aliases: pure `createKitRegistry()`, `engine.kitManifest`, `engine.domainManifestRegistry`, `engine.capabilityGraph`, and `engine.compositionPlanning`.
+- Adapter boundary: fetch, GitHub, cache, integrity transport, lockfile, module import, and install remain outside all three DSKs.
+
 ## 2026-07-09 - Resource-meter canonicalization map update
 
 - Primitive owner: NexusEngine core `createResourceMeter()` remains the pure single-meter primitive.

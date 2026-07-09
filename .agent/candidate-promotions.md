@@ -2,6 +2,18 @@
 
 Record reusable behavior that should move into ProtoKits.
 
+## 2026-07-09 - Registry control-plane purge and promotion gate
+
+Three native DSKs are ready for stable Kits promotion as an approved addition set:
+
+- `kit-registry-domain-kit`: canonical repository, kit, domain, and bundle metadata state.
+- `capability-graph-domain-kit`: dependency graph, missing requirements, cycles, clusters, and deterministic ordering.
+- `composition-planning-domain-kit`: kit/domain/bundle expansion, status gates, plans, and validation.
+
+The purge merges ProtoKits `kit-registry`, `kit-manifest-domain-kit`, `domain-manifest-registry-domain-kit`, the Editor registry, and the stable Kits catalog into one registry owner. The two old runtime registry factories and pure helper remain compatibility exports without separate state ownership.
+
+Repository transport, immutable-ref resolution, integrity verification, lockfiles, module loading, and installation are intentionally deferred to stable installer adapters. They are not registry-domain behavior.
+
 ## 2026-07-09 - Resource-meter experiment purge and promotion gate
 
 `generic-resource-loop-kit` is ready for stable NexusEngine-Kits promotion as the canonical runtime-installed resource-meter collection. The feature union covers NexusEngine's pure meter semantics, the existing runtime resource-pressure mutations, and Gold Rush's resource-loop usage without absorbing pressure policy or game fiction.

@@ -11,7 +11,10 @@ const promotionCandidatePaths = [
   "protokits/generic-route-cargo-extraction-kit/index.js",
   "protokits/generic-defense-dsk-boundaries/index.js",
   "protokits/generic-defense-aaa-dsk-bridge/index.js",
-  "protokits/generic-defense-session-command-kit/index.js"
+  "protokits/generic-defense-session-command-kit/index.js",
+  "protokits/kit-registry-domain-kit/index.js",
+  "protokits/capability-graph-domain-kit/index.js",
+  "protokits/composition-planning-domain-kit/index.js"
 ];
 
 const forbiddenPromotionRuntimeApis = [
