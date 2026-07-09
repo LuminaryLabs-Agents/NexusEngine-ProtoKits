@@ -1,0 +1,38 @@
+{
+  "id": "spatial-surface-candidate-domain-kit",
+  "domain": "spatial-surface-candidate",
+  "parentDomain": "spatial-placement",
+  "type": "domain-service-kit",
+  "status": "experimental",
+  "requires": [],
+  "provides": ["n:spatial:surface-candidate", "spatial:surface-observation", "spatial:surface-selection"],
+  "resources": ["spatialSurfaceCandidate.state"],
+  "events": ["spatialSurfaceCandidate.observed", "spatialSurfaceCandidate.stabilized", "spatialSurfaceCandidate.selected", "spatialSurfaceCandidate.removed", "spatialSurfaceCandidate.rejected", "spatialSurfaceCandidate.reset"],
+  "publicApi": ["createSpatialSurfaceCandidateDomainKit", "classifySurfaceOrientation", "normalizeSurfaceObservation", "engine.n.spatialSurfaceCandidate.observe", "engine.n.spatialSurfaceCandidate.select", "engine.n.spatialSurfaceCandidate.remove", "engine.n.spatialSurfaceCandidate.reset", "engine.n.spatialSurfaceCandidate.getSnapshot", "engine.n.spatialSurfaceCandidate.loadSnapshot", "engine.n.spatialSurfaceCandidate.getDescriptors"],
+  "descriptors": ["spatial-surface-candidate"],
+  "boundary": "Normalize host observations and own candidate stability/selection without owning tracking or anchors.",
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "ownsDom": false,
+    "ownsCanvas": false,
+    "ownsThreeObjects": false,
+    "forbidden": ["XRSession", "XRFrame", "DOM", "Canvas", "WebGL", "Three.js", "camera streams", "asset loading"]
+  },
+  "performance": {
+    "tickCost": "O(1); the kit has no owned frame loop",
+    "selectionCost": "O(candidate count log candidate count)",
+    "defaultCandidateCap": 32,
+    "scalesWith": ["candidateCount", "snapshotCandidateCount"],
+    "telemetry": ["candidateCount", "stableCandidateCount", "rejectionCount"],
+    "degradationModes": ["lowerCandidateCap", "reduceHostObservationFrequency"]
+  },
+  "snapshot": {
+    "stable": true,
+    "fields": ["status", "candidateIds", "candidatesById", "selectedCandidateId", "rejections", "updatedAtTick"]
+  },
+  "metadata": {
+    "boundary": "spatial-placement/surface-candidate",
+    "purpose": "Renderer-independent surface candidate normalization, stability, orientation, and selection.",
+    "sourceRepositories": ["LuminaryLabs-Dev/MuseumMultiverse-TheLostPages"]
+  }
+}

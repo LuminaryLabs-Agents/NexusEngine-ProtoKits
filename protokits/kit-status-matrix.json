@@ -21,6 +21,14 @@
   ],
   "entries": [
     {
+      "id": "spatial-surface-candidate-domain-kit",
+      "classification": "atomic-dsk",
+      "promotionStatus": "incubating-downstream-proof-needed",
+      "currentAction": "Keep as the renderer-agnostic boundary between host tracking observations and committed spatial anchors.",
+      "nextLedge": "Add a host adapter proof and a second consumer before promotion review.",
+      "doNotDoNext": "Do not absorb raw XR frames, camera streams, marker libraries, renderer reticles, anchors, objectives, or game copy."
+    },
+    {
       "id": "generic-pressure-loop-kit",
       "classification": "atomic-dsk",
       "promotionStatus": "promotion-candidate-after-proof",
