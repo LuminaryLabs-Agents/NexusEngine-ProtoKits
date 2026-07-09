@@ -25,7 +25,7 @@ These concerns stay together because they form one candidate lifecycle and share
 
 - `spatial-surface-smoothing-policy-kit`: pose jitter filtering.
 - `surface-capability-fallback-policy-kit`: plane, marker, overlay, and preview mode selection.
-- `webxr-hit-test-adapter-kit`: raw `XRFrame` results to plain observations.
+- `webxr-hit-test-adapter-domain-kit`: implemented experimental adapter from structural `XRFrame` results and NexusEngine hit-test poses to plain observations.
 - `marker-tracking-adapter-kit`: marker confidence/pose to plain observations.
 - `spatial-anchor-persistence-adapter-kit`: selected candidates to host anchor APIs.
 
@@ -42,6 +42,8 @@ host adapter -> spatial-surface-candidate -> generic-anchor-descriptor
 - Does not absorb `raycast-placement-kit`, which owns grid raycasts and placement validation.
 - Does not own XR sessions, raw frames, camera streams, marker libraries, renderer reticles, anchors, objectives, or game copy.
 - Merges wall, floor, marker, and fallback observations through one contract while preserving orientation and source variation.
+
+The WebXR adapter is now a separate composed DSK. This candidate service remains free of WebXR host objects and can continue accepting marker, native, simulated, or fallback observations through the same plain contract.
 
 ## Public API
 

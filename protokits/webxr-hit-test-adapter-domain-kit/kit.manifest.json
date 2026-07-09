@@ -1,0 +1,45 @@
+{
+  "id": "webxr-hit-test-adapter-domain-kit",
+  "domain": "webxr-hit-test-adapter",
+  "parentDomain": "spatial-placement",
+  "type": "domain-service-kit",
+  "status": "experimental",
+  "requires": ["n:spatial-placement:surface-candidate"],
+  "provides": ["spatial:webxr-hit-observation", "spatial:webxr-frame-observation"],
+  "resources": ["webxrHitTestAdapter.state"],
+  "events": ["webxrHitTestAdapter.observed", "webxrHitTestAdapter.frameObserved", "webxrHitTestAdapter.rejected", "webxrHitTestAdapter.reset"],
+  "publicApi": ["createWebXRHitTestAdapterDomainKit", "normalizeWebXRHitTestPose", "createSurfaceObservationFromWebXRHit", "engine.n.webxrHitTestAdapter.observePose", "engine.n.webxrHitTestAdapter.observeResult", "engine.n.webxrHitTestAdapter.observeFrame", "engine.n.webxrHitTestAdapter.reset", "engine.n.webxrHitTestAdapter.getSnapshot", "engine.n.webxrHitTestAdapter.loadSnapshot"],
+  "descriptors": ["spatial-surface-observation"],
+  "boundary": "Translate structural WebXR hit-test frames, results, and poses into plain observations without owning sessions, candidate policy, anchors, or rendering.",
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "ownsDom": false,
+    "ownsCanvas": false,
+    "ownsThreeObjects": false,
+    "allowedHostInputs": ["XRFrame-like", "XRHitTestResult-like", "XRSpace-like", "plain NexusEngine hit-test pose"],
+    "forbiddenState": ["XRSession", "XRFrame", "XRHitTestSource", "XRHitTestResult", "XRSpace", "DOM", "Canvas", "WebGL", "Three.js"]
+  },
+  "performance": {
+    "tickCost": "O(1); the adapter has no owned frame loop",
+    "frameCallCost": "O(min(hit result count, maxResultsPerFrame))",
+    "defaultMaxResultsPerFrame": 8,
+    "scalesWith": ["hostCallFrequency", "boundedHitResultCount"],
+    "telemetry": ["acceptedCount", "rejectedCount", "emptyFrameCount"],
+    "degradationModes": ["lowerMaxResultsPerFrame", "lowerHostObservationFrequency"]
+  },
+  "snapshot": {
+    "stable": true,
+    "fields": ["status", "acceptedCount", "rejectedCount", "emptyFrameCount", "lastObservation", "lastResult", "updatedAtTick"],
+    "excludes": ["all WebXR host objects"]
+  },
+  "metadata": {
+    "boundary": "spatial-placement/webxr-hit-test-adapter",
+    "purpose": "Explicit WebXR host adapter for spatial surface observations.",
+    "sourceRepositories": ["LuminaryLabs-Dev/NexusEngine", "LuminaryLabs-Dev/MuseumMultiverse-TheLostPages"],
+    "sourceRevisions": {
+      "LuminaryLabs-Dev/NexusEngine": "851372d29fece5ad7d9a6253fb1a74730ae24047",
+      "LuminaryLabs-Dev/MuseumMultiverse-TheLostPages": "5984ecf03989ea99ecb2c426d8982c052d8f6f3f"
+    },
+    "standards": ["https://immersive-web.github.io/hit-test/"]
+  }
+}

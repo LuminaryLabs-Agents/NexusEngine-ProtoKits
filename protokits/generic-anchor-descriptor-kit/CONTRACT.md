@@ -14,6 +14,8 @@ genericAnchorDescriptor.upsertAnchors
 genericAnchorDescriptor.removeAnchors
 genericAnchorDescriptor.clearAnchors
 genericAnchorDescriptor.updated
+genericAnchorDescriptor.reset
+genericAnchorDescriptor.snapshotLoaded
 ```
 
 ## Anchor descriptor
@@ -50,3 +52,13 @@ genericAnchorDescriptor.updated
 ## Determinism
 
 State changes only through tick-scoped events and serializable descriptors.
+
+`reset()` restores configured anchors. `getSnapshot()` returns a serializable copy. `loadSnapshot()` validates version and descriptor data, rebuilds indexes/groups, and never trusts derived maps from the input snapshot.
+
+## NexusEngine domain surface
+
+```txt
+domain path: n:spatial-placement:anchor-descriptor
+API: engine.n.anchorDescriptors
+legacy alias: engine.anchorDescriptors
+```

@@ -25,8 +25,25 @@
       "classification": "atomic-dsk",
       "promotionStatus": "incubating-downstream-proof-needed",
       "currentAction": "Keep as the renderer-agnostic boundary between host tracking observations and committed spatial anchors.",
-      "nextLedge": "Add a host adapter proof and a second consumer before promotion review.",
+      "nextLedge": "Adopt the proven WebXR adapter in two executable hosts and capture device-level wall/floor proof before promotion review.",
       "doNotDoNext": "Do not absorb raw XR frames, camera streams, marker libraries, renderer reticles, anchors, objectives, or game copy."
+    },
+    {
+      "id": "webxr-hit-test-adapter-domain-kit",
+      "classification": "atomic-dsk",
+      "promotionStatus": "incubating-downstream-proof-needed",
+      "currentAction": "Keep as the explicit structural WebXR frame/result/pose adapter feeding spatial-surface-candidate.",
+      "composes": ["spatial-surface-candidate-domain-kit"],
+      "nextLedge": "Integrate in Lost Pages and one independent WebXR host, then capture real-device hit-test and replay evidence.",
+      "doNotDoNext": "Do not absorb XR session lifecycle, candidate policy, anchors, renderer reticles, objectives, or game copy."
+    },
+    {
+      "id": "generic-anchor-descriptor-kit",
+      "classification": "atomic-dsk",
+      "promotionStatus": "incubating-downstream-proof-needed",
+      "currentAction": "Use as the canonical serializable committed-anchor descriptor owner under engine.n.anchorDescriptors.",
+      "nextLedge": "Exercise snapshot migration and committed placement consumption in two executable hosts before promotion review.",
+      "doNotDoNext": "Do not absorb host XRAnchor lifecycle, persistence transport, surface discovery, rendering, or game-specific anchor meaning."
     },
     {
       "id": "generic-pressure-loop-kit",

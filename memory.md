@@ -17,6 +17,7 @@ NexusEngine-ProtoKits provides reusable, branded-app-neutral Domain Service Kits
 - Browser-only remote URL forwarder modules are skipped by the local Node import smoke; local ProtoKit index modules should still import cleanly.
 - Browser CDN hosts using direct-import DSK ProtoKits need an import map that resolves bare `nexusengine` to the desired NexusEngine URL or package path.
 - NexusEngine is resolved from `github:LuminaryLabs-Dev/NexusEngine#main`; the old runtime identity and compatibility aliases are not part of the package surface.
+- Spatial placement separates host translation, candidate policy, and committed descriptors: `webxr-hit-test-adapter-domain-kit` structurally reads WebXR data without retaining host objects, `spatial-surface-candidate-domain-kit` owns stable candidate classification/selection, and `generic-anchor-descriptor-kit` owns serializable committed anchor descriptors under `engine.n.anchorDescriptors` while retaining `engine.anchorDescriptors` as its existing host alias.
 - Stable reusable behavior promotes to NexusEngine-Kits. NexusEngine core changes are reserved for runtime primitives and contracts.
 - Flight drag in `flight-motion-kit` is time-step scaled so simulation behavior is not frame-rate dependent.
 - `generic-pressure-loop-kit` is the first GPT-brainstormed AAA-batch DSK candidate. It owns renderer-agnostic pressure channels, thresholds, status transitions, and warning/peaked/recovered events for reusable heat, storm, alert, oxygen debt, radiation, corruption, collapse, or similar loops.

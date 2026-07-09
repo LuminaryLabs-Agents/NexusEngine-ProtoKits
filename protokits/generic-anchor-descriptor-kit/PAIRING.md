@@ -5,6 +5,8 @@
 - `generic-mode-projected-route` can generate anchors from a projected route.
 - `generic-poi-placement-kit` can provide point-like POIs that can be converted into anchors.
 - `generic-surface-projection-kit` / `generic-raycast-placement-kit` can provide grounded positions.
+- `spatial-surface-candidate-domain-kit` can provide a selected plain surface descriptor.
+- `webxr-hit-test-adapter-domain-kit` can feed WebXR observations into that candidate owner without coupling this registry to WebXR.
 
 ## Downstream kits
 
@@ -19,6 +21,7 @@
 anchor:descriptors
 route:anchors
 render:anchor-descriptors
+n:spatial-placement:anchor-descriptor
 ```
 
 ## Requires

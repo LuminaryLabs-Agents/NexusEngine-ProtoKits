@@ -1,0 +1,41 @@
+{
+  "id": "generic-anchor-descriptor-kit",
+  "domain": "anchor-descriptor",
+  "parentDomain": "spatial-placement",
+  "type": "domain-service-kit",
+  "status": "experimental",
+  "requires": [],
+  "provides": ["anchor:descriptors", "route:anchors", "render:anchor-descriptors"],
+  "resources": ["genericAnchorDescriptor.state"],
+  "events": ["genericAnchorDescriptor.setAnchors", "genericAnchorDescriptor.upsertAnchors", "genericAnchorDescriptor.removeAnchors", "genericAnchorDescriptor.clearAnchors", "genericAnchorDescriptor.updated", "genericAnchorDescriptor.reset", "genericAnchorDescriptor.snapshotLoaded"],
+  "publicApi": ["createGenericAnchorDescriptorKit", "normalizeAnchorDescriptor", "engine.n.anchorDescriptors.setAnchors", "engine.n.anchorDescriptors.upsertAnchors", "engine.n.anchorDescriptors.addAnchor", "engine.n.anchorDescriptors.removeAnchors", "engine.n.anchorDescriptors.clear", "engine.n.anchorDescriptors.reset", "engine.n.anchorDescriptors.getSnapshot", "engine.n.anchorDescriptors.loadSnapshot", "engine.n.anchorDescriptors.getAnchors", "engine.n.anchorDescriptors.getAnchor", "engine.anchorDescriptors compatibility alias"],
+  "descriptors": ["generic-anchor-descriptor"],
+  "boundary": "Own committed serializable anchor descriptors and indexes without owning surface discovery, host anchors, persistence transport, rendering, or game meaning.",
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "ownsDom": false,
+    "ownsCanvas": false,
+    "ownsThreeObjects": false,
+    "forbidden": ["XRAnchor", "XRSession", "DOM", "Canvas", "WebGL", "Three.js", "asset loading"]
+  },
+  "performance": {
+    "tickCost": "O(anchor command count plus changed anchor count)",
+    "lookupCost": "O(1) by stable id; O(group size) by group",
+    "scalesWith": ["anchorCount", "commandsPerTick", "snapshotAnchorCount"],
+    "telemetry": ["anchorCount", "groupCount", "lastReason"],
+    "degradationModes": ["reduceAnchorCount", "batchUpserts"]
+  },
+  "snapshot": {
+    "stable": true,
+    "fields": ["status", "anchors", "anchorsById", "groups", "updatedAtTick", "lastReason"],
+    "loadPolicy": "validate source anchors and rebuild derived indexes"
+  },
+  "metadata": {
+    "boundary": "spatial-placement/anchor-descriptor",
+    "purpose": "Canonical serializable anchor descriptor registry.",
+    "sourceRepositories": ["NexusEngine-ProtoKits", "LuminaryLabs-Dev/MuseumMultiverse-TheLostPages"],
+    "sourceRevisions": {
+      "LuminaryLabs-Dev/MuseumMultiverse-TheLostPages": "5984ecf03989ea99ecb2c426d8982c052d8f6f3f"
+    }
+  }
+}

@@ -24,6 +24,13 @@ Scheduled tasks should keep this file current by recording:
 
 Move toward composable DSK-style kits that let hosts stay close to import/configure/tick/render.
 
+## 2026-07-09 - Spatial placement adapter map update
+
+- Host adapter: `webxr-hit-test-adapter-domain-kit` converts structural WebXR frames/results and plain NexusEngine poses into serializable observations.
+- Candidate policy: `spatial-surface-candidate-domain-kit` remains the sole owner of orientation classification, stability, preference, and selection.
+- Committed descriptor owner: `generic-anchor-descriptor-kit` now installs as a native DSK at `engine.n.anchorDescriptors` and retains `engine.anchorDescriptors` as an alias.
+- Composition proof exists in the default suite; downstream host adoption and real-device proof remain open.
+
 ## 2026-06-23 — API Surface Pruner map update
 
 ### Generic promotion candidates with clear atomic surfaces

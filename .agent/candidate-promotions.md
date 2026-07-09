@@ -14,6 +14,7 @@ Promotion/pruning implications:
 - Strongest promotion pipeline, not one bundle: `generic-defense-dsk-boundaries` gives the atomic map/economy/build/wave/combat/session/render child surfaces. The broad generic-defense compatibility and AAA bridge surfaces remain migration tools, not Core-promotion candidates.
 - Split required: vertical climb, arcade race, open-world flight, and other game-family stacks should promote only proven child domains, not branded or family-wide bundles.
 - Promotion hold: `vr-platformer-kit-suite` remains an incubation suite for a possible spatial-platformer-loop; child domains need deterministic replay and downstream proof before promotion-facing claims.
+- Promotion hold: the `webxr-hit-test-adapter` -> `spatial-surface-candidate` -> `anchor-descriptor` stack has real NexusEngine replay/composition proof, but still needs two executable host consumers and device-level WebXR proof.
 
 Safest next patch: run `tests/kit-status-matrix-smoke.test.mjs`, then either add downstream `next-ledge` consumption proof for `generic-route-cargo-extraction-kit` or add deterministic replay for one child boundary inside `vr-platformer-kit-suite`.
 
