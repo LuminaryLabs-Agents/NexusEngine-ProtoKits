@@ -15,7 +15,29 @@ export function createMockNexusEngine() {
       return { ...spec, __nexusRuntimeKit: true };
     },
     defineDomainServiceKit(spec) {
-      return { ...spec, __nexusDomainServiceKit: true };
+      return {
+        ...spec,
+        __nexusDomainServiceKit: true,
+        metadata: {
+          ...spec.metadata,
+          kind: "domain-service-kit",
+          namespace: "n",
+          domain: spec.domain,
+          domainPath: spec.domainPath,
+          parentDomainPath: spec.parentDomainPath,
+          apiName: spec.apiName,
+          stability: spec.stability,
+          version: spec.version
+        },
+        install(context) {
+          context.engine.n ??= {};
+          const api = typeof spec.createApi === "function" ? spec.createApi(context) : undefined;
+          if (api !== undefined) context.engine.n[spec.apiName] = api;
+          const result = spec.install?.(context);
+          if (api === undefined && result !== undefined) context.engine.n[spec.apiName] = result;
+          return result;
+        }
+      };
     }
   };
 }

@@ -110,6 +110,10 @@ Track scenario QA and deterministic replay coverage.
 
 ## Open gaps
 
+## 2026-07-09 - Resource-meter replay closure
+
+`generic-resource-loop-kit` now provides deterministic fixed-delta updates and versioned snapshot restore through `engine.n.resourceMeter`. Fresh engine installs, reset, and restored snapshots reproduce meter values, elapsed simulation time, threshold state, and bounded recent changes without wall-clock, RNG, DOM, Canvas, WebGL, or host-object ownership.
+
 - Replace or isolate `generic-defense-aaa-kits` wall-clock/browser-timing ledger and presentation convenience paths before treating any AAA facade as promotion-ready.
 - Split or alias `generic-defense-kits` into clearer atomic DSK boundaries after the compatibility replay stays green: path/slot/vital-target, economy wallet, build-placement, structure runtime, wave/agent director, projectile/combat resolver, and render-descriptor output.
 - Keep Experiments route-level replay manifests aligned with ProtoKit coverage; the first executable route-domain replay now exists for `signal-bastion`, while other lanes remain contract-only.

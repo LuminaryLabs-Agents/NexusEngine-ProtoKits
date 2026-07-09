@@ -1,63 +1,125 @@
 import assert from "node:assert/strict";
-import { createGenericResourceLoopKit, normalizeResourceMeter } from "../index.js";
+import { readFileSync } from "node:fs";
+import * as NexusEngine from "nexusengine";
+import { createResourceMeter } from "nexusengine/core-kits";
+import {
+  createGenericResourceLoopKit,
+  createResourceMeterDomainKit,
+  normalizeResourceMeter
+} from "../index.js";
 
-function defineNamed(kind, name) { return Object.freeze({ kind, name }); }
-function defineRuntimeKit(config = {}) { return Object.freeze({ id: config.id ?? "kit", resources: config.resources ?? {}, events: config.events ?? {}, systems: config.systems ?? [], requires: config.requires ?? [], provides: config.provides ?? [], bindings: config.bindings ?? {}, metadata: config.metadata ?? {}, initWorld: config.initWorld, install: config.install }); }
-const Nexus = { defineResource: (name) => defineNamed("resource", name), defineEvent: (name) => defineNamed("event", name), defineRuntimeKit };
-function createWorld() { const resources = new Map(); const events = new Map(); return { __nexusClock: { delta: 1 / 60, elapsed: 0, frame: 0 }, setResource(def, value) { resources.set(def.name, value); return value; }, getResource(def) { return resources.get(def.name); }, emit(def, payload = {}) { const queue = events.get(def.name) ?? []; queue.push(payload); events.set(def.name, queue); return payload; }, readEvents(def) { return (events.get(def.name) ?? []).slice(); }, clearAllEvents() { events.clear(); } }; }
-function createEngine(kits) { const world = createWorld(); const systems = []; const engine = { world, tick(delta = 1 / 60) { world.__nexusClock.delta = delta; world.__nexusClock.elapsed += delta; world.__nexusClock.frame += 1; for (const entry of systems) entry.system(world); return world; } }; for (const kit of kits) { kit.initWorld?.({ engine, world, kit }); for (const entry of kit.systems ?? []) systems.push(entry); kit.install?.({ engine, world, kit }); } return engine; }
-
-const normalized = normalizeResourceMeter({ id: "oxygen", initial: 40, max: 50, thresholds: [{ id: "low", value: 20, direction: "below" }] });
-assert.equal(normalized.value, 40);
-assert.equal(normalized.full, false);
-
-const engine = createEngine([
-  createGenericResourceLoopKit(Nexus, {
-    resources: [
-      { id: "oxygen", initial: 50, max: 50, ratePerSecond: -10, thresholds: [{ id: "low", value: 25, direction: "below" }] },
-      { id: "charge", initial: 0, max: 100, thresholds: [{ id: "ready", value: 80, direction: "above" }] }
-    ]
-  })
-]);
-
-assert.equal(engine.genericResourceLoop.getState().resources.length, 2);
-engine.genericResourceLoop.spend("oxygen", 60, "test-spend");
-assert.equal(engine.genericResourceLoop.getResource("oxygen").value, 0);
-assert.equal(engine.genericResourceLoop.getResource("oxygen").empty, true);
-
-engine.genericResourceLoop.restore("charge", 120, "test-restore");
-assert.equal(engine.genericResourceLoop.getResource("charge").value, 100);
-assert.equal(engine.genericResourceLoop.getResource("charge").full, true);
-
-engine.genericResourceLoop.reset({
-  resources: [
-    { id: "oxygen", initial: 50, max: 50, ratePerSecond: -10, thresholds: [{ id: "low", value: 25, direction: "below" }] },
-    { id: "charge", initial: 0, max: 100, thresholds: [{ id: "ready", value: 80, direction: "above" }] }
-  ]
+const normalized = normalizeResourceMeter({
+  id: "heat",
+  start: 50,
+  max: 100,
+  drainPerSecond: 2,
+  thresholds: [{ id: "low", value: 20, direction: "below", once: true }]
 });
-engine.tick(1);
-engine.tick(1);
-engine.tick(1);
-assert.equal(engine.genericResourceLoop.getResource("oxygen").value, 20);
-assert.equal(engine.genericResourceLoop.getResource("oxygen").lastThresholdEvent.thresholdId, "low");
+assert.equal(normalized.value, 50);
+assert.equal(normalized.ratePerSecond, -2);
+assert.equal(normalized.thresholds[0].repeatable, false);
+assert.equal(createResourceMeterDomainKit, createGenericResourceLoopKit);
 
-engine.genericResourceLoop.setRate("charge", 50, "charge-up");
-engine.tick(1);
-engine.tick(1);
-assert.equal(engine.genericResourceLoop.getResource("charge").value, 100);
-assert.equal(engine.genericResourceLoop.getResource("charge").lastThresholdEvent.thresholdId, "ready");
-
-engine.genericResourceLoop.setLocked("charge", true, "test-lock");
-engine.genericResourceLoop.spend("charge", 10, "locked-spend");
-assert.equal(engine.genericResourceLoop.getResource("charge").value, 100);
-
-const first = createEngine([createGenericResourceLoopKit(Nexus, { resources: [{ id: "ink", initial: 30, max: 30, ratePerSecond: -3 }] })]);
-const second = createEngine([createGenericResourceLoopKit(Nexus, { resources: [{ id: "ink", initial: 30, max: 30, ratePerSecond: -3 }] })]);
-for (let i = 0; i < 5; i++) {
-  first.tick(0.5);
-  second.tick(0.5);
+function createSourceEngine() {
+  return NexusEngine.createEngine({
+    kits: [
+      createGenericResourceLoopKit(NexusEngine, {
+        resources: [
+          {
+            id: "gold",
+            label: "Gold",
+            min: 0,
+            max: 120,
+            initial: 0,
+            thresholds: [
+              { id: "empty", value: 0, direction: "below" },
+              { id: "loaded", value: 1, direction: "above" }
+            ],
+            tags: ["gold", "cargo", "extraction"]
+          },
+          { id: "heat", label: "Heat", start: 50, max: 100, drainPerSecond: 2 }
+        ]
+      })
+    ]
+  });
 }
-assert.deepEqual(first.genericResourceLoop.getState(), second.genericResourceLoop.getState());
-assert.deepEqual(JSON.parse(JSON.stringify(first.genericResourceLoop.getState())), first.genericResourceLoop.getState());
+
+function runSourceScenario() {
+  const engine = createSourceEngine();
+  assert.equal(engine.n.resourceMeter, engine.n.genericResourceLoop);
+  assert.equal(engine.resourceMeter, engine.genericResourceLoop);
+
+  engine.n.resourceMeter.restore("gold", 24, "goldrush-mine-seam");
+  engine.n.resourceMeter.spend("gold", 9, "goldrush-cashout-proof");
+  engine.tick(1);
+  engine.n.resourceMeter.adjust("heat", 25, { source: "nexusengine-core-shape" });
+
+  assert.equal(engine.n.resourceMeter.get("gold").value, 15);
+  assert.equal(engine.n.resourceMeter.get("heat").value, 73);
+  assert.equal(engine.n.resourceMeter.getDescriptors().find((entry) => entry.id === "gold").normalized, 0.125);
+  return { engine, snapshot: engine.n.resourceMeter.getSnapshot() };
+}
+
+const first = runSourceScenario();
+const second = runSourceScenario();
+assert.deepEqual(second.snapshot, first.snapshot, "GoldRush and NexusEngine source-shaped commands replay exactly");
+
+first.engine.n.resourceMeter.register({ id: "oxygen", start: 10, max: 10, rate: -1 });
+first.engine.n.resourceMeter.register({ id: "oxygen", start: 8, max: 10, rate: -2 });
+assert.equal(first.engine.n.resourceMeter.getState().resources.filter((entry) => entry.id === "oxygen").length, 1, "registration is idempotent by id");
+assert.equal(first.engine.n.resourceMeter.get("oxygen").value, 8);
+first.engine.tick(1);
+assert.equal(first.engine.n.resourceMeter.get("oxygen").value, 6);
+
+first.engine.n.resourceMeter.setLocked("oxygen", true, "freeze");
+first.engine.n.resourceMeter.spend("oxygen", 2, "blocked");
+assert.equal(first.engine.n.resourceMeter.get("oxygen").value, 6);
+first.engine.n.resourceMeter.setLocked("oxygen", false, "resume");
+assert.equal(first.engine.n.resourceMeter.remove("oxygen"), true);
+assert.equal(first.engine.n.resourceMeter.get("oxygen"), null);
+
+first.engine.n.resourceMeter.register({
+  id: "signal",
+  initial: 5,
+  max: 5,
+  thresholds: [{ id: "lost", value: 2, direction: "below", once: true }]
+});
+first.engine.n.resourceMeter.spend("signal", 4, "first-loss");
+first.engine.n.resourceMeter.restore("signal", 4, "recover");
+first.engine.n.resourceMeter.spend("signal", 4, "second-loss");
+assert.equal(first.engine.n.resourceMeter.get("signal").thresholdCrossCounts.lost, 1, "one-shot thresholds do not emit repeatedly");
+
+const snapshot = first.engine.n.resourceMeter.getSnapshot();
+first.engine.n.resourceMeter.reset({ reason: "test" });
+assert.equal(first.engine.n.resourceMeter.get("gold").value, 0);
+first.engine.n.resourceMeter.loadSnapshot(snapshot);
+assert.deepEqual(first.engine.n.resourceMeter.getSnapshot(), snapshot);
+assert.throws(() => first.engine.n.resourceMeter.loadSnapshot({ ...snapshot, version: "0.1.0" }), /Unsupported/);
+assert.throws(() => NexusEngine.createEngine({
+  kits: [createGenericResourceLoopKit(NexusEngine, { resources: [{ id: "same" }, { id: "same" }] })]
+}), /duplicated/);
+
+const corePrimitive = createResourceMeter({ id: "stamina", initial: 10, max: 10 });
+const parityEngine = NexusEngine.createEngine({ kits: [createGenericResourceLoopKit(NexusEngine, { resources: [{ id: "stamina", initial: 10, max: 10 }] })] });
+corePrimitive.spend(3, "sprint");
+parityEngine.n.resourceMeter.spend("stamina", 3, "sprint");
+corePrimitive.restore(1, "rest");
+parityEngine.n.resourceMeter.restore("stamina", 1, "rest");
+assert.deepEqual(
+  parityEngine.n.resourceMeter.getDescriptors()[0].value,
+  corePrimitive.snapshot().value,
+  "service mutation preserves the NexusEngine core meter primitive semantics"
+);
+
+const many = Array.from({ length: 1000 }, (_, index) => ({ id: `meter-${index}`, initial: 100, ratePerSecond: -1 }));
+const scaleEngine = NexusEngine.createEngine({ kits: [createGenericResourceLoopKit(NexusEngine, { resources: many, recentChangeLimit: 64 })] });
+scaleEngine.tick(1 / 60);
+assert.equal(scaleEngine.n.resourceMeter.getState().resources.length, 1000);
+assert.equal(scaleEngine.n.resourceMeter.getState().recentChanges.length, 64, "change history remains bounded at scale");
+
+const source = readFileSync(new URL("../index.js", import.meta.url), "utf8");
+for (const forbidden of ["document.", "window.", "requestAnimationFrame", "Date.now", "Math.random", "new THREE", "getContext("]) {
+  assert.equal(source.includes(forbidden), false, `source excludes ${forbidden}`);
+}
 
 console.log("generic resource loop kit tests passed");

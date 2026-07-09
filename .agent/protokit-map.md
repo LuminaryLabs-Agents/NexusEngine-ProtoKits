@@ -24,6 +24,14 @@ Scheduled tasks should keep this file current by recording:
 
 Move toward composable DSK-style kits that let hosts stay close to import/configure/tick/render.
 
+## 2026-07-09 - Resource-meter canonicalization map update
+
+- Primitive owner: NexusEngine core `createResourceMeter()` remains the pure single-meter primitive.
+- Runtime collection owner: `generic-resource-loop-kit` is the canonical native DSK at `engine.n.resourceMeter`; existing `genericResourceLoop` names remain aliases.
+- Policy siblings: pressure-loop and pressure-domain kits remain separate because warning, peak, recovery, and fiction-facing pressure policy are not meter storage concerns.
+- Compatibility layer: the older resource-pressure kit remains available for a later parity-backed adapter migration.
+- Stable purge: replace only the NexusEngine-Kits resource-loop placeholder after the ProtoKit target commit is pushed and referenced.
+
 ## 2026-07-09 - Spatial placement adapter map update
 
 - Host adapter: `webxr-hit-test-adapter-domain-kit` converts structural WebXR frames/results and plain NexusEngine poses into serializable observations.

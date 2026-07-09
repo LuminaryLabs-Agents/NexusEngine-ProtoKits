@@ -1,0 +1,53 @@
+{
+  "id": "generic-resource-loop-kit",
+  "domain": "resource-meter-service",
+  "parentDomain": "simulation",
+  "type": "domain-service-kit",
+  "status": "promotion-ready",
+  "scope": "feature-domain",
+  "extendsBase": "nexusengine/core-simulation/resource-meter",
+  "composes": [],
+  "requires": [],
+  "provides": ["resource:loop", "resource:meters", "resource:meter-service", "validation:resources"],
+  "resources": ["resourceMeter.state"],
+  "events": ["genericResource.registered", "genericResource.removed", "genericResource.spendRequested", "genericResource.restoreRequested", "genericResource.adjusted", "genericResource.rateChanged", "genericResource.lockChanged", "genericResource.changed", "genericResource.thresholdCrossed", "genericResource.emptied", "genericResource.filled", "genericResource.rejected", "genericResource.reset", "genericResource.snapshotLoaded"],
+  "publicApi": ["createGenericResourceLoopKit", "createResourceMeterDomainKit", "normalizeResourceMeter", "engine.n.resourceMeter.register", "engine.n.resourceMeter.remove", "engine.n.resourceMeter.adjust", "engine.n.resourceMeter.add", "engine.n.resourceMeter.spend", "engine.n.resourceMeter.restore", "engine.n.resourceMeter.drain", "engine.n.resourceMeter.setRate", "engine.n.resourceMeter.setLocked", "engine.n.resourceMeter.get", "engine.n.resourceMeter.getResource", "engine.n.resourceMeter.getDescriptors", "engine.n.resourceMeter.getSnapshot", "engine.n.resourceMeter.loadSnapshot", "engine.n.resourceMeter.reset", "engine.n.genericResourceLoop compatibility alias", "engine.genericResourceLoop compatibility alias"],
+  "descriptors": ["resource-meter"],
+  "boundary": "Own runtime resource-meter collections and service behavior while core owns the pure primitive and pressure, economy, inventory, controls, rendering, and game fiction remain separate.",
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "ownsDom": false,
+    "ownsCanvas": false,
+    "ownsThreeObjects": false,
+    "forbidden": ["DOM", "Canvas", "WebGL", "Three.js", "browser input", "asset loading", "wall-clock time", "unseeded random"]
+  },
+  "performance": {
+    "tickCost": "O(resource count plus threshold count for changed resources)",
+    "lookupCost": "O(1) by stable id",
+    "historyPolicy": "bounded by recentChangeLimit; default 64",
+    "scaleProof": "1,000 meters in the real NexusEngine headless test",
+    "scalesWith": ["resourceCount", "thresholdCount", "changedResourceCount"],
+    "telemetry": ["resourceCount", "depletedCount", "recentChangeCount", "elapsedSeconds", "tick"],
+    "degradationModes": ["reduceHostTickFrequency", "partitionIndependentMeterServices", "lowerRecentChangeLimit"]
+  },
+  "snapshot": {
+    "stable": true,
+    "version": "1.0.0",
+    "fields": ["resources", "resourcesById", "depleted", "recentChanges", "elapsedSeconds", "tick", "lastChange"],
+    "loadPolicy": "validate source meters and rebuild derived indexes"
+  },
+  "resetPolicy": "restore configured resources or explicit reset resources",
+  "exportPath": "./generic-resource-loop-kit",
+  "sourcePath": "protokits/generic-resource-loop-kit/index.js",
+  "testPaths": ["protokits/generic-resource-loop-kit/tests/generic-resource-loop-kit.test.mjs", "tests/generic-promotion-gate-smoke.test.mjs", "tests/generic-promotion-replay-smoke.test.mjs", "tests/generic-route-cargo-extraction-kit-smoke.test.mjs", "tests/generic-route-cargo-extraction-replay-smoke.test.mjs"],
+  "metadata": {
+    "boundary": "simulation/resource-meter-service",
+    "purpose": "Canonical runtime collection service above the NexusEngine pure resource-meter primitive.",
+    "sourceRepositories": ["LuminaryLabs-Dev/NexusEngine", "LuminaryLabs-Dev/NexusEngine-GoldRush", "LuminaryLabs-Agents/NexusEngine-ProtoKits"],
+    "sourceRevisions": {
+      "LuminaryLabs-Dev/NexusEngine": "851372d29fece5ad7d9a6253fb1a74730ae24047",
+      "LuminaryLabs-Dev/NexusEngine-GoldRush": "d1e3f5ecfaa41ef6e49a6c7cca23bda07f64bb32"
+    },
+    "doesNotOwn": ["pressure policy", "inventory", "economy", "cargo fiction", "controls", "rendering", "persistence transport"]
+  }
+}

@@ -120,6 +120,12 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 
 ## Open gaps
 
+## 2026-07-09 - Resource-meter promotion smoke
+
+- The direct test installs the native DSK through real NexusEngine and exercises NexusEngine-core and Gold Rush-shaped configurations.
+- Coverage includes aliases, idempotent registration, passive rates, locks, rejection events, one-shot thresholds, reset, versioned snapshot restore, duplicate rejection, 1,000-meter scale, bounded history, and browser/renderer exclusion.
+- The existing generic promotion, route/cargo composition, replay, determinism, manifest, and performance checks remain part of the promotion gate.
+
 - Replace `generic-defense-aaa-kits` wall-clock ledger/presentation stamps with tick/command-derived deterministic stamps or keep the AAA facade outside promotion-facing surfaces.
 - After the placement/projector namespace smoke, session-command smoke, and boundary-alias smoke stay green, keep Signal Bastion browser-host calls on the smallest generic-defense DSK aliases and avoid reintroducing broad build/wave compatibility facades.
 - Route-level replay manifests now exist in Experiments, and `signal-bastion` has the first executable route-domain replay. Add equivalent executable replays for other lanes only after a real reusable ProtoKit boundary exists.

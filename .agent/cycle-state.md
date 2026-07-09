@@ -22,6 +22,8 @@ Grow reusable DSK-based ProtoKits while shrinking local experiment JavaScript.
 
 ## Current expansion focus
 
+Resource-meter promotion focus: `generic-resource-loop-kit` is now the canonical native resource-meter collection under `engine.n.resourceMeter`, with legacy aliases preserved. Its experiment purge keeps pressure policy and resource-pressure compatibility behavior separate; only the stable Kits catalog placeholder is eligible for replacement in this cycle.
+
 Use the generic-defense DSK boundary aliases, AAA DSK bridge, and `engine.n.genericDefense.<boundary>` namespace as compatibility-safe paths from broad composite APIs toward smaller resources/events/methods/snapshots/descriptors surfaces.
 
 The previous Twenty Game Refiner seam in `createGenericPlacementProjectorKit().confirm()` is now closed for the reusable projector path: `protokits/generic-defense-presentation-stack-kit/index.js` prefers `engine.n.genericDefense.sessionFacade.getSnapshot()` for reusable presentation snapshots and `engine.n.genericDefense.sessionFacade.build(...)` for placement confirmation before falling back to compatibility facades.
@@ -35,6 +37,8 @@ API Surface Pruner focus: the route/cargo/extraction family now has preferred at
 Intent Miner focus: treat `vr-platformer-kit-suite` as an incubation suite for a possible `spatial-platformer-loop` higher-level domain, not as a Core-promotion-ready maximum-feature blob. Its child platformer/XR/spatial-board/comfort/render-descriptor boundaries need deterministic replay and downstream Experiments consumption proof before promotion-facing claims.
 
 ## Current pruning focus
+
+Resource-meter pruning rule: one service owns meter registration, bounded values, passive rates, locks, threshold transitions, change history, reset, and versioned snapshots. It must not own pressure policy, economy/inventory semantics, cargo fiction, host controls, rendering, or persistence transport.
 
 Keep `generic-defense-kits` and `generic-defense-aaa-kits` compatible while shifting future imports and host calls toward `generic-defense-dsk-boundaries`, `generic-defense-aaa-dsk-bridge`, and the seven named atomic aliases: map, economy wallet, build placement, wave/agent director, combat resolver, session facade, and render descriptors.
 

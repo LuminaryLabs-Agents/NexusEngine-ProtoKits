@@ -1,6 +1,6 @@
 {
   "schemaVersion": "nexusengine.protokits.kit-status-matrix.v1",
-  "updated": "2026-06-25",
+  "updated": "2026-07-09",
   "purpose": "Classify current ProtoKits into a gated DSK/domain incubation pipeline.",
   "classificationTypes": [
     "atomic-dsk",
@@ -13,6 +13,7 @@
   ],
   "promotionStatuses": [
     "promotion-candidate-after-proof",
+    "promotion-ready-for-kits",
     "incubating-downstream-proof-needed",
     "blocked-downstream-consumption-needed",
     "split-required",
@@ -56,10 +57,11 @@
     {
       "id": "generic-resource-loop-kit",
       "classification": "atomic-dsk",
-      "promotionStatus": "promotion-candidate-after-proof",
-      "currentAction": "Keep as a reusable meter/resource DSK.",
-      "nextLedge": "Use it as a child boundary where route/cargo/extraction or survival pressure needs resource state.",
-      "doNotDoNext": "Do not turn it into a whole economy, inventory, or mode kit."
+      "promotionStatus": "promotion-ready-for-kits",
+      "currentAction": "Use as the canonical NexusEngine runtime resource-meter collection under engine.n.resourceMeter, with genericResourceLoop aliases retained for compatibility.",
+      "nextLedge": "Promote the proven 1.0.0 behavior into NexusEngine-Kits, then migrate pressure and resource-pressure compatibility layers to compose it without deleting their distinct policy behavior.",
+      "doNotDoNext": "Do not absorb pressure policy, economy, inventory, cargo fiction, host input, rendering, or persistence transport.",
+      "purgeDecision": "Replace the stable catalog placeholder only; retain pressure owners and the old resource-pressure compatibility surface until separate parity-backed migrations exist."
     },
     {
       "id": "generic-action-window-kit",

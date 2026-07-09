@@ -735,6 +735,6 @@ NexusEngine grows by turning repeated gameplay needs into clean domain services,
 ## Recent Incubating DSKs
 
 - `generic-pressure-loop-kit`: renderer-agnostic pressure channels, thresholds, and warning/peaked/recovered events.
-- `generic-resource-loop-kit`: renderer-agnostic resource meters, rates, locks, empty/full state, threshold crossings, and deterministic reset.
+- `generic-resource-loop-kit`: canonical native resource-meter DSK collection under `engine.n.resourceMeter`, with rates, locks, bounded change history, one-shot/repeatable thresholds, empty/full transitions, deterministic reset/snapshot restore, and compatibility aliases.
 - `generic-action-window-kit`: renderer-agnostic action timing, perfect/good/miss judgment, cooldowns, rejection reasons, and deterministic reset.
 - `generic-affordance-descriptor-kit`: renderer-agnostic interactable availability, target descriptors, stable rejection reasons, and usable/blocked/completed state.

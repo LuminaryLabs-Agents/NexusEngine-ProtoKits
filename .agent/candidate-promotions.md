@@ -2,6 +2,15 @@
 
 Record reusable behavior that should move into ProtoKits.
 
+## 2026-07-09 - Resource-meter experiment purge and promotion gate
+
+`generic-resource-loop-kit` is ready for stable NexusEngine-Kits promotion as the canonical runtime-installed resource-meter collection. The feature union covers NexusEngine's pure meter semantics, the existing runtime resource-pressure mutations, and Gold Rush's resource-loop usage without absorbing pressure policy or game fiction.
+
+- Purge target: replace only the NexusEngine-Kits `generic-resource-loop-kit` placeholder.
+- Retain: `generic-pressure-loop-kit` and `pressure-domain-kit` as pressure-policy owners; retain the old resource-pressure surface as a compatibility migration candidate until parity is proven.
+- Proven: native NexusEngine install, deterministic tick/reset/replay, versioned snapshot restore, aliases, threshold modes, duplicate rejection, bounded history, and 1,000-meter scale.
+- Proposals: make pressure policy compose `engine.n.resourceMeter`; add inventory/economy bridge policies only when a second consumer proves reusable meaning; add named threshold presets without moving policy into the meter owner.
+
 ## 2026-06-25 — ProtoKits master pipeline bootstrap
 
 `protokits/kit-status-matrix.json` is now the current classification layer for high-signal ProtoKits. It turns the broad inventory into a gated pipeline: atomic DSKs, atomic DSK families, composite coordinators, compatibility bridges, game-family kits, renderer-descriptor kits, and incubation suites.
