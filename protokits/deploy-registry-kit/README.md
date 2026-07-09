@@ -15,7 +15,7 @@ Composition kit.
 ## Factory
 
 ```js
-createDeployRegistryKit(NexusRealtime, options)
+createDeployRegistryKit(NexusEngine, options)
 ```
 
 ## Requires

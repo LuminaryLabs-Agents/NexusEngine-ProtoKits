@@ -26,9 +26,9 @@ function rng(seed) {
   };
 }
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineResource", "defineEvent", "defineRuntimeKit"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createNextLedgeKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createNextLedgeKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -131,9 +131,9 @@ function aimFrom(state, payload = {}) {
   return { x: dx / len, y: dy / len, worldX: state.player.x + dx * 150, worldY: state.player.y + dy * 150 };
 }
 
-export function createNextLedgeKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineResource, defineEvent, defineRuntimeKit } = NexusRealtime;
+export function createNextLedgeKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineResource, defineEvent, defineRuntimeKit } = NexusEngine;
   const State = defineResource(config.resourceName ?? "nextLedge.state");
   const Action = defineEvent("nextLedge.action");
   const Choose = defineEvent("nextLedge.choose");

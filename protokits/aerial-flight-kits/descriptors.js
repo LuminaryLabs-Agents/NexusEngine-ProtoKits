@@ -63,9 +63,9 @@ export const GENERIC_FLIGHT_CHALLENGE_KIT_DEFINITION = Object.freeze({
   requires: ['aerial:checkpoint-volume'],
   purpose: 'Generic score, checkpoint count, prompt, completion, and altitude readout.'
 });
-export function createGenericFlightChallengeKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericFlightChallengeKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_FLIGHT_CHALLENGE_KIT_DEFINITION.id,
     provides: GENERIC_FLIGHT_CHALLENGE_KIT_DEFINITION.provides,
     requires: GENERIC_FLIGHT_CHALLENGE_KIT_DEFINITION.requires,
@@ -100,9 +100,9 @@ export const GENERIC_FLIGHT_CAMERA_KIT_DEFINITION = Object.freeze({
   requires: ['aerial:body'],
   purpose: 'Renderer-neutral chase camera descriptor for aerial traversal.'
 });
-export function createGenericFlightCameraKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericFlightCameraKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_FLIGHT_CAMERA_KIT_DEFINITION.id,
     provides: GENERIC_FLIGHT_CAMERA_KIT_DEFINITION.provides,
     requires: GENERIC_FLIGHT_CAMERA_KIT_DEFINITION.requires,
@@ -141,9 +141,9 @@ export const GENERIC_FLIGHT_VFX_KIT_DEFINITION = Object.freeze({
   requires: ['aerial:body', 'aerial:boost-impulse'],
   purpose: 'Renderer-neutral speed trail, airflow, and boost flash descriptors.'
 });
-export function createGenericFlightVfxKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericFlightVfxKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_FLIGHT_VFX_KIT_DEFINITION.id,
     provides: GENERIC_FLIGHT_VFX_KIT_DEFINITION.provides,
     requires: GENERIC_FLIGHT_VFX_KIT_DEFINITION.requires,
@@ -174,9 +174,9 @@ export const GENERIC_FLIGHT_AUDIO_KIT_DEFINITION = Object.freeze({
   requires: ['aerial:body'],
   purpose: 'Renderer-neutral wind audio gain and filter descriptors.'
 });
-export function createGenericFlightAudioKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericFlightAudioKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_FLIGHT_AUDIO_KIT_DEFINITION.id,
     provides: GENERIC_FLIGHT_AUDIO_KIT_DEFINITION.provides,
     requires: GENERIC_FLIGHT_AUDIO_KIT_DEFINITION.requires,
@@ -203,8 +203,8 @@ export const GENERIC_AERIAL_RENDER_DESCRIPTOR_KIT_DEFINITION = Object.freeze({
   requires: ['environment:sky', 'world:streaming-descriptors', 'aerial:checkpoint-volume', 'aerial:lift-volume', 'ai:flock-agent', 'challenge:flight', 'camera:flight-follow', 'vfx:flight', 'render:rig-animation-descriptor', 'render:weather-descriptor', 'render:volumetric-lighting-descriptor', 'audio:flight-descriptor'],
   purpose: 'Single renderer-facing descriptor snapshot for aerial hosts.'
 });
-export function createGenericAerialRenderDescriptorKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
+export function createGenericAerialRenderDescriptorKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
   function buildDescriptor(world, state) {
     const body = buildBodyDescriptor(state);
     const patches = (state.world?.patches ?? []).map((patch) => ({
@@ -236,7 +236,7 @@ export function createGenericAerialRenderDescriptorKit(NexusRealtime, config = {
       audio: state.audio ?? {}
     };
   }
-  return makeRuntimeKit(NexusRealtime, {
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_AERIAL_RENDER_DESCRIPTOR_KIT_DEFINITION.id,
     provides: GENERIC_AERIAL_RENDER_DESCRIPTOR_KIT_DEFINITION.provides,
     requires: GENERIC_AERIAL_RENDER_DESCRIPTOR_KIT_DEFINITION.requires,

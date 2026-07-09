@@ -1,16 +1,16 @@
-# NexusRealtime ProtoKit Expansion Agent Memory
+# NexusEngine ProtoKit Expansion Agent Memory
 
-This folder is durable, repo-local memory for cumulative NexusRealtime automation. Every scheduled task must review this folder before making decisions and must build on it rather than restarting from scratch.
+This folder is durable, repo-local memory for cumulative NexusEngine automation. Every scheduled task must review this folder before making decisions and must build on it rather than restarting from scratch.
 
 ## Public ecosystem
 
-- Core: https://github.com/LuminaryLabs-Dev/NexusRealtime
-- ProtoKits: https://github.com/LuminaryLabs-Agents/NexusRealtime-ProtoKits
-- Experiments: https://github.com/LuminaryLabs-Agents/NexusRealtime-Experiments
+- Core: https://github.com/LuminaryLabs-Dev/NexusEngine
+- ProtoKits: https://github.com/LuminaryLabs-Agents/NexusEngine-ProtoKits
+- Experiments: https://github.com/LuminaryLabs-Agents/NexusEngine-Experiments
 
 ## Primary intent
 
-Grow reusable NexusRealtime domain-service-kit layers while shrinking local experiment JavaScript.
+Grow reusable NexusEngine domain-service-kit layers while shrinking local experiment JavaScript.
 
 DSKs are not gap fillers. DSKs are layered domain communication boundaries that let domains expand, compose, and communicate through stable resources, events, methods, snapshots, and descriptors.
 

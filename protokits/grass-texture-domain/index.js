@@ -37,11 +37,11 @@ export function createGrassTextureState(options = {}) {
   };
 }
 
-export function createGrassTextureDomainKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createGrassTextureDomainKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const State = defs.resource(options.resourceName ?? "grassTexture.state");
   const initial = () => createGrassTextureState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.kitId ?? "grass-texture-domain",
     resources: { State },
     provides: ["grass:texture-descriptor", "grass:blade-color-ramp", "render:grass-texture-contract"],

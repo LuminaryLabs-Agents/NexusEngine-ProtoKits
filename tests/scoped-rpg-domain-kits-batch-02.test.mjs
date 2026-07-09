@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-scoped-domain-rpg-batch-02::aggregate::2026-06-20
+// Smoke signature: NexusEngine-scoped-domain-rpg-batch-02::aggregate::2026-06-20
 import { assert, FIVE_SMOKE_ENVIRONMENTS, assertKitContract, installKit } from "./aaa-domain-spine-smoke-harness.mjs";
 import { createEnemyObjectDomainKit } from "../protokits/enemy-object-domain-kit/index.js";
 import { createEnemyAgentDomainKit } from "../protokits/enemy-agent-domain-kit/index.js";

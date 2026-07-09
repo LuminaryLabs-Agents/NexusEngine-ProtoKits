@@ -57,7 +57,7 @@ export const SURVIVAL_CRAFTING_DOMAIN_MANIFEST = Object.freeze({
   kits: Object.freeze(SURVIVAL_CRAFTING_KIT_SPECS.map(([id]) => id))
 });
 
-export function createSurvivalCraftingKitById(NexusRealtime, kitId, config = {}) {
+export function createSurvivalCraftingKitById(NexusEngine, kitId, config = {}) {
   const spec = SURVIVAL_CRAFTING_KIT_SPECS.find(([id]) => id === kitId);
   if (!spec) throw new Error(`Unknown survival crafting kit: ${kitId}`);
   const [id, subdomain, category, purpose, requires, provides] = spec;
@@ -75,7 +75,7 @@ export function createSurvivalCraftingKitById(NexusRealtime, kitId, config = {})
     describe() { return Object.freeze({ id: api.id, version: api.version, domain: api.domain, subdomain, category, purpose, requires: api.requires.slice(), provides: api.provides.slice() }); },
     getState() { return copy(state); },
     createRuntimeKit(options = {}) {
-      return defineInjectedRuntimeKit(NexusRealtime, {
+      return defineInjectedRuntimeKit(NexusEngine, {
         id: options.id ?? api.id,
         requires: options.requires ?? api.requires,
         provides: options.provides ?? api.provides,
@@ -87,9 +87,9 @@ export function createSurvivalCraftingKitById(NexusRealtime, kitId, config = {})
   return api;
 }
 
-export function createSurvivalCraftingDomainKits(NexusRealtime, config = {}) {
+export function createSurvivalCraftingDomainKits(NexusEngine, config = {}) {
   const omit = new Set(arr(config.omit));
-  return SURVIVAL_CRAFTING_KIT_SPECS.filter(([id]) => !omit.has(id)).map(([id]) => createSurvivalCraftingKitById(NexusRealtime, id, config[id] ?? {}));
+  return SURVIVAL_CRAFTING_KIT_SPECS.filter(([id]) => !omit.has(id)).map(([id]) => createSurvivalCraftingKitById(NexusEngine, id, config[id] ?? {}));
 }
 
 export default createSurvivalCraftingDomainKits;

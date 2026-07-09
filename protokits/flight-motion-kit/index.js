@@ -321,11 +321,11 @@ export function stepFlight(state = {}, input = {}, dt = 1 / 60, terrainSampler =
   return next;
 }
 
-export function createFlightMotionKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createFlightMotionKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const FlightMotionState = resource(options.resourceName ?? "flightMotion.state");
   const FlightMotionUpdated = event("flightMotion.updated");
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "flight-motion-kit",
     resources: { FlightMotionState },
     events: { FlightMotionUpdated },

@@ -19,15 +19,15 @@ function reportOk(parts = {}) {
   return [parts.policy, parts.bridge, parts.scenario, parts.replay].every((part) => part == null || part.ok !== false && part.accepted !== false);
 }
 
-export function createAgentEvalHarnessKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createAgentEvalHarnessKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const AgentEvalState = resource(options.resourceName ?? "agentEval.state");
   const CaseRegistered = event("agentEval.caseRegistered");
   const CaseRun = event("agentEval.caseRun");
   const SuiteRun = event("agentEval.suiteRun");
   const AgentEvalReset = event("agentEval.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "agent-eval-harness-kit",
     resources: { AgentEvalState },
     events: { CaseRegistered, CaseRun, SuiteRun, AgentEvalReset },

@@ -19,8 +19,8 @@ function createInitialState(options = {}) {
   return { version: CLOUD_ZONE_KIT_VERSION, zones, currentZoneId: current?.id ?? null, previousZoneId: null, enteredAt: 0, fog: number(current?.fog), wind: number(current?.wind), theme: current?.theme ?? "cliff-ruins", light: current?.light ?? "warm" };
 }
 
-export function createCloudZoneKit(nexusRealtime = {}, options = {}) {
-  const definitions = createVerticalClimbDefinitions(nexusRealtime, options);
+export function createCloudZoneKit(nexusEngine = {}, options = {}) {
+  const definitions = createVerticalClimbDefinitions(nexusEngine, options);
   const { resources, events } = definitions;
   const system = (world) => {
     const state = ensureResource(world, resources.CloudState, () => createInitialState(options));
@@ -31,7 +31,7 @@ export function createCloudZoneKit(nexusRealtime = {}, options = {}) {
     Object.assign(state, { fog: number(zone.fog), wind: number(zone.wind), theme: zone.theme ?? state.theme, light: zone.light ?? state.light });
     world.setResource(resources.CloudState, state);
   };
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "cloud-zone-kit",
     resources: { CloudState: resources.CloudState, ClimbState: resources.ClimbState },
     events: { CloudBandEntered: events.CloudBandEntered },

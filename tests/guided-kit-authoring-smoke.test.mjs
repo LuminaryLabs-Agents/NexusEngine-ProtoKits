@@ -1,15 +1,15 @@
-import { assert, createMockNexusRealtime, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
+import { assert, createMockNexusEngine, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
 import { createGuidedKitAuthoringKit } from "../protokits/guided-kit-authoring-kit/index.js";
 import { createKitManifestDomainKit } from "../protokits/kit-manifest-domain-kit/index.js";
 import { createKitBoundaryLintKit } from "../protokits/kit-boundary-lint-kit/index.js";
 
-const NexusRealtime = createMockNexusRealtime();
+const NexusEngine = createMockNexusEngine();
 const world = createSmokeWorld();
 const engine = {};
 const kits = [
-  createGuidedKitAuthoringKit(NexusRealtime),
-  createKitManifestDomainKit(NexusRealtime),
-  createKitBoundaryLintKit(NexusRealtime)
+  createGuidedKitAuthoringKit(NexusEngine),
+  createKitManifestDomainKit(NexusEngine),
+  createKitBoundaryLintKit(NexusEngine)
 ];
 for (const kit of kits) kit.initWorld?.({ world, engine });
 for (const kit of kits) kit.install?.({ world, engine });

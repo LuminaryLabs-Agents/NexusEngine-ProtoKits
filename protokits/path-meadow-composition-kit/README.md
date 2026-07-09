@@ -55,7 +55,7 @@ This kit does not render. It emits serializable descriptors that an experiment c
 ## Example
 
 ```js
-import { createPathMeadowCompositionKit } from "@luminarylabs/nexusrealtime-protokits/path-meadow-composition-kit";
+import { createPathMeadowCompositionKit } from "@luminarylabs/nexusengine-protokits/path-meadow-composition-kit";
 
 const kit = createPathMeadowCompositionKit(null, { seed: "hero-tree-meadow" });
 const composition = kit.getComposition();

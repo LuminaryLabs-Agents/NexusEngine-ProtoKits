@@ -36,13 +36,13 @@ export function queryObjectFamilies(state = {}, filter = {}) {
   }).map(clone);
 }
 
-export function createObjectFamilyKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjectFamilyKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objectFamily.state");
   const Updated = event("objectFamily.updated");
   const Registered = event("objectFamily.registered");
   const initial = () => createObjectFamilyState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "object-family-kit",
     resources: { State },
     events: { Updated, Registered },

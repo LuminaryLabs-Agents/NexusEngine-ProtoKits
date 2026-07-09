@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-promotion-determinism-guard::headless::2026-06-23
+// Smoke signature: NexusEngine-promotion-determinism-guard::headless::2026-06-23
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 

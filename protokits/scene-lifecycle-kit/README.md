@@ -15,7 +15,7 @@ Composition kit.
 ## Factory
 
 ```js
-createSceneLifecycleKit(NexusRealtime, options)
+createSceneLifecycleKit(NexusEngine, options)
 ```
 
 ## Requires

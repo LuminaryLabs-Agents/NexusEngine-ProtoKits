@@ -39,7 +39,7 @@ import {
   createDenseCozyIslandRenderContract,
   createDenseIslandSpawnRequests,
   createIslandPathNetwork
-} from "@luminarylabs/nexusrealtime-protokits/island-foliage-domain";
+} from "@luminarylabs/nexusengine-protokits/island-foliage-domain";
 ```
 
 ## Runtime shape

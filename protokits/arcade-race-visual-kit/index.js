@@ -264,8 +264,8 @@ function createVisualCleanupSystem(definitions) {
   };
 }
 
-export function createArcadeRaceVisualKit(nexusRealtime = {}, options = {}) {
-  const definitions = createArcadeRaceDefinitions(nexusRealtime, options);
+export function createArcadeRaceVisualKit(nexusEngine = {}, options = {}) {
+  const definitions = createArcadeRaceDefinitions(nexusEngine, options);
   const { components, resources, events } = definitions;
 
   const bindings = {
@@ -282,7 +282,7 @@ export function createArcadeRaceVisualKit(nexusRealtime = {}, options = {}) {
     }
   };
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: "arcade-race-visual-kit",
     components: {
       Racer: components.Racer,
@@ -324,7 +324,7 @@ export function createArcadeRaceVisualKit(nexusRealtime = {}, options = {}) {
       version: ARCADE_RACE_VISUAL_KIT_VERSION,
       coreVersion: ARCADE_RACE_CORE_VERSION,
       purpose: "Low-poly render descriptors, trail effects, crash effects, boost effects, gates, signs, and finish arch descriptors.",
-      usesNexusRealtimeKits: ["runtime-kit", "render-descriptor-kit", "renderer-agnostic"]
+      usesNexusEngineKits: ["runtime-kit", "render-descriptor-kit", "renderer-agnostic"]
     }
   });
 }

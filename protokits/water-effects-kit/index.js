@@ -20,8 +20,8 @@ function createInitial(config = {}) {
   return { effects: asFluidArray(config.effects).map(normalizeWaterEffect), emittedCount: 0, foamLevel: toFluidNumber(config.foamLevel, 0.1) };
 }
 
-export function createWaterEffectsKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createWaterEffectsKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: WATER_EFFECTS_KIT_VERSION,
     factoryName: "createWaterEffectsKit",
     kitId: "water-effects-kit",

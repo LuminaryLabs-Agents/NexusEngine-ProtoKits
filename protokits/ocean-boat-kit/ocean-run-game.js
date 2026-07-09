@@ -26,7 +26,7 @@ function clamp(v, a, b) {
 function makeHud(root) {
   const el = document.createElement("section");
   el.style.cssText = "position:fixed;left:16px;top:16px;z-index:5;width:min(430px,calc(100vw - 32px));padding:13px 14px;border:1px solid rgba(177,229,255,.22);border-radius:10px;background:rgba(2,8,18,.58);backdrop-filter:blur(14px);box-shadow:0 20px 80px rgba(0,0,0,.42);color:#ecfbff;font-family:Inter,system-ui,sans-serif;pointer-events:none";
-  el.innerHTML = `<h1 style="margin:0 0 5px;font-size:14px;letter-spacing:.08em;text-transform:uppercase">NexusRealtime Ocean Run</h1><p style="margin:0;color:rgba(236,251,255,.72);font-size:13px;line-height:1.35">Collect all signal buoys before the storm timer ends. WASD / arrows drive.</p><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:11px"><b data-speed>0 kn</b><b data-score>0/0</b><b data-hull>100%</b><b data-time>120</b></div><p data-status style="margin:10px 0 0;color:rgba(236,251,255,.78);font-size:12px">Find the glowing buoys.</p>`;
+  el.innerHTML = `<h1 style="margin:0 0 5px;font-size:14px;letter-spacing:.08em;text-transform:uppercase">NexusEngine Ocean Run</h1><p style="margin:0;color:rgba(236,251,255,.72);font-size:13px;line-height:1.35">Collect all signal buoys before the storm timer ends. WASD / arrows drive.</p><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:11px"><b data-speed>0 kn</b><b data-score>0/0</b><b data-hull>100%</b><b data-time>120</b></div><p data-status style="margin:10px 0 0;color:rgba(236,251,255,.78);font-size:12px">Find the glowing buoys.</p>`;
   root.append(el);
   return {
     el,
@@ -67,8 +67,8 @@ function makeMarkers(root) {
   };
 }
 
-export function createOceanRunGame(nexusRealtime, options = {}) {
-  const kit = createOceanBoatKit(nexusRealtime, options.kitOptions);
+export function createOceanRunGame(nexusEngine, options = {}) {
+  const kit = createOceanBoatKit(nexusEngine, options.kitOptions);
   const buoys = (options.buoys || DEFAULT_BUOYS).map((b) => ({ ...b, kind: "buoy", collected: false }));
   const reefs = (options.reefs || DEFAULT_REEFS).map((r) => ({ ...r, kind: "reef" }));
   const mission = { buoys, reefs, score: 0, hull: 100, time: options.timeLimit ?? 120, won: false, lost: false };

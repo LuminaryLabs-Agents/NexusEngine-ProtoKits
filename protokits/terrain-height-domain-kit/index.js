@@ -3,10 +3,10 @@ export const TERRAIN_HEIGHT_DOMAIN_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createTerrainHeightDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createTerrainHeightDomainKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -26,9 +26,9 @@ function createState(config = {}) {
   };
 }
 
-export function createTerrainHeightDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createTerrainHeightDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const TerrainHeightState = defineResource(config.resourceName ?? "terrainHeightDomain.state");
   const TerrainHeightSampled = defineEvent("terrainHeight.sampled");
   const heightAtImpl = typeof config.heightAt === "function" ? config.heightAt : defaultHeightAt;

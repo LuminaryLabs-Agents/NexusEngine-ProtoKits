@@ -321,7 +321,7 @@ export function createMeadowArea(config = {}) {
 
 export function createMeadowAreaKit(runtimeOrConfig = {}, maybeConfig = {}) {
   const isRuntimeFirst = runtimeOrConfig && typeof runtimeOrConfig === "object" && (typeof runtimeOrConfig.defineRuntimeKit === "function" || typeof runtimeOrConfig.defineDomainServiceKit === "function");
-  const NexusRealtime = isRuntimeFirst ? runtimeOrConfig : null;
+  const NexusEngine = isRuntimeFirst ? runtimeOrConfig : null;
   const config = isRuntimeFirst ? maybeConfig : runtimeOrConfig;
   const api = createMeadowArea(config);
 
@@ -330,8 +330,8 @@ export function createMeadowAreaKit(runtimeOrConfig = {}, maybeConfig = {}) {
     createRuntimeKit(runtimeOptions = {}) {
       const id = runtimeOptions.id ?? "meadow-area-kit";
       const provides = runtimeOptions.provides ?? ["environment:meadow-area", "render:meadow-area-plan", "service:meadow-area-query"];
-      if (typeof NexusRealtime?.defineRuntimeKit === "function") {
-        return NexusRealtime.defineRuntimeKit({
+      if (typeof NexusEngine?.defineRuntimeKit === "function") {
+        return NexusEngine.defineRuntimeKit({
           id,
           provides,
           metadata: { version: MEADOW_AREA_KIT_VERSION, domain: "meadow-area", rendererIndependent: true, ...(runtimeOptions.metadata ?? {}) },

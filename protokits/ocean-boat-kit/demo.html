@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>NexusRealtime Ocean Boat Kit Demo</title>
+    <title>NexusEngine Ocean Boat Kit Demo</title>
     <style>
       :root {
         color-scheme: dark;
@@ -86,9 +86,9 @@
     </style>
   </head>
   <body>
-    <canvas id="ocean" aria-label="NexusRealtime Ocean Boat Kit demo"></canvas>
+    <canvas id="ocean" aria-label="NexusEngine Ocean Boat Kit demo"></canvas>
     <aside>
-      <h1>NexusRealtime Ocean Boat Kit</h1>
+      <h1>NexusEngine Ocean Boat Kit</h1>
       <p><kbd>WASD</kbd> or arrows steer the boat. This demo loads the Ocean Boat Kit as a module and runs the same import surface intended for CDN use.</p>
       <dl>
         <div class="metric"><dt>Speed</dt><dd id="speed">0 kn</dd></div>
@@ -100,7 +100,7 @@
     <script type="module">
       import { createOceanBoatKit } from "./index.js";
 
-      const fallbackNexusRealtime = {
+      const fallbackNexusEngine = {
         createRealtimeGame({ update, render }) {
           let running = false;
           let last = 0;
@@ -127,19 +127,19 @@
           };
         },
         createTerrainKit() {
-          return { id: "nexusrealtime-terrain-kit-adapter" };
+          return { id: "nexusengine-terrain-kit-adapter" };
         },
         createRenderDescriptorKit() {
-          return { id: "nexusrealtime-render-descriptor-adapter" };
+          return { id: "nexusengine-render-descriptor-adapter" };
         },
         createRealismKit() {
-          return { id: "nexusrealtime-realism-adapter" };
+          return { id: "nexusengine-realism-adapter" };
         }
       };
 
       const speed = document.getElementById("speed");
       const throttle = document.getElementById("throttle");
-      const kit = createOceanBoatKit(fallbackNexusRealtime);
+      const kit = createOceanBoatKit(fallbackNexusEngine);
 
       const game = kit.createOceanBoatGame({
         canvas: document.getElementById("ocean"),

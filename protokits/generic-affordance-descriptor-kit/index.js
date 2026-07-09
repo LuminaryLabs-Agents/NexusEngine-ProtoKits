@@ -4,10 +4,10 @@ const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createGenericAffordanceDescriptorKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createGenericAffordanceDescriptorKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -67,9 +67,9 @@ function available(affordance, config, actionId = null) {
   return true;
 }
 
-export function createGenericAffordanceDescriptorKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createGenericAffordanceDescriptorKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
 
   const AffordanceState = defineResource(config.resourceName ?? "genericAffordance.state");
   const UseRequested = defineEvent("genericAffordance.useRequested");

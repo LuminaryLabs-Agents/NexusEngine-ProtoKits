@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { createMockNexusRealtime, createSmokeWorld } from "../../../tests/aaa-domain-spine-smoke-harness.mjs";
+import { createMockNexusEngine, createSmokeWorld } from "../../../tests/aaa-domain-spine-smoke-harness.mjs";
 import { classifySurfaceOrientation, createSpatialSurfaceCandidateDomainKit, normalizeSurfaceObservation } from "../index.js";
 
 function createHarness() {
-  const runtime = createMockNexusRealtime();
+  const runtime = createMockNexusEngine();
   const NexusEngine = {
     ...runtime,
     defineDomainServiceKit(spec) {

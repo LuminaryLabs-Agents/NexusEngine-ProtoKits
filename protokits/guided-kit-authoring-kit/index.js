@@ -74,8 +74,8 @@ function checklistFor(spec = {}, validation = validateSpec(spec)) {
   ];
 }
 
-export function createGuidedKitAuthoringKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createGuidedKitAuthoringKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const GuidedKitAuthoringState = resource(options.resourceName ?? "guidedKitAuthoring.state");
   const SpecCreated = event("guidedKitAuthoring.specCreated");
   const SpecPatched = event("guidedKitAuthoring.specPatched");
@@ -83,7 +83,7 @@ export function createGuidedKitAuthoringKit(nexusRealtime = {}, options = {}) {
   const FilesPlanned = event("guidedKitAuthoring.filesPlanned");
   const GuidedKitAuthoringReset = event("guidedKitAuthoring.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "guided-kit-authoring-kit",
     resources: { GuidedKitAuthoringState },
     events: { SpecCreated, SpecPatched, SpecValidated, FilesPlanned, GuidedKitAuthoringReset },

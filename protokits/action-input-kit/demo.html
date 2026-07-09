@@ -19,11 +19,11 @@
     </section>
   </main>
   <script type="module">
-    import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+    import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
     import { createActionInputKit } from "./index.js";
 
-    const engine = NexusRealtime.createRealtimeGame({
-      kits: [createActionInputKit(NexusRealtime, { context: "demo" })]
+    const engine = NexusEngine.createRealtimeGame({
+      kits: [createActionInputKit(NexusEngine, { context: "demo" })]
     });
     const out = document.querySelector("#out");
 

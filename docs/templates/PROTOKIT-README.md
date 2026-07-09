@@ -15,7 +15,7 @@ Atomic Domain Service Kit / Domain-Purpose Game-Family Kit / Mode Kit / Preset K
 ## Factory
 
 ```js
-createXKit(NexusRealtime, options)
+createXKit(NexusEngine, options)
 ```
 
 ## Requires

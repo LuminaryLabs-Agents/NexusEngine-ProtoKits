@@ -33,10 +33,10 @@ export const particleBackgroundPresets = Object.freeze({
   })
 });
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createGenericParticleBackgroundKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createGenericParticleBackgroundKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -101,9 +101,9 @@ function createState(config = {}) {
   };
 }
 
-export function createGenericParticleBackgroundKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createGenericParticleBackgroundKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const ParticleBackgroundState = defineResource(config.resourceName ?? "genericParticleBackground.state");
   const Configure = defineEvent("genericParticleBackground.configure");
   const SetPreset = defineEvent("genericParticleBackground.setPreset");

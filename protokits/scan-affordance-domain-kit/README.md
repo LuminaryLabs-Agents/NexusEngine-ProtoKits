@@ -12,7 +12,7 @@ What if an object can be scanned?
   It does not draw scan beams or mutate renderer objects.
 ```
 
-Extends: NexusRealtime runtime-shaped DomainServiceKit via `defineRuntimeKit`.
+Extends: NexusEngine runtime-shaped DomainServiceKit via `defineRuntimeKit`.
 
 Composes:
 
@@ -35,5 +35,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-scoped-domain-rpg-batch-01::scan-affordance-domain-kit::2026-06-20
+NexusEngine-scoped-domain-rpg-batch-01::scan-affordance-domain-kit::2026-06-20
 ```

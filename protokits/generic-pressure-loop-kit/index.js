@@ -5,10 +5,10 @@ const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createGenericPressureLoopKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createGenericPressureLoopKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -85,9 +85,9 @@ function applyDelta(channel, amount) {
   return { ...channel, value, status: classify({ ...channel, value }) };
 }
 
-export function createGenericPressureLoopKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createGenericPressureLoopKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
 
   const PressureLoopState = defineResource(config.resourceName ?? "genericPressureLoop.state");
   const PressureAdjusted = defineEvent("genericPressureLoop.adjusted");
@@ -99,8 +99,8 @@ export function createGenericPressureLoopKit(NexusRealtime, config = {}) {
   function emitTransition(world, before, after, reason) {
     const event = { id: after.id, before: before.value, after: after.value, status: after.status, reason };
     world.emit(PressureAdjusted, event);
-    if (before.status !== "warning" && after.status === "warning") world.emit(PressureWarning, event);
-    if (before.status !== "failed" && after.status === "failed") world.emit(PressurePeaked, event);
+    if (before.value < after.warningAt && after.value >= after.warningAt) world.emit(PressureWarning, event);
+    if (before.value < after.failAt && after.value >= after.failAt) world.emit(PressurePeaked, event);
     if (before.status !== "stable" && after.status === "stable") world.emit(PressureRecovered, event);
     return event;
   }

@@ -46,13 +46,13 @@ export function createFidelityPassDescriptor(input = {}) {
   };
 }
 
-export function createVisualFidelityMakerKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createVisualFidelityMakerKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const VisualFidelityState = resource(options.resourceName ?? "visualFidelity.state");
   const FidelityPassRun = event("visualFidelity.passRun");
   const FidelityReportCreated = event("visualFidelity.reportCreated");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "visual-fidelity-maker-kit",
     resources: { VisualFidelityState },
     events: { FidelityPassRun, FidelityReportCreated },

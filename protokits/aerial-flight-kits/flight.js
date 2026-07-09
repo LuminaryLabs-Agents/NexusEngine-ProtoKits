@@ -1,9 +1,9 @@
 import { add3, clamp, dt, ensureState, forwardFromRotation, installApi, len3, makeRuntimeKit, mix, mul3, norm3, now, num, terrainHeight, writeState, createDefinitions } from './core.js';
 
 export const GENERIC_AERIAL_BODY_KIT_DEFINITION = Object.freeze({ id: 'generic-aerial-body-kit', provides: ['aerial:body'], requires: ['terrain:height-sampler'], purpose: 'Durable 3D airborne body state.' });
-export function createGenericAerialBodyKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericAerialBodyKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_AERIAL_BODY_KIT_DEFINITION.id,
     provides: GENERIC_AERIAL_BODY_KIT_DEFINITION.provides,
     requires: GENERIC_AERIAL_BODY_KIT_DEFINITION.requires,
@@ -49,9 +49,9 @@ export function createGenericAerialBodyKit(NexusRealtime, config = {}) {
 }
 
 export const GENERIC_GLIDE_PHYSICS_KIT_DEFINITION = Object.freeze({ id: 'generic-glide-physics-kit', provides: ['aerial:glide-physics'], requires: ['aerial:body', 'input:flight', 'terrain:height-sampler'], purpose: 'Bird/glider steering, lift, drag, stall, speed limits, and terrain collision.' });
-export function createGenericGlidePhysicsKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericGlidePhysicsKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_GLIDE_PHYSICS_KIT_DEFINITION.id,
     provides: GENERIC_GLIDE_PHYSICS_KIT_DEFINITION.provides,
     requires: GENERIC_GLIDE_PHYSICS_KIT_DEFINITION.requires,
@@ -135,9 +135,9 @@ export function createGenericGlidePhysicsKit(NexusRealtime, config = {}) {
 }
 
 export const GENERIC_BOOST_IMPULSE_KIT_DEFINITION = Object.freeze({ id: 'generic-boost-impulse-kit', provides: ['aerial:boost-impulse'], requires: ['aerial:body', 'input:flight'], purpose: 'Cooldown-gated forward boost impulse.' });
-export function createGenericBoostImpulseKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericBoostImpulseKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_BOOST_IMPULSE_KIT_DEFINITION.id,
     provides: GENERIC_BOOST_IMPULSE_KIT_DEFINITION.provides,
     requires: GENERIC_BOOST_IMPULSE_KIT_DEFINITION.requires,

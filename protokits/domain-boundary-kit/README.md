@@ -15,7 +15,7 @@ Atomic Domain Service Kit / composition support kit.
 ## Factory
 
 ```js
-createDomainBoundaryKit(NexusRealtime, options)
+createDomainBoundaryKit(NexusEngine, options)
 ```
 
 ## Public helpers

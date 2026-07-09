@@ -57,13 +57,13 @@ export function summarizeInstanceBatches(batches = []) {
   };
 }
 
-export function createInstancedRenderKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createInstancedRenderKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const InstancedRenderState = resource(options.resourceName ?? "instancedRender.state");
   const InstancedRenderBatchesUpdated = event("instancedRender.batchesUpdated");
   const initial = () => ({ version: INSTANCED_RENDER_KIT_VERSION, batches: [], byPatch: {}, byProofPacket: {}, lod: options.lod ?? true, stats: summarizeInstanceBatches([]) });
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "instanced-render-kit",
     resources: { InstancedRenderState },
     events: { InstancedRenderBatchesUpdated },

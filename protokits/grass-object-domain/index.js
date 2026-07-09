@@ -182,11 +182,11 @@ export function createGrassObjectState(options = {}) {
   return { id: options.id ?? "grass-object-domain", version: GRASS_OBJECT_DOMAIN_VERSION, lastPlacement: null };
 }
 
-export function createGrassObjectDomainKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createGrassObjectDomainKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const State = defs.resource(options.resourceName ?? "grassObject.state");
   const initial = () => createGrassObjectState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.kitId ?? "grass-object-domain",
     resources: { State },
     provides: ["grass:patch-object", "grass:patch-placement", "render:grass-static-batch-descriptor"],

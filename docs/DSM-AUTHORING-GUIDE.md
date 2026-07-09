@@ -175,15 +175,15 @@ tree-kit
 A runtime-installed kit should usually export a factory like:
 
 ```js
-export function createExampleKit(NexusRealtime, options = {}) {
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createExampleKit(NexusEngine, options = {}) {
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   return defineRuntimeKit({ ... });
 }
 ```
 
 Required habits:
 
-- use the supplied NexusRealtime dependency object
+- use the supplied NexusEngine dependency object
 - declare `requires` and `provides`
 - initialize resources in `initWorld`
 - keep systems deterministic

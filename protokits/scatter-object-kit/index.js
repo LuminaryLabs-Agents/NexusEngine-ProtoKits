@@ -43,7 +43,7 @@ export function generateScatterObjects(options = {}) {
   return objects;
 }
 
-export function createScatterObjectKit(nexusRealtime = {}, options = {}) {
+export function createScatterObjectKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "scatter-object-kit", version: SCATTER_OBJECT_KIT_VERSION, defaultScatterTypes, weightedPick, createScatterObject, generateScatterObjects };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["detail:scatter-objects", "placement:scatter"], bindings: { scatterObjectKit: kit }, metadata: { version: SCATTER_OBJECT_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["detail:scatter-objects", "placement:scatter"], bindings: { scatterObjectKit: kit }, metadata: { version: SCATTER_OBJECT_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

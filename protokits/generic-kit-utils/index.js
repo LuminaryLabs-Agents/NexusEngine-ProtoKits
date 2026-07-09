@@ -302,20 +302,20 @@ function buildApi({ id, definition, world, State, Command, createInitialState })
   return api;
 }
 
-export function createGenericProtoKit(NexusRealtime, definition, config = {}) {
-  ({ NexusRealtime, config } = normalizeProtoKitFactoryArgs(NexusRealtime, config));
-  NexusRealtime = withProtoDomainServiceRuntime(NexusRealtime, definition.id ?? definition.camelName, {
+export function createGenericProtoKit(NexusEngine, definition, config = {}) {
+  ({ NexusEngine, config } = normalizeProtoKitFactoryArgs(NexusEngine, config));
+  NexusEngine = withProtoDomainServiceRuntime(NexusEngine, definition.id ?? definition.camelName, {
     version: definition.version ?? GENERIC_KIT_UTILS_VERSION,
     apiName: definition.engineKey
   });
-  const defineRuntimeKit = NexusRealtime?.defineRuntimeKit ?? fallbackDefineRuntimeKit;
+  const defineRuntimeKit = NexusEngine?.defineRuntimeKit ?? fallbackDefineRuntimeKit;
   const id = config.id ?? definition.id;
   const stateBindingName = `${definition.camelName}State`;
   const apiBindingName = `${definition.camelName}Api`;
-  const State = typeof NexusRealtime?.defineResource === "function" ? NexusRealtime.defineResource(`${id}.state`) : `${id}.state`;
-  const Command = typeof NexusRealtime?.defineEvent === "function" ? NexusRealtime.defineEvent(`${id}.command`) : `${id}.command`;
-  const Updated = typeof NexusRealtime?.defineEvent === "function" ? NexusRealtime.defineEvent(`${id}.updated`) : `${id}.updated`;
-  const Rejected = typeof NexusRealtime?.defineEvent === "function" ? NexusRealtime.defineEvent(`${id}.rejected`) : `${id}.rejected`;
+  const State = typeof NexusEngine?.defineResource === "function" ? NexusEngine.defineResource(`${id}.state`) : `${id}.state`;
+  const Command = typeof NexusEngine?.defineEvent === "function" ? NexusEngine.defineEvent(`${id}.command`) : `${id}.command`;
+  const Updated = typeof NexusEngine?.defineEvent === "function" ? NexusEngine.defineEvent(`${id}.updated`) : `${id}.updated`;
+  const Rejected = typeof NexusEngine?.defineEvent === "function" ? NexusEngine.defineEvent(`${id}.rejected`) : `${id}.rejected`;
   const makeState = () => createInitialState(definition, config, id);
 
   return defineRuntimeKit({

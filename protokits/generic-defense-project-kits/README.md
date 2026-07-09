@@ -18,7 +18,7 @@ This module re-exports the existing implementation from `generic-defense-aaa-kit
 import {
   createGenericDefenseKits,
   createGenericDefenseGame
-} from "@luminarylabs/nexusrealtime-protokits/generic-defense-project-kits";
+} from "@luminarylabs/nexusengine-protokits/generic-defense-project-kits";
 ```
 
 ## Renderer boundary

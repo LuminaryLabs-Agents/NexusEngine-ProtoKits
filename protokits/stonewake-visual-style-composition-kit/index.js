@@ -55,9 +55,9 @@ export const STONEWAKE_STYLE_KIT_PRESETS = Object.freeze([
   ["steam-polish-style-composition-kit", "composition", "steam-polish", "Aggregator over texture, lighting, particles, silhouettes, and theme." ]
 ].map(([id, layer, token, purpose], order) => ({ id, layer, token, purpose, order, enabled: true })));
 
-function requireNexus(NexusRealtime, factoryName) {
+function requireNexus(NexusEngine, factoryName) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`${factoryName} requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`${factoryName} requires NexusEngine.${key}.`);
   }
 }
 
@@ -108,9 +108,9 @@ export function buildStonewakeStyleComposition(options = {}) {
   };
 }
 
-export function createStonewakeVisualStyleCompositionKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime, "createStonewakeVisualStyleCompositionKit");
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createStonewakeVisualStyleCompositionKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine, "createStonewakeVisualStyleCompositionKit");
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const VisualStyleState = defineResource(config.resourceName ?? "stonewakeVisualStyle.state");
   const VisualStyleComposed = defineEvent("stonewakeVisualStyle.composed");
   const initial = () => buildStonewakeStyleComposition(config.defaultComposition ?? {});

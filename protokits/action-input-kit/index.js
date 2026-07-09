@@ -92,8 +92,8 @@ function initialState(config = {}) {
   };
 }
 
-export function createActionInputKit(NexusRealtime, config = {}) {
-  const { defineResource, defineEvent, defineRuntimeKit } = NexusRealtime;
+export function createActionInputKit(NexusEngine, config = {}) {
+  const { defineResource, defineEvent, defineRuntimeKit } = NexusEngine;
   const ActionInputState = defineResource(config.resourceName ?? "actionInput.state");
   const InputKey = defineEvent("actionInput.key");
   const InputPress = defineEvent("actionInput.press");

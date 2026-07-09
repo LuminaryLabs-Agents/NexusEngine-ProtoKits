@@ -13,12 +13,12 @@ export function sampleVegetationDensity(x = 0, z = 0, biome = "mixed-forest", st
   return { tree: clamp(b.tree * state.baseTreeDensity * (0.65 + noise * 0.55) * (0.72 + clearing * 0.34), 0, 4), grass: clamp(b.grass * state.baseGrassDensity * (0.7 + noise * 0.6), 0, 4), clearing };
 }
 
-export function createVegetationDensityFieldKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createVegetationDensityFieldKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "vegetationDensityField.state");
   const Updated = event("vegetationDensityField.updated");
   const initial = () => createVegetationDensityFieldState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, { id: options.id ?? "vegetation-density-field-kit", resources: { State }, events: { Updated }, provides: ["vegetation:density-field", "vegetation:density-sample"], initWorld({ world }) { ensureResource(world, State, initial); }, install({ engine, world }) { const state = () => ensureResource(world, State, initial); const api = { getState: state, sample(x = 0, z = 0, biome = "mixed-forest") { return sampleVegetationDensity(x, z, biome, state()); }, set(config = {}) { const next = { ...state(), ...config, biome: { ...state().biome, ...(config.biome ?? {}) } }; world.setResource(State, next); world.emit?.(Updated, { state: clone(next) }); return clone(next); }, snapshot: () => clone(state()) }; engine.vegetationDensityField = api; engine.n ??= {}; engine.n.vegetationDensityField = api; }, metadata: { version: VEGETATION_DENSITY_FIELD_KIT_VERSION, purpose: "Biome-aware deterministic vegetation density samples for placement kits." } });
+  return defineInjectedRuntimeKit(nexusEngine, { id: options.id ?? "vegetation-density-field-kit", resources: { State }, events: { Updated }, provides: ["vegetation:density-field", "vegetation:density-sample"], initWorld({ world }) { ensureResource(world, State, initial); }, install({ engine, world }) { const state = () => ensureResource(world, State, initial); const api = { getState: state, sample(x = 0, z = 0, biome = "mixed-forest") { return sampleVegetationDensity(x, z, biome, state()); }, set(config = {}) { const next = { ...state(), ...config, biome: { ...state().biome, ...(config.biome ?? {}) } }; world.setResource(State, next); world.emit?.(Updated, { state: clone(next) }); return clone(next); }, snapshot: () => clone(state()) }; engine.vegetationDensityField = api; engine.n ??= {}; engine.n.vegetationDensityField = api; }, metadata: { version: VEGETATION_DENSITY_FIELD_KIT_VERSION, purpose: "Biome-aware deterministic vegetation density samples for placement kits." } });
 }
 
 export default createVegetationDensityFieldKit;

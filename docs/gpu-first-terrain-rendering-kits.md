@@ -1,6 +1,6 @@
 # GPU-First Terrain Rendering Kit Plan
 
-This document codifies the GPU-first terrain architecture for NexusRealtime ProtoKits.
+This document codifies the GPU-first terrain architecture for NexusEngine ProtoKits.
 
 ## Naming rule
 
@@ -342,7 +342,7 @@ gpu-texture-format-policy-kit
 gpu-fallback-policy-kit
 ```
 
-## NexusRealtime integration kit inventory
+## NexusEngine integration kit inventory
 
 ```txt
 nexus-terrain-runtime-bridge-kit

@@ -36,11 +36,11 @@ function isJsonSerializable(value) {
   }
 }
 
-function kit(NexusRealtime, api) {
+function kit(NexusEngine, api) {
   return Object.freeze({
     ...api,
     createRuntimeKit(options = {}) {
-      return defineInjectedRuntimeKit(NexusRealtime, {
+      return defineInjectedRuntimeKit(NexusEngine, {
         id: options.id ?? api.id,
         requires: options.requires ?? api.requires ?? [],
         provides: options.provides ?? api.provides ?? [],
@@ -71,7 +71,7 @@ function samplePath(points, t) {
   });
 }
 
-export function createPathMeadowRouteKit(NexusRealtime = {}, config = {}) {
+export function createPathMeadowRouteKit(NexusEngine = {}, config = {}) {
   const path = Object.freeze({
     id: config.id ?? "path-meadow.route.hero-tree",
     type: "winding-ground-path",
@@ -94,7 +94,7 @@ export function createPathMeadowRouteKit(NexusRealtime = {}, config = {}) {
       { x: 0, z: 20 }
     ]).map((entry) => point(entry)))
   });
-  return kit(NexusRealtime, {
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-route-kit",
     apiName: "pathMeadowRoute",
     category: "domain-service",
@@ -106,7 +106,7 @@ export function createPathMeadowRouteKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createHeroTreeDomainKit(NexusRealtime = {}, config = {}) {
+export function createHeroTreeDomainKit(NexusEngine = {}, config = {}) {
   const tree = Object.freeze({
     id: config.id ?? "path-meadow.hero-tree",
     type: "hero-tree",
@@ -138,7 +138,7 @@ export function createHeroTreeDomainKit(NexusRealtime = {}, config = {}) {
     },
     interaction: { inspectable: true, label: "Ancient meadow tree", anchorId: "hero-tree-root" }
   });
-  return kit(NexusRealtime, {
+  return kit(NexusEngine, {
     id: config.kitId ?? "hero-tree-domain-kit",
     apiName: "heroTreeDomain",
     category: "domain-service",
@@ -149,7 +149,7 @@ export function createHeroTreeDomainKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowPlayerScaleKit(NexusRealtime = {}, config = {}) {
+export function createPathMeadowPlayerScaleKit(NexusEngine = {}, config = {}) {
   const descriptor = Object.freeze({
     id: config.id ?? "path-meadow.player-scale",
     type: "third-person-scale-actor",
@@ -166,7 +166,7 @@ export function createPathMeadowPlayerScaleKit(NexusRealtime = {}, config = {}) 
     }),
     interaction: { inspectable: true, label: "Meadow path traveler", anchorId: "player-scale-root" }
   });
-  return kit(NexusRealtime, {
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-player-scale-kit",
     apiName: "pathMeadowPlayerScale",
     category: "domain-service",
@@ -177,7 +177,7 @@ export function createPathMeadowPlayerScaleKit(NexusRealtime = {}, config = {}) 
   });
 }
 
-export function createPathMeadowScatterKit(NexusRealtime = {}, config = {}) {
+export function createPathMeadowScatterKit(NexusEngine = {}, config = {}) {
   const seed = config.seed ?? "path-meadow-scatter";
   const rng = createSeededRandom(seed);
   const count = (key, fallback) => Math.max(0, Math.floor(number(config[key], fallback)));
@@ -185,7 +185,7 @@ export function createPathMeadowScatterKit(NexusRealtime = {}, config = {}) {
     return Object.freeze(Array.from({ length: amount }, (_, index) => {
       const side = rng() > 0.5 ? 1 : -1;
       const z = rng.range(zMin, zMax);
-      const centerX = samplePath(createPathMeadowRouteKit(NexusRealtime, config.route ?? {}).getPathDescriptor().points, clamp((z - zMin) / Math.max(1, zMax - zMin), 0, 1)).x;
+      const centerX = samplePath(createPathMeadowRouteKit(NexusEngine, config.route ?? {}).getPathDescriptor().points, clamp((z - zMin) / Math.max(1, zMax - zMin), 0, 1)).x;
       return Object.freeze({
         id: `path-meadow.${kind}.${index}`,
         kind,
@@ -209,7 +209,7 @@ export function createPathMeadowScatterKit(NexusRealtime = {}, config = {}) {
     foregroundClusters: scatter("foreground-meadow-cluster", count("foregroundClusterCount", 26), 22, -45, -16, { color: "#e6cc67", accent: "#ef7fb2" }),
     treeLine: scatter("background-tree", count("treeLineCount", 36), 52, 34, 58, { color: "#294026" })
   });
-  return kit(NexusRealtime, {
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-scatter-kit",
     apiName: "pathMeadowScatter",
     category: "domain-service",
@@ -220,9 +220,9 @@ export function createPathMeadowScatterKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowGrassKit(NexusRealtime = {}, config = {}) {
-  const descriptor = createPathMeadowScatterKit(NexusRealtime, config).getScatterDescriptor().grass;
-  return kit(NexusRealtime, {
+export function createPathMeadowGrassKit(NexusEngine = {}, config = {}) {
+  const descriptor = createPathMeadowScatterKit(NexusEngine, config).getScatterDescriptor().grass;
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-grass-kit",
     apiName: "pathMeadowGrass",
     category: "domain-service",
@@ -233,9 +233,9 @@ export function createPathMeadowGrassKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowWildflowerKit(NexusRealtime = {}, config = {}) {
-  const descriptor = createPathMeadowScatterKit(NexusRealtime, config).getScatterDescriptor().flowers;
-  return kit(NexusRealtime, {
+export function createPathMeadowWildflowerKit(NexusEngine = {}, config = {}) {
+  const descriptor = createPathMeadowScatterKit(NexusEngine, config).getScatterDescriptor().flowers;
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-wildflower-kit",
     apiName: "pathMeadowWildflower",
     category: "domain-service",
@@ -246,9 +246,9 @@ export function createPathMeadowWildflowerKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowRockKit(NexusRealtime = {}, config = {}) {
-  const descriptor = createPathMeadowScatterKit(NexusRealtime, config).getScatterDescriptor().rocks;
-  return kit(NexusRealtime, {
+export function createPathMeadowRockKit(NexusEngine = {}, config = {}) {
+  const descriptor = createPathMeadowScatterKit(NexusEngine, config).getScatterDescriptor().rocks;
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-rock-kit",
     apiName: "pathMeadowRock",
     category: "domain-service",
@@ -259,9 +259,9 @@ export function createPathMeadowRockKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowMushroomKit(NexusRealtime = {}, config = {}) {
-  const descriptor = createPathMeadowScatterKit(NexusRealtime, config).getScatterDescriptor().mushrooms;
-  return kit(NexusRealtime, {
+export function createPathMeadowMushroomKit(NexusEngine = {}, config = {}) {
+  const descriptor = createPathMeadowScatterKit(NexusEngine, config).getScatterDescriptor().mushrooms;
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-mushroom-kit",
     apiName: "pathMeadowMushroom",
     category: "domain-service",
@@ -272,9 +272,9 @@ export function createPathMeadowMushroomKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowTreeLineKit(NexusRealtime = {}, config = {}) {
-  const descriptor = createPathMeadowScatterKit(NexusRealtime, config).getScatterDescriptor().treeLine;
-  return kit(NexusRealtime, {
+export function createPathMeadowTreeLineKit(NexusEngine = {}, config = {}) {
+  const descriptor = createPathMeadowScatterKit(NexusEngine, config).getScatterDescriptor().treeLine;
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-tree-line-kit",
     apiName: "pathMeadowTreeLine",
     category: "domain-service",
@@ -285,9 +285,9 @@ export function createPathMeadowTreeLineKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowForegroundClusterKit(NexusRealtime = {}, config = {}) {
-  const descriptor = createPathMeadowScatterKit(NexusRealtime, config).getScatterDescriptor().foregroundClusters;
-  return kit(NexusRealtime, {
+export function createPathMeadowForegroundClusterKit(NexusEngine = {}, config = {}) {
+  const descriptor = createPathMeadowScatterKit(NexusEngine, config).getScatterDescriptor().foregroundClusters;
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-foreground-cluster-kit",
     apiName: "pathMeadowForegroundCluster",
     category: "domain-service",
@@ -298,7 +298,7 @@ export function createPathMeadowForegroundClusterKit(NexusRealtime = {}, config 
   });
 }
 
-export function createPathMeadowAtmosphereKit(NexusRealtime = {}, config = {}) {
+export function createPathMeadowAtmosphereKit(NexusEngine = {}, config = {}) {
   const descriptor = Object.freeze({
     id: config.id ?? "path-meadow.atmosphere.golden-hour",
     type: "golden-hour-atmosphere",
@@ -323,7 +323,7 @@ export function createPathMeadowAtmosphereKit(NexusRealtime = {}, config = {}) {
     exposure: number(config.exposure, 1.08),
     mood: "warm-cinematic-meadow"
   });
-  return kit(NexusRealtime, {
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-atmosphere-kit",
     apiName: "pathMeadowAtmosphere",
     category: "domain-service",
@@ -334,9 +334,9 @@ export function createPathMeadowAtmosphereKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowCloudLayerKit(NexusRealtime = {}, config = {}) {
-  const descriptor = createPathMeadowAtmosphereKit(NexusRealtime, config).getAtmosphereDescriptor();
-  return kit(NexusRealtime, {
+export function createPathMeadowCloudLayerKit(NexusEngine = {}, config = {}) {
+  const descriptor = createPathMeadowAtmosphereKit(NexusEngine, config).getAtmosphereDescriptor();
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-cloud-layer-kit",
     apiName: "pathMeadowCloudLayer",
     category: "domain-service",
@@ -348,7 +348,7 @@ export function createPathMeadowCloudLayerKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowVisualPaletteKit(NexusRealtime = {}, config = {}) {
+export function createPathMeadowVisualPaletteKit(NexusEngine = {}, config = {}) {
   const descriptor = Object.freeze({
     id: config.id ?? "path-meadow.visual-palette",
     type: "painterly-meadow-visual-palette",
@@ -381,7 +381,7 @@ export function createPathMeadowVisualPaletteKit(NexusRealtime = {}, config = {}
       grainAlpha: number(config.grainAlpha, 0.045)
     })
   });
-  return kit(NexusRealtime, {
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-visual-palette-kit",
     apiName: "pathMeadowVisualPalette",
     category: "domain-service",
@@ -392,7 +392,7 @@ export function createPathMeadowVisualPaletteKit(NexusRealtime = {}, config = {}
   });
 }
 
-export function createPathMeadowDepthCueKit(NexusRealtime = {}, config = {}) {
+export function createPathMeadowDepthCueKit(NexusEngine = {}, config = {}) {
   const descriptor = Object.freeze({
     id: config.id ?? "path-meadow.depth-cues",
     type: "meadow-depth-cue-descriptors",
@@ -421,7 +421,7 @@ export function createPathMeadowDepthCueKit(NexusRealtime = {}, config = {}) {
       playerSeparation: number(config.playerSeparation, 0.28)
     })
   });
-  return kit(NexusRealtime, {
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-depth-cue-kit",
     apiName: "pathMeadowDepthCue",
     category: "domain-service",
@@ -432,7 +432,7 @@ export function createPathMeadowDepthCueKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowCel3DStyleKit(NexusRealtime = {}, config = {}) {
+export function createPathMeadowCel3DStyleKit(NexusEngine = {}, config = {}) {
   const descriptor = Object.freeze({
     id: config.id ?? "path-meadow.cel-3d-style",
     type: "cel-shaded-3d-style",
@@ -477,7 +477,7 @@ export function createPathMeadowCel3DStyleKit(NexusRealtime = {}, config = {}) {
       sky: Object.freeze({ base: "#7fb2dc", shade: "#496f88", highlight: "#ffd18a" })
     })
   });
-  return kit(NexusRealtime, {
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-cel-3d-style-kit",
     apiName: "pathMeadowCel3DStyle",
     category: "presentation-service",
@@ -488,7 +488,7 @@ export function createPathMeadowCel3DStyleKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowEntityGenerationKit(NexusRealtime = {}, config = {}) {
+export function createPathMeadowEntityGenerationKit(NexusEngine = {}, config = {}) {
   const descriptor = Object.freeze({
     id: config.id ?? "path-meadow.entity-generation",
     type: "entity-generation-ratios",
@@ -511,7 +511,7 @@ export function createPathMeadowEntityGenerationKit(NexusRealtime = {}, config =
       reset: "deterministic-from-seed"
     })
   });
-  return kit(NexusRealtime, {
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-entity-generation-kit",
     apiName: "pathMeadowEntityGeneration",
     category: "domain-service",
@@ -522,16 +522,16 @@ export function createPathMeadowEntityGenerationKit(NexusRealtime = {}, config =
   });
 }
 
-export function createPathMeadowCompositionKit(NexusRealtime = {}, config = {}) {
-  const route = createPathMeadowRouteKit(NexusRealtime, config.route ?? config);
-  const heroTree = createHeroTreeDomainKit(NexusRealtime, config.heroTree ?? config);
-  const player = createPathMeadowPlayerScaleKit(NexusRealtime, config.player ?? config);
-  const scatter = createPathMeadowScatterKit(NexusRealtime, { ...(config.scatter ?? {}), seed: config.seed ?? "path-meadow", route: config.route ?? config });
-  const atmosphere = createPathMeadowAtmosphereKit(NexusRealtime, config.atmosphere ?? {});
-  const visualPalette = createPathMeadowVisualPaletteKit(NexusRealtime, config.visualPalette ?? {});
-  const depthCue = createPathMeadowDepthCueKit(NexusRealtime, config.depthCue ?? {});
-  const cel3D = createPathMeadowCel3DStyleKit(NexusRealtime, config.cel3D ?? {});
-  const entityGeneration = createPathMeadowEntityGenerationKit(NexusRealtime, { ...(config.entityGeneration ?? {}), seed: config.seed ?? "path-meadow" });
+export function createPathMeadowCompositionKit(NexusEngine = {}, config = {}) {
+  const route = createPathMeadowRouteKit(NexusEngine, config.route ?? config);
+  const heroTree = createHeroTreeDomainKit(NexusEngine, config.heroTree ?? config);
+  const player = createPathMeadowPlayerScaleKit(NexusEngine, config.player ?? config);
+  const scatter = createPathMeadowScatterKit(NexusEngine, { ...(config.scatter ?? {}), seed: config.seed ?? "path-meadow", route: config.route ?? config });
+  const atmosphere = createPathMeadowAtmosphereKit(NexusEngine, config.atmosphere ?? {});
+  const visualPalette = createPathMeadowVisualPaletteKit(NexusEngine, config.visualPalette ?? {});
+  const depthCue = createPathMeadowDepthCueKit(NexusEngine, config.depthCue ?? {});
+  const cel3D = createPathMeadowCel3DStyleKit(NexusEngine, config.cel3D ?? {});
+  const entityGeneration = createPathMeadowEntityGenerationKit(NexusEngine, { ...(config.entityGeneration ?? {}), seed: config.seed ?? "path-meadow" });
   function getComposition() {
     const composition = Object.freeze({
       id: config.id ?? "path-meadow.hero-tree-composition",
@@ -594,7 +594,7 @@ export function createPathMeadowCompositionKit(NexusRealtime = {}, config = {}) 
     const score = Object.values(checks).filter(Boolean).length;
     return Object.freeze({ ...checks, score, passed: score === Object.keys(checks).length });
   }
-  return kit(NexusRealtime, {
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-composition-kit",
     apiName: "pathMeadowComposition",
     category: "mode",
@@ -663,8 +663,8 @@ export function validatePathMeadowDescriptorStreamPacket(packet) {
   return Object.freeze({ ...checks, score, passed: score === Object.keys(checks).length });
 }
 
-export function createPathMeadowDataStreamKit(NexusRealtime = {}, config = {}) {
-  const compositionKit = createPathMeadowCompositionKit(NexusRealtime, config);
+export function createPathMeadowDataStreamKit(NexusEngine = {}, config = {}) {
+  const compositionKit = createPathMeadowCompositionKit(NexusEngine, config);
   function getSnapshot() {
     const composition = compositionKit.getComposition();
     return Object.freeze({
@@ -699,7 +699,7 @@ export function createPathMeadowDataStreamKit(NexusRealtime = {}, config = {}) {
     const packet = getStreamPacket();
     return Object.freeze({ accepted: true, packet, validation: validatePathMeadowDescriptorStreamPacket(packet) });
   }
-  return kit(NexusRealtime, {
+  return kit(NexusEngine, {
     id: config.kitId ?? "path-meadow-data-stream-kit",
     apiName: "pathMeadowDataStream",
     category: "stream-service",
@@ -716,27 +716,27 @@ export function createPathMeadowDataStreamKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPathMeadowCompositionKits(NexusRealtime = {}, config = {}) {
+export function createPathMeadowCompositionKits(NexusEngine = {}, config = {}) {
   return Object.freeze({
     version: PATH_MEADOW_COMPOSITION_KIT_VERSION,
-    route: createPathMeadowRouteKit(NexusRealtime, config.route ?? config),
-    heroTree: createHeroTreeDomainKit(NexusRealtime, config.heroTree ?? config),
-    player: createPathMeadowPlayerScaleKit(NexusRealtime, config.player ?? config),
-    grass: createPathMeadowGrassKit(NexusRealtime, config.grass ?? config),
-    wildflowers: createPathMeadowWildflowerKit(NexusRealtime, config.wildflowers ?? config),
-    rocks: createPathMeadowRockKit(NexusRealtime, config.rocks ?? config),
-    mushrooms: createPathMeadowMushroomKit(NexusRealtime, config.mushrooms ?? config),
-    foregroundClusters: createPathMeadowForegroundClusterKit(NexusRealtime, config.foregroundClusters ?? config),
-    treeLine: createPathMeadowTreeLineKit(NexusRealtime, config.treeLine ?? config),
-    scatter: createPathMeadowScatterKit(NexusRealtime, config.scatter ?? config),
-    atmosphere: createPathMeadowAtmosphereKit(NexusRealtime, config.atmosphere ?? config),
-    cloudLayer: createPathMeadowCloudLayerKit(NexusRealtime, config.cloudLayer ?? config),
-    visualPalette: createPathMeadowVisualPaletteKit(NexusRealtime, config.visualPalette ?? config),
-    depthCue: createPathMeadowDepthCueKit(NexusRealtime, config.depthCue ?? config),
-    cel3D: createPathMeadowCel3DStyleKit(NexusRealtime, config.cel3D ?? config),
-    entityGeneration: createPathMeadowEntityGenerationKit(NexusRealtime, config.entityGeneration ?? config),
-    dataStream: createPathMeadowDataStreamKit(NexusRealtime, config),
-    composition: createPathMeadowCompositionKit(NexusRealtime, config)
+    route: createPathMeadowRouteKit(NexusEngine, config.route ?? config),
+    heroTree: createHeroTreeDomainKit(NexusEngine, config.heroTree ?? config),
+    player: createPathMeadowPlayerScaleKit(NexusEngine, config.player ?? config),
+    grass: createPathMeadowGrassKit(NexusEngine, config.grass ?? config),
+    wildflowers: createPathMeadowWildflowerKit(NexusEngine, config.wildflowers ?? config),
+    rocks: createPathMeadowRockKit(NexusEngine, config.rocks ?? config),
+    mushrooms: createPathMeadowMushroomKit(NexusEngine, config.mushrooms ?? config),
+    foregroundClusters: createPathMeadowForegroundClusterKit(NexusEngine, config.foregroundClusters ?? config),
+    treeLine: createPathMeadowTreeLineKit(NexusEngine, config.treeLine ?? config),
+    scatter: createPathMeadowScatterKit(NexusEngine, config.scatter ?? config),
+    atmosphere: createPathMeadowAtmosphereKit(NexusEngine, config.atmosphere ?? config),
+    cloudLayer: createPathMeadowCloudLayerKit(NexusEngine, config.cloudLayer ?? config),
+    visualPalette: createPathMeadowVisualPaletteKit(NexusEngine, config.visualPalette ?? config),
+    depthCue: createPathMeadowDepthCueKit(NexusEngine, config.depthCue ?? config),
+    cel3D: createPathMeadowCel3DStyleKit(NexusEngine, config.cel3D ?? config),
+    entityGeneration: createPathMeadowEntityGenerationKit(NexusEngine, config.entityGeneration ?? config),
+    dataStream: createPathMeadowDataStreamKit(NexusEngine, config),
+    composition: createPathMeadowCompositionKit(NexusEngine, config)
   });
 }
 

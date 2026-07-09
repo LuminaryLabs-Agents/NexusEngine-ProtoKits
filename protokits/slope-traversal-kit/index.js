@@ -247,8 +247,8 @@ function createBoostDecaySystem(definitions) {
   };
 }
 
-export function createSlopeTraversalKit(nexusRealtime = {}, options = {}) {
-  const definitions = createArcadeRaceDefinitions(nexusRealtime, options);
+export function createSlopeTraversalKit(nexusEngine = {}, options = {}) {
+  const definitions = createArcadeRaceDefinitions(nexusEngine, options);
   const { components, resources, events } = definitions;
 
   const bindings = {
@@ -279,7 +279,7 @@ export function createSlopeTraversalKit(nexusRealtime = {}, options = {}) {
     }
   };
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: "slope-traversal-kit",
     components: {
       Position: components.Position,
@@ -317,7 +317,7 @@ export function createSlopeTraversalKit(nexusRealtime = {}, options = {}) {
       version: SLOPE_TRAVERSAL_KIT_VERSION,
       coreVersion: ARCADE_RACE_CORE_VERSION,
       purpose: "Slope acceleration, sliding friction, surface grip, snow/ice drag, drift, and crash-prone high speed traversal.",
-      usesNexusRealtimeKits: ["runtime-kit", "common-game-definitions", "character-movement-compatible"]
+      usesNexusEngineKits: ["runtime-kit", "common-game-definitions", "character-movement-compatible"]
     }
   });
 }

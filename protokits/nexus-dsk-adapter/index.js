@@ -13,7 +13,41 @@ const LOCAL_NEXUS_RUNTIME = Object.freeze({
     return Object.freeze({ kind: "runtime-kit", ...config });
   },
   defineDomainServiceKit(config = {}) {
-    return Object.freeze({ kind: "domain-service-kit", ...config });
+    const domainPath = config.domainPath ?? `n:${config.domain}`;
+    const apiName = config.apiName;
+    const legacyInstall = config.install;
+    return Object.freeze({
+      kind: "domain-service-kit",
+      ...config,
+      provides: Object.freeze(Array.from(new Set([domainPath, ...(config.provides ?? [])]))),
+      metadata: Object.freeze({
+        ...(config.metadata ?? {}),
+        kind: "domain-service-kit",
+        namespace: "n",
+        domain: config.domain,
+        domainPath,
+        apiName: config.apiName,
+        stability: config.stability,
+        version: config.version,
+        execution: Object.freeze({
+          mode: "linear",
+          asyncReady: config.asyncReady !== false,
+          serializableState: config.serializableState !== false,
+          inputs: Object.freeze([...(config.inputs ?? [])]),
+          outputs: Object.freeze([...(config.outputs ?? [])]),
+          snapshot: config.snapshot ?? "required",
+          reset: config.reset ?? "required"
+        })
+      }),
+      install(context) {
+        context.engine.n ??= {};
+        const api = typeof config.createApi === "function" ? config.createApi(context) : undefined;
+        const result = legacyInstall?.(context);
+        const installedApi = api ?? result ?? context.engine[apiName];
+        if (installedApi !== undefined) context.engine.n[apiName] = installedApi;
+        return result;
+      }
+    });
   },
   createRealtimeGame(config = {}) {
     return Object.freeze({ kind: "realtime-game", ...config });
@@ -83,14 +117,14 @@ export function isNexusRuntimeCandidate(value) {
 export function normalizeProtoKitFactoryArgs(runtimeOrConfig, maybeConfig = {}) {
   if (isNexusRuntimeCandidate(runtimeOrConfig)) {
     return {
-      NexusRealtime: runtimeOrConfig,
+      NexusEngine: runtimeOrConfig,
       config: maybeConfig ?? {},
       mode: "injected-runtime"
     };
   }
 
   return {
-    NexusRealtime: LOCAL_NEXUS_RUNTIME,
+    NexusEngine: LOCAL_NEXUS_RUNTIME,
     config: runtimeOrConfig ?? {},
     mode: "local-fallback-runtime"
   };
@@ -131,16 +165,16 @@ function createDskConfig(config, spec, options = {}) {
   };
 }
 
-export function withProtoDomainServiceRuntime(NexusRealtime, key, options = {}) {
+export function withProtoDomainServiceRuntime(NexusEngine, key, options = {}) {
   const spec = getFirstWaveDskSpec(key);
-  if (!spec || typeof NexusRealtime?.defineDomainServiceKit !== "function") {
-    return NexusRealtime;
+  if (!spec || typeof NexusEngine?.defineDomainServiceKit !== "function") {
+    return NexusEngine;
   }
 
   return Object.freeze({
-    ...NexusRealtime,
+    ...NexusEngine,
     defineRuntimeKit(config = {}) {
-      return NexusRealtime.defineDomainServiceKit(createDskConfig(config, spec, options));
+      return NexusEngine.defineDomainServiceKit(createDskConfig(config, spec, options));
     }
   });
 }

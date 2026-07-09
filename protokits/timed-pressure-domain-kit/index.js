@@ -3,10 +3,10 @@ export const TIMED_PRESSURE_DOMAIN_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createTimedPressureDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createTimedPressureDomainKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -26,9 +26,9 @@ function createState(config = {}) {
   };
 }
 
-export function createTimedPressureDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createTimedPressureDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
 
   const TimedPressureState = defineResource(config.resourceName ?? "timedPressureDomain.state");
   const TimedPressureExpired = defineEvent("timedPressure.expired");

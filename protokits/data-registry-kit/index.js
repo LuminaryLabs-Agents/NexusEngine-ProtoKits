@@ -85,8 +85,8 @@ function normalizeObjectSpec(spec = {}, context = {}) {
   };
 }
 
-export function createDataRegistryKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createDataRegistryKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const GameDataState = resource(options.resourceName ?? "gameData.state");
   const GameDataUpdated = event("gameData.updated");
   const GameDataNamespaceRegistered = event("gameData.namespaceRegistered");
@@ -94,7 +94,7 @@ export function createDataRegistryKit(nexusRealtime = {}, options = {}) {
   const ObjectProofHashRecorded = event("gameData.objectProofHashRecorded");
   const ObjectProofSchemaRegistered = event("gameData.objectProofSchemaRegistered");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "data-registry-kit",
     resources: { GameDataState },
     events: { GameDataUpdated, GameDataNamespaceRegistered, ObjectProofSpecRegistered, ObjectProofHashRecorded, ObjectProofSchemaRegistered },

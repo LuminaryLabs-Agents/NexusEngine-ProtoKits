@@ -6,7 +6,7 @@ These kits are intentionally **not** branded to one game. A bird game, wingsuit 
 
 ## Architecture audit
 
-The stack keeps NexusRealtime responsibilities separated:
+The stack keeps NexusEngine responsibilities separated:
 
 - Runtime: `createRealtimeGame`, deterministic ticks, resources, events, scheduler phases, and kit installation.
 - ProtoKits: flight input, aerial body state, glide physics, boost impulse, checkpoint volumes, lift volumes, flock agents, sky descriptors, terrain sampling, patch windows, challenge state, camera descriptors, VFX descriptors, audio descriptors, and render descriptors.
@@ -50,11 +50,11 @@ The original aerial prototype mixed renderer, terrain generation, flight physics
 ## Import
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@0.0.1/src/index.js";
-import { createGenericAerialAdventureKits } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/aerial-flight-kits/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
+import { createGenericAerialAdventureKits } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/aerial-flight-kits/index.js";
 
-const engine = NexusRealtime.createRealtimeGame({
-  kits: createGenericAerialAdventureKits(NexusRealtime, {
+const engine = NexusEngine.createRealtimeGame({
+  kits: createGenericAerialAdventureKits(NexusEngine, {
     seed: "aerial-example",
     terrain: {
       heightScale: 170,
@@ -92,6 +92,6 @@ A Three.js renderer should:
 
 ## Validation experiment
 
-Branded validation apps should live in NexusRealtime-Experiments, not inside ProtoKits.
+Branded validation apps should live in NexusEngine-Experiments, not inside ProtoKits.
 
 The game name belongs in Experiments and presets. The ProtoKits remain generic so the same stack can power other aerial games.

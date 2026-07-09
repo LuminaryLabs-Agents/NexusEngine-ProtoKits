@@ -7,8 +7,8 @@ function createInitialState(options = {}) {
   return { version: CLIMB_INPUT_KIT_VERSION, inputMode: options.inputMode ?? "pointer", hoveredTargetId: null, lastTargetId: null, swingAxis: 0, lastClick: null, lastAction: null, focusActive: true };
 }
 
-export function createClimbInputKit(nexusRealtime = {}, options = {}) {
-  const definitions = createVerticalClimbDefinitions(nexusRealtime, options);
+export function createClimbInputKit(nexusEngine = {}, options = {}) {
+  const definitions = createVerticalClimbDefinitions(nexusEngine, options);
   const { resources, events } = definitions;
   const system = (world) => {
     const state = ensureResource(world, resources.InputState, () => createInitialState(options));
@@ -19,7 +19,7 @@ export function createClimbInputKit(nexusRealtime = {}, options = {}) {
     if (world.readEvents(events.ClimbRestarted).length) { state.swingAxis = 0; state.hoveredTargetId = null; state.lastAction = { type: "restart", at: now }; }
     world.setResource(resources.InputState, state);
   };
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "climb-input-kit",
     resources: { InputState: resources.InputState },
     events: { LedgeChosen: events.LedgeChosen, SwingInput: events.SwingInput, TargetHovered: events.TargetHovered, ClimbRestarted: events.ClimbRestarted },

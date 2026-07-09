@@ -1,6 +1,6 @@
 # agent-kit
 
-`agent-kit` is the NexusRealtime agent domain ProtoKit. It owns in-game agent profiles, memory, goals, decision context, proposal validation, and decision traces.
+`agent-kit` is the NexusEngine agent domain ProtoKit. It owns in-game agent profiles, memory, goals, decision context, proposal validation, and decision traces.
 
 Harnesses are pluggable decision sources. The kit includes fake, scripted, replay, ONNX-score, and live-dry-run harness factories. Harnesses only produce structured proposals. Gameplay still commits through normal kits, DSKs, events, and sequences.
 

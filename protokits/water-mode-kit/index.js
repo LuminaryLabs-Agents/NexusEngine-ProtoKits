@@ -30,8 +30,8 @@ function createInitial(config = {}) {
   };
 }
 
-export function createWaterModeKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createWaterModeKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: WATER_MODE_KIT_VERSION,
     factoryName: "createWaterModeKit",
     kitId: "water-mode-kit",

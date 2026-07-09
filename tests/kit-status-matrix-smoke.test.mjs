@@ -13,7 +13,7 @@ const matrix = JSON.parse(fs.readFileSync(matrixPath, "utf8"));
 
 assert.equal(
   matrix.schemaVersion,
-  "nexusrealtime.protokits.kit-status-matrix.v1",
+  "nexusengine.protokits.kit-status-matrix.v1",
   "kit status matrix schema version must stay stable"
 );
 assert.ok(Array.isArray(matrix.classificationTypes), "classificationTypes must be an array");

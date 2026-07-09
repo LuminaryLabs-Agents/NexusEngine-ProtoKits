@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-generic-route-cargo-extraction-replay::headless::2026-06-24
+// Smoke signature: NexusEngine-generic-route-cargo-extraction-replay::headless::2026-06-24
 import { readFileSync } from "node:fs";
 import { assert, installKit } from "./aaa-domain-spine-smoke-harness.mjs";
 import { createGenericRouteCargoExtractionKit } from "../protokits/generic-route-cargo-extraction-kit/index.js";

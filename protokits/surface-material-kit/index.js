@@ -28,7 +28,7 @@ export function blendSurfaceRules(baseLegend = {}, rules = []) {
   return legend;
 }
 
-export function createSurfaceMaterialKit(nexusRealtime = {}, options = {}) {
+export function createSurfaceMaterialKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "surface-material-kit", version: SURFACE_MATERIAL_KIT_VERSION, defaultSurfaceLegend, createSurfaceMaterialMap, blendSurfaceRules };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["surface:materials", "surface:legend"], bindings: { surfaceMaterialKit: kit }, metadata: { version: SURFACE_MATERIAL_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["surface:materials", "surface:legend"], bindings: { surfaceMaterialKit: kit }, metadata: { version: SURFACE_MATERIAL_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

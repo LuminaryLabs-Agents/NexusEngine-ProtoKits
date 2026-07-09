@@ -62,7 +62,7 @@ export function randomFreePoint(random, validator, options = {}) {
   return null;
 }
 
-export function createRaycastPlacementKit(nexusRealtime = {}, options = {}) {
+export function createRaycastPlacementKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "raycast-placement-kit", version: RAYCAST_PLACEMENT_KIT_VERSION, createGridSampler, castGridRay, nearestWallDistance, createPlacementValidator, randomFreePoint };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["placement:grid", "placement:raycast", "placement:validators"], bindings: { raycastPlacementKit: kit }, metadata: { version: RAYCAST_PLACEMENT_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["placement:grid", "placement:raycast", "placement:validators"], bindings: { raycastPlacementKit: kit }, metadata: { version: RAYCAST_PLACEMENT_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

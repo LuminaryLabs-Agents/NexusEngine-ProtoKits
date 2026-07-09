@@ -5,10 +5,10 @@ const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createGenericRouteProgressKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createGenericRouteProgressKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -116,9 +116,9 @@ function reject(world, Rejected, reason, payload = {}) {
   return { accepted: false, reason, event };
 }
 
-export function createGenericRouteProgressKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createGenericRouteProgressKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
 
   const RouteProgressState = defineResource(config.resourceName ?? "genericRouteProgress.state");
   const CheckpointEntered = defineEvent("genericRouteProgress.checkpoint.entered");

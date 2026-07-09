@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-generic-route-progress-replay::headless::2026-06-24
+// Smoke signature: NexusEngine-generic-route-progress-replay::headless::2026-06-24
 import { readFileSync } from "node:fs";
 import { assert, installKit } from "./aaa-domain-spine-smoke-harness.mjs";
 import { createGenericRouteProgressKit } from "../protokits/generic-route-progress-kit/index.js";

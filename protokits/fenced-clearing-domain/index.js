@@ -161,11 +161,11 @@ export function createFencedClearingState(options = {}) {
   return { id: options.id ?? "fenced-clearing-domain", version: FENCED_CLEARING_DOMAIN_VERSION, lastGraph: null };
 }
 
-export function createFencedClearingDomainKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createFencedClearingDomainKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const State = defs.resource(options.resourceName ?? "fencedClearing.state");
   const initial = () => createFencedClearingState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.kitId ?? "fenced-clearing-domain",
     resources: { State },
     provides: ["clearing:fenced-object-graph", "clearing:first-person-bounds", "clearing:camera-anchor", "clearing:player-avatar-anchor", "clearing:grass-exclusion-zones"],

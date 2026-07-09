@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-generic-route-cargo-extraction-replay::fixtures::2026-06-24
+// Smoke signature: NexusEngine-generic-route-cargo-extraction-replay::fixtures::2026-06-24
 
 export const routeCargoExtractionReplayFixtures = Object.freeze([
   {

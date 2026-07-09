@@ -2,19 +2,19 @@
 
 ## One-Sentence Thesis
 
-NexusRealtime kits should be organized as a long-term capability system: stable curated NexusRealtime kits form the trusted engine surface, ProtoKits incubate domain-purpose gameplay services and game-family compositions, and Deploy Kits package content/configuration/presets into playable experiences without becoming gameplay engines themselves.
+NexusEngine kits should be organized as a long-term capability system: stable curated NexusEngine kits form the trusted engine surface, ProtoKits incubate domain-purpose gameplay services and game-family compositions, and Deploy Kits package content/configuration/presets into playable experiences without becoming gameplay engines themselves.
 
 ---
 
 ## 1. Core Mentality
 
-NexusRealtime should grow through kit maturity, not one-off game code.
+NexusEngine should grow through kit maturity, not one-off game code.
 
 ```txt
 Runtime
   deterministic execution
 
-Curated NexusRealtime Kits
+Curated NexusEngine Kits
   stable promoted capabilities
 
 ProtoKits
@@ -65,7 +65,7 @@ one giant custom update loop
 There are three major kit classes.
 
 ```txt
-1. Curated NexusRealtime Kits
+1. Curated NexusEngine Kits
 2. ProtoKits
 3. Deploy Kits
 ```
@@ -74,11 +74,11 @@ Each class has a different job.
 
 ---
 
-## 3. Curated NexusRealtime Kits
+## 3. Curated NexusEngine Kits
 
-Curated NexusRealtime Kits are stable promoted engine capabilities.
+Curated NexusEngine Kits are stable promoted engine capabilities.
 
-They live in the core NexusRealtime repo.
+They live in the core NexusEngine repo.
 
 They should be reliable, documented, deterministic, headless-testable, and broadly reusable.
 
@@ -105,7 +105,7 @@ stable resource/event/component patterns
 
 ### Promotion standard
 
-A kit belongs in curated NexusRealtime only when:
+A kit belongs in curated NexusEngine only when:
 
 ```txt
 API is stable.
@@ -125,14 +125,14 @@ It is not tied to one game brand.
 
 ProtoKits are the incubation zone.
 
-They live in the NexusRealtime-ProtoKits repo.
+They live in the NexusEngine-ProtoKits repo.
 
 A ProtoKit is a future-stable kit candidate that has not yet earned promotion.
 
 ### Purpose
 
 ```txt
-Test reusable gameplay APIs before they become stable NexusRealtime kits.
+Test reusable gameplay APIs before they become stable NexusEngine kits.
 ```
 
 ### ProtoKit requirements
@@ -144,7 +144,7 @@ index.js
 README.md
 demo.html when useful
 version constant
-createXKit(NexusRealtime, config)
+createXKit(NexusEngine, config)
 resources
 events
 systems
@@ -492,12 +492,12 @@ They should not be promoted into core.
 Use this split.
 
 ```txt
-NexusRealtime
+NexusEngine
   stable runtime
   curated promoted kits
   stable sequence/runtime surfaces
 
-NexusRealtime-ProtoKits
+NexusEngine-ProtoKits
   atomic domain service kits
   domain-purpose game-family kits
   mode kits
@@ -505,7 +505,7 @@ NexusRealtime-ProtoKits
   experimental renderer adapters
   headless tests and demos
 
-NexusRealtime-Experiments
+NexusEngine-Experiments
   playable validation games
   tiny Canvas/Three hosts
   data files
@@ -636,7 +636,7 @@ Headless tests
 Promotion review
   decide promote / iterate / split / merge / archive / delete
 
-Curated NexusRealtime Kit
+Curated NexusEngine Kit
   stable engine capability
 ```
 
@@ -670,7 +670,7 @@ When adding a new capability, ask:
 
 ```txt
 Is it stable and already proven?
-  Put it in NexusRealtime as curated kit.
+  Put it in NexusEngine as curated kit.
 
 Is it reusable but not proven?
   Put it in ProtoKits as an atomic/domain service.
@@ -729,7 +729,7 @@ hosts for presentation
 ## 16. Final Rule
 
 ```txt
-NexusRealtime grows by turning repeated gameplay needs into clean domain services, not by accumulating one-off game code.
+NexusEngine grows by turning repeated gameplay needs into clean domain services, not by accumulating one-off game code.
 ```
 
 ## Recent Incubating DSKs

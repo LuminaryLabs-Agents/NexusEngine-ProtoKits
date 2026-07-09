@@ -43,7 +43,7 @@ export function drawDebugMiniMap(ctx, map, camera, options = {}) {
   ctx.restore();
 }
 
-export function createDebugOverlayKit(nexusRealtime = {}, options = {}) {
+export function createDebugOverlayKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "debug-overlay-kit", version: DEBUG_OVERLAY_KIT_VERSION, createDebugOverlay, drawDebugMiniMap };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["debug:overlay", "debug:minimap"], bindings: { debugOverlayKit: kit }, metadata: { version: DEBUG_OVERLAY_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["debug:overlay", "debug:minimap"], bindings: { debugOverlayKit: kit }, metadata: { version: DEBUG_OVERLAY_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

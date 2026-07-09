@@ -440,16 +440,16 @@ function createWebGLRenderer(canvas, options = {}) {
   };
 }
 
-export function createOceanBoatKit(nexusRealtime = {}, options = {}) {
-  const terrainKit = createOptionalCoreKit(nexusRealtime.createTerrainKit, {
+export function createOceanBoatKit(nexusEngine = {}, options = {}) {
+  const terrainKit = createOptionalCoreKit(nexusEngine.createTerrainKit, {
     id: "fallback-terrain-kit",
     source: "ocean-boat-kit"
   });
-  const renderDescriptorKit = createOptionalCoreKit(nexusRealtime.createRenderDescriptorKit, {
+  const renderDescriptorKit = createOptionalCoreKit(nexusEngine.createRenderDescriptorKit, {
     id: "fallback-render-descriptor-kit",
     source: "ocean-boat-kit"
   });
-  const realismKit = createOptionalCoreKit(nexusRealtime.createRealismKit, {
+  const realismKit = createOptionalCoreKit(nexusEngine.createRealismKit, {
     id: "fallback-realism-kit",
     source: "ocean-boat-kit"
   });
@@ -489,7 +489,7 @@ export function createOceanBoatKit(nexusRealtime = {}, options = {}) {
       gameOptions.onRender?.(state);
     }
 
-    const loopFactory = nexusRealtime.createRealtimeGame || createFallbackLoop;
+    const loopFactory = nexusEngine.createRealtimeGame || createFallbackLoop;
     const loop = loopFactory({ update, render });
 
     return {

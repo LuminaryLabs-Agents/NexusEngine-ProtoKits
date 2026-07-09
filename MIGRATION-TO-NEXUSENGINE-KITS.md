@@ -1,10 +1,10 @@
-# Migration To NexusRealtime Kits
+# Migration To NexusEngine Kits
 
 Stable ProtoKits now promote into the official first-party kit catalog:
 
 ```txt
-Repo: LuminaryLabs-Dev/NexusRealitime-Kits
-Package: @luminarylabs/nexusrealtime-kits
+Repo: LuminaryLabs-Dev/NexusEngine-Kits
+Package: @luminarylabs/nexusengine-kits
 Branch: main
 ```
 
@@ -13,7 +13,7 @@ This repository remains the incubation zone.
 Use:
 
 ```txt
-docs/PROMOTION-TO-NEXUSREALTIME-KITS.md
+docs/PROMOTION-TO-NEXUSENGINE-KITS.md
 ```
 
 for the promotion rules, destination structure, and first migration targets.
@@ -24,8 +24,8 @@ for the promotion rules, destination structure, and first migration targets.
 Experiment
 -> ProtoKit
 -> validated ProtoKit
--> NexusRealtime-Kits official kit
--> NexusRealtime runtime primitive only if the runtime contract itself must change
+-> NexusEngine-Kits official kit
+-> NexusEngine runtime primitive only if the runtime contract itself must change
 ```
 
 Do not delete existing ProtoKit import paths when a kit promotes. Keep compatibility notes or bridge exports until downstream apps have migrated.

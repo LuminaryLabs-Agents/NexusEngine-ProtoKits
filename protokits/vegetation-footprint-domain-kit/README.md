@@ -12,7 +12,7 @@ What if two large trees try to spawn inside each other?
   It does not render trees or choose species.
 ```
 
-Extends: NexusRealtime runtime-shaped DomainServiceKit via `defineRuntimeKit`.
+Extends: NexusEngine runtime-shaped DomainServiceKit via `defineRuntimeKit`.
 
 Composes:
 
@@ -35,5 +35,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-scoped-domain-rpg-batch-01::vegetation-footprint-domain-kit::2026-06-20
+NexusEngine-scoped-domain-rpg-batch-01::vegetation-footprint-domain-kit::2026-06-20
 ```

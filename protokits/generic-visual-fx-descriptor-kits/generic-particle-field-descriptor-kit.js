@@ -22,10 +22,10 @@ function namespace(engine) {
   return engine.n.visualFx;
 }
 
-export function createGenericParticleFieldDescriptorKit(NexusRealtime = {}, config = {}) {
-  const State = resource(NexusRealtime, config.resourceName ?? "genericVisualFx.particleField.state");
-  const SetField = event(NexusRealtime, config.setEventName ?? "genericVisualFx.particleField.set");
-  const RemoveField = event(NexusRealtime, config.removeEventName ?? "genericVisualFx.particleField.remove");
+export function createGenericParticleFieldDescriptorKit(NexusEngine = {}, config = {}) {
+  const State = resource(NexusEngine, config.resourceName ?? "genericVisualFx.particleField.state");
+  const SetField = event(NexusEngine, config.setEventName ?? "genericVisualFx.particleField.set");
+  const RemoveField = event(NexusEngine, config.removeEventName ?? "genericVisualFx.particleField.remove");
   const initialFields = mapById(config.fields ?? config.presets ?? []);
 
   function normalize(field = {}) {
@@ -85,7 +85,7 @@ export function createGenericParticleFieldDescriptorKit(NexusRealtime = {}, conf
     world.setResource(State, state);
   }
 
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "generic-particle-field-descriptor-kit",
     provides: ["fx:particle-field-descriptors", "render:particle-field-descriptors", "atmosphere:particle-fields"],
     resources: { State },

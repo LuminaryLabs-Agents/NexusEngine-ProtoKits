@@ -1,6 +1,6 @@
 # Next Ledge Kit
 
-Composable cinematic grapple-climb rules for NexusRealtime games.
+Composable cinematic grapple-climb rules for NexusEngine games.
 
 `next-ledge-kit` now owns the reusable gameplay that was previously trapped inside the single-file **Next Ledge — Playable Cinematic Engine** prototype: deterministic ledge generation, sector progression, stamina, rope state, swing/release/fire/reel/fall modes, grapple latching, route completion, render snapshots, camera state, trajectory prediction, and small gameplay effect descriptors.
 
@@ -9,11 +9,11 @@ The browser Experiment owns only the supportive host work: HTML, input listeners
 ## Import
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
 import {
   createNextLedgeKit,
   createProceduralNextLedgeLevel
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/next-ledge-kit/cinematic-ascent-kit.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/next-ledge-kit/cinematic-ascent-kit.js";
 ```
 
 ## Install
@@ -21,9 +21,9 @@ import {
 ```js
 const level = createProceduralNextLedgeLevel({ seed: "summit-recovery-protocol" });
 
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createNextLedgeKit(NexusRealtime, { level })
+    createNextLedgeKit(NexusEngine, { level })
   ]
 });
 ```
@@ -115,7 +115,7 @@ nextLedge.sectorAdvanced
 ## Config
 
 ```js
-createNextLedgeKit(NexusRealtime, {
+createNextLedgeKit(NexusEngine, {
   level,
   seed: "optional-seed",
   sector: 1,
@@ -140,7 +140,7 @@ The kit does **not** create DOM nodes, Canvas contexts, Three.js meshes, `AudioC
 The validation app lives in:
 
 ```txt
-NexusRealtime-Experiments/experiments/next-ledge/
+NexusEngine-Experiments/experiments/next-ledge/
 ```
 
 It imports this ProtoKit and keeps the browser code thin.

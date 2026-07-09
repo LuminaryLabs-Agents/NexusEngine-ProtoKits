@@ -19,12 +19,12 @@ export function describeObjectMaterialVariant(asset = {}, instance = {}, context
   return { assetId: asset.id ?? instance.assetId ?? null, slots: clone(slots), season: context.season ?? state.season, wetness: number(context.wetness, state.wetness), tint: { color: tintForBiome(biome), strength: state.biomeTintStrength }, variationKey: `${biome}:${context.season ?? state.season}:${Math.floor(number(instance.scale, 1) * 100)}` };
 }
 
-export function createObjectMaterialVariantKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjectMaterialVariantKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objectMaterialVariant.state");
   const Updated = event("objectMaterialVariant.updated");
   const initial = () => createObjectMaterialVariantState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "object-material-variant-kit",
     resources: { State },
     events: { Updated },

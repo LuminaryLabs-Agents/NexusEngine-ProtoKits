@@ -39,14 +39,14 @@ export function cancelSceneTransition(state = createSceneTransitionState(), reas
   return { ...state, active: null, history: [...(state.history ?? []).slice(-63), cancelled] };
 }
 
-export function createSceneTransitionKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createSceneTransitionKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const SceneTransitionState = resource(options.resourceName ?? "sceneTransition.state");
   const SceneTransitionRequested = event("sceneTransition.requested");
   const SceneTransitionCompleted = event("sceneTransition.completed");
   const SceneTransitionCancelled = event("sceneTransition.cancelled");
   const createState = () => createSceneTransitionState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "scene-transition-kit",
     resources: { SceneTransitionState },
     events: { SceneTransitionRequested, SceneTransitionCompleted, SceneTransitionCancelled },

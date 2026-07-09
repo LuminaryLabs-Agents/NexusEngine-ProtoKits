@@ -8,7 +8,7 @@
     "external-three-renderer-host"
   ],
   "island": {
-    "import": "@luminarylabs/nexusrealtime-protokits/ocean-island-landform-domain",
+    "import": "@luminarylabs/nexusengine-protokits/ocean-island-landform-domain",
     "factory": "createOceanIslandLandformDomainKit",
     "initialState": {
       "seed": "island-weather-dome-001",
@@ -20,7 +20,7 @@
     }
   },
   "clouds": {
-    "import": "@luminarylabs/nexusrealtime-protokits/mattatz-clouds-domain",
+    "import": "@luminarylabs/nexusengine-protokits/mattatz-clouds-domain",
     "factory": "createMattatzCloudsDomainKit",
     "initialState": {
       "seed": "island-weather-dome-clouds-001",

@@ -174,7 +174,7 @@ export function listUniversalGameKits(filter = {}) {
 
 export function getUniversalGameKitSpec(id) { return UNIVERSAL_GAME_KIT_SPECS_BY_ID[id] ?? null; }
 
-export function createUniversalGameKitById(NexusRealtime = {}, kitId, config = {}) {
+export function createUniversalGameKitById(NexusEngine = {}, kitId, config = {}) {
   const spec = getUniversalGameKitSpec(kitId);
   if (!spec) throw new Error(`Unknown universal game kit: ${kitId}`);
   const state = { id: config.id ?? spec.id, layer: spec.layer, domain: spec.domain, subdomain: spec.subdomain, descriptors: Array.isArray(config.descriptors) ? config.descriptors.slice() : [], presets: Array.isArray(config.presets) ? config.presets.slice() : [], config: clone(config.config ?? {}) };
@@ -196,38 +196,38 @@ export function createUniversalGameKitById(NexusRealtime = {}, kitId, config = {
     addDescriptor(descriptor = {}) { state.descriptors.push(clone(descriptor)); return clone(state.descriptors[state.descriptors.length - 1]); },
     addPreset(preset = {}) { state.presets.push(clone(preset)); return clone(state.presets[state.presets.length - 1]); },
     createRuntimeKit(options = {}) {
-      return defineInjectedRuntimeKit(NexusRealtime, { id: options.id ?? api.id, requires: options.requires ?? api.requires, provides: options.provides ?? api.provides, bindings: { [apiName]: api }, metadata: { version: api.version, layer: api.layer, abstractionLevel: api.abstractionLevel, domain: api.domain, subdomain: api.subdomain, category: api.category, purpose: api.purpose, existingProtoKit: api.existingProtoKit, rendererIndependent: true, headlessSafe: true, generatedCatalog: "universal-game-domain-kits", ...(options.metadata ?? {}) } });
+      return defineInjectedRuntimeKit(NexusEngine, { id: options.id ?? api.id, requires: options.requires ?? api.requires, provides: options.provides ?? api.provides, bindings: { [apiName]: api }, metadata: { version: api.version, layer: api.layer, abstractionLevel: api.abstractionLevel, domain: api.domain, subdomain: api.subdomain, category: api.category, purpose: api.purpose, existingProtoKit: api.existingProtoKit, rendererIndependent: true, headlessSafe: true, generatedCatalog: "universal-game-domain-kits", ...(options.metadata ?? {}) } });
     }
   });
   return api;
 }
 
-export function createUniversalGameDomainKits(NexusRealtime = {}, config = {}) {
+export function createUniversalGameDomainKits(NexusEngine = {}, config = {}) {
   const only = new Set(Array.isArray(config.only) ? config.only : []);
   const omit = new Set(Array.isArray(config.omit) ? config.omit : []);
-  return UNIVERSAL_GAME_KIT_SPECS.filter((spec) => (!only.size || only.has(spec.id)) && !omit.has(spec.id)).map((spec) => createUniversalGameKitById(NexusRealtime, spec.id, config[spec.id] ?? {}));
+  return UNIVERSAL_GAME_KIT_SPECS.filter((spec) => (!only.size || only.has(spec.id)) && !omit.has(spec.id)).map((spec) => createUniversalGameKitById(NexusEngine, spec.id, config[spec.id] ?? {}));
 }
 
-export const UNIVERSAL_GAME_KIT_FACTORIES = Object.freeze(Object.fromEntries(UNIVERSAL_GAME_KIT_SPECS.map((spec) => [spec.id, (NexusRealtime, config = {}) => createUniversalGameKitById(NexusRealtime, spec.id, config)])));
-export function createUniversalGameRuntimeBundle(NexusRealtime = {}, config = {}) { return createUniversalGameDomainKits(NexusRealtime, config).map((kit) => kit.createRuntimeKit(config.runtime ?? {})); }
+export const UNIVERSAL_GAME_KIT_FACTORIES = Object.freeze(Object.fromEntries(UNIVERSAL_GAME_KIT_SPECS.map((spec) => [spec.id, (NexusEngine, config = {}) => createUniversalGameKitById(NexusEngine, spec.id, config)])));
+export function createUniversalGameRuntimeBundle(NexusEngine = {}, config = {}) { return createUniversalGameDomainKits(NexusEngine, config).map((kit) => kit.createRuntimeKit(config.runtime ?? {})); }
 
-export function createRuntimeDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "runtime-domain-kit", config); }
-export function createInputActionDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "input-action-domain-kit", config); }
-export function createObjectCapabilityDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "object-capability-domain-kit", config); }
-export function createSpatialLayoutDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "spatial-layout-domain-kit", config); }
-export function createTraversalDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "traversal-domain-kit", config); }
-export function createInteractionAffordanceDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "interaction-affordance-domain-kit", config); }
-export function createObjectiveProgressionDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "objective-progression-domain-kit", config); }
-export function createPressureResourceDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "pressure-resource-domain-kit", config); }
-export function createHazardConflictDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "hazard-conflict-domain-kit", config); }
-export function createEconomyCargoInventoryDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "economy-cargo-inventory-domain-kit", config); }
-export function createCraftRepairDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "craft-repair-domain-kit", config); }
-export function createPuzzleSignalDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "puzzle-signal-domain-kit", config); }
-export function createSurveyCartographyDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "survey-cartography-domain-kit", config); }
-export function createEnvironmentDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "environment-domain-kit", config); }
-export function createVisualRenderDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "visual-render-domain-kit", config); }
-export function createAudioFeedbackDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "audio-feedback-domain-kit", config); }
-export function createAgentAiDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "agent-ai-domain-kit", config); }
-export function createAuthoringQaDomainKit(NexusRealtime, config = {}) { return createUniversalGameKitById(NexusRealtime, "authoring-qa-domain-kit", config); }
+export function createRuntimeDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "runtime-domain-kit", config); }
+export function createInputActionDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "input-action-domain-kit", config); }
+export function createObjectCapabilityDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "object-capability-domain-kit", config); }
+export function createSpatialLayoutDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "spatial-layout-domain-kit", config); }
+export function createTraversalDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "traversal-domain-kit", config); }
+export function createInteractionAffordanceDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "interaction-affordance-domain-kit", config); }
+export function createObjectiveProgressionDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "objective-progression-domain-kit", config); }
+export function createPressureResourceDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "pressure-resource-domain-kit", config); }
+export function createHazardConflictDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "hazard-conflict-domain-kit", config); }
+export function createEconomyCargoInventoryDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "economy-cargo-inventory-domain-kit", config); }
+export function createCraftRepairDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "craft-repair-domain-kit", config); }
+export function createPuzzleSignalDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "puzzle-signal-domain-kit", config); }
+export function createSurveyCartographyDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "survey-cartography-domain-kit", config); }
+export function createEnvironmentDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "environment-domain-kit", config); }
+export function createVisualRenderDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "visual-render-domain-kit", config); }
+export function createAudioFeedbackDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "audio-feedback-domain-kit", config); }
+export function createAgentAiDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "agent-ai-domain-kit", config); }
+export function createAuthoringQaDomainKit(NexusEngine, config = {}) { return createUniversalGameKitById(NexusEngine, "authoring-qa-domain-kit", config); }
 
 export default createUniversalGameDomainKits;

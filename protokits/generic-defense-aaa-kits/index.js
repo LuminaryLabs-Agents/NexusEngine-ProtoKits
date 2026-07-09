@@ -81,8 +81,8 @@ function findStructure(snapshot, structureId) {
   return snapshot?.structures?.structures?.[structureId] ?? null;
 }
 
-function makeFacadeKit(NexusRealtime, spec) {
-  const { defineRuntimeKit } = NexusRealtime;
+function makeFacadeKit(NexusEngine, spec) {
+  const { defineRuntimeKit } = NexusEngine;
   return defineRuntimeKit({
     id: spec.id,
     requires: spec.requires ?? ["game:generic-defense"],
@@ -101,9 +101,9 @@ function makeFacadeKit(NexusRealtime, spec) {
   });
 }
 
-export function createGenericDefenseFoundationKit(NexusRealtime, config = {}) {
+export function createGenericDefenseFoundationKit(NexusEngine, config = {}) {
   const ledger = createLedger();
-  return makeFacadeKit(NexusRealtime, {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-foundation-kit",
     requires: [],
     provides: ["foundation:commands", "foundation:events", "foundation:digest", "gamehost:bridge"],
@@ -132,8 +132,8 @@ export function createGenericDefenseFoundationKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseWorldKit(NexusRealtime, config = {}) {
-  return makeFacadeKit(NexusRealtime, {
+export function createGenericDefenseWorldKit(NexusEngine, config = {}) {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-world-kit",
     provides: ["world:paths", "world:lanes", "world:slots", "world:vital-targets", "world:affordances", "world:spawn-gates"],
     purpose: "Consolidated battlefield topology: paths, slots, vital targets, terrain affordances, and gates.",
@@ -162,9 +162,9 @@ export function createGenericDefenseWorldKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseBuildKit(NexusRealtime, config = {}) {
+export function createGenericDefenseBuildKit(NexusEngine, config = {}) {
   const ledger = createLedger();
-  return makeFacadeKit(NexusRealtime, {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-build-kit",
     provides: ["build:blueprints", "build:placement", "structure:runtime", "structure:upgrade", "structure:sell", "structure:repair"],
     purpose: "Consolidated blueprints, placement, structure lifecycle, upgrades, sell, and repair API.",
@@ -212,9 +212,9 @@ export function createGenericDefenseBuildKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseCombatKit(NexusRealtime, config = {}) {
+export function createGenericDefenseCombatKit(NexusEngine, config = {}) {
   const targetModes = new Map();
-  return makeFacadeKit(NexusRealtime, {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-combat-kit-consolidated",
     provides: ["target:query", "target:priority", "combat:attack", "projectile:motion", "combat:damage", "combat:status", "combat:death"],
     purpose: "Consolidated targeting, attacks, projectile, damage, health, shield, status, and death facade.",
@@ -232,8 +232,8 @@ export function createGenericDefenseCombatKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseAgentKit(NexusRealtime, config = {}) {
-  return makeFacadeKit(NexusRealtime, {
+export function createGenericDefenseAgentKit(NexusEngine, config = {}) {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-agent-kit",
     provides: ["agent:roster", "agent:spawn", "agent:path-follow", "agent:breach", "agent:boss-phase"],
     purpose: "Consolidated enemy/agent roster, spawning, path-follow, modifiers, boss, and breach API.",
@@ -256,8 +256,8 @@ export function createGenericDefenseAgentKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseWaveKit(NexusRealtime, config = {}) {
-  return makeFacadeKit(NexusRealtime, {
+export function createGenericDefenseWaveKit(NexusEngine, config = {}) {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-wave-kit",
     provides: ["wave:definition", "wave:scheduler", "wave:director", "wave:pressure", "wave:preview", "wave:boss"],
     purpose: "Consolidated wave definition, scheduling, pressure, preview, and boss wave API.",
@@ -283,10 +283,10 @@ export function createGenericDefenseWaveKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseEconomyKit(NexusRealtime, config = {}) {
+export function createGenericDefenseEconomyKit(NexusEngine, config = {}) {
   const ledger = createLedger();
   const rewardChoices = new Map();
-  return makeFacadeKit(NexusRealtime, {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-economy-kit-consolidated",
     provides: ["economy:wallet", "economy:costs", "economy:income", "economy:rewards", "economy:shop"],
     purpose: "Consolidated wallet, cost resolution, income, reward choices, shop, discounts, and unlock API.",
@@ -328,9 +328,9 @@ export function createGenericDefenseEconomyKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseAbilityKit(NexusRealtime, config = {}) {
+export function createGenericDefenseAbilityKit(NexusEngine, config = {}) {
   const state = { activeCast: null, cooldowns: {}, charges: {}, ultimate: 0 };
-  return makeFacadeKit(NexusRealtime, {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-ability-kit",
     provides: ["ability:registry", "ability:cooldown", "ability:targeting", "ability:cast", "ability:ultimate", "ability:consumable"],
     purpose: "Consolidated ability registry, cooldown, targeting, cast, ultimate, and consumable API.",
@@ -346,9 +346,9 @@ export function createGenericDefenseAbilityKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseObjectiveKit(NexusRealtime, config = {}) {
+export function createGenericDefenseObjectiveKit(NexusEngine, config = {}) {
   const objectives = new Map();
-  return makeFacadeKit(NexusRealtime, {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-objective-kit",
     provides: ["objective:state", "objective:completion", "objective:score", "objective:failure", "objective:stars"],
     purpose: "Consolidated objectives, completion, score, stars, failure, and session outcome API.",
@@ -364,9 +364,9 @@ export function createGenericDefenseObjectiveKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefensePresentationKit(NexusRealtime, config = {}) {
+export function createGenericDefensePresentationKit(NexusEngine, config = {}) {
   const signals = [];
-  return makeFacadeKit(NexusRealtime, {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-presentation-kit",
     provides: ["presentation:render", "presentation:hud", "presentation:vfx", "presentation:audio", "presentation:camera"],
     purpose: "Consolidated renderer-agnostic descriptors, HUD, VFX, audio, music, screen feedback, and camera beats.",
@@ -382,9 +382,9 @@ export function createGenericDefensePresentationKit(NexusRealtime, config = {}) 
   });
 }
 
-export function createGenericDefenseScaleKit(NexusRealtime, config = {}) {
+export function createGenericDefenseScaleKit(NexusEngine, config = {}) {
   const entities = new Map();
-  return makeFacadeKit(NexusRealtime, {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-scale-kit",
     provides: ["scale:entities", "scale:spatial-index", "scale:batch-targeting", "scale:budget", "scale:lod"],
     purpose: "Consolidated entity registry, spatial query, batch targeting, batch damage, object pools, LOD, and budget API.",
@@ -407,8 +407,8 @@ export function createGenericDefenseScaleKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseAuthoringQaKit(NexusRealtime, config = {}) {
-  return makeFacadeKit(NexusRealtime, {
+export function createGenericDefenseAuthoringQaKit(NexusEngine, config = {}) {
+  return makeFacadeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-authoring-qa-kit",
     requires: [],
     provides: ["authoring:validation", "qa:scenario", "qa:replay", "qa:metrics", "qa:inspector"],
@@ -433,32 +433,32 @@ export function createGenericDefenseAuthoringQaKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseKits(NexusRealtime, config = {}) {
-  const legacyKits = createLegacyGenericDefenseKits(NexusRealtime, config);
+export function createGenericDefenseKits(NexusEngine, config = {}) {
+  const legacyKits = createLegacyGenericDefenseKits(NexusEngine, config);
   return [
     ...legacyKits,
-    createGenericDefenseFoundationKit(NexusRealtime, config.foundation ?? {}),
-    createGenericDefenseAuthoringQaKit(NexusRealtime, config.authoring ?? {}),
-    createGenericDefenseWorldKit(NexusRealtime, config.world ?? {}),
-    createGenericDefenseEconomyKit(NexusRealtime, config.economy ?? {}),
-    createGenericDefenseBuildKit(NexusRealtime, config.build ?? {}),
-    createGenericDefenseAgentKit(NexusRealtime, config.agents ?? {}),
-    createGenericDefenseWaveKit(NexusRealtime, config.waves ?? {}),
-    createGenericDefenseCombatKit(NexusRealtime, config.combat ?? {}),
-    createGenericDefenseAbilityKit(NexusRealtime, config.abilities ?? {}),
-    createGenericDefenseObjectiveKit(NexusRealtime, config.objectives ?? {}),
-    createGenericDefenseScaleKit(NexusRealtime, config.scale ?? {}),
-    createGenericDefensePresentationKit(NexusRealtime, config.presentation ?? {})
+    createGenericDefenseFoundationKit(NexusEngine, config.foundation ?? {}),
+    createGenericDefenseAuthoringQaKit(NexusEngine, config.authoring ?? {}),
+    createGenericDefenseWorldKit(NexusEngine, config.world ?? {}),
+    createGenericDefenseEconomyKit(NexusEngine, config.economy ?? {}),
+    createGenericDefenseBuildKit(NexusEngine, config.build ?? {}),
+    createGenericDefenseAgentKit(NexusEngine, config.agents ?? {}),
+    createGenericDefenseWaveKit(NexusEngine, config.waves ?? {}),
+    createGenericDefenseCombatKit(NexusEngine, config.combat ?? {}),
+    createGenericDefenseAbilityKit(NexusEngine, config.abilities ?? {}),
+    createGenericDefenseObjectiveKit(NexusEngine, config.objectives ?? {}),
+    createGenericDefenseScaleKit(NexusEngine, config.scale ?? {}),
+    createGenericDefensePresentationKit(NexusEngine, config.presentation ?? {})
   ];
 }
 
-export function createGenericDefenseGame(NexusRealtime, config = {}) {
-  if (typeof NexusRealtime?.createRealtimeGame !== "function") {
-    throw new TypeError("createGenericDefenseGame requires NexusRealtime.createRealtimeGame.");
+export function createGenericDefenseGame(NexusEngine, config = {}) {
+  if (typeof NexusEngine?.createRealtimeGame !== "function") {
+    throw new TypeError("createGenericDefenseGame requires NexusEngine.createRealtimeGame.");
   }
-  return NexusRealtime.createRealtimeGame({
-    kits: createGenericDefenseKits(NexusRealtime, config),
-    renderer: typeof NexusRealtime.createRenderer === "function" ? NexusRealtime.createRenderer("headless") : undefined
+  return NexusEngine.createRealtimeGame({
+    kits: createGenericDefenseKits(NexusEngine, config),
+    renderer: typeof NexusEngine.createRenderer === "function" ? NexusEngine.createRenderer("headless") : undefined
   });
 }
 

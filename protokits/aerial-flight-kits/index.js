@@ -159,36 +159,36 @@ export function createDefaultGenericAerialAdventureConfig(config = {}) {
   };
 }
 
-export function createGenericAerialAdventureKits(NexusRealtime, config = {}) {
+export function createGenericAerialAdventureKits(NexusEngine, config = {}) {
   const shared = createDefaultGenericAerialAdventureConfig(config);
   return [
-    createGenericAtmosphereSkyKit(NexusRealtime, { ...shared, ...(shared.sky ?? {}) }),
-    ...((shared.sky?.dayNightCycle || shared.sky?.dayLengthSeconds) ? [createSkyCycleKit(NexusRealtime, shared.sky)] : []),
-    createGenericTerrainSamplerKit(NexusRealtime, shared),
-    createGenericFlightInputKit(NexusRealtime, shared),
-    createGenericAerialBodyKit(NexusRealtime, shared),
-    createGenericGlidePhysicsKit(NexusRealtime, shared),
-    createGenericBoostImpulseKit(NexusRealtime, shared),
-    createGenericWorldPatchKit(NexusRealtime, { ...shared.terrain, ...shared.world }),
-    createGenericCheckpointVolumeKit(NexusRealtime, { ...shared, ...shared.checkpoints }),
-    createGenericLiftVolumeKit(NexusRealtime, { ...shared, ...shared.liftVolumes }),
-    createGenericFlockAgentKit(NexusRealtime, { ...shared, ...shared.flock }),
-    createGenericFlightChallengeKit(NexusRealtime, shared.challenge),
-    createGenericFlightCameraKit(NexusRealtime, shared.camera),
-    createGenericFlightVfxKit(NexusRealtime, shared.vfx),
-    createArticulatedRigDescriptorKit(NexusRealtime, shared.rig),
-    createProceduralWingFlapKit(NexusRealtime, shared.rig),
-    createFlightPoseDriverKit(NexusRealtime, shared.rig),
-    createRigAnimationDescriptorKit(NexusRealtime, shared.rig),
-    createAtmosphericWeatherKit(NexusRealtime, shared.weather),
-    createVolumetricLightingKit(NexusRealtime, { ...shared.weather, ...shared.lighting }),
-    createGenericFlightAudioKit(NexusRealtime, shared.audio),
-    createGenericAerialRenderDescriptorKit(NexusRealtime, shared)
+    createGenericAtmosphereSkyKit(NexusEngine, { ...shared, ...(shared.sky ?? {}) }),
+    ...((shared.sky?.dayNightCycle || shared.sky?.dayLengthSeconds) ? [createSkyCycleKit(NexusEngine, shared.sky)] : []),
+    createGenericTerrainSamplerKit(NexusEngine, shared),
+    createGenericFlightInputKit(NexusEngine, shared),
+    createGenericAerialBodyKit(NexusEngine, shared),
+    createGenericGlidePhysicsKit(NexusEngine, shared),
+    createGenericBoostImpulseKit(NexusEngine, shared),
+    createGenericWorldPatchKit(NexusEngine, { ...shared.terrain, ...shared.world }),
+    createGenericCheckpointVolumeKit(NexusEngine, { ...shared, ...shared.checkpoints }),
+    createGenericLiftVolumeKit(NexusEngine, { ...shared, ...shared.liftVolumes }),
+    createGenericFlockAgentKit(NexusEngine, { ...shared, ...shared.flock }),
+    createGenericFlightChallengeKit(NexusEngine, shared.challenge),
+    createGenericFlightCameraKit(NexusEngine, shared.camera),
+    createGenericFlightVfxKit(NexusEngine, shared.vfx),
+    createArticulatedRigDescriptorKit(NexusEngine, shared.rig),
+    createProceduralWingFlapKit(NexusEngine, shared.rig),
+    createFlightPoseDriverKit(NexusEngine, shared.rig),
+    createRigAnimationDescriptorKit(NexusEngine, shared.rig),
+    createAtmosphericWeatherKit(NexusEngine, shared.weather),
+    createVolumetricLightingKit(NexusEngine, { ...shared.weather, ...shared.lighting }),
+    createGenericFlightAudioKit(NexusEngine, shared.audio),
+    createGenericAerialRenderDescriptorKit(NexusEngine, shared)
   ];
 }
 
-export function createGenericAerialAdventureGame(NexusRealtime, config = {}) {
-  return NexusRealtime.createRealtimeGame({ ...(config.engine ?? {}), kits: createGenericAerialAdventureKits(NexusRealtime, config) });
+export function createGenericAerialAdventureGame(NexusEngine, config = {}) {
+  return NexusEngine.createRealtimeGame({ ...(config.engine ?? {}), kits: createGenericAerialAdventureKits(NexusEngine, config) });
 }
 
 export default createGenericAerialAdventureKits;

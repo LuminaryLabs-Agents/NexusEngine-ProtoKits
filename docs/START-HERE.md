@@ -1,10 +1,10 @@
 # Start Here: ProtoKit DSM Work
 
-This is the first document an agent should read before creating, splitting, refining, composing, or promoting any NexusRealtime ProtoKit.
+This is the first document an agent should read before creating, splitting, refining, composing, or promoting any NexusEngine ProtoKit.
 
 ## The one-sentence architecture
 
-NexusRealtime ProtoKits follow **Domain Service Module** architecture: each kit defines a domain and exposes services, data contracts, events, resources, and optional child kits that make that domain usable.
+NexusEngine ProtoKits follow **Domain Service Module** architecture: each kit defines a domain and exposes services, data contracts, events, resources, and optional child kits that make that domain usable.
 
 ```txt
 DSM = architecture concept
@@ -28,7 +28,7 @@ In this repo, DSMs are built and shipped as `-kit` implementations. New scalable
 9. `docs/DSM-SPLIT-RULES.md` — decide whether to create, refine, or split modules.
 10. `docs/DSM-DATA-CONTRACTS.md` — keep behavior data-driven.
 11. `docs/DSM-TESTING-GUIDE.md` — add headless tests and smoke checks.
-12. `docs/DSM-PROMOTION-GUIDE.md` — understand the bar for promoting to stable NexusRealtime.
+12. `docs/DSM-PROMOTION-GUIDE.md` — understand the bar for promoting to stable NexusEngine.
 13. `docs/DSM-CATALOG.md` — reuse or extend existing domain/service families.
 14. `docs/templates/DOMAIN-SPEC.md` — write a scoped domain spec for significant new domain work.
 15. `docs/templates/DOMAIN-MANIFEST.md` — create machine-readable domain metadata.
@@ -102,7 +102,7 @@ Canvas-owned-gameplay-kit
 - **Child domain:** a smaller domain composed by a larger domain.
 - **Data contract:** serializable configuration and authored content accepted by the domain.
 - **Host:** browser/renderer/app shell that captures input and draws snapshots.
-- **Runtime kit:** the NexusRealtime-compatible installation unit using resources, events, systems, requires, provides, initWorld, install, and metadata.
+- **Runtime kit:** the NexusEngine-compatible installation unit using resources, events, systems, requires, provides, initWorld, install, and metadata.
 
 ## Prime directive
 

@@ -12,7 +12,7 @@ What if the player casts a spell?
   Damage, VFX, audio, and status domains compose the event.
 ```
 
-Extends: NexusRealtime runtime-shaped DomainServiceKit via `defineRuntimeKit`.
+Extends: NexusEngine runtime-shaped DomainServiceKit via `defineRuntimeKit`.
 
 Composes:
 
@@ -35,5 +35,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-scoped-domain-rpg-batch-01::spell-cast-domain-kit::2026-06-20
+NexusEngine-scoped-domain-rpg-batch-01::spell-cast-domain-kit::2026-06-20
 ```

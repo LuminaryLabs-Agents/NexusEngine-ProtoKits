@@ -4,9 +4,9 @@ const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 const trimSlash = (value) => String(value ?? "").replace(/^\/+|\/+$/g, "");
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createHuggingFaceLoaderKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createHuggingFaceLoaderKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -35,9 +35,9 @@ function createPlan(manifest, config = {}) {
   };
 }
 
-export function createHuggingFaceLoaderKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createHuggingFaceLoaderKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const HuggingFaceLoaderState = defineResource(config.resourceName ?? "huggingFaceLoader.state");
   const HuggingFacePlanCreated = defineEvent("huggingFaceLoader.planCreated");
   const HuggingFacePlanRejected = defineEvent("huggingFaceLoader.planRejected");

@@ -52,22 +52,22 @@ function createMiniEngine(kits) {
   };
 }
 
-const NexusRealtime = createMiniNexus();
+const NexusEngine = createMiniNexus();
 const kits = [
-  createFluidFieldKit(NexusRealtime),
-  createFluidMotionKit(NexusRealtime),
-  createFluidShadingKit(NexusRealtime),
-  createFluidEffectsKit(NexusRealtime),
-  createWaterDataKit(NexusRealtime),
-  createWaterStreamKit(NexusRealtime),
-  createWaterSurfaceKit(NexusRealtime),
-  createWaterMeshKit(NexusRealtime),
-  createWaterShadingKit(NexusRealtime),
-  createWaterPhysicsKit(NexusRealtime),
-  createWaterBehaviorKit(NexusRealtime),
-  createWaterEffectsKit(NexusRealtime),
-  createWaterAudioKit(NexusRealtime),
-  createWaterModeKit(NexusRealtime)
+  createFluidFieldKit(NexusEngine),
+  createFluidMotionKit(NexusEngine),
+  createFluidShadingKit(NexusEngine),
+  createFluidEffectsKit(NexusEngine),
+  createWaterDataKit(NexusEngine),
+  createWaterStreamKit(NexusEngine),
+  createWaterSurfaceKit(NexusEngine),
+  createWaterMeshKit(NexusEngine),
+  createWaterShadingKit(NexusEngine),
+  createWaterPhysicsKit(NexusEngine),
+  createWaterBehaviorKit(NexusEngine),
+  createWaterEffectsKit(NexusEngine),
+  createWaterAudioKit(NexusEngine),
+  createWaterModeKit(NexusEngine)
 ];
 
 assert.equal(kits.length, 14);

@@ -161,8 +161,8 @@ function createContactSystem(definitions, options = {}) {
   };
 }
 
-export function createRacerContactKit(nexusRealtime = {}, options = {}) {
-  const definitions = createArcadeRaceDefinitions(nexusRealtime, options);
+export function createRacerContactKit(nexusEngine = {}, options = {}) {
+  const definitions = createArcadeRaceDefinitions(nexusEngine, options);
   const { components, events } = definitions;
 
   const bindings = {
@@ -179,7 +179,7 @@ export function createRacerContactKit(nexusRealtime = {}, options = {}) {
     }
   };
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: "racer-contact-kit",
     components: {
       Racer: components.Racer,
@@ -206,7 +206,7 @@ export function createRacerContactKit(nexusRealtime = {}, options = {}) {
       version: RACER_CONTACT_KIT_VERSION,
       coreVersion: ARCADE_RACE_CORE_VERSION,
       purpose: "Bumping, blocking, shoving, spinout thresholds, recovery windows, and fairness limits.",
-      usesNexusRealtimeKits: ["runtime-kit", "common-game-definitions", "world-physics-compatible"]
+      usesNexusEngineKits: ["runtime-kit", "common-game-definitions", "world-physics-compatible"]
     }
   });
 }

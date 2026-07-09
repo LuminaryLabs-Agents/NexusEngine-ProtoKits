@@ -2,7 +2,7 @@
 
 Date: 2026-06-25
 Actor: ChatGPT
-Repo: LuminaryLabs-Agents/NexusRealtime-ProtoKits
+Repo: LuminaryLabs-Agents/NexusEngine-ProtoKits
 Branch: main
 
 ## Goal

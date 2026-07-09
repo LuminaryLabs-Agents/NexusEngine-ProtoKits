@@ -35,7 +35,7 @@ export function drawFogOverlay(ctx, width, height, options = {}) {
   ctx.fillRect(0, 0, width, height);
 }
 
-export function createDepthFogKit(nexusRealtime = {}, options = {}) {
+export function createDepthFogKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "depth-fog-kit", version: DEPTH_FOG_KIT_VERSION, fogAmount, mixFogColor, drawFogOverlay };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["render:depth-fog", "lighting:fog"], bindings: { depthFogKit: kit }, metadata: { version: DEPTH_FOG_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["render:depth-fog", "lighting:fog"], bindings: { depthFogKit: kit }, metadata: { version: DEPTH_FOG_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

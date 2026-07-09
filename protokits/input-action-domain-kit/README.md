@@ -1,6 +1,6 @@
 # input-action-domain-kit
 
-Purpose: first-pass AAA spine domain kit for NexusRealtime ProtoKits branch `0.0.2`.
+Purpose: first-pass AAA spine domain kit for NexusEngine ProtoKits branch `0.0.2`.
 
 Boundary:
 
@@ -31,13 +31,13 @@ renderer state
 Extends:
 
 ```txt
-NexusRealtime DomainServiceKit shape through defineRuntimeKit
+NexusEngine DomainServiceKit shape through defineRuntimeKit
 ```
 
 Composes:
 
 ```txt
-NexusRealtime InputIntentKit
+NexusEngine InputIntentKit
 command surface
 future action-window-domain-kit
 future affordance-descriptor-domain-kit
@@ -63,5 +63,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-AAA-domain-spine-batch-01::input-action-domain-kit::2026-06-20
+NexusEngine-AAA-domain-spine-batch-01::input-action-domain-kit::2026-06-20
 ```

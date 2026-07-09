@@ -11,9 +11,9 @@ Use it when another kit has produced usable points and the host needs a stable d
 ```js
 import { createGenericAnchorDescriptorKit } from "./index.js";
 
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createGenericAnchorDescriptorKit(NexusRealtime, {
+    createGenericAnchorDescriptorKit(NexusEngine, {
       anchors: [
         { id: "anchor-0", position: { x: 0, y: 0, z: 0 }, radius: 8, tags: ["start"] }
       ]

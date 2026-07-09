@@ -3,10 +3,10 @@ export const SCENARIO_SMOKE_DOMAIN_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createScenarioSmokeDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createScenarioSmokeDomainKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -23,13 +23,13 @@ function createState(config = {}) {
     rejectedActions: [],
     completed: actions.length === 0,
     lastResult: null,
-    signature: "NexusRealtime-AAA-domain-spine-batch-01"
+    signature: "NexusEngine-AAA-domain-spine-batch-01"
   };
 }
 
-export function createScenarioSmokeDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createScenarioSmokeDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
 
   const ScenarioSmokeState = defineResource(config.resourceName ?? "scenarioSmokeDomain.state");
   const ScenarioSmokeAction = defineEvent("scenarioSmoke.action");

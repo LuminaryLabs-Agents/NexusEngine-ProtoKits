@@ -21,12 +21,12 @@ export function createLightingSnapshot(options = {}, sky = null) {
   };
 }
 
-export function createLightingDescriptorKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createLightingDescriptorKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const LightingDescriptorState = resource(options.resourceName ?? "lightingDescriptor.state");
   const LightingDescriptorUpdated = event("lightingDescriptor.updated");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "lighting-descriptor-kit",
     resources: { LightingDescriptorState },
     events: { LightingDescriptorUpdated },

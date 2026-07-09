@@ -254,21 +254,21 @@ export function createMeadowSceneRecipe(config = {}) {
   };
 }
 
-function make(def, NexusRealtime, config = {}) {
-  return createGenericProtoKit(NexusRealtime, def, { ...config, contracts: { ...(def.contracts ?? {}), ...(config.contracts ?? {}) } });
+function make(def, NexusEngine, config = {}) {
+  return createGenericProtoKit(NexusEngine, def, { ...config, contracts: { ...(def.contracts ?? {}), ...(config.contracts ?? {}) } });
 }
 
-export function createNoteCardSpawnerDsk(NexusRealtime, config = {}) { return make(NOTE_CARD_SPAWNER_DSK_DEFINITION, NexusRealtime, config); }
-export function createParticleFunnelSpawnerDsk(NexusRealtime, config = {}) { return make(PARTICLE_FUNNEL_SPAWNER_DSK_DEFINITION, NexusRealtime, config); }
-export function createPortalTransitionDsk(NexusRealtime, config = {}) { return make(PORTAL_TRANSITION_DSK_DEFINITION, NexusRealtime, config); }
-export function createMeadowSceneRecipeDsk(NexusRealtime, config = {}) { return make(MEADOW_SCENE_RECIPE_DSK_DEFINITION, NexusRealtime, config); }
+export function createNoteCardSpawnerDsk(NexusEngine, config = {}) { return make(NOTE_CARD_SPAWNER_DSK_DEFINITION, NexusEngine, config); }
+export function createParticleFunnelSpawnerDsk(NexusEngine, config = {}) { return make(PARTICLE_FUNNEL_SPAWNER_DSK_DEFINITION, NexusEngine, config); }
+export function createPortalTransitionDsk(NexusEngine, config = {}) { return make(PORTAL_TRANSITION_DSK_DEFINITION, NexusEngine, config); }
+export function createMeadowSceneRecipeDsk(NexusEngine, config = {}) { return make(MEADOW_SCENE_RECIPE_DSK_DEFINITION, NexusEngine, config); }
 
-export function createSpatialAuthoringToolkitDsks(NexusRealtime, config = {}) {
+export function createSpatialAuthoringToolkitDsks(NexusEngine, config = {}) {
   return [
-    createNoteCardSpawnerDsk(NexusRealtime, config.noteCards ?? {}),
-    createParticleFunnelSpawnerDsk(NexusRealtime, config.particles ?? {}),
-    createPortalTransitionDsk(NexusRealtime, config.portal ?? {}),
-    createMeadowSceneRecipeDsk(NexusRealtime, config.meadow ?? {})
+    createNoteCardSpawnerDsk(NexusEngine, config.noteCards ?? {}),
+    createParticleFunnelSpawnerDsk(NexusEngine, config.particles ?? {}),
+    createPortalTransitionDsk(NexusEngine, config.portal ?? {}),
+    createMeadowSceneRecipeDsk(NexusEngine, config.meadow ?? {})
   ];
 }
 

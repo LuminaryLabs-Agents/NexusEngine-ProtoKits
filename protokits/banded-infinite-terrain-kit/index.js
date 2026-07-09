@@ -13,8 +13,8 @@ function clone(value) {
   return value == null ? value : JSON.parse(JSON.stringify(value));
 }
 
-function defineResource(NexusRealtime, name) {
-  return typeof NexusRealtime.defineResource === "function" ? NexusRealtime.defineResource(name) : `resource:${name}`;
+function defineResource(NexusEngine, name) {
+  return typeof NexusEngine.defineResource === "function" ? NexusEngine.defineResource(name) : `resource:${name}`;
 }
 
 function vec2(value = {}, fallback = {}) {
@@ -174,9 +174,9 @@ export function validateBandedTerrainContract(contract = {}) {
   return { passed: failures.length === 0, failures };
 }
 
-export function createBandedInfiniteTerrainKit(NexusRealtime = {}, options = {}) {
-  const State = defineResource(NexusRealtime, options.resourceName ?? "bandedInfiniteTerrain.state");
-  return defineInjectedRuntimeKit(NexusRealtime, {
+export function createBandedInfiniteTerrainKit(NexusEngine = {}, options = {}) {
+  const State = defineResource(NexusEngine, options.resourceName ?? "bandedInfiniteTerrain.state");
+  return defineInjectedRuntimeKit(NexusEngine, {
     id: options.kitId ?? "banded-infinite-terrain-kit",
     provides: ["terrain:banded-infinite-terrain", "terrain:stable-origin", "terrain:radial-topology", "terrain:render-contract"],
     resources: { State },

@@ -190,8 +190,8 @@ function createHazardCollisionSystem(definitions, options = {}) {
   };
 }
 
-export function createRaceHazardKit(nexusRealtime = {}, options = {}) {
-  const definitions = createArcadeRaceDefinitions(nexusRealtime, options);
+export function createRaceHazardKit(nexusEngine = {}, options = {}) {
+  const definitions = createArcadeRaceDefinitions(nexusEngine, options);
   const { components, resources, events } = definitions;
 
   const bindings = {
@@ -210,7 +210,7 @@ export function createRaceHazardKit(nexusRealtime = {}, options = {}) {
     }
   };
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: "race-hazard-kit",
     components: {
       Racer: components.Racer,
@@ -251,7 +251,7 @@ export function createRaceHazardKit(nexusRealtime = {}, options = {}) {
       version: RACE_HAZARD_KIT_VERSION,
       coreVersion: ARCADE_RACE_CORE_VERSION,
       purpose: "Obstacle descriptors, crash zones, slowdown zones, hazard density, readable danger placement, and collision event emission.",
-      usesNexusRealtimeKits: ["runtime-kit", "common-game-definitions", "navmesh-compatible", "render-descriptor-compatible"]
+      usesNexusEngineKits: ["runtime-kit", "common-game-definitions", "navmesh-compatible", "render-descriptor-compatible"]
     }
   });
 }

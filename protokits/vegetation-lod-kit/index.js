@@ -62,13 +62,13 @@ export function createVegetationLodSelector(data = {}, options = {}) {
   return Object.freeze({ levels: Object.freeze([...levels]), cullDistance, selectLod, selectLodForInstance, getCullDistance, getBillboardDescriptor, applyLod });
 }
 
-export function createVegetationLodKit(nexusRealtime = {}, options = {}) {
+export function createVegetationLodKit(nexusEngine = {}, options = {}) {
   const selector = createVegetationLodSelector(options.data ?? options, options);
   const api = Object.freeze({ id: options.id ?? "vegetation-lod-kit", version: VEGETATION_LOD_KIT_VERSION, ...selector });
   return Object.freeze({
     ...api,
     createRuntimeKit(runtimeOptions = {}) {
-      return defineInjectedRuntimeKit(nexusRealtime, {
+      return defineInjectedRuntimeKit(nexusEngine, {
         id: runtimeOptions.id ?? api.id,
         provides: runtimeOptions.provides ?? ["domain:vegetation-lod", "service:lod-selection", "descriptor:billboard"],
         bindings: { vegetationLodKit: api },

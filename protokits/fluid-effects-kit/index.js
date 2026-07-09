@@ -21,8 +21,8 @@ function createInitial(config = {}) {
   return { effects, maxEffects: Math.max(8, toFluidNumber(config.maxEffects, 64)), emittedCount: effects.length };
 }
 
-export function createFluidEffectsKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createFluidEffectsKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: FLUID_EFFECTS_KIT_VERSION,
     factoryName: "createFluidEffectsKit",
     kitId: "fluid-effects-kit",

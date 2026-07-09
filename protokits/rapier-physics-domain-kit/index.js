@@ -148,8 +148,8 @@ function collectContacts(runtime, state) {
   return contacts;
 }
 
-export function createRapierPhysicsDefinitions(NexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(NexusRealtime);
+export function createRapierPhysicsDefinitions(NexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(NexusEngine);
   const prefix = options.namespace ?? RAPIER_PHYSICS_ENGINE_NAMESPACE;
   return {
     resources: {
@@ -164,8 +164,8 @@ export function createRapierPhysicsDefinitions(NexusRealtime = {}, options = {})
   };
 }
 
-export function createRapierPhysicsKit(NexusRealtime = {}, options = {}) {
-  const definitions = createRapierPhysicsDefinitions(NexusRealtime, options);
+export function createRapierPhysicsKit(NexusEngine = {}, options = {}) {
+  const definitions = createRapierPhysicsDefinitions(NexusEngine, options);
   const { resources, events } = definitions;
   const runtime = createRuntime(options);
 
@@ -185,7 +185,7 @@ export function createRapierPhysicsKit(NexusRealtime = {}, options = {}) {
     for (const contact of contacts) world.emit?.(events.RapierPhysicsContact, contact);
   }
 
-  return defineInjectedRuntimeKit(NexusRealtime, {
+  return defineInjectedRuntimeKit(NexusEngine, {
     id: options.id ?? "rapier-physics-domain-kit",
     resources,
     events,

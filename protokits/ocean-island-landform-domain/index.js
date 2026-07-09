@@ -529,13 +529,13 @@ export function validateOceanIslandLandform(stateInput = createOceanIslandLandfo
   return { passed: failures.length === 0, failures };
 }
 
-export function createOceanIslandLandformDomainKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createOceanIslandLandformDomainKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const IslandState = defs.resource(options.resourceName ?? "oceanIslandLandform.state");
   const IslandUpdated = defs.event("oceanIslandLandform.updated");
   const initial = () => createOceanIslandLandformState(options);
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.kitId ?? "ocean-island-landform-domain",
     resources: { IslandState },
     events: { IslandUpdated },

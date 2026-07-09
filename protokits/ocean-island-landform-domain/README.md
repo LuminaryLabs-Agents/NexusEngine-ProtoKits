@@ -65,7 +65,7 @@ import {
   sampleIslandHeight,
   sampleIslandMasks,
   validateOceanIslandLandform
-} from "@luminarylabs/nexusrealtime-protokits/ocean-island-landform-domain";
+} from "@luminarylabs/nexusengine-protokits/ocean-island-landform-domain";
 ```
 
 Installed engine API:

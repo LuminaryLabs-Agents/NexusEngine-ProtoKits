@@ -4,10 +4,10 @@ const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 const toId = (value, fallback = "") => String(value ?? fallback).trim();
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createAgentKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createAgentKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -182,9 +182,9 @@ export function createLiveAgentHarness(config = {}) {
   };
 }
 
-export function createAgentKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createAgentKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const AgentState = defineResource(config.resourceName ?? "agent.state");
   const AgentCreated = defineEvent("agent.created");
   const AgentMemoryRecorded = defineEvent("agent.memory.recorded");

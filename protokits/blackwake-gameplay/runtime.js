@@ -7,14 +7,14 @@ import { createBlackwakeProtoKit } from "../blackwake-kit-registry/index.js";
 
 export const BLACKWAKE_GAMEPLAY_VERSION = "0.3.1";
 
-export function createBlackwakeHealthReport(NexusRealtime, canvas, options = {}) {
+export function createBlackwakeHealthReport(NexusEngine, canvas, options = {}) {
   const wantsThree = options.renderer === "three" || Boolean(options.three || options.THREE);
   const checks = [
-    ["NexusRealtime object", Boolean(NexusRealtime)],
-    ["defineRuntimeKit", typeof NexusRealtime?.defineRuntimeKit === "function"],
-    ["defineResource", typeof NexusRealtime?.defineResource === "function"],
-    ["defineEvent", typeof NexusRealtime?.defineEvent === "function"],
-    ["createRealtimeGame", typeof NexusRealtime?.createRealtimeGame === "function"],
+    ["NexusEngine object", Boolean(NexusEngine)],
+    ["defineRuntimeKit", typeof NexusEngine?.defineRuntimeKit === "function"],
+    ["defineResource", typeof NexusEngine?.defineResource === "function"],
+    ["defineEvent", typeof NexusEngine?.defineEvent === "function"],
+    ["createRealtimeGame", typeof NexusEngine?.createRealtimeGame === "function"],
     ["canvas", Boolean(canvas)],
     ["canvas getContext", typeof canvas?.getContext === "function"],
     ["Three renderer module", wantsThree ? canUseBlackwakeThreeRenderer(options) : true]
@@ -23,12 +23,12 @@ export function createBlackwakeHealthReport(NexusRealtime, canvas, options = {})
   return Object.freeze({ ok: failed.length === 0, failed, checks: Object.freeze(checks.map(([name, ok]) => ({ name, ok }))) });
 }
 
-function createGameplayRuntimeKit(NexusRealtime, runtime, id) {
-  if (typeof NexusRealtime?.defineRuntimeKit !== "function" || typeof NexusRealtime?.defineResource !== "function" || typeof NexusRealtime?.defineEvent !== "function") return null;
-  const State = NexusRealtime.defineResource(`${id}:state`);
-  const Ticked = NexusRealtime.defineEvent(`${id}:ticked`);
-  const PhaseChanged = NexusRealtime.defineEvent(`${id}:phase-changed`);
-  return NexusRealtime.defineRuntimeKit({
+function createGameplayRuntimeKit(NexusEngine, runtime, id) {
+  if (typeof NexusEngine?.defineRuntimeKit !== "function" || typeof NexusEngine?.defineResource !== "function" || typeof NexusEngine?.defineEvent !== "function") return null;
+  const State = NexusEngine.defineResource(`${id}:state`);
+  const Ticked = NexusEngine.defineEvent(`${id}:ticked`);
+  const PhaseChanged = NexusEngine.defineEvent(`${id}:phase-changed`);
+  return NexusEngine.defineRuntimeKit({
     id: `${id}:playable-runtime`,
     provides: [`gameplay:${id}`, "gameplay:blackwake-playable"],
     resources: { State },
@@ -67,10 +67,10 @@ function makeRenderer(canvas, state, options) {
   return createBlackwakeRenderer(canvas, state, options);
 }
 
-export function createBlackwakePlayableGame(NexusRealtime, gameId = "blackwake-game-isles", options = {}) {
+export function createBlackwakePlayableGame(NexusEngine, gameId = "blackwake-game-isles", options = {}) {
   const canvas = options.canvas;
   if (!canvas) throw new Error("createBlackwakePlayableGame requires a canvas.");
-  const health = createBlackwakeHealthReport(NexusRealtime, canvas, options);
+  const health = createBlackwakeHealthReport(NexusEngine, canvas, options);
   if (!health.ok && options.showHealthOverlay !== false && typeof document !== "undefined") {
     createErrorOverlay(options.overlayRoot || document.body, "Blackwake startup warning", `Missing: ${health.failed.join(", ")}\nThe game will use available fallbacks where possible.`);
   }
@@ -96,10 +96,10 @@ export function createBlackwakePlayableGame(NexusRealtime, gameId = "blackwake-g
       hud?.destroy?.();
     }
   };
-  const registryProtoKit = createBlackwakeProtoKit(NexusRealtime, gameId, { status: "playable-scaffold", ...(options.protoKitOptions ?? {}) });
-  const gameplayKit = createGameplayRuntimeKit(NexusRealtime, runtime, gameId);
+  const registryProtoKit = createBlackwakeProtoKit(NexusEngine, gameId, { status: "playable-scaffold", ...(options.protoKitOptions ?? {}) });
+  const gameplayKit = createGameplayRuntimeKit(NexusEngine, runtime, gameId);
   const kits = gameplayKit ? [...registryProtoKit.kits, gameplayKit] : registryProtoKit.kits;
-  const engine = typeof NexusRealtime?.createRealtimeGame === "function" ? NexusRealtime.createRealtimeGame({ ...(options.engine ?? {}), canvas, kits }) : null;
+  const engine = typeof NexusEngine?.createRealtimeGame === "function" ? NexusEngine.createRealtimeGame({ ...(options.engine ?? {}), canvas, kits }) : null;
   let running = false;
   let last = 0;
   let errorOverlay = null;

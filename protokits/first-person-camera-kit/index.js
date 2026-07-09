@@ -53,12 +53,12 @@ export function updateFirstPersonCamera(camera, input, delta, collision = null) 
   return camera;
 }
 
-export function createFirstPersonCameraKit(nexusRealtime = {}, options = {}) {
+export function createFirstPersonCameraKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "first-person-camera-kit", version: FIRST_PERSON_CAMERA_KIT_VERSION, createFirstPersonCamera, cameraForward, cameraRight, applyLook, moveFirstPersonCamera, updateFirstPersonCamera };
   return Object.freeze({
     ...kit,
     createRuntimeKit(runtimeOptions = {}) {
-      return defineInjectedRuntimeKit(nexusRealtime, {
+      return defineInjectedRuntimeKit(nexusEngine, {
         id: runtimeOptions.id ?? kit.id,
         provides: runtimeOptions.provides ?? ["camera:first-person", "camera:pointer-look"],
         requires: runtimeOptions.requires ?? [],

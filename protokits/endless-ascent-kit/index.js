@@ -37,12 +37,12 @@ export function generateAscentChunk(index = 0, options = {}) {
   return { id: `chunk-${index}`, index, seed, theme, yStart, yEnd, nodes: connectRouteNodes(nodes, options), ledges: nodes, layeredObjects, difficulty: number(options.difficultyBase, 0.1) + index * number(options.difficultyPerChunk, 0.015) };
 }
 
-export function createEndlessAscentKit(nexusRealtime = {}, options = {}) {
-  const definitions = createVerticalClimbDefinitions(nexusRealtime, options);
+export function createEndlessAscentKit(nexusEngine = {}, options = {}) {
+  const definitions = createVerticalClimbDefinitions(nexusEngine, options);
   const { resources, events } = definitions;
   const storeChunks = (world, state, playerY = 0) => { const targetY = number(playerY) + state.keepChunksAhead * state.chunkHeight; const created = []; while (state.highestGeneratedY < targetY) { const chunk = generateAscentChunk(state.nextChunkIndex, { ...options, seed: state.seed, chunkHeight: state.chunkHeight }); state.chunks[chunk.id] = chunk; state.chunkOrder.push(chunk.id); state.nextChunkIndex += 1; state.highestGeneratedY = Math.max(state.highestGeneratedY, chunk.yEnd); state.lastGenerated = chunk.id; state.stats.generated += 1; created.push(chunk); world.emit(events.ChunkGenerated, { chunk }); } return created; };
   const system = (world) => { const state = ensureResource(world, resources.AscentState, () => createInitialState(options)); storeChunks(world, state, world.getResource(resources.ClimbState)?.height ?? 0); world.setResource(resources.AscentState, state); };
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "endless-ascent-kit",
     resources: { AscentState: resources.AscentState, ClimbState: resources.ClimbState, RouteState: resources.RouteState },
     events: { ChunkGenerated: events.ChunkGenerated },

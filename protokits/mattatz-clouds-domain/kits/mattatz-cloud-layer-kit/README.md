@@ -17,5 +17,5 @@ Altitude-band composition kit for the `mattatz-clouds-domain`.
 Import from the parent domain entry:
 
 ```js
-import { createMattatzCloudLayerKit } from "@luminarylabs/nexusrealtime-protokits/mattatz-clouds-domain";
+import { createMattatzCloudLayerKit } from "@luminarylabs/nexusengine-protokits/mattatz-clouds-domain";
 ```

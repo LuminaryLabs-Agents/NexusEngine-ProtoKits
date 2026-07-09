@@ -36,7 +36,7 @@ export function createFloorSampler(options = {}) {
   };
 }
 
-export function createFloorCastingKit(nexusRealtime = {}, options = {}) {
+export function createFloorCastingKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "floor-casting-kit", version: FLOOR_CASTING_KIT_VERSION, renderFloorCasting, createFloorSampler };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["render:floor-casting", "surface:floor-sampling"], bindings: { floorCastingKit: kit }, metadata: { version: FLOOR_CASTING_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["render:floor-casting", "surface:floor-sampling"], bindings: { floorCastingKit: kit }, metadata: { version: FLOOR_CASTING_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

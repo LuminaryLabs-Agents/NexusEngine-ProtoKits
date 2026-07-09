@@ -64,8 +64,8 @@ function publish(world, State, Updated, next, evt) {
   return clone(next);
 }
 
-export function createAssetLoadQueueKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createAssetLoadQueueKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "assetLoadQueue.state");
   const Updated = event("assetLoadQueue.updated");
   const RequestQueued = event("assetLoadQueue.requestQueued");
@@ -75,7 +75,7 @@ export function createAssetLoadQueueKit(nexusRealtime = {}, options = {}) {
   const RequestFailed = event("assetLoadQueue.requestFailed");
   const initial = () => createAssetLoadQueueState(options);
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "asset-load-queue-kit",
     resources: { State },
     events: { Updated, RequestQueued, RequestStarted, RequestProgressed, RequestCompleted, RequestFailed },

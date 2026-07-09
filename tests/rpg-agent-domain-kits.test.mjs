@@ -29,14 +29,14 @@ function install(kits) {
   return { engine, world, events };
 }
 
-const NexusRealtime = createNexusStub();
+const NexusEngine = createNexusStub();
 const { engine } = install([
-  createAgentKit(NexusRealtime, {
+  createAgentKit(NexusEngine, {
     agents: [{ id: "guard_01", role: "guard", goals: ["protect market"] }],
     knownTargets: ["player", "apple", "merchant", "gate"],
     allowedIntents: ["observe", "warn", "accuse", "question", "unlock"]
   }),
-  createPerceptionKit(NexusRealtime, {
+  createPerceptionKit(NexusEngine, {
     entities: [
       { id: "guard_01", label: "Guard", role: "guard", position: { x: 0, z: 0 }, metadata: { sightRange: 8 } },
       { id: "player", label: "Player", position: { x: 2, z: 0 }, tags: ["person"] },
@@ -46,10 +46,10 @@ const { engine } = install([
       { id: "hidden_note", label: "Hidden Note", position: { x: 1, z: 0 }, hidden: true }
     ]
   }),
-  createRpgSocialFactKit(NexusRealtime, {
+  createRpgSocialFactKit(NexusEngine, {
     ownership: { apple: { itemId: "apple", ownerId: "merchant", holderId: "merchant", stolen: false } }
   }),
-  createAffordanceChoiceKit(NexusRealtime, {
+  createAffordanceChoiceKit(NexusEngine, {
     actions: [
       { id: "patrol", label: "patrol market", intent: "observe", priority: 1 },
       { id: "warn", label: "warn player", intent: "warn", targetId: "player", priority: 2 },

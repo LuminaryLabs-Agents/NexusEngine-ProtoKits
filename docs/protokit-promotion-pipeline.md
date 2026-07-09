@@ -2,7 +2,7 @@
 
 ## Goal
 
-Use ProtoKits as the incubation factory for reusable NexusRealtime DSK/domain behavior.
+Use ProtoKits as the incubation factory for reusable NexusEngine DSK/domain behavior.
 
 The pipeline is:
 

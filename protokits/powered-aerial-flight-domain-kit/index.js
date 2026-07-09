@@ -3,8 +3,8 @@ import { clamp, defineInjectedRuntimeKit, number } from "../foundation-kit/index
 export const POWERED_AERIAL_FLIGHT_DOMAIN_KIT_VERSION = "0.2.0";
 
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
-function defineResource(NexusRealtime, name) { return typeof NexusRealtime.defineResource === "function" ? NexusRealtime.defineResource(name) : `resource:${name}`; }
-function defineEvent(NexusRealtime, name) { return typeof NexusRealtime.defineEvent === "function" ? NexusRealtime.defineEvent(name) : `event:${name}`; }
+function defineResource(NexusEngine, name) { return typeof NexusEngine.defineResource === "function" ? NexusEngine.defineResource(name) : `resource:${name}`; }
+function defineEvent(NexusEngine, name) { return typeof NexusEngine.defineEvent === "function" ? NexusEngine.defineEvent(name) : `event:${name}`; }
 function dtOf(world) { return clamp(number(world.__nexusClock?.delta, 1 / 60), 0, 1 / 15); }
 function approach(a, b, rate, dt) { return number(a) + (number(b) - number(a)) * (1 - Math.exp(-Math.max(0, rate) * Math.max(0, dt))); }
 function len3(v = {}) { return Math.hypot(number(v.x), number(v.y), number(v.z)); }
@@ -19,12 +19,12 @@ const DEFAULT_PLANES = Object.freeze([
   { id: "a12-interceptor", label: "A-12 Interceptor", baseSpeed: 148, maxSpeed: 315, maxHealth: 82, agility: 0.95, color: "#1e3a8a", accent: "#10b981" }
 ]);
 
-export function createPoweredAerialFlightDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "poweredAerialFlight.state");
-  const SetInput = defineEvent(NexusRealtime, "poweredAerialFlight.setInput");
-  const Reset = defineEvent(NexusRealtime, "poweredAerialFlight.reset");
-  const Crashed = defineEvent(NexusRealtime, "poweredAerialFlight.crashed");
-  const FireRequested = defineEvent(NexusRealtime, "poweredAerialFlight.fireRequested");
+export function createPoweredAerialFlightDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "poweredAerialFlight.state");
+  const SetInput = defineEvent(NexusEngine, "poweredAerialFlight.setInput");
+  const Reset = defineEvent(NexusEngine, "poweredAerialFlight.reset");
+  const Crashed = defineEvent(NexusEngine, "poweredAerialFlight.crashed");
+  const FireRequested = defineEvent(NexusEngine, "poweredAerialFlight.fireRequested");
   const planes = Object.freeze((config.planes ?? DEFAULT_PLANES).map((plane, index) => ({ id: plane.id ?? `plane-${index + 1}`, ...plane })));
   let installedEngine = null;
 
@@ -110,7 +110,7 @@ export function createPoweredAerialFlightDomainKit(NexusRealtime = {}, config = 
     world.setResource(State, { ...state, body, frame: number(state.frame) + 1 });
   }
 
-  return defineInjectedRuntimeKit(NexusRealtime, { id: config.kitId ?? "powered-aerial-flight-domain-kit", requires: ["terrain:height-sampler", "flight:corridor"], provides: ["aerial:powered-flight", "aerial:body", "input:flight", "combat:fire-request"], resources: { State }, events: { SetInput, Reset, Crashed, FireRequested }, systems: [{ phase: "simulate", name: "poweredAerialFlightSystem", system }], initWorld({ world }) { world.setResource(State, initialState()); }, install({ engine, world }) { installedEngine = engine; engine.poweredAerialFlight = { events: { SetInput, Reset, Crashed, FireRequested }, setInput(input = {}) { world.emit(SetInput, input); return world.getResource(State); }, reset(payload = {}) { world.emit(Reset, payload); return world.getResource(State); }, getState() { return world.getResource(State); }, getSnapshot() { return clone(world.getResource(State)); }, getBody() { return world.getResource(State)?.body ?? null; }, getRenderDescriptor() { const s = world.getResource(State); return s ? { id: "player-plane", kind: "aerial-body", planeId: s.planeId, plane: s.plane, transform: { position: s.body.position, rotation: s.body.rotation }, body: s.body } : null; } }; engine.genericFlightInput ??= { setInput: engine.poweredAerialFlight.setInput }; engine.genericAerialBody ??= { getActiveBody: engine.poweredAerialFlight.getBody, reset: engine.poweredAerialFlight.reset, getState: engine.poweredAerialFlight.getState }; }, metadata: { version: POWERED_AERIAL_FLIGHT_DOMAIN_KIT_VERSION, domain: "powered-aerial-flight", purpose: "Responsive arcade aircraft flight with airbrake, bank-turn coupling, auto-level, boost heat, terrain assist, and terrain-relative cruise." } });
+  return defineInjectedRuntimeKit(NexusEngine, { id: config.kitId ?? "powered-aerial-flight-domain-kit", requires: ["terrain:height-sampler", "flight:corridor"], provides: ["aerial:powered-flight", "aerial:body", "input:flight", "combat:fire-request"], resources: { State }, events: { SetInput, Reset, Crashed, FireRequested }, systems: [{ phase: "simulate", name: "poweredAerialFlightSystem", system }], initWorld({ world }) { world.setResource(State, initialState()); }, install({ engine, world }) { installedEngine = engine; engine.poweredAerialFlight = { events: { SetInput, Reset, Crashed, FireRequested }, setInput(input = {}) { world.emit(SetInput, input); return world.getResource(State); }, reset(payload = {}) { world.emit(Reset, payload); return world.getResource(State); }, getState() { return world.getResource(State); }, getSnapshot() { return clone(world.getResource(State)); }, getBody() { return world.getResource(State)?.body ?? null; }, getRenderDescriptor() { const s = world.getResource(State); return s ? { id: "player-plane", kind: "aerial-body", planeId: s.planeId, plane: s.plane, transform: { position: s.body.position, rotation: s.body.rotation }, body: s.body } : null; } }; engine.genericFlightInput ??= { setInput: engine.poweredAerialFlight.setInput }; engine.genericAerialBody ??= { getActiveBody: engine.poweredAerialFlight.getBody, reset: engine.poweredAerialFlight.reset, getState: engine.poweredAerialFlight.getState }; }, metadata: { version: POWERED_AERIAL_FLIGHT_DOMAIN_KIT_VERSION, domain: "powered-aerial-flight", purpose: "Responsive arcade aircraft flight with airbrake, bank-turn coupling, auto-level, boost heat, terrain assist, and terrain-relative cruise." } });
 }
 
 export default createPoweredAerialFlightDomainKit;

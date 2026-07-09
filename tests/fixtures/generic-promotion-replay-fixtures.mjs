@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-generic-promotion-replay::fixtures::2026-06-23
+// Smoke signature: NexusEngine-generic-promotion-replay::fixtures::2026-06-23
 
 export const promotionReplayFixtures = Object.freeze([
   {

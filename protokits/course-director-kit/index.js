@@ -209,8 +209,8 @@ function createCourseSectionSystem(definitions) {
   };
 }
 
-export function createCourseDirectorKit(nexusRealtime = {}, options = {}) {
-  const definitions = createArcadeRaceDefinitions(nexusRealtime, options);
+export function createCourseDirectorKit(nexusEngine = {}, options = {}) {
+  const definitions = createArcadeRaceDefinitions(nexusEngine, options);
   const { components, resources, events } = definitions;
 
   const bindings = {
@@ -244,7 +244,7 @@ export function createCourseDirectorKit(nexusRealtime = {}, options = {}) {
     }
   };
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: "course-director-kit",
     components: {
       Racer: components.Racer,
@@ -291,7 +291,7 @@ export function createCourseDirectorKit(nexusRealtime = {}, options = {}) {
       version: COURSE_DIRECTOR_KIT_VERSION,
       coreVersion: ARCADE_RACE_CORE_VERSION,
       purpose: "Calm sections, hazard clusters, shortcut branches, boost sections, final sprint sections, and procedural course pacing.",
-      usesNexusRealtimeKits: ["runtime-kit", "procedural-kit-compatible", "terrain-kit-compatible", "render-descriptor-compatible"]
+      usesNexusEngineKits: ["runtime-kit", "procedural-kit-compatible", "terrain-kit-compatible", "render-descriptor-compatible"]
     }
   });
 }

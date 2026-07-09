@@ -1,8 +1,8 @@
-# Master Upgrade Plan — NexusRealtime ProtoKits
+# Master Upgrade Plan — NexusEngine ProtoKits
 
 ## Intent
 
-Upgrade `NexusRealtime-ProtoKits` into a durable, additive Domain Service Kit composition layer without removing or renaming existing functionality. Every current kit, route, export, demo, and experiment remains a compatibility consumer while new documentation, manifests, domain-boundary metadata, deploy/scene composition kits, validation scripts, and promotion evidence are layered in. The north star is simple: reusable behavior becomes a kit, reusable composition becomes a kit, game-specific content becomes data/deploy manifests/sequences, and presentation stays in hosts or renderer adapters.
+Upgrade `NexusEngine-ProtoKits` into a durable, additive Domain Service Kit composition layer without removing or renaming existing functionality. Every current kit, route, export, demo, and experiment remains a compatibility consumer while new documentation, manifests, domain-boundary metadata, deploy/scene composition kits, validation scripts, and promotion evidence are layered in. The north star is simple: reusable behavior becomes a kit, reusable composition becomes a kit, game-specific content becomes data/deploy manifests/sequences, and presentation stays in hosts or renderer adapters.
 
 ## Non-breaking rules
 

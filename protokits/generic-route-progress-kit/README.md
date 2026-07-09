@@ -1,6 +1,6 @@
 # Generic Route Progress Kit
 
-Renderer-agnostic route/checkpoint progress boundary for NexusRealtime experiments.
+Renderer-agnostic route/checkpoint progress boundary for NexusEngine experiments.
 
 This kit owns ordered checkpoint state, completion events, active objective snapshots, and checkpoint descriptors. Hosts still own input capture, collision/hit testing, browser rendering, camera, audio, assets, and route fiction.
 
@@ -15,11 +15,11 @@ This kit owns ordered checkpoint state, completion events, active objective snap
 ## Example
 
 ```js
-import { createGenericRouteProgressKit } from "@luminarylabs/nexusrealtime-protokits/generic-route-progress-kit";
+import { createGenericRouteProgressKit } from "@luminarylabs/nexusengine-protokits/generic-route-progress-kit";
 
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createGenericRouteProgressKit(NexusRealtime, {
+    createGenericRouteProgressKit(NexusEngine, {
       routeId: "cargo-chain",
       checkpoints: [
         { id: "pickup", label: "Pickup" },

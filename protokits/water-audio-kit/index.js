@@ -19,8 +19,8 @@ function createInitial(config = {}) {
   return { layers, layersById: Object.fromEntries(layers.map((layer) => [layer.id, layer])), listener: cloneFluidValue(config.listener ?? { x: 0, y: 1.6, z: 0 }), oneShots: [] };
 }
 
-export function createWaterAudioKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createWaterAudioKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: WATER_AUDIO_KIT_VERSION,
     factoryName: "createWaterAudioKit",
     kitId: "water-audio-kit",

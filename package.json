@@ -1,8 +1,8 @@
 {
-  "name": "@luminarylabs/nexusrealtime-protokits",
+  "name": "@luminarylabs/nexusengine-protokits",
   "version": "0.0.2",
   "type": "module",
-  "description": "Prototype kits for NexusRealtime applications.",
+  "description": "Prototype kits for NexusEngine applications.",
   "exports": {
     "./aerial-canyon-kits": "./protokits/aerial-canyon-kits/index.js",
     "./aerial-biome-fidelity-kits": "./protokits/aerial-biome-fidelity-kits/index.js",
@@ -87,6 +87,12 @@
     "./*": "./protokits/*/index.js"
   },
   "files": ["KITS.md", "README-DSM-ADDENDUM.md", "docs", "protokits", "apps", "scripts", "tests"],
+  "peerDependencies": {
+    "nexusengine": "github:LuminaryLabs-Dev/NexusEngine#main"
+  },
+  "devDependencies": {
+    "nexusengine": "github:LuminaryLabs-Dev/NexusEngine#main"
+  },
   "scripts": {
     "check": "npm run check:syntax && npm run check:manifests && npm run check:docs && npm test",
     "check:syntax": "node scripts/check-all-js.mjs",

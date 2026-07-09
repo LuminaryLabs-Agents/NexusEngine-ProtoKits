@@ -2,7 +2,7 @@
 
 ## Goal
 
-Build NexusRealtime-ProtoKits into a domain-oriented, self-composing engine fabric.
+Build NexusEngine-ProtoKits into a domain-oriented, self-composing engine fabric.
 
 The goal is not to add random helper modules. The goal is to make every reusable logic space a scoped domain with an explicit boundary, manifest, public service surface, tests, proof reports, and promotion fate.
 
@@ -17,7 +17,7 @@ HTML/JS hosts only import, configure, tick, expose debug state, and render.
 ## North-star architecture
 
 ```txt
-NexusRealtime
+NexusEngine
 ├─ Core Runtime
 │  ├─ ecs-runtime-domain
 │  ├─ scheduler-runtime-domain

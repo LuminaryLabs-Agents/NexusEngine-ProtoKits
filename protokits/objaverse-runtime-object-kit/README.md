@@ -4,7 +4,7 @@ Composition kit for real-time streamed Objaverse-derived objects, import transfo
 
 ## Services
 
-- `createObjaverseRuntimeObjectKits(NexusRealtime, config)`
+- `createObjaverseRuntimeObjectKits(NexusEngine, config)`
 
 ## Boundary
 

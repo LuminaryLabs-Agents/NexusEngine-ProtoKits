@@ -1,4 +1,4 @@
-# NexusRealtime Architecture Rules
+# NexusEngine Architecture Rules
 
 ## Core
 

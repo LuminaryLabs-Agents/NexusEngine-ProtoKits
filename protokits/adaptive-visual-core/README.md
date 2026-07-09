@@ -9,9 +9,9 @@ The core exists so each wrapper kit can stay small while all visual descriptor l
 ## Install pattern
 
 ```js
-import { createAdaptiveVisualStackKits } from "@luminarylabs/nexusrealtime-protokits/adaptive-visual-core";
+import { createAdaptiveVisualStackKits } from "@luminarylabs/nexusengine-protokits/adaptive-visual-core";
 
-const kits = createAdaptiveVisualStackKits(NexusRealtime, {
+const kits = createAdaptiveVisualStackKits(NexusEngine, {
   visualPolicy: { preferredProfile: "balanced" },
   renderCapability: { webgl2: true, webgpu: false },
   environmentContent: { seed: "demo", instanceCount: 128 }

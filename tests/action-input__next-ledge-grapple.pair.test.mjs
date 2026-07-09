@@ -14,12 +14,12 @@ function routeActionEvents(engine) {
   }
 }
 
-const NexusRealtime = createMiniNexusRuntime();
+const NexusEngine = createMiniNexusRuntime();
 const level = createDefaultNextLedgeGrappleLevel({ seed: "pair-test", sector: 1 });
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createActionInputKit(NexusRealtime, { context: "next-ledge-grapple" }),
-    createNextLedgeGrappleKit(NexusRealtime, { level, seed: level.seed })
+    createActionInputKit(NexusEngine, { context: "next-ledge-grapple" }),
+    createNextLedgeGrappleKit(NexusEngine, { level, seed: level.seed })
   ]
 });
 

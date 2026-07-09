@@ -59,7 +59,7 @@ engine.n.spatialSurfaceCandidate.reset()
 
 ```js
 import * as NexusEngine from "nexusengine";
-import { createSpatialSurfaceCandidateDomainKit } from "@luminarylabs/nexusrealtime-protokits/spatial-surface-candidate-domain-kit";
+import { createSpatialSurfaceCandidateDomainKit } from "@luminarylabs/nexusengine-protokits/spatial-surface-candidate-domain-kit";
 
 const surfaceCandidateKit = createSpatialSurfaceCandidateDomainKit(NexusEngine, {
   stableFramesRequired: 3,

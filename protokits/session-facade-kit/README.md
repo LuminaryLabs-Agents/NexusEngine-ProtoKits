@@ -15,7 +15,7 @@ Composition kit.
 ## Factory
 
 ```js
-createSessionFacadeKit(NexusRealtime, options)
+createSessionFacadeKit(NexusEngine, options)
 ```
 
 ## Provides

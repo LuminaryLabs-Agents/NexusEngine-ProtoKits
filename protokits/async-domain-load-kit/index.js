@@ -71,8 +71,8 @@ function sortedQueued(state, filter = {}) {
     .sort((a, b) => number(b.priority, 0) - number(a.priority, 0));
 }
 
-export function createAsyncDomainLoadKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createAsyncDomainLoadKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "asyncDomainLoad.state");
   const Updated = event("asyncDomainLoad.updated");
   const TaskQueued = event("asyncDomainLoad.taskQueued");
@@ -83,7 +83,7 @@ export function createAsyncDomainLoadKit(nexusRealtime = {}, options = {}) {
   const TaskCancelled = event("asyncDomainLoad.taskCancelled");
   const initial = () => createAsyncDomainLoadState(options);
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "async-domain-load-kit",
     resources: { State },
     events: { Updated, TaskQueued, TaskStarted, TaskProgressed, TaskCompleted, TaskFailed, TaskCancelled },

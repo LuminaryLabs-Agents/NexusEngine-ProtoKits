@@ -14,7 +14,7 @@ GPU calculates what it looks like.
 The kit formalizes this terrain pipeline:
 
 ```txt
-NexusRealtime runtime intent
+NexusEngine runtime intent
   -> terrain performance circle
   -> density policy
   -> one fixed radial mesh descriptor

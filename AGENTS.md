@@ -1,8 +1,8 @@
 # AGENTS.md
 
-This file defines how agents must work inside NexusRealtime-ProtoKits.
+This file defines how agents must work inside NexusEngine-ProtoKits.
 
-ProtoKits is the proving ground for the NexusRealtime operating system. Agents use this repository to discover, split, compose, test, and refine reusable domains before stable capabilities promote into the core `NexusRealtime` engine.
+ProtoKits is the proving ground for the NexusEngine operating system. Agents use this repository to discover, split, compose, test, and refine reusable domains before stable capabilities promote into `NexusEngine-Kits`.
 
 ## Prime Directive
 
@@ -26,7 +26,7 @@ The app is not the architecture. The kit graph is the architecture.
 
 ## Repository Role
 
-This repository is the experimental domain foundry for NexusRealtime.
+This repository is the experimental domain foundry for NexusEngine.
 
 That means this repo owns:
 
@@ -41,7 +41,7 @@ That means this repo owns:
 - composition proofs
 - promotion candidates
 
-NexusRealtime core is the promotion target. ProtoKits is where reusable domain boundaries are discovered and proven.
+NexusEngine-Kits is the stable capability promotion target. NexusEngine core changes are reserved for runtime primitives and contracts.
 
 ## Required Reading For Major Changes
 
@@ -166,7 +166,7 @@ Do use:
 - reset behavior
 - snapshot behavior
 - headless tests
-- NexusRealtime runtime-kit contracts when runtime-installed
+- NexusEngine runtime-kit contracts when runtime-installed
 
 ## Idempotency Rules
 

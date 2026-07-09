@@ -69,9 +69,9 @@ export function createIdFactory(prefix = "id") {
   };
 }
 
-export function defineInjectedRuntimeKit(nexusRealtime = {}, config = {}) {
-  if (typeof nexusRealtime.defineRuntimeKit === "function") {
-    return nexusRealtime.defineRuntimeKit(config);
+export function defineInjectedRuntimeKit(nexusEngine = {}, config = {}) {
+  if (typeof nexusEngine.defineRuntimeKit === "function") {
+    return nexusEngine.defineRuntimeKit(config);
   }
 
   return Object.freeze({
@@ -145,7 +145,7 @@ export function createSpatialHash(cellSize = 1) {
   };
 }
 
-export function createFoundationKit(nexusRealtime = {}, options = {}) {
+export function createFoundationKit(nexusEngine = {}, options = {}) {
   const seed = options.seed ?? "foundation-kit";
   const random = createSeededRandom(seed);
   const makeId = createIdFactory(options.idPrefix ?? "entity");
@@ -172,7 +172,7 @@ export function createFoundationKit(nexusRealtime = {}, options = {}) {
   return Object.freeze({
     ...api,
     createRuntimeKit(runtimeOptions = {}) {
-      return defineInjectedRuntimeKit(nexusRealtime, {
+      return defineInjectedRuntimeKit(nexusEngine, {
         id: runtimeOptions.id ?? api.id,
         provides: runtimeOptions.provides ?? ["foundation:math", "foundation:random", "foundation:ids"],
         bindings: { foundationKit: api },

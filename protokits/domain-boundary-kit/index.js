@@ -86,8 +86,8 @@ export function createDomainBoundaryRegistry(boundaries = []) {
   };
 }
 
-export function createDomainBoundaryKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createDomainBoundaryKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const DomainBoundaryState = resource(options.resourceName ?? "domainBoundary.state");
   const DomainBoundaryRegistered = event("domainBoundary.registered");
   const createState = () => ({
@@ -97,7 +97,7 @@ export function createDomainBoundaryKit(nexusRealtime = {}, options = {}) {
       return [boundary.id, boundary];
     }))
   });
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "domain-boundary-kit",
     resources: { DomainBoundaryState },
     events: { DomainBoundaryRegistered },

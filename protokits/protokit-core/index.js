@@ -18,8 +18,8 @@ export function createFallbackDefinition(kind, name) {
   return Object.freeze({ kind, name });
 }
 
-export function defineInjectedRuntimeKit(nexusRealtime = {}, config = {}) {
-  if (typeof nexusRealtime.defineRuntimeKit === "function") return nexusRealtime.defineRuntimeKit(config);
+export function defineInjectedRuntimeKit(nexusEngine = {}, config = {}) {
+  if (typeof nexusEngine.defineRuntimeKit === "function") return nexusEngine.defineRuntimeKit(config);
   return Object.freeze({
     id: config.id ?? "runtime-kit",
     components: config.components ?? {},
@@ -41,11 +41,11 @@ export function defineInjectedRuntimeKit(nexusRealtime = {}, config = {}) {
   });
 }
 
-export function createDefinitionFactory(nexusRealtime = {}) {
+export function createDefinitionFactory(nexusEngine = {}) {
   return {
-    component: nexusRealtime.defineComponent ?? ((name) => createFallbackDefinition("component", name)),
-    resource: nexusRealtime.defineResource ?? ((name) => createFallbackDefinition("resource", name)),
-    event: nexusRealtime.defineEvent ?? ((name) => createFallbackDefinition("event", name))
+    component: nexusEngine.defineComponent ?? ((name) => createFallbackDefinition("component", name)),
+    resource: nexusEngine.defineResource ?? ((name) => createFallbackDefinition("resource", name)),
+    event: nexusEngine.defineEvent ?? ((name) => createFallbackDefinition("event", name))
   };
 }
 

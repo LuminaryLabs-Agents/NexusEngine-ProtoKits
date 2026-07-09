@@ -2,9 +2,9 @@ export const COMBAT_STANCE_DOMAIN_KIT_VERSION = "0.1.0";
 
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createCombatStanceDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createCombatStanceDomainKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -26,9 +26,9 @@ function createState(config = {}) {
   return { version: COMBAT_STANCE_DOMAIN_KIT_VERSION, id: config.stateId ?? "combat-stance-domain", domain: "combat-stance", actorId: config.actorId ?? "player", stance: config.stance ?? "exploration", history: [], lastRejection: null };
 }
 
-export function createCombatStanceDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createCombatStanceDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const CombatStanceState = defineResource(config.resourceName ?? "combatStanceDomain.state");
   const CombatStanceRequested = defineEvent("combatStance.requested");
   const CombatStanceChanged = defineEvent("combatStance.changed");

@@ -3,9 +3,9 @@ export const SCAN_AFFORDANCE_DOMAIN_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createScanAffordanceDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createScanAffordanceDomainKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -13,9 +13,9 @@ function createState(config = {}) {
   return { version: SCAN_AFFORDANCE_DOMAIN_KIT_VERSION, id: config.stateId ?? "scan-affordance-domain", domain: "scan-affordance", targets: Object.fromEntries((config.targets ?? []).map((target) => [target.id, { ...target, progress: 0, scanned: false }])), completed: [], rejected: [], lastResult: null };
 }
 
-export function createScanAffordanceDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createScanAffordanceDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const ScanAffordanceState = defineResource(config.resourceName ?? "scanAffordanceDomain.state");
   const ScanRequested = defineEvent("scanAffordance.requested");
   const ScanCompleted = defineEvent("scanAffordance.completed");

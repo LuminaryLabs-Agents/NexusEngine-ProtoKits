@@ -318,9 +318,9 @@ export function generateLayeredDrunkWalkLevel(request = {}) {
   return level;
 }
 
-function requireNexus(NexusRealtime, factoryName) {
+function requireNexus(NexusEngine, factoryName) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`${factoryName} requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`${factoryName} requires NexusEngine.${key}.`);
   }
 }
 
@@ -331,9 +331,9 @@ function ensureNamespace(engine, namespace) {
   return engine.n[namespace];
 }
 
-export function createLayeredDrunkWalkLevelGenerationKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime, "createLayeredDrunkWalkLevelGenerationKit");
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createLayeredDrunkWalkLevelGenerationKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine, "createLayeredDrunkWalkLevelGenerationKit");
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const LevelGenerationState = defineResource(config.resourceName ?? "layeredDrunkWalkLevelGeneration.state");
   const LevelGenerated = defineEvent("layeredDrunkWalkLevelGeneration.generated");
   const LevelRejected = defineEvent("layeredDrunkWalkLevelGeneration.rejected");

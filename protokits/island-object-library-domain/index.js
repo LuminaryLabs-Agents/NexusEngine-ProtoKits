@@ -182,11 +182,11 @@ export function createIslandObjectLibraryState(options = {}) {
   };
 }
 
-export function createIslandObjectLibraryDomainKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createIslandObjectLibraryDomainKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const State = defs.resource(options.resourceName ?? "islandObjectLibrary.state");
   const initial = () => createIslandObjectLibraryState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.kitId ?? "island-object-library-domain",
     resources: { State },
     provides: ["island:object-library", "island:nested-object-graph", "render:island-object-descriptors"],

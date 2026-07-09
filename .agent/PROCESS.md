@@ -1,6 +1,6 @@
 # ProtoKits Agent Process
 
-This file defines the repeatable agent cycle for `NexusRealtime-ProtoKits`.
+This file defines the repeatable agent cycle for `NexusEngine-ProtoKits`.
 
 ## Standard Cycle
 

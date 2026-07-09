@@ -122,15 +122,15 @@ export const foglineVisualPreset = Object.freeze({
   ]
 });
 
-function definitionFactory(nexusRealtime = {}) {
+function definitionFactory(nexusEngine = {}) {
   return {
-    resource: nexusRealtime.defineResource ?? ((name) => Object.freeze({ kind: "resource", name })),
-    event: nexusRealtime.defineEvent ?? ((name) => Object.freeze({ kind: "event", name }))
+    resource: nexusEngine.defineResource ?? ((name) => Object.freeze({ kind: "resource", name })),
+    event: nexusEngine.defineEvent ?? ((name) => Object.freeze({ kind: "event", name }))
   };
 }
 
-export function createRenderLayerDefinitions(nexusRealtime = {}, options = {}) {
-  const { resource, event } = definitionFactory(nexusRealtime);
+export function createRenderLayerDefinitions(nexusEngine = {}, options = {}) {
+  const { resource, event } = definitionFactory(nexusEngine);
   const prefix = options.namespace ?? "visual";
   return {
     resources: {
@@ -514,8 +514,8 @@ function snapshotRealism(world, options = {}) {
   return world.__nexusRealismSnapshot ?? options.realism ?? {};
 }
 
-export function createRenderLayerKit(nexusRealtime = {}, options = {}) {
-  const definitions = createRenderLayerDefinitions(nexusRealtime, options);
+export function createRenderLayerKit(nexusEngine = {}, options = {}) {
+  const definitions = createRenderLayerDefinitions(nexusEngine, options);
   const { resources, events } = definitions;
   const preset = mergePlain(foglineVisualPreset, options.preset ?? {});
   const layerOrder = asList(options.layerOrder ?? preset.layerOrder ?? DEFAULT_RENDER_LAYER_ORDER);
@@ -588,7 +588,7 @@ export function createRenderLayerKit(nexusRealtime = {}, options = {}) {
     world.setResource(resources.VisualPipelineState, next);
   }
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "render-layer-kit",
     resources,
     events,

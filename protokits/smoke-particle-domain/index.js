@@ -51,11 +51,11 @@ export function createSmokeParticleState(options = {}) {
   return { id: options.id ?? "smoke-particle-domain", version: SMOKE_PARTICLE_DOMAIN_VERSION, descriptor: createSmokeParticleDescriptor(options.descriptor ?? options) };
 }
 
-export function createSmokeParticleDomainKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createSmokeParticleDomainKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const State = defs.resource(options.resourceName ?? "smokeParticle.state");
   const initial = () => createSmokeParticleState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.kitId ?? "smoke-particle-domain",
     resources: { State },
     provides: ["smoke:particle-emitter", "smoke:wind-response", "render:smoke-particle-descriptor"],

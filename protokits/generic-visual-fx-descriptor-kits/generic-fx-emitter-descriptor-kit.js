@@ -20,10 +20,10 @@ function namespace(engine) {
   return engine.n.visualFx;
 }
 
-export function createGenericFxEmitterDescriptorKit(NexusRealtime = {}, config = {}) {
-  const State = resource(NexusRealtime, config.resourceName ?? "genericVisualFx.emitter.state");
-  const Emit = event(NexusRealtime, config.emitEventName ?? "genericVisualFx.emitter.emit");
-  const Clear = event(NexusRealtime, config.clearEventName ?? "genericVisualFx.emitter.clear");
+export function createGenericFxEmitterDescriptorKit(NexusEngine = {}, config = {}) {
+  const State = resource(NexusEngine, config.resourceName ?? "genericVisualFx.emitter.state");
+  const Emit = event(NexusEngine, config.emitEventName ?? "genericVisualFx.emitter.emit");
+  const Clear = event(NexusEngine, config.clearEventName ?? "genericVisualFx.emitter.clear");
   const presets = clone(config.presets ?? {});
 
   const initial = () => ({
@@ -88,7 +88,7 @@ export function createGenericFxEmitterDescriptorKit(NexusRealtime = {}, config =
     world.setResource(State, state);
   }
 
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "generic-fx-emitter-descriptor-kit",
     provides: ["fx:emitter-descriptors", "render:effect-descriptors", "feedback:effect-events"],
     resources: { State },

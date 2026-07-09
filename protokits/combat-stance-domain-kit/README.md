@@ -12,7 +12,7 @@ What if the player moves from exploration into Tekken-like magic combat?
   Combat, spell, guard, animation, and camera domains compose the result.
 ```
 
-Extends: NexusRealtime runtime-shaped DomainServiceKit via `defineRuntimeKit`.
+Extends: NexusEngine runtime-shaped DomainServiceKit via `defineRuntimeKit`.
 
 Composes:
 
@@ -36,5 +36,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-scoped-domain-rpg-batch-01::combat-stance-domain-kit::2026-06-20
+NexusEngine-scoped-domain-rpg-batch-01::combat-stance-domain-kit::2026-06-20
 ```

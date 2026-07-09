@@ -21,10 +21,10 @@ function namespace(engine) {
   return engine.n.visualFx;
 }
 
-export function createGenericShockwaveDescriptorKit(NexusRealtime = {}, config = {}) {
-  const State = resource(NexusRealtime, config.resourceName ?? "genericVisualFx.shockwave.state");
-  const Emit = event(NexusRealtime, config.emitEventName ?? "genericVisualFx.shockwave.emit");
-  const Clear = event(NexusRealtime, config.clearEventName ?? "genericVisualFx.shockwave.clear");
+export function createGenericShockwaveDescriptorKit(NexusEngine = {}, config = {}) {
+  const State = resource(NexusEngine, config.resourceName ?? "genericVisualFx.shockwave.state");
+  const Emit = event(NexusEngine, config.emitEventName ?? "genericVisualFx.shockwave.emit");
+  const Clear = event(NexusEngine, config.clearEventName ?? "genericVisualFx.shockwave.clear");
 
   const initial = () => ({
     id: config.id ?? "generic-shockwave-descriptors",
@@ -89,7 +89,7 @@ export function createGenericShockwaveDescriptorKit(NexusRealtime = {}, config =
     world.setResource(State, state);
   }
 
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "generic-shockwave-descriptor-kit",
     provides: ["feedback:shockwave-descriptors", "world:shockwave-descriptors", "render:shockwave-descriptors"],
     resources: { State },

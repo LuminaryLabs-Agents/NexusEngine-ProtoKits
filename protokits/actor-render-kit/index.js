@@ -37,13 +37,13 @@ export function createPoseDescriptor(actor = {}, motion = {}) {
   };
 }
 
-export function createActorRenderKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createActorRenderKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const ActorRenderState = resource(options.resourceName ?? "actorRender.state");
   const ActorPoseUpdated = event("actorRender.poseUpdated");
   const initial = () => ({ version: ACTOR_RENDER_KIT_VERSION, actors: asList(options.actors ?? [{ id: "player", archetype: "bird" }]), archetypes: { ...DEFAULT_ACTOR_ARCHETYPES, ...(options.archetypes ?? {}) }, poses: {} });
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "actor-render-kit",
     resources: { ActorRenderState },
     events: { ActorPoseUpdated },

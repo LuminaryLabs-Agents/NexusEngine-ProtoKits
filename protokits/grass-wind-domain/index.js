@@ -39,11 +39,11 @@ export function createGrassWindState(options = {}) {
   };
 }
 
-export function createGrassWindDomainKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createGrassWindDomainKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const State = defs.resource(options.resourceName ?? "grassWind.state");
   const initial = () => createGrassWindState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.kitId ?? "grass-wind-domain",
     resources: { State },
     provides: ["grass:wind-field", "grass:sway-phase", "render:grass-wind-descriptor"],

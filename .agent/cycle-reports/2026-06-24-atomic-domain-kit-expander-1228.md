@@ -2,9 +2,9 @@
 
 ## Review scope
 
-Reviewed the current NexusRealtime ecosystem through the Atomic Domain Kit Expander lens:
+Reviewed the current NexusEngine ecosystem through the Atomic Domain Kit Expander lens:
 
-- Core `.agent/intent.md` is still unavailable in `LuminaryLabs-Dev/NexusRealtime`; the repository is reachable, but Core durable memory cannot be treated as reviewed until `.agent/intent.md` exists.
+- Core `.agent/intent.md` is still unavailable in `LuminaryLabs-Dev/NexusEngine`; the repository is reachable, but Core durable memory cannot be treated as reviewed until `.agent/intent.md` exists.
 - ProtoKits `.agent/intent.md`, `.agent/architecture.md`, `.agent/dsk-boundaries.md`, `.agent/domain-backlog.md`, `.agent/protokit-map.md`, `.agent/smoke-tests.md`, `.agent/replay-qa.md`, `.agent/candidate-promotions.md`, and `.agent/scheduled-task-cycle.md` all continue to point toward reusable rendererless DSKs, downstream route proof, and higher-level domain consolidation.
 - Experiments `.agent/cycle-state.md`, `.agent/experiment-map.md`, `.agent/replay-qa.md`, `experiments/next-ledge/src/session.js`, and `tests/next-ledge-route-progress-replay-spec-smoke.mjs` now show that `next-ledge` has consumed the atomic route-progress seam through `engine.n.genericRouteProgress`.
 

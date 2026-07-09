@@ -1,12 +1,12 @@
 # Domain ProtoKit Contract
 
-A domain ProtoKit is a reusable, deterministic runtime kit shaped for eventual promotion into NexusRealtime core.
+A domain ProtoKit is a reusable, deterministic runtime kit shaped for eventual promotion into NexusEngine core.
 
 ## Required shape
 
 ```txt
 VERSION constant
-createXKit(NexusRealtime, config = {})
+createXKit(NexusEngine, config = {})
 stable runtime kit id
 resources
 events

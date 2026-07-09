@@ -3,9 +3,9 @@ export const AUDIO_FEEDBACK_DOMAIN_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createAudioFeedbackDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createAudioFeedbackDomainKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -13,9 +13,9 @@ function createState(config = {}) {
   return { version: AUDIO_FEEDBACK_DOMAIN_KIT_VERSION, id: config.stateId ?? "audio-feedback-domain", domain: "audio-feedback", rules: asArray(config.rules), descriptors: [], lastDescriptor: null };
 }
 
-export function createAudioFeedbackDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createAudioFeedbackDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const AudioFeedbackState = defineResource(config.resourceName ?? "audioFeedbackDomain.state");
   const AudioFeedbackRequested = defineEvent("audioFeedback.requested");
   const AudioFeedbackDescribed = defineEvent("audioFeedback.described");

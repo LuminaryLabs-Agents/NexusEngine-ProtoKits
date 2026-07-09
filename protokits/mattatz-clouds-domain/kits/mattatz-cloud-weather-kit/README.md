@@ -26,5 +26,5 @@ Preset composition kit for the `mattatz-clouds-domain`.
 ## Public implementation
 
 ```js
-import { createMattatzCloudWeatherKit } from "@luminarylabs/nexusrealtime-protokits/mattatz-clouds-domain";
+import { createMattatzCloudWeatherKit } from "@luminarylabs/nexusengine-protokits/mattatz-clouds-domain";
 ```

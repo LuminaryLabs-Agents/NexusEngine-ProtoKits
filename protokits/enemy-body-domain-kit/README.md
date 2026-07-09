@@ -12,7 +12,7 @@ What if an enemy currently exists only as a billboard?
   The kit does not create Three.js meshes.
 ```
 
-Extends: NexusRealtime runtime-shaped DomainServiceKit via `defineRuntimeKit`.
+Extends: NexusEngine runtime-shaped DomainServiceKit via `defineRuntimeKit`.
 
 Composes:
 
@@ -35,5 +35,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-scoped-domain-rpg-batch-01::enemy-body-domain-kit::2026-06-20
+NexusEngine-scoped-domain-rpg-batch-01::enemy-body-domain-kit::2026-06-20
 ```

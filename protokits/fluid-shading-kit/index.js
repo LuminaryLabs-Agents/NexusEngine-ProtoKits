@@ -21,8 +21,8 @@ function createInitial(config = {}) {
   return { layers, layersById: Object.fromEntries(layers.map((layer) => [layer.id, layer])), quality: config.quality ?? "medium" };
 }
 
-export function createFluidShadingKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createFluidShadingKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: FLUID_SHADING_KIT_VERSION,
     factoryName: "createFluidShadingKit",
     kitId: "fluid-shading-kit",

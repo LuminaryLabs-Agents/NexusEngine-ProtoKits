@@ -8,11 +8,11 @@ function clone(value) {
   return typeof structuredClone === "function" ? structuredClone(value) : JSON.parse(JSON.stringify(value));
 }
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   const required = ["defineResource", "defineEvent", "defineRuntimeKit"];
   for (const key of required) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createNextLedgeKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createNextLedgeKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -87,9 +87,9 @@ export function createDefaultNextLedgeLevel() {
   };
 }
 
-export function createNextLedgeKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineResource, defineEvent, defineRuntimeKit } = NexusRealtime;
+export function createNextLedgeKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineResource, defineEvent, defineRuntimeKit } = NexusEngine;
 
   const normalized = normalizeLevel(config.level ?? createDefaultNextLedgeLevel());
   const ledges = normalized.ledges;

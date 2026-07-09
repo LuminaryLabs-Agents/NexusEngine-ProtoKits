@@ -19,8 +19,8 @@ function createInitial(config = {}) {
   return { flows, flowsById: Object.fromEntries(flows.map((flow) => [flow.id, flow])), motionTime: 0 };
 }
 
-export function createFluidMotionKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createFluidMotionKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: FLUID_MOTION_KIT_VERSION,
     factoryName: "createFluidMotionKit",
     kitId: "fluid-motion-kit",

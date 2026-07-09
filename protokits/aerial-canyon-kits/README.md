@@ -1,6 +1,6 @@
 # Aerial Canyon Kits
 
-Composable NexusRealtime ProtoKits for powered aerial canyon games.
+Composable NexusEngine ProtoKits for powered aerial canyon games.
 
 This package is intentionally domain-first. It does not define one giant Sky Rogue game kit. Instead, it provides small domain kits that can be layered by a browser host, mode composition, or future sequence authoring.
 
@@ -20,7 +20,7 @@ This package is intentionally domain-first. It does not define one giant Sky Rog
 ## Minimal install
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
 import {
   createCanyonTerrainDomainKit,
   createFlightCorridorDomainKit,
@@ -33,20 +33,20 @@ import {
   createAerialCameraRigDomainKit,
   createAerialMissionSequenceKit,
   collectAerialCanyonSnapshot
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/aerial-canyon-kits/index.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/aerial-canyon-kits/index.js";
 
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createCanyonTerrainDomainKit(NexusRealtime),
-    createFlightCorridorDomainKit(NexusRealtime),
-    createPoweredAerialFlightDomainKit(NexusRealtime),
-    createAerialVegetationPlacementDomainKit(NexusRealtime),
-    createAerialProceduralObjectDomainKit(NexusRealtime),
-    createAerialProjectileSystemKit(NexusRealtime),
-    createAerialCombatDomainKit(NexusRealtime),
-    createAerialEncounterDirectorKit(NexusRealtime),
-    createAerialCameraRigDomainKit(NexusRealtime),
-    createAerialMissionSequenceKit(NexusRealtime)
+    createCanyonTerrainDomainKit(NexusEngine),
+    createFlightCorridorDomainKit(NexusEngine),
+    createPoweredAerialFlightDomainKit(NexusEngine),
+    createAerialVegetationPlacementDomainKit(NexusEngine),
+    createAerialProceduralObjectDomainKit(NexusEngine),
+    createAerialProjectileSystemKit(NexusEngine),
+    createAerialCombatDomainKit(NexusEngine),
+    createAerialEncounterDirectorKit(NexusEngine),
+    createAerialCameraRigDomainKit(NexusEngine),
+    createAerialMissionSequenceKit(NexusEngine)
   ]
 });
 
@@ -69,4 +69,4 @@ A Three.js host should:
 
 ## Promotion notes
 
-The generic candidates for later NexusRealtime promotion are terrain sampling, flight corridor, powered flight, aerial projectile, aerial combat, camera rig, and vegetation placement. Renderer-specific Three.js pooling should stay as host/adapter code unless it becomes a renderer adapter kit with a clear boundary.
+The generic candidates for later NexusEngine promotion are terrain sampling, flight corridor, powered flight, aerial projectile, aerial combat, camera rig, and vegetation placement. Renderer-specific Three.js pooling should stay as host/adapter code unless it becomes a renderer adapter kit with a clear boundary.

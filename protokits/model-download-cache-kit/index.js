@@ -3,9 +3,9 @@ export const MODEL_DOWNLOAD_CACHE_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createModelDownloadCacheKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createModelDownloadCacheKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -20,9 +20,9 @@ function normalizePlan(plan = {}) {
   return { ...clone(plan), modelId, files, estimatedBytes: Number(plan.estimatedBytes ?? files.reduce((sum, file) => sum + file.bytes, 0)) };
 }
 
-export function createModelDownloadCacheKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createModelDownloadCacheKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const ModelCacheState = defineResource(config.resourceName ?? "modelCache.state");
   const ModelDownloadQueued = defineEvent("modelCache.downloadQueued");
   const ModelDownloadProgressed = defineEvent("modelCache.downloadProgressed");

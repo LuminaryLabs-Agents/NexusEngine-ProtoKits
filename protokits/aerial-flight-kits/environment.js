@@ -1,9 +1,9 @@
 import { clamp, createDefinitions, ensureState, installApi, makeRuntimeKit, norm3, num, terrainBiome, terrainHeight, terrainNormal, writeState } from './core.js';
 
 export const GENERIC_ATMOSPHERE_SKY_KIT_DEFINITION = Object.freeze({ id: 'generic-atmosphere-sky-kit', provides: ['environment:sky', 'environment:lighting'], requires: [], purpose: 'Sky, sun, haze, and lighting descriptor state.' });
-export function createGenericAtmosphereSkyKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericAtmosphereSkyKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_ATMOSPHERE_SKY_KIT_DEFINITION.id,
     provides: GENERIC_ATMOSPHERE_SKY_KIT_DEFINITION.provides,
     resources: { State: definitions.State },
@@ -29,9 +29,9 @@ export function createGenericAtmosphereSkyKit(NexusRealtime, config = {}) {
   });
 }
 
-export const GENERIC_TERRAIN_SAMPLER_KIT_DEFINITION = Object.freeze({ id: 'generic-terrain-sampler-kit', provides: ['terrain:height-sampler', 'terrain:biome-sampler', 'terrain:normal-sampler'], requires: [], purpose: 'Deterministic terrain height, normal, biome, and optional NexusRealtime TerrainKit query bridge.' });
-export function createGenericTerrainSamplerKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
+export const GENERIC_TERRAIN_SAMPLER_KIT_DEFINITION = Object.freeze({ id: 'generic-terrain-sampler-kit', provides: ['terrain:height-sampler', 'terrain:biome-sampler', 'terrain:normal-sampler'], requires: [], purpose: 'Deterministic terrain height, normal, biome, and optional NexusEngine TerrainKit query bridge.' });
+export function createGenericTerrainSamplerKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
   const terrainKit = config.terrainKit ?? null;
   const terrainFocusResource = terrainKit?.definitions?.resources?.TerrainFocusState ?? terrainKit?.resources?.TerrainFocusState ?? null;
   const terrainSnapshotResource = terrainKit?.definitions?.resources?.TerrainSnapshot ?? terrainKit?.resources?.TerrainSnapshot ?? null;
@@ -43,7 +43,7 @@ export function createGenericTerrainSamplerKit(NexusRealtime, config = {}) {
     return null;
   }
 
-  return makeRuntimeKit(NexusRealtime, {
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_TERRAIN_SAMPLER_KIT_DEFINITION.id,
     provides: GENERIC_TERRAIN_SAMPLER_KIT_DEFINITION.provides,
     requires,
@@ -89,9 +89,9 @@ export function createGenericTerrainSamplerKit(NexusRealtime, config = {}) {
 }
 
 export const GENERIC_FLIGHT_INPUT_KIT_DEFINITION = Object.freeze({ id: 'generic-flight-input-kit', provides: ['input:flight'], requires: [], purpose: 'Renderer-agnostic pitch, bank, yaw, brake, and boost input intent.' });
-export function createGenericFlightInputKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericFlightInputKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_FLIGHT_INPUT_KIT_DEFINITION.id,
     provides: GENERIC_FLIGHT_INPUT_KIT_DEFINITION.provides,
     resources: { State: definitions.State },

@@ -20,13 +20,13 @@ export function pickObjectVariant(candidates = [], state = createObjectVariantSe
   return clone(weightedChoice(weighted, rng) ?? null);
 }
 
-export function createObjectVariantSelectionKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjectVariantSelectionKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objectVariantSelection.state");
   const Updated = event("objectVariantSelection.updated");
   const Picked = event("objectVariantSelection.picked");
   const initial = () => createObjectVariantSelectionState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "object-variant-selection-kit",
     resources: { State },
     events: { Updated, Picked },

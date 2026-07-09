@@ -1,5 +1,6 @@
 {
   "id": "composition-planning-domain-kit",
+  "type": "domain-service-kit",
   "domain": "composition-planning",
   "parentDomain": "domain-control-plane",
   "scope": "control-domain",
@@ -13,5 +14,11 @@
   "exportPath": "./composition-planning-domain-kit",
   "sourcePath": "protokits/composition-planning-domain-kit/index.js",
   "testPaths": ["tests/domain-composition-planning-smoke.test.mjs"],
-  "status": "experimental"
+  "status": "experimental",
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "ownsDom": false,
+    "ownsCanvas": false,
+    "ownsThreeObjects": false
+  }
 }

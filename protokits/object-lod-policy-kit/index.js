@@ -32,13 +32,13 @@ export function selectObjectLod(asset = {}, viewer = {}, context = {}, state = c
   return { assetId: asset.id ?? asset.assetId ?? null, distance: d, lod: tier, url, renderMode: tier === "impostor" ? "impostor" : tier === "culled" ? "culled" : "mesh", shadowTier: tier === "lod0" ? "full" : tier === "lod1" ? "reduced" : "none", windTier: tier === "lod0" ? "full" : tier === "lod1" ? "medium" : tier === "lod2" ? "low" : "none" };
 }
 
-export function createObjectLodPolicyKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjectLodPolicyKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objectLodPolicy.state");
   const Updated = event("objectLodPolicy.updated");
   const Selected = event("objectLodPolicy.selected");
   const initial = () => createObjectLodPolicyState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "object-lod-policy-kit",
     resources: { State },
     events: { Updated, Selected },

@@ -70,8 +70,8 @@ export function buildHorizonRings(center = {}, options = {}) {
   return rings;
 }
 
-export function createTerrainHorizonLodKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createTerrainHorizonLodKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const TerrainHorizonState = resource(options.resourceName ?? "terrainHorizon.state");
   const TerrainHorizonRingsBuilt = event("terrainHorizon.ringsBuilt");
   const initial = () => ({
@@ -81,7 +81,7 @@ export function createTerrainHorizonLodKit(nexusRealtime = {}, options = {}) {
     lastRings: []
   });
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "terrain-horizon-lod-kit",
     resources: { TerrainHorizonState },
     events: { TerrainHorizonRingsBuilt },

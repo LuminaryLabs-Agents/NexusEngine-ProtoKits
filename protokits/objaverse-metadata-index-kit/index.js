@@ -22,13 +22,13 @@ export function createObjaverseMetadataIndexState(options = {}) {
   return { version: OBJAVERSE_METADATA_INDEX_KIT_VERSION, records: Object.fromEntries(records.map((record) => [record.assetId, record])), history: [] };
 }
 
-export function createObjaverseMetadataIndexKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjaverseMetadataIndexKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objaverseMetadataIndex.state");
   const Updated = event("objaverseMetadataIndex.updated");
   const Registered = event("objaverseMetadataIndex.registered");
   const initial = () => createObjaverseMetadataIndexState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "objaverse-metadata-index-kit",
     resources: { State },
     events: { Updated, Registered },

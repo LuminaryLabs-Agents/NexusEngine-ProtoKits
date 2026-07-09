@@ -59,13 +59,13 @@ export function createMaterialPaletteState(options = {}) {
   return { version: MATERIAL_PALETTE_KIT_VERSION, activeTheme: options.theme ?? "default", materials: byId(materials), aliases: { ...(options.aliases ?? {}) }, families: byFamily };
 }
 
-export function createMaterialPaletteKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createMaterialPaletteKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const MaterialPaletteState = resource(options.resourceName ?? "materialPalette.state");
   const MaterialRegistered = event("materialPalette.registered");
   const MaterialFamilyRegistered = event("materialPalette.familyRegistered");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "material-palette-kit",
     resources: { MaterialPaletteState },
     events: { MaterialRegistered, MaterialFamilyRegistered },

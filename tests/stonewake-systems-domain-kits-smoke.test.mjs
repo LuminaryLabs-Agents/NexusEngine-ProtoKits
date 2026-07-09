@@ -31,13 +31,13 @@ function createHarness(kits) {
   };
 }
 
-const NexusRealtime = {
+const NexusEngine = {
   defineResource(name) { return name; },
   defineEvent(name) { return name; },
   defineRuntimeKit(spec) { return spec; }
 };
 
-const kits = createStonewakeSystemsDomainKits(NexusRealtime, {
+const kits = createStonewakeSystemsDomainKits(NexusEngine, {
   acousticSignal: { defaultSpeed: 100, radiusPerIntensity: 100 },
   conditionGate: { },
   physicsBodyLite: { gravity: { x: 0, y: 0, z: 0 } },

@@ -1,6 +1,6 @@
 # Generic Visual FX Descriptor Kits
 
-Renderer-agnostic visual feedback descriptors for NexusRealtime hosts.
+Renderer-agnostic visual feedback descriptors for NexusEngine hosts.
 
 This bundle is intentionally generic. It does not create DOM nodes, Canvas/WebGL objects, Three.js meshes, browser input listeners, or frame loops. A host or renderer adapter reads descriptors and turns them into presentation.
 
@@ -13,7 +13,7 @@ This bundle only fills reusable descriptor gaps for transient FX, persistent par
 ## Exports
 
 ```js
-import { createGenericVisualFxDescriptorKits } from "@luminarylabs/nexusrealtime-protokits/generic-visual-fx-descriptor-kits";
+import { createGenericVisualFxDescriptorKits } from "@luminarylabs/nexusengine-protokits/generic-visual-fx-descriptor-kits";
 ```
 
 ## Kits
@@ -26,7 +26,7 @@ import { createGenericVisualFxDescriptorKits } from "@luminarylabs/nexusrealtime
 ## Composition
 
 ```js
-const kits = createGenericVisualFxDescriptorKits(NexusRealtime, {
+const kits = createGenericVisualFxDescriptorKits(NexusEngine, {
   fxEmitter: { presets: { impact: { family: "burst", count: 24 } } },
   particleFields: { fields: [{ id: "ambient-dust", kind: "ambient-particles" }] },
   atmosphereLayers: { layers: [{ id: "horizon", kind: "horizon-band" }] }

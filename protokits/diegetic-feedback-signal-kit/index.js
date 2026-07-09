@@ -35,13 +35,13 @@ function normalizeSignal(signal = {}, index = 0, templates = DEFAULT_OBJECT_SIGN
   };
 }
 
-export function createDiegeticFeedbackSignalKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createDiegeticFeedbackSignalKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const DiegeticFeedbackState = resource(options.resourceName ?? "diegeticFeedback.state");
   const FeedbackSignalEmitted = event("diegeticFeedback.signalEmitted");
   const FeedbackSignalCleared = event("diegeticFeedback.signalCleared");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "diegetic-feedback-signal-kit",
     resources: { DiegeticFeedbackState },
     events: { FeedbackSignalEmitted, FeedbackSignalCleared },

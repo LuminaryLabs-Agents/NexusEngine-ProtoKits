@@ -18,7 +18,7 @@ The old `generic-defense-aaa-dsk-bridge` path remains available as a deprecated 
 import {
   createGenericDefenseKits,
   createGenericDefenseDskBundle
-} from "@luminarylabs/nexusrealtime-protokits/generic-defense-project-bridge";
+} from "@luminarylabs/nexusengine-protokits/generic-defense-project-bridge";
 ```
 
 ## Renderer boundary

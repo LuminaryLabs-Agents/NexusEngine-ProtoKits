@@ -42,13 +42,13 @@ export function scatterForPatch(patch = {}, rules = DEFAULT_SCATTER_RULES, optio
   return out;
 }
 
-export function createScatterPlacementKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createScatterPlacementKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const ScatterPlacementState = resource(options.resourceName ?? "scatterPlacement.state");
   const ScatterGenerated = event("scatterPlacement.generated");
   const initial = () => ({ version: SCATTER_PLACEMENT_KIT_VERSION, seed: options.seed ?? "scatter", rules: asList(options.rules ?? DEFAULT_SCATTER_RULES), byPatch: {} });
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "scatter-placement-kit",
     resources: { ScatterPlacementState },
     events: { ScatterGenerated },

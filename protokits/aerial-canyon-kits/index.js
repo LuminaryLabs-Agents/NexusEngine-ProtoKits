@@ -186,16 +186,16 @@ function patchColor(patch, config = {}) {
   return palette[patch] ?? "#8a3f12";
 }
 
-function defineResource(NexusRealtime, name) {
-  return typeof NexusRealtime.defineResource === "function" ? NexusRealtime.defineResource(name) : `resource:${name}`;
+function defineResource(NexusEngine, name) {
+  return typeof NexusEngine.defineResource === "function" ? NexusEngine.defineResource(name) : `resource:${name}`;
 }
 
-function defineEvent(NexusRealtime, name) {
-  return typeof NexusRealtime.defineEvent === "function" ? NexusRealtime.defineEvent(name) : `event:${name}`;
+function defineEvent(NexusEngine, name) {
+  return typeof NexusEngine.defineEvent === "function" ? NexusEngine.defineEvent(name) : `event:${name}`;
 }
 
-function runtimeKit(NexusRealtime, config) {
-  return defineInjectedRuntimeKit(NexusRealtime, config);
+function runtimeKit(NexusEngine, config) {
+  return defineInjectedRuntimeKit(NexusEngine, config);
 }
 
 function installGetterApi(engine, key, world, State, extra = {}) {
@@ -207,8 +207,8 @@ function installGetterApi(engine, key, world, State, extra = {}) {
   return engine[key];
 }
 
-export function createCanyonTerrainDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "canyonTerrain.state");
+export function createCanyonTerrainDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "canyonTerrain.state");
   const terrainConfig = { seed: DEFAULT_SEED, ...config };
   function initialState() {
     return {
@@ -219,7 +219,7 @@ export function createCanyonTerrainDomainKit(NexusRealtime = {}, config = {}) {
       samples: []
     };
   }
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "canyon-terrain-domain-kit",
     provides: ["terrain:height-sampler", "terrain:normal-sampler", "terrain:material-sampler", "terrain:patch-classifier", "terrain:corridor-field"],
     resources: { State },
@@ -253,8 +253,8 @@ export function createCanyonTerrainDomainKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createFlightCorridorDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "flightCorridor.state");
+export function createFlightCorridorDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "flightCorridor.state");
   function initialState() {
     return {
       id: config.id ?? "flight-corridor",
@@ -290,7 +290,7 @@ export function createFlightCorridorDomainKit(NexusRealtime = {}, config = {}) {
       thinSpire: weight > number(config.spireThinWeight, 0.55)
     };
   }
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "flight-corridor-domain-kit",
     requires: ["terrain:height-sampler"],
     provides: ["flight:corridor", "route:field", "terrain:route-shaping"],
@@ -310,12 +310,12 @@ export function createFlightCorridorDomainKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createPoweredAerialFlightDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "poweredAerialFlight.state");
-  const SetInput = defineEvent(NexusRealtime, "poweredAerialFlight.setInput");
-  const Reset = defineEvent(NexusRealtime, "poweredAerialFlight.reset");
-  const Crashed = defineEvent(NexusRealtime, "poweredAerialFlight.crashed");
-  const FireRequested = defineEvent(NexusRealtime, "poweredAerialFlight.fireRequested");
+export function createPoweredAerialFlightDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "poweredAerialFlight.state");
+  const SetInput = defineEvent(NexusEngine, "poweredAerialFlight.setInput");
+  const Reset = defineEvent(NexusEngine, "poweredAerialFlight.reset");
+  const Crashed = defineEvent(NexusEngine, "poweredAerialFlight.crashed");
+  const FireRequested = defineEvent(NexusEngine, "poweredAerialFlight.fireRequested");
   let installedEngine = null;
   const planes = Object.freeze((config.planes ?? DEFAULT_PLANES).map((plane, index) => ({ id: plane.id ?? `plane-${index + 1}`, ...plane })));
   function initialState(overrides = {}) {
@@ -409,7 +409,7 @@ export function createPoweredAerialFlightDomainKit(NexusRealtime = {}, config = 
     state = { ...state, body, frame: state.frame + 1 };
     world.setResource(State, state);
   }
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "powered-aerial-flight-domain-kit",
     requires: ["terrain:height-sampler", "flight:corridor"],
     provides: ["aerial:powered-flight", "aerial:body", "input:flight", "combat:fire-request"],
@@ -465,8 +465,8 @@ function patchBounds(patch = {}, sizeFallback = 768) {
   return { size, minX: centerX - size / 2, minZ: centerZ - size / 2, centerX, centerZ };
 }
 
-export function createAerialVegetationPlacementDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialVegetationPlacement.state");
+export function createAerialVegetationPlacementDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialVegetationPlacement.state");
   let installedEngine = null;
   function generateForPatch(patch) {
     const terrain = installedEngine?.canyonTerrain ?? installedEngine?.genericTerrainSampler;
@@ -542,7 +542,7 @@ export function createAerialVegetationPlacementDomainKit(NexusRealtime = {}, con
       stats: { patches: patches.length, descriptors: descriptors.length, batches: batches.length }
     });
   }
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "aerial-vegetation-placement-domain-kit",
     requires: ["domain:biome-field", "domain:vegetation-archetype", "domain:ground-contact", "domain:vegetation-lod", "terrain:height-sampler", "world:patch-window", "flight:corridor"],
     provides: ["vegetation:placement", "vegetation:instances", "render:vegetation-descriptors"],
@@ -560,8 +560,8 @@ export function createAerialVegetationPlacementDomainKit(NexusRealtime = {}, con
   });
 }
 
-export function createAerialProceduralObjectDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialProceduralObject.state");
+export function createAerialProceduralObjectDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialProceduralObject.state");
   let installedEngine = null;
   function generateForPatch(patch) {
     const terrain = installedEngine?.canyonTerrain ?? installedEngine?.genericTerrainSampler;
@@ -622,7 +622,7 @@ export function createAerialProceduralObjectDomainKit(NexusRealtime = {}, config
       stats: { patches: patches.length, descriptors: descriptors.length, collisionProxies: collisionProxies.length }
     });
   }
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "aerial-procedural-object-domain-kit",
     requires: ["world:patch-window", "terrain:height-sampler", "terrain:normal-sampler", "terrain:patch-classifier", "flight:corridor"],
     provides: ["world:procedural-objects", "render:object-descriptors", "collision:proxy-descriptors"],
@@ -640,11 +640,11 @@ export function createAerialProceduralObjectDomainKit(NexusRealtime = {}, config
   });
 }
 
-export function createAerialProjectileSystemKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialProjectile.state");
-  const Fire = defineEvent(NexusRealtime, "aerialProjectile.fire");
-  const Hit = defineEvent(NexusRealtime, "aerialProjectile.hit");
-  const Reset = defineEvent(NexusRealtime, "aerialProjectile.reset");
+export function createAerialProjectileSystemKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialProjectile.state");
+  const Fire = defineEvent(NexusEngine, "aerialProjectile.fire");
+  const Hit = defineEvent(NexusEngine, "aerialProjectile.hit");
+  const Reset = defineEvent(NexusEngine, "aerialProjectile.reset");
   let seq = 0;
   let installedEngine = null;
   let installedFireEvent = null;
@@ -696,7 +696,7 @@ export function createAerialProjectileSystemKit(NexusRealtime = {}, config = {})
     }
     world.setResource(State, { ...state, projectiles: nextProjectiles, hits: hits.slice(-32), frame: state.frame + 1 });
   }
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "aerial-projectile-system-kit",
     provides: ["projectile:simulation", "combat:projectile-events", "render:projectile-descriptors"],
     resources: { State },
@@ -717,12 +717,12 @@ export function createAerialProjectileSystemKit(NexusRealtime = {}, config = {})
   });
 }
 
-export function createAerialCombatDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialCombat.state");
-  const RegisterTarget = defineEvent(NexusRealtime, "aerialCombat.registerTarget");
-  const Damage = defineEvent(NexusRealtime, "aerialCombat.damage");
-  const Reset = defineEvent(NexusRealtime, "aerialCombat.reset");
-  const TargetDestroyed = defineEvent(NexusRealtime, "aerialCombat.targetDestroyed");
+export function createAerialCombatDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialCombat.state");
+  const RegisterTarget = defineEvent(NexusEngine, "aerialCombat.registerTarget");
+  const Damage = defineEvent(NexusEngine, "aerialCombat.damage");
+  const Reset = defineEvent(NexusEngine, "aerialCombat.reset");
+  const TargetDestroyed = defineEvent(NexusEngine, "aerialCombat.targetDestroyed");
   function initialState() {
     return { id: config.id ?? "aerial-combat", version: AERIAL_COMBAT_DOMAIN_KIT_VERSION, targets: {}, destroyedIds: [], score: 0, frame: 0 };
   }
@@ -764,7 +764,7 @@ export function createAerialCombatDomainKit(NexusRealtime = {}, config = {}) {
     world.setResource(State, state);
   }
   let installedProjectileHitEvent = null;
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "aerial-combat-domain-kit",
     requires: ["projectile:simulation"],
     provides: ["combat:damage", "combat:health", "combat:events", "combat:targets"],
@@ -786,8 +786,8 @@ export function createAerialCombatDomainKit(NexusRealtime = {}, config = {}) {
   });
 }
 
-export function createAerialEncounterDirectorKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialEncounter.state");
+export function createAerialEncounterDirectorKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialEncounter.state");
   let installedEngine = null;
   function initialState() {
     return { id: config.id ?? "aerial-encounter-director", version: AERIAL_ENCOUNTER_DIRECTOR_KIT_VERSION, spawned: {}, descriptors: [], frame: 0, targetCount: 0 };
@@ -821,7 +821,7 @@ export function createAerialEncounterDirectorKit(NexusRealtime = {}, config = {}
     }
     world.setResource(State, { ...state, descriptors, frame: state.frame + 1, targetCount: descriptors.length });
   }
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "aerial-encounter-director-kit",
     requires: ["aerial:body", "terrain:height-sampler", "flight:corridor", "combat:health"],
     provides: ["encounter:aerial", "combat:targets", "render:enemy-descriptors"],
@@ -839,8 +839,8 @@ export function createAerialEncounterDirectorKit(NexusRealtime = {}, config = {}
   });
 }
 
-export function createAerialCameraRigDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialCameraRig.state");
+export function createAerialCameraRigDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialCameraRig.state");
   let installedEngine = null;
   function initialState() {
     return { id: config.id ?? "aerial-camera-rig", version: AERIAL_CAMERA_RIG_DOMAIN_KIT_VERSION, mode: "chase-drone", descriptor: null, frame: 0 };
@@ -872,7 +872,7 @@ export function createAerialCameraRigDomainKit(NexusRealtime = {}, config = {}) 
       frame: state.frame + 1
     });
   }
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "aerial-camera-rig-domain-kit",
     requires: ["aerial:body"],
     provides: ["camera:state", "camera:chase-rig", "render:camera-descriptor"],
@@ -889,10 +889,10 @@ export function createAerialCameraRigDomainKit(NexusRealtime = {}, config = {}) 
   });
 }
 
-export function createAerialMissionSequenceKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialMission.state");
-  const Start = defineEvent(NexusRealtime, "aerialMission.start");
-  const Reset = defineEvent(NexusRealtime, "aerialMission.reset");
+export function createAerialMissionSequenceKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialMission.state");
+  const Start = defineEvent(NexusEngine, "aerialMission.start");
+  const Reset = defineEvent(NexusEngine, "aerialMission.reset");
   let installedEngine = null;
   function initialState() {
     return {
@@ -924,7 +924,7 @@ export function createAerialMissionSequenceKit(NexusRealtime = {}, config = {}) 
     state.frame += 1;
     world.setResource(State, state);
   }
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "aerial-mission-sequence-kit",
     requires: ["aerial:body", "combat:events", "encounter:aerial"],
     provides: ["sequence:aerial-mission", "mission:objective", "mission:events", "ui:prompt-descriptors"],
@@ -966,23 +966,23 @@ export function collectAerialCanyonSnapshot(engine = {}) {
   };
 }
 
-export function createAerialCanyonDomainKits(NexusRealtime = {}, config = {}) {
+export function createAerialCanyonDomainKits(NexusEngine = {}, config = {}) {
   return [
-    createCanyonTerrainDomainKit(NexusRealtime, config.terrain ?? config.canyonTerrain ?? {}),
-    createFlightCorridorDomainKit(NexusRealtime, config.corridor ?? config.flightCorridor ?? {}),
-    createPoweredAerialFlightDomainKit(NexusRealtime, config.flight ?? config.poweredFlight ?? {}),
-    createAerialVegetationPlacementDomainKit(NexusRealtime, config.vegetationPlacement ?? {}),
-    createAerialProceduralObjectDomainKit(NexusRealtime, config.objects ?? config.proceduralObjects ?? {}),
-    createAerialProjectileSystemKit(NexusRealtime, config.projectiles ?? {}),
-    createAerialCombatDomainKit(NexusRealtime, config.combat ?? {}),
-    createAerialEncounterDirectorKit(NexusRealtime, config.encounters ?? {}),
-    createAerialCameraRigDomainKit(NexusRealtime, config.camera ?? {}),
-    createAerialMissionSequenceKit(NexusRealtime, config.mission ?? {})
+    createCanyonTerrainDomainKit(NexusEngine, config.terrain ?? config.canyonTerrain ?? {}),
+    createFlightCorridorDomainKit(NexusEngine, config.corridor ?? config.flightCorridor ?? {}),
+    createPoweredAerialFlightDomainKit(NexusEngine, config.flight ?? config.poweredFlight ?? {}),
+    createAerialVegetationPlacementDomainKit(NexusEngine, config.vegetationPlacement ?? {}),
+    createAerialProceduralObjectDomainKit(NexusEngine, config.objects ?? config.proceduralObjects ?? {}),
+    createAerialProjectileSystemKit(NexusEngine, config.projectiles ?? {}),
+    createAerialCombatDomainKit(NexusEngine, config.combat ?? {}),
+    createAerialEncounterDirectorKit(NexusEngine, config.encounters ?? {}),
+    createAerialCameraRigDomainKit(NexusEngine, config.camera ?? {}),
+    createAerialMissionSequenceKit(NexusEngine, config.mission ?? {})
   ];
 }
 
-export function createAerialCanyonGame(NexusRealtime = {}, config = {}) {
-  return NexusRealtime.createRealtimeGame({ ...(config.engine ?? {}), kits: createAerialCanyonDomainKits(NexusRealtime, config) });
+export function createAerialCanyonGame(NexusEngine = {}, config = {}) {
+  return NexusEngine.createRealtimeGame({ ...(config.engine ?? {}), kits: createAerialCanyonDomainKits(NexusEngine, config) });
 }
 
 export default createAerialCanyonDomainKits;

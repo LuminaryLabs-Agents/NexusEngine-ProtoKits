@@ -83,8 +83,8 @@ export function shapeTerrainHeight(x = 0, z = 0, baseHeight = 0, options = {}) {
   return lerp(shaped, terraced, terrace.strength);
 }
 
-export function createTerrainShapingDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createTerrainShapingDomainKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const TerrainShapingState = resource(options.resourceName ?? "terrainShaping.state");
   const TerrainShapingSampled = event("terrainShaping.sampled");
   const initial = () => ({
@@ -93,7 +93,7 @@ export function createTerrainShapingDomainKit(nexusRealtime = {}, options = {}) 
     config: { ...DEFAULT_TERRAIN_SHAPING_CONFIG, ...(options.shaping ?? options.config ?? options) }
   });
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "terrain-shaping-domain-kit",
     resources: { TerrainShapingState },
     events: { TerrainShapingSampled },

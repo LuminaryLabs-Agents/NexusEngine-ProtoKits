@@ -34,7 +34,7 @@ import {
   selectLod
 } from "../protokits/adaptive-visual-core/index.js";
 
-const NexusRealtime = {
+const NexusEngine = {
   defineResource(name) { return { kind: "resource", name }; },
   defineEvent(name) { return { kind: "event", name }; },
   defineRuntimeKit(config) { return config; }
@@ -77,7 +77,7 @@ const factories = [
 ];
 
 for (const [engineKey, factory] of factories) {
-  const kit = factory(NexusRealtime, { id: `${engineKey}-test` });
+  const kit = factory(NexusEngine, { id: `${engineKey}-test` });
   assert.ok(kit.id.endsWith("kit"), `${engineKey} should define a kit id`);
   assert.ok(kit.provides.length > 0, `${engineKey} should provide capabilities`);
   assert.equal(typeof kit.systems[0].system, "function", `${engineKey} should install a system`);
@@ -95,7 +95,7 @@ for (const [engineKey, factory] of factories) {
   assert.ok(engine[engineKey].getDescriptors(), `${engineKey} should expose descriptors`);
 }
 
-assert.equal(createAdaptiveVisualStackKits(NexusRealtime, { environmentContent: { instanceCount: 4 } }).length, 15);
+assert.equal(createAdaptiveVisualStackKits(NexusEngine, { environmentContent: { instanceCount: 4 } }).length, 15);
 assert.equal(chooseCapabilityProfile({ webgpu: true }, { preferredProfile: "cinematic" }), "webgpu");
 assert.equal(chooseCapabilityProfile({ webgpu: false, webgl2: false, webgl: false, canvas2d: true }, {}), "canvas");
 assert.equal(normalizeVisualPolicy({ targetFrameMs: 33 }).targetFrameMs, 33);

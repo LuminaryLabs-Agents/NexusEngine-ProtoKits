@@ -2,9 +2,9 @@ export const MODEL_LOADER_KIT_VERSION = "0.1.0";
 
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createModelLoaderKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createModelLoaderKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -12,9 +12,9 @@ function initialState() {
   return { version: MODEL_LOADER_KIT_VERSION, loads: {}, order: [], rejections: [] };
 }
 
-export function createModelLoaderKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createModelLoaderKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const ModelLoaderState = defineResource(config.resourceName ?? "modelLoader.state");
   const ModelLoadRequested = defineEvent("modelLoader.loadRequested");
   const ModelLoadReady = defineEvent("modelLoader.ready");

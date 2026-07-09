@@ -4,7 +4,7 @@ Experimental Domain Service Kits for a 3D ONNX agent workspace where chat remain
 
 ## Kit stack
 
-`createOnnxWorkspaceKits(NexusRealtime, config)` installs:
+`createOnnxWorkspaceKits(NexusEngine, config)` installs:
 
 - `chat-io-domain-kit` — chat input/output packets, thread records, packet links.
 - `conversation-bubble-domain-kit` — world-space bubble lifecycle and render descriptors.
@@ -22,11 +22,11 @@ Experimental Domain Service Kits for a 3D ONNX agent workspace where chat remain
 ## Example
 
 ```js
-import { createOnnxWorkspaceKits } from "@luminarylabs/nexusrealtime-protokits/onnx-workspace-kits";
+import { createOnnxWorkspaceKits } from "@luminarylabs/nexusengine-protokits/onnx-workspace-kits";
 
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    ...createOnnxWorkspaceKits(NexusRealtime, {
+    ...createOnnxWorkspaceKits(NexusEngine, {
       selfTalkLoop: {
         defaultAgentId: "guide",
         defaultModelId: "onnx-community/Qwen2.5-0.5B-Instruct",

@@ -47,7 +47,7 @@ export function shadeColor(color, light = { intensity: 1 }) {
   return rgb({ r: source.r * intensity, g: source.g * intensity, b: source.b * intensity });
 }
 
-export function createLightingMoodKit(nexusRealtime = {}, options = {}) {
+export function createLightingMoodKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "lighting-mood-kit", version: LIGHTING_MOOD_KIT_VERSION, moodPresets, createLightField, shadeColor };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["lighting:mood", "lighting:local-lights"], bindings: { lightingMoodKit: kit }, metadata: { version: LIGHTING_MOOD_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["lighting:mood", "lighting:local-lights"], bindings: { lightingMoodKit: kit }, metadata: { version: LIGHTING_MOOD_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

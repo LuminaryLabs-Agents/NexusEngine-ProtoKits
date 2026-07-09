@@ -22,8 +22,8 @@ function createInitial(config = {}) {
   return { meshes, meshesById: Object.fromEntries(meshes.map((mesh) => [mesh.id, mesh])), totalVertexBudget: meshes.reduce((sum, mesh) => sum + mesh.vertexBudget, 0) };
 }
 
-export function createWaterMeshKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createWaterMeshKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: WATER_MESH_KIT_VERSION,
     factoryName: "createWaterMeshKit",
     kitId: "water-mesh-kit",

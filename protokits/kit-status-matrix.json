@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "nexusrealtime.protokits.kit-status-matrix.v1",
+  "schemaVersion": "nexusengine.protokits.kit-status-matrix.v1",
   "updated": "2026-06-25",
   "purpose": "Classify current ProtoKits into a gated DSK/domain incubation pipeline.",
   "classificationTypes": [

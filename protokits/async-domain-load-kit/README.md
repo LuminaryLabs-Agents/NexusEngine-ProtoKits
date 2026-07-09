@@ -1,6 +1,6 @@
 # Async Domain Load Kit
 
-Bounded async loading domain state for NexusRealtime ProtoKits.
+Bounded async loading domain state for NexusEngine ProtoKits.
 
 This kit owns deterministic load queue state, readiness, progress, and metrics. It does not own browser `fetch`, `import()`, GLTF parsing, WebGL, Three.js, DOM, or GPU upload. Hosts and renderer adapters perform actual IO and report progress back through the engine API.
 

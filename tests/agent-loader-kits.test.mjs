@@ -33,9 +33,9 @@ function install(kits) {
   return { engine, world, events };
 }
 
-const NexusRealtime = createNexusStub();
+const NexusEngine = createNexusStub();
 
-const manifestKit = createModelManifestKit(NexusRealtime, {
+const manifestKit = createModelManifestKit(NexusEngine, {
   models: [{
     id: "tone-ranker",
     source: "huggingface",
@@ -51,13 +51,13 @@ const manifestKit = createModelManifestKit(NexusRealtime, {
 
 const { engine } = install([
   manifestKit,
-  createHuggingFaceLoaderKit(NexusRealtime),
-  createModelDownloadCacheKit(NexusRealtime),
-  createModelLoaderKit(NexusRealtime),
-  createTokenizerLoaderKit(NexusRealtime),
-  createOnnxLoaderKit(NexusRealtime, { mockOutputs: { "tone-ranker": { logits: [0.2, 0.8], labels: ["calm", "suspicious"] } } }),
-  createEmbeddingMemoryKit(NexusRealtime),
-  createAgentKit(NexusRealtime, {
+  createHuggingFaceLoaderKit(NexusEngine),
+  createModelDownloadCacheKit(NexusEngine),
+  createModelLoaderKit(NexusEngine),
+  createTokenizerLoaderKit(NexusEngine),
+  createOnnxLoaderKit(NexusEngine, { mockOutputs: { "tone-ranker": { logits: [0.2, 0.8], labels: ["calm", "suspicious"] } } }),
+  createEmbeddingMemoryKit(NexusEngine),
+  createAgentKit(NexusEngine, {
     agents: [{ id: "guard_01", role: "guard", goals: ["protect-village"] }],
     knownTargets: ["player", "gate_01"],
     allowedIntents: ["observe", "warn", "accuse"],

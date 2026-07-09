@@ -27,15 +27,15 @@ export function createDiegeticSignals(snapshot = {}, options = {}) {
   return { signals, targetSignals, worldSignals: signals.filter((signal) => ["cloud-zone", "low-stamina", "fall"].includes(signal.type)), lastMessage: options.overlayUi ? climbState.message ?? null : null };
 }
 
-export function createDiegeticFeedbackKit(nexusRealtime = {}, options = {}) {
-  const definitions = createVerticalClimbDefinitions(nexusRealtime, options);
+export function createDiegeticFeedbackKit(nexusEngine = {}, options = {}) {
+  const definitions = createVerticalClimbDefinitions(nexusEngine, options);
   const { resources } = definitions;
   const system = (world) => {
     const state = ensureResource(world, resources.FeedbackState, () => createInitialState(options));
     Object.assign(state, createDiegeticSignals({ climbState: world.getResource(resources.ClimbState) ?? {}, routeState: world.getResource(resources.RouteState) ?? {}, riskState: world.getResource(resources.RiskState) ?? {}, swingState: world.getResource(resources.SwingState) ?? {}, cloudState: world.getResource(resources.CloudState) ?? {}, inputState: world.getResource(resources.InputState) ?? {} }, { ...options, overlayUi: state.overlayUi }));
     world.setResource(resources.FeedbackState, state);
   };
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "diegetic-feedback-kit",
     resources: { FeedbackState: resources.FeedbackState, ClimbState: resources.ClimbState, RouteState: resources.RouteState, RiskState: resources.RiskState, SwingState: resources.SwingState, CloudState: resources.CloudState, InputState: resources.InputState },
     systems: [{ phase: "cleanup", name: "diegeticFeedbackSystem", system }],

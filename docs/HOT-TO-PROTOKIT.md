@@ -10,13 +10,13 @@ A ProtoKit can own gameplay, simulation, rendering, browser input, UI, audio, as
 
 The goal is not to create many small random helpers.
 
-The goal is to build a clear kit ecosystem where each kit owns a domain, proves that domain against NexusRealtime, and can be composed into experiments, feature labs, and full games.
+The goal is to build a clear kit ecosystem where each kit owns a domain, proves that domain against NexusEngine, and can be composed into experiments, feature labs, and full games.
 
 ---
 
 # 1. All Kits Are Domain Service Kits
 
-All kits in NexusRealtime are **Domain Service Kits**.
+All kits in NexusEngine are **Domain Service Kits**.
 
 A **Domain Service Kit** is a service boundary that owns a domain.
 
@@ -338,20 +338,20 @@ A ProtoKit can become a Stable Domain Kit after it has enough proof, consumers, 
 # 10. Repo Boundaries
 
 ```txt
-NexusRealtime Core
+NexusEngine Core
 → runtime contracts and stable primitives
 
-NexusRealtime-ProtoKits
+NexusEngine-ProtoKits
 → reusable scoped domain kits
 
-NexusRealtime-Experiments
+NexusEngine-Experiments
 → proof lanes, feature labs, render bridges, visual tests, and playable validation
 
 Games
 → final composed products
 ```
 
-## NexusRealtime Core
+## NexusEngine Core
 
 Core owns stable runtime primitives.
 
@@ -376,7 +376,7 @@ Core should not own gameplay domains.
 
 Core should not know about a specific genre, game, route, fiction, character, or branded mechanic.
 
-## NexusRealtime-ProtoKits
+## NexusEngine-ProtoKits
 
 ProtoKits own reusable domains.
 
@@ -396,7 +396,7 @@ composition domains
 
 ProtoKits are where reusable domains are prototyped, improved, tested, and promoted.
 
-## NexusRealtime-Experiments
+## NexusEngine-Experiments
 
 Experiments are proof lanes.
 
@@ -485,7 +485,7 @@ ProtoKits can exist at multiple layers.
 
 ## Layer 0: Core Runtime Domains
 
-Usually owned by NexusRealtime Core.
+Usually owned by NexusEngine Core.
 
 ```txt
 runtime-world-kit
@@ -860,23 +860,23 @@ responsible for final product assembly
 
 # 15. ProtoKit Testing and Growth Order
 
-ProtoKits should always be tested against NexusRealtime Core and the existing ProtoKits library.
+ProtoKits should always be tested against NexusEngine Core and the existing ProtoKits library.
 
 A new ProtoKit should not be the first move.
 
 The correct order is:
 
 ```txt
-1. Test against NexusRealtime Core.
+1. Test against NexusEngine Core.
 2. Search existing ProtoKits.
 3. Reuse an existing kit if it already owns the domain.
 4. Improve the existing kit if it is missing needed functions.
 5. Add a new ProtoKit only when no existing kit owns the domain.
 ```
 
-## Test Against NexusRealtime First
+## Test Against NexusEngine First
 
-A ProtoKit should prove that it works with NexusRealtime’s runtime contracts.
+A ProtoKit should prove that it works with NexusEngine’s runtime contracts.
 
 That means it should work through expected runtime surfaces:
 
@@ -893,7 +893,7 @@ browser smoke tests
 visual proof tests
 ```
 
-If a kit cannot run cleanly against NexusRealtime Core, the kit boundary is not ready.
+If a kit cannot run cleanly against NexusEngine Core, the kit boundary is not ready.
 
 ## Search Existing ProtoKits First
 
@@ -1158,7 +1158,7 @@ Use this workflow when Proto Kitting.
 1. Find repeated behavior.
 2. Remove specific game fiction.
 3. Name the reusable domain.
-4. Search NexusRealtime Core and existing ProtoKits.
+4. Search NexusEngine Core and existing ProtoKits.
 5. Reuse an existing kit when possible.
 6. Improve an existing kit when it owns the domain but lacks a function.
 7. Add a new ProtoKit only when no existing kit owns the domain.
@@ -1205,11 +1205,11 @@ A ProtoKit should usually expose a factory.
 Example shape:
 
 ```js
-export function createInputIntentKit(NexusRealtime, options = {}) {
-  const inputIntentState = NexusRealtime.defineResource("inputIntent.state");
-  const inputIntentChanged = NexusRealtime.defineEvent("inputIntent.changed");
+export function createInputIntentKit(NexusEngine, options = {}) {
+  const inputIntentState = NexusEngine.defineResource("inputIntent.state");
+  const inputIntentChanged = NexusEngine.defineEvent("inputIntent.changed");
 
-  return NexusRealtime.defineRuntimeKit({
+  return NexusEngine.defineRuntimeKit({
     id: "input-intent-kit",
 
     initWorld({ world }) {
@@ -1544,7 +1544,7 @@ A Composition Kit should assemble reusable domains into a loop.
 
 A Stable Domain Kit should be proven and dependable.
 
-A new ProtoKit should only be added after NexusRealtime Core and the existing ProtoKits have been checked first.
+A new ProtoKit should only be added after NexusEngine Core and the existing ProtoKits have been checked first.
 
 If the logic is reusable, kit it.
 

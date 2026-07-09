@@ -13,13 +13,13 @@ export function normalizeObjectMeshRequest(input = {}, index = 0) {
   return { id, assetId, lod, url: input.url ?? input.selection?.url ?? null, instanceId: input.instanceId ?? input.instance?.id ?? null, priority: number(input.priority, 0), status: input.status ?? "queued", requestedAt: number(input.requestedAt, 0), metadata: clone(input.metadata ?? {}) };
 }
 
-export function createObjectMeshRequestKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjectMeshRequestKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objectMeshRequest.state");
   const Updated = event("objectMeshRequest.updated");
   const Requested = event("objectMeshRequest.requested");
   const initial = () => createObjectMeshRequestState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "object-mesh-request-kit",
     resources: { State },
     events: { Updated, Requested },

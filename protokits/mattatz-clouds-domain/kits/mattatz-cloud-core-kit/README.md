@@ -23,7 +23,7 @@ Base cloud primitive descriptor for the `mattatz-clouds-domain`.
 The implementation is exported from the parent domain entry:
 
 ```js
-import { createMattatzCloudCoreKit } from "@luminarylabs/nexusrealtime-protokits/mattatz-clouds-domain";
+import { createMattatzCloudCoreKit } from "@luminarylabs/nexusengine-protokits/mattatz-clouds-domain";
 ```
 
 Use `createMattatzCloudPrimitiveDescriptor()` when a renderer host only needs the descriptor object.

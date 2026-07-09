@@ -5,10 +5,10 @@ const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Numbe
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createGenericAnchorDescriptorKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createGenericAnchorDescriptorKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -108,9 +108,9 @@ function removeAnchors(state, ids, reason = "remove") {
   };
 }
 
-export function createGenericAnchorDescriptorKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createGenericAnchorDescriptorKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
 
   const AnchorDescriptorState = defineResource(config.resourceName ?? "genericAnchorDescriptor.state");
   const SetAnchors = defineEvent("genericAnchorDescriptor.setAnchors");

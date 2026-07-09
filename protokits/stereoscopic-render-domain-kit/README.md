@@ -49,21 +49,21 @@ Host-owned output:
 ## Import
 
 ```js
-import { createStereoscopicRenderDomainKit } from "@luminarylabs/nexusrealtime-protokits/stereoscopic-render-domain-kit";
+import { createStereoscopicRenderDomainKit } from "@luminarylabs/nexusengine-protokits/stereoscopic-render-domain-kit";
 ```
 
 CDN:
 
 ```js
-import { createStereoscopicRenderDomainKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/stereoscopic-render-domain-kit/index.js";
+import { createStereoscopicRenderDomainKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/stereoscopic-render-domain-kit/index.js";
 ```
 
 ## Install
 
 ```js
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createStereoscopicRenderDomainKit(NexusRealtime, {
+    createStereoscopicRenderDomainKit(NexusEngine, {
       interpupillaryDistance: 0.064,
       fovDegrees: 70,
       near: 0.05,

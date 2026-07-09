@@ -141,13 +141,13 @@ export function computeFlightCameraSnapshot(previous = {}, motion = {}, dt = 1 /
   };
 }
 
-export function createFlightCameraDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createFlightCameraDomainKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const FlightCameraState = resource(options.resourceName ?? "flightCamera.state");
   const FlightCameraUpdated = event("flightCamera.updated");
   const initial = () => createFlightCameraState(options);
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "flight-camera-domain-kit",
     resources: { FlightCameraState },
     events: { FlightCameraUpdated },

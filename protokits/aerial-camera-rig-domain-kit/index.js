@@ -2,7 +2,7 @@ import { defineInjectedRuntimeKit, number } from "../foundation-kit/index.js";
 
 export const AERIAL_CAMERA_RIG_DOMAIN_KIT_VERSION = "0.2.0";
 
-function defineResource(NexusRealtime, name) { return typeof NexusRealtime.defineResource === "function" ? NexusRealtime.defineResource(name) : `resource:${name}`; }
+function defineResource(NexusEngine, name) { return typeof NexusEngine.defineResource === "function" ? NexusEngine.defineResource(name) : `resource:${name}`; }
 function clone(value) { return value == null ? value : JSON.parse(JSON.stringify(value)); }
 function norm3(v = {}, fallback = { x: 0, y: 1, z: 0 }) { const x = number(v.x), y = number(v.y), z = number(v.z); const length = Math.hypot(x, y, z) || 0; return length > 0.000001 ? { x: x / length, y: y / length, z: z / length } : { ...fallback }; }
 function add(a = {}, b = {}) { return { x: number(a.x) + number(b.x), y: number(a.y) + number(b.y), z: number(a.z) + number(b.z) }; }
@@ -13,8 +13,8 @@ function forwardFromRotation(rotation = {}) { const yaw = number(rotation.yaw, 0
 function normalizePhase(phase, fallback = "cleanup") { const value = String(phase ?? fallback); if (value === "post" || value === "render") return "cleanup"; if (["input", "simulate", "resolve", "cleanup"].includes(value)) return value; return fallback; }
 function initialState(config = {}) { return { id: config.id ?? "aerial-camera-rig", version: AERIAL_CAMERA_RIG_DOMAIN_KIT_VERSION, mode: config.mode ?? "floating-chase", descriptor: null, frame: 0 }; }
 
-export function createAerialCameraRigDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialCameraRig.state");
+export function createAerialCameraRigDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialCameraRig.state");
   let installedEngine = null;
   function system(world) {
     const state = clone(world.getResource(State) ?? initialState(config));
@@ -41,7 +41,7 @@ export function createAerialCameraRigDomainKit(NexusRealtime = {}, config = {}) 
     const fov = number(config.fovBase, number(config.fov, 62)) + speedT * number(config.fovBoost, 12) - (body.airbrake ? 3 : 0);
     world.setResource(State, { ...state, mode: config.mode ?? "floating-chase", descriptor: { id: "camera.floating-chase", mode: config.mode ?? "floating-chase", anchorPosition, position: desiredCameraPosition, lookAt: anchorPosition, up, fov, rollInfluence: number(config.rollInfluence, 0.15), shake: { intensity: lowAglT * 0.18 + speedT * 0.035, lowAglT, speedT }, smoothing: { position: number(config.positionSmoothing, 7), look: number(config.lookSmoothing, 9), up: number(config.upSmoothing, 4) } }, frame: state.frame + 1 });
   }
-  return defineInjectedRuntimeKit(NexusRealtime, { id: config.kitId ?? "aerial-camera-rig-domain-kit", requires: ["aerial:body"], provides: ["camera:state", "camera:chase-rig", "render:camera-descriptor"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "aerialCameraRigSystem", system }], initWorld({ world }) { world.setResource(State, initialState(config)); }, install({ engine, world }) { installedEngine = engine; engine.aerialCameraRig = { getState() { return world.getResource(State); }, getSnapshot() { return clone(world.getResource(State)); }, getDescriptor() { return world.getResource(State)?.descriptor ?? null; } }; }, metadata: { version: AERIAL_CAMERA_RIG_DOMAIN_KIT_VERSION, domain: "aerial-camera-rig", purpose: "Floating chase camera anchor with velocity lead, roll damping, FOV kick, and low-AGL rise descriptors." } });
+  return defineInjectedRuntimeKit(NexusEngine, { id: config.kitId ?? "aerial-camera-rig-domain-kit", requires: ["aerial:body"], provides: ["camera:state", "camera:chase-rig", "render:camera-descriptor"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "aerialCameraRigSystem", system }], initWorld({ world }) { world.setResource(State, initialState(config)); }, install({ engine, world }) { installedEngine = engine; engine.aerialCameraRig = { getState() { return world.getResource(State); }, getSnapshot() { return clone(world.getResource(State)); }, getDescriptor() { return world.getResource(State)?.descriptor ?? null; } }; }, metadata: { version: AERIAL_CAMERA_RIG_DOMAIN_KIT_VERSION, domain: "aerial-camera-rig", purpose: "Floating chase camera anchor with velocity lead, roll damping, FOV kick, and low-AGL rise descriptors." } });
 }
 
 export default createAerialCameraRigDomainKit;

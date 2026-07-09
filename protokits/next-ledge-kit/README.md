@@ -1,18 +1,18 @@
 # Next Ledge Kit
 
-Composable click-to-climb and rope-swing rules for NexusRealtime games.
+Composable click-to-climb and rope-swing rules for NexusEngine games.
 
 `next-ledge-kit` remains the high-level coordinator for the climb loop. The surrounding vertical-climb ProtoKits provide content palettes, layered objects, route graphs, simple swing, endless ascent, cloud zones, input routing, camera state, risk evaluation, and no-overlay diegetic feedback.
 
 ## One-call cloud climb preset
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
 import {
   createNextLedgeCloudClimb
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/next-ledge-kit/cloud-climb-preset.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/next-ledge-kit/cloud-climb-preset.js";
 
-const game = createNextLedgeCloudClimb(NexusRealtime, {
+const game = createNextLedgeCloudClimb(NexusEngine, {
   seed: "clouds-forever-001",
   overlayUi: false,
   mode: "hybrid"
@@ -22,13 +22,13 @@ const game = createNextLedgeCloudClimb(NexusRealtime, {
 ## Advanced composition
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
 import {
   createNextLedgeCloudClimbKits
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/next-ledge-kit/cloud-climb-preset.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/next-ledge-kit/cloud-climb-preset.js";
 
-const game = NexusRealtime.createRealtimeGame({
-  kits: createNextLedgeCloudClimbKits(NexusRealtime, {
+const game = NexusEngine.createRealtimeGame({
+  kits: createNextLedgeCloudClimbKits(NexusEngine, {
     seed: "clouds-forever-001",
     overlayUi: false
   })

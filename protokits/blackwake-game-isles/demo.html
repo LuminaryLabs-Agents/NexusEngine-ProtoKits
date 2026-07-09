@@ -13,14 +13,14 @@
   <body>
     <canvas id="game" aria-label="Blackwake Isles Three.js ProtoKit demo"></canvas>
     <script type="module">
-      const nexusUrl = "https://cdn.jsdelivr.net/gh/" + "LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+      const nexusUrl = "https://cdn.jsdelivr.net/gh/" + "LuminaryLabs-Dev/NexusEngine@main/src/index.js";
       const threeUrl = "https://cdn.jsdelivr.net/npm/" + "three@0.160.0/build/three.module.js";
-      const [NexusRealtime, THREE, mod] = await Promise.all([
+      const [NexusEngine, THREE, mod] = await Promise.all([
         import(nexusUrl),
         import(threeUrl),
         import("./index.js")
       ]);
-      const game = mod.createBlackwakeIslesGame(NexusRealtime, {
+      const game = mod.createBlackwakeIslesGame(NexusEngine, {
         canvas: document.getElementById("game"),
         renderer: "three",
         three: THREE,

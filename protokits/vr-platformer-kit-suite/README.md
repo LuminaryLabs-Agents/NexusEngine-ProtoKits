@@ -56,7 +56,7 @@ Host owns:
 
 ```js
 simulatePlatformerStep(avatar, level, dt, config)
-createVrPlatformerMaximumFeatureKits(NexusRealtime, options)
+createVrPlatformerMaximumFeatureKits(NexusEngine, options)
 ```
 
 ## Smoke test

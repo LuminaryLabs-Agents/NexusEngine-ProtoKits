@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-scoped-domain-rpg-batch-01::vegetation-scale-domain-kit::2026-06-20
+// Smoke signature: NexusEngine-scoped-domain-rpg-batch-01::vegetation-scale-domain-kit::2026-06-20
 import { assert, FIVE_SMOKE_ENVIRONMENTS, assertKitContract, installKit } from "../../../tests/aaa-domain-spine-smoke-harness.mjs";
 import { createVegetationScaleDomainKit } from "../index.js";
 

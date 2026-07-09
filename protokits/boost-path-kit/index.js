@@ -151,8 +151,8 @@ function createBoostCollisionSystem(definitions, options = {}) {
   };
 }
 
-export function createBoostPathKit(nexusRealtime = {}, options = {}) {
-  const definitions = createArcadeRaceDefinitions(nexusRealtime, options);
+export function createBoostPathKit(nexusEngine = {}, options = {}) {
+  const definitions = createArcadeRaceDefinitions(nexusEngine, options);
   const { components, resources, events } = definitions;
 
   const bindings = {
@@ -188,7 +188,7 @@ export function createBoostPathKit(nexusRealtime = {}, options = {}) {
     }
   };
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: "boost-path-kit",
     components: {
       Racer: components.Racer,
@@ -226,7 +226,7 @@ export function createBoostPathKit(nexusRealtime = {}, options = {}) {
       version: BOOST_PATH_KIT_VERSION,
       coreVersion: ARCADE_RACE_CORE_VERSION,
       purpose: "Boost pads, lanes, risky shortcuts, boost duration, cooldowns, and stacking rules.",
-      usesNexusRealtimeKits: ["runtime-kit", "render-descriptor-compatible"]
+      usesNexusEngineKits: ["runtime-kit", "render-descriptor-compatible"]
     }
   });
 }

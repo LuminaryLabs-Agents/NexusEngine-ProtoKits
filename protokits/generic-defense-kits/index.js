@@ -181,8 +181,8 @@ export function createGenericDefenseLevel(config = {}) {
   return createDefaultLevel(config);
 }
 
-function createDefinitions(NexusRealtime, config = {}) {
-  const { defineResource, defineEvent } = NexusRealtime;
+function createDefinitions(NexusEngine, config = {}) {
+  const { defineResource, defineEvent } = NexusEngine;
   const prefix = config.resourcePrefix ?? "genericDefense";
   return {
     level: createDefaultLevel(config.level ?? config),
@@ -303,8 +303,8 @@ function initialRender(level) {
   };
 }
 
-function createMapKit(NexusRealtime, defs, config = {}) {
-  const { defineRuntimeKit } = NexusRealtime;
+function createMapKit(NexusEngine, defs, config = {}) {
+  const { defineRuntimeKit } = NexusEngine;
   const { MapState } = defs.resources;
   const { Reset, VitalDamaged } = defs.events;
   const level = defs.level;
@@ -342,8 +342,8 @@ function createMapKit(NexusRealtime, defs, config = {}) {
   });
 }
 
-function createEconomyKit(NexusRealtime, defs, config = {}) {
-  const { defineRuntimeKit } = NexusRealtime;
+function createEconomyKit(NexusEngine, defs, config = {}) {
+  const { defineRuntimeKit } = NexusEngine;
   const { EconomyState } = defs.resources;
   const { Reset, EconomyCredit, EconomyDebit, Rejected } = defs.events;
   const level = defs.level;
@@ -397,8 +397,8 @@ function createEconomyKit(NexusRealtime, defs, config = {}) {
   });
 }
 
-function createStructureKit(NexusRealtime, defs, config = {}) {
-  const { defineRuntimeKit } = NexusRealtime;
+function createStructureKit(NexusEngine, defs, config = {}) {
+  const { defineRuntimeKit } = NexusEngine;
   const { MapState, EconomyState, StructureState } = defs.resources;
   const { Reset, BuildRequested, UpgradeRequested, EconomyDebit, StructureBuilt, StructureUpgraded, Rejected } = defs.events;
   const level = defs.level;
@@ -525,8 +525,8 @@ function createStructureKit(NexusRealtime, defs, config = {}) {
   });
 }
 
-function createAgentWaveKit(NexusRealtime, defs, config = {}) {
-  const { defineRuntimeKit } = NexusRealtime;
+function createAgentWaveKit(NexusEngine, defs, config = {}) {
+  const { defineRuntimeKit } = NexusEngine;
   const { SessionState, AgentState } = defs.resources;
   const { Reset, StartWave, WaveStarted, WaveCompleted, VitalDamaged } = defs.events;
   const level = defs.level;
@@ -661,8 +661,8 @@ function createAgentWaveKit(NexusRealtime, defs, config = {}) {
   });
 }
 
-function createCombatKit(NexusRealtime, defs, config = {}) {
-  const { defineRuntimeKit } = NexusRealtime;
+function createCombatKit(NexusEngine, defs, config = {}) {
+  const { defineRuntimeKit } = NexusEngine;
   const { StructureState, AgentState, CombatState } = defs.resources;
   const { Reset, EnemyKilled, EconomyCredit } = defs.events;
   const level = defs.level;
@@ -795,8 +795,8 @@ function createCombatKit(NexusRealtime, defs, config = {}) {
   });
 }
 
-function createSessionFacadeKit(NexusRealtime, defs, config = {}) {
-  const { defineRuntimeKit } = NexusRealtime;
+function createSessionFacadeKit(NexusEngine, defs, config = {}) {
+  const { defineRuntimeKit } = NexusEngine;
   const { SessionState, MapState, EconomyState, StructureState, AgentState, CombatState, RenderState } = defs.resources;
   const { Reset, Select, BuildRequested, UpgradeRequested, StartWave, WaveCompleted, EconomyCredit, Rejected } = defs.events;
   const level = defs.level;
@@ -914,8 +914,8 @@ function createSessionFacadeKit(NexusRealtime, defs, config = {}) {
   });
 }
 
-function createRenderDescriptorKit(NexusRealtime, defs, config = {}) {
-  const { defineRuntimeKit } = NexusRealtime;
+function createRenderDescriptorKit(NexusEngine, defs, config = {}) {
+  const { defineRuntimeKit } = NexusEngine;
   const { SessionState, MapState, EconomyState, StructureState, AgentState, CombatState, RenderState } = defs.resources;
   const level = defs.level;
 
@@ -976,29 +976,29 @@ function createRenderDescriptorKit(NexusRealtime, defs, config = {}) {
   });
 }
 
-export function createGenericDefenseKits(NexusRealtime, config = {}) {
-  if (!NexusRealtime?.defineRuntimeKit || !NexusRealtime?.defineResource || !NexusRealtime?.defineEvent) {
-    throw new TypeError("createGenericDefenseKits requires NexusRealtime runtime helpers.");
+export function createGenericDefenseKits(NexusEngine, config = {}) {
+  if (!NexusEngine?.defineRuntimeKit || !NexusEngine?.defineResource || !NexusEngine?.defineEvent) {
+    throw new TypeError("createGenericDefenseKits requires NexusEngine runtime helpers.");
   }
-  const defs = createDefinitions(NexusRealtime, config);
+  const defs = createDefinitions(NexusEngine, config);
   return [
-    createMapKit(NexusRealtime, defs, config.mapKit ?? {}),
-    createEconomyKit(NexusRealtime, defs, config.economyKit ?? {}),
-    createStructureKit(NexusRealtime, defs, config.structureKit ?? {}),
-    createAgentWaveKit(NexusRealtime, defs, config.agentWaveKit ?? {}),
-    createCombatKit(NexusRealtime, defs, config.combatKit ?? {}),
-    createSessionFacadeKit(NexusRealtime, defs, config.sessionKit ?? {}),
-    createRenderDescriptorKit(NexusRealtime, defs, config.renderKit ?? {})
+    createMapKit(NexusEngine, defs, config.mapKit ?? {}),
+    createEconomyKit(NexusEngine, defs, config.economyKit ?? {}),
+    createStructureKit(NexusEngine, defs, config.structureKit ?? {}),
+    createAgentWaveKit(NexusEngine, defs, config.agentWaveKit ?? {}),
+    createCombatKit(NexusEngine, defs, config.combatKit ?? {}),
+    createSessionFacadeKit(NexusEngine, defs, config.sessionKit ?? {}),
+    createRenderDescriptorKit(NexusEngine, defs, config.renderKit ?? {})
   ];
 }
 
-export function createGenericDefenseGame(NexusRealtime, config = {}) {
-  if (typeof NexusRealtime?.createRealtimeGame !== "function") {
-    throw new TypeError("createGenericDefenseGame requires NexusRealtime.createRealtimeGame.");
+export function createGenericDefenseGame(NexusEngine, config = {}) {
+  if (typeof NexusEngine?.createRealtimeGame !== "function") {
+    throw new TypeError("createGenericDefenseGame requires NexusEngine.createRealtimeGame.");
   }
-  return NexusRealtime.createRealtimeGame({
-    kits: createGenericDefenseKits(NexusRealtime, config),
-    renderer: typeof NexusRealtime.createRenderer === "function" ? NexusRealtime.createRenderer("headless") : undefined
+  return NexusEngine.createRealtimeGame({
+    kits: createGenericDefenseKits(NexusEngine, config),
+    renderer: typeof NexusEngine.createRenderer === "function" ? NexusEngine.createRenderer("headless") : undefined
   });
 }
 

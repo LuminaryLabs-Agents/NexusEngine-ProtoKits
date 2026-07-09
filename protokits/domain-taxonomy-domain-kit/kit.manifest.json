@@ -1,5 +1,6 @@
 {
   "id": "domain-taxonomy-domain-kit",
+  "type": "domain-service-kit",
   "domain": "domain-taxonomy",
   "parentDomain": "domain-control-plane",
   "scope": "control-domain",
@@ -13,5 +14,11 @@
   "exportPath": "./domain-taxonomy-domain-kit",
   "sourcePath": "protokits/domain-taxonomy-domain-kit/index.js",
   "testPaths": ["tests/domain-control-plane-smoke.test.mjs"],
-  "status": "experimental"
+  "status": "experimental",
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "ownsDom": false,
+    "ownsCanvas": false,
+    "ownsThreeObjects": false
+  }
 }

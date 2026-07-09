@@ -5,7 +5,7 @@ Sky Rogue should be composed from domain kits instead of implemented as one HTML
 ## Target split
 
 Runtime:
-- NexusRealtime tick, events, resources, kit install order.
+- NexusEngine tick, events, resources, kit install order.
 
 Domain kits:
 - canyon terrain sampling

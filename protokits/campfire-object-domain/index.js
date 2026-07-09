@@ -80,11 +80,11 @@ export function createCampfireState(options = {}) {
   return { id: options.id ?? "campfire-object-domain", version: CAMPFIRE_OBJECT_DOMAIN_VERSION, lastGraph: null };
 }
 
-export function createCampfireObjectDomainKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createCampfireObjectDomainKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const State = defs.resource(options.resourceName ?? "campfireObject.state");
   const initial = () => createCampfireState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.kitId ?? "campfire-object-domain",
     resources: { State },
     provides: ["campfire:object-graph", "campfire:render-descriptor", "campfire:collision-descriptor"],

@@ -27,12 +27,12 @@ export function buildFoliageBatches(instances = [], viewer = {}, engine = {}, st
   return { batches: Array.from(batches.values()), fallbacks, requests };
 }
 
-export function createFoliageBatchDescriptorKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createFoliageBatchDescriptorKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "foliageBatchDescriptors.state");
   const Updated = event("foliageBatchDescriptors.updated");
   const initial = () => createFoliageBatchDescriptorState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, { id: options.id ?? "foliage-batch-descriptor-kit", resources: { State }, events: { Updated }, requires: ["vegetation:placement", "object:lod-policy", "object:residency"], provides: ["render:vegetation-descriptors", "render:foliage-batches"], initWorld({ world }) { ensureResource(world, State, initial); }, install({ engine, world }) { const state = () => ensureResource(world, State, initial); const api = { getState: state, build(viewer = {}) { const result = buildFoliageBatches(engine.vegetationPlacement?.listInstances?.() ?? [], viewer, engine, state()); const next = { ...state(), ...result }; world.setResource(State, next); world.emit?.(Updated, { state: clone(next) }); return clone(next); }, getBatches() { return clone(state().batches); }, snapshot: () => clone(state()) }; engine.foliageBatchDescriptors = api; engine.vegetationRenderDescriptors ??= api; engine.n ??= {}; engine.n.foliageBatchDescriptors = api; }, metadata: { version: FOLIAGE_BATCH_DESCRIPTOR_KIT_VERSION, purpose: "Foliage batch descriptors using object LOD, material, request, and residency services." } });
+  return defineInjectedRuntimeKit(nexusEngine, { id: options.id ?? "foliage-batch-descriptor-kit", resources: { State }, events: { Updated }, requires: ["vegetation:placement", "object:lod-policy", "object:residency"], provides: ["render:vegetation-descriptors", "render:foliage-batches"], initWorld({ world }) { ensureResource(world, State, initial); }, install({ engine, world }) { const state = () => ensureResource(world, State, initial); const api = { getState: state, build(viewer = {}) { const result = buildFoliageBatches(engine.vegetationPlacement?.listInstances?.() ?? [], viewer, engine, state()); const next = { ...state(), ...result }; world.setResource(State, next); world.emit?.(Updated, { state: clone(next) }); return clone(next); }, getBatches() { return clone(state().batches); }, snapshot: () => clone(state()) }; engine.foliageBatchDescriptors = api; engine.vegetationRenderDescriptors ??= api; engine.n ??= {}; engine.n.foliageBatchDescriptors = api; }, metadata: { version: FOLIAGE_BATCH_DESCRIPTOR_KIT_VERSION, purpose: "Foliage batch descriptors using object LOD, material, request, and residency services." } });
 }
 
 export default createFoliageBatchDescriptorKit;

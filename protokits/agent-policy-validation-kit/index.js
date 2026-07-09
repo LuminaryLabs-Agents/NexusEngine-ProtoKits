@@ -58,15 +58,15 @@ function validateProposal(proposal = {}, rules = createInitialState().rules, con
   return { ok: warnings.length === 0, reason: warnings[0]?.type ?? "accepted", intent, warnings, warningCount: warnings.length, actionReports, proposal: clone(proposal) };
 }
 
-export function createAgentPolicyValidationKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createAgentPolicyValidationKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const AgentPolicyState = resource(options.resourceName ?? "agentPolicy.state");
   const ProposalEvaluated = event("agentPolicy.proposalEvaluated");
   const ProposalAccepted = event("agentPolicy.proposalAccepted");
   const ProposalRejected = event("agentPolicy.proposalRejected");
   const AgentPolicyReset = event("agentPolicy.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "agent-policy-validation-kit",
     resources: { AgentPolicyState },
     events: { ProposalEvaluated, ProposalAccepted, ProposalRejected, AgentPolicyReset },

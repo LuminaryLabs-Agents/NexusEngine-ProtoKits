@@ -29,7 +29,7 @@ The module does not depend on DOM, Canvas, Three.js, browser globals, fetch, or 
 For runtime kits:
 
 ```js
-const kit = createExampleKit(NexusRealtime, options);
+const kit = createExampleKit(NexusEngine, options);
 assert.equal(typeof kit.id, "string");
 assert.ok(Array.isArray(kit.systems) || kit.systems === undefined);
 ```

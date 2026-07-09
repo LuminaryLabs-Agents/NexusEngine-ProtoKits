@@ -1,6 +1,6 @@
 # DSM Agent Workflow
 
-This is the operating loop for AI agents working in NexusRealtime-ProtoKits.
+This is the operating loop for AI agents working in NexusEngine-ProtoKits.
 
 ## Prime directive
 

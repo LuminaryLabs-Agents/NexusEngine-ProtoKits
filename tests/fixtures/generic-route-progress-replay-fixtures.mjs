@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-generic-route-progress-replay::fixtures::2026-06-24
+// Smoke signature: NexusEngine-generic-route-progress-replay::fixtures::2026-06-24
 
 export const routeProgressReplayFixtures = Object.freeze([
   {

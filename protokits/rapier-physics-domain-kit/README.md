@@ -1,6 +1,6 @@
 # rapier-physics-domain-kit
 
-`rapier-physics-domain-kit` is the Rapier-backed physics boundary for NexusRealtime hosts.
+`rapier-physics-domain-kit` is the Rapier-backed physics boundary for NexusEngine hosts.
 
 The kit does not import Rapier by URL. The browser or native host provides a Rapier module/runtime to the kit. This keeps the domain reusable, testable, and free of renderer or CDN ownership.
 

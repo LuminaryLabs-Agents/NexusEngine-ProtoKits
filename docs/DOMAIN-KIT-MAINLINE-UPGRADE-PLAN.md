@@ -2,13 +2,13 @@
 
 ## Status
 
-This document is the mainline implementation plan for expanding NexusRealtime ProtoKits into a complete generalized domain-kit and composition-kit architecture.
+This document is the mainline implementation plan for expanding NexusEngine ProtoKits into a complete generalized domain-kit and composition-kit architecture.
 
-This is not a side package, not a new repository, and not a `v3` branch. The upgrade belongs in the current `NexusRealtime-ProtoKits` organization and should land on `main` in as few pushes as practical.
+This is not a side package, not a new repository, and not a `v3` branch. The upgrade belongs in the current `NexusEngine-ProtoKits` organization and should land on `main` in as few pushes as practical.
 
 ## One-sentence goal
 
-Make ProtoKits the main incubation surface for every reusable NexusRealtime domain capability: atomic domain kits, composition kits, harness kits, manifests, promotion gates, and vertical stacks that can later promote into core NexusRealtime when they are stable.
+Make ProtoKits the main incubation surface for every reusable NexusEngine domain capability: atomic domain kits, composition kits, harness kits, manifests, promotion gates, and vertical stacks that can later promote into core NexusEngine when they are stable.
 
 ## North-star mentality
 

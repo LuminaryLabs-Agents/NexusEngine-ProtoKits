@@ -39,13 +39,13 @@ import {
   createMaterialDomainServiceKit,
   createLightingDomainServiceKit,
   createAtmosphereDomainServiceKit
-} from "@luminarylabs/nexusrealtime-protokits/adaptive-visual-core";
+} from "@luminarylabs/nexusengine-protokits/adaptive-visual-core";
 ```
 
 Or import a wrapper directly:
 
 ```js
-import { createRenderQualityBudgetKit } from "@luminarylabs/nexusrealtime-protokits/render-quality-budget-kit";
+import { createRenderQualityBudgetKit } from "@luminarylabs/nexusengine-protokits/render-quality-budget-kit";
 ```
 
 ## Promotion notes

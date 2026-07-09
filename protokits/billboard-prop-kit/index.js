@@ -57,7 +57,7 @@ export function drawBillboards(ctx, camera, billboards = [], view = {}) {
   return drawn;
 }
 
-export function createBillboardPropKit(nexusRealtime = {}, options = {}) {
+export function createBillboardPropKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "billboard-prop-kit", version: BILLBOARD_PROP_KIT_VERSION, createBillboard, projectBillboard, sortBillboards, drawBillboards };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["render:billboards", "detail:props"], bindings: { billboardPropKit: kit }, metadata: { version: BILLBOARD_PROP_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["render:billboards", "detail:props"], bindings: { billboardPropKit: kit }, metadata: { version: BILLBOARD_PROP_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

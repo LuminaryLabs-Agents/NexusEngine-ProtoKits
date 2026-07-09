@@ -117,12 +117,12 @@ function normalizeAim(x, y) {
   return { x: clamp(x / d, -1, 1), y: clamp(y / d, -1, 1) };
 }
 
-export function createNextLedgeGrappleKit(NexusRealtime, config = {}) {
+export function createNextLedgeGrappleKit(NexusEngine, config = {}) {
   const required = ["defineResource", "defineEvent", "defineRuntimeKit"];
   for (const key of required) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createNextLedgeGrappleKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createNextLedgeGrappleKit requires NexusEngine.${key}.`);
   }
-  const { defineResource, defineEvent, defineRuntimeKit } = NexusRealtime;
+  const { defineResource, defineEvent, defineRuntimeKit } = NexusEngine;
   const cfg = createDefaultNextLedgeGrappleConfig(config);
   let level = config.level ?? createDefaultNextLedgeGrappleLevel(cfg);
 

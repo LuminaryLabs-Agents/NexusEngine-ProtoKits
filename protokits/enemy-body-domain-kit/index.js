@@ -3,9 +3,9 @@ export const ENEMY_BODY_DOMAIN_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const toNumber = (value, fallback = 1) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createEnemyBodyDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createEnemyBodyDomainKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -39,9 +39,9 @@ function createState(config = {}) {
   return { version: ENEMY_BODY_DOMAIN_KIT_VERSION, id: config.stateId ?? "enemy-body-domain", domain: "enemy-body", bodies: [], bodiesById: {}, lastBody: null };
 }
 
-export function createEnemyBodyDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createEnemyBodyDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const EnemyBodyState = defineResource(config.resourceName ?? "enemyBodyDomain.state");
   const EnemyBodyDescribed = defineEvent("enemyBody.described");
 

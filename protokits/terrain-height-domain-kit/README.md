@@ -12,7 +12,7 @@ What if an actor, prop, tree, or camera needs ground height?
   It does not draw terrain or move actors by itself.
 ```
 
-Extends: NexusRealtime runtime-shaped DomainServiceKit via `defineRuntimeKit`.
+Extends: NexusEngine runtime-shaped DomainServiceKit via `defineRuntimeKit`.
 
 Composes:
 
@@ -35,5 +35,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-scoped-domain-rpg-batch-01::terrain-height-domain-kit::2026-06-20
+NexusEngine-scoped-domain-rpg-batch-01::terrain-height-domain-kit::2026-06-20
 ```

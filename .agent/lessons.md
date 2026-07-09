@@ -4,7 +4,7 @@ Status: active
 
 ## Purpose
 
-Store game ideas tried and tested for reusable NexusRealtime domain-kit extraction.
+Store game ideas tried and tested for reusable NexusEngine domain-kit extraction.
 
 ## Current Run: 2026-06-22
 

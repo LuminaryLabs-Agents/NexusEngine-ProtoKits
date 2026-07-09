@@ -8,13 +8,13 @@ import {
   createGenericDefensePresentationStackKit
 } from "../index.js";
 
-const NexusRealtime = {
+const NexusEngine = {
   defineRuntimeKit(config) { return config; }
 };
 
 assert.equal(GENERIC_DEFENSE_PRESENTATION_STACK_VERSION, "0.1.0");
 
-const stack = createGenericDefensePresentationStackKits(NexusRealtime);
+const stack = createGenericDefensePresentationStackKits(NexusEngine);
 assert.equal(stack.length, 19, "all presentation child kits plus stack kit are created");
 assert.equal(stack.at(-1).id, "generic-defense-presentation-stack-kit");
 
@@ -41,9 +41,9 @@ const requiredIds = [
 ];
 
 assert.deepEqual(stack.map((kit) => kit.id), requiredIds);
-assert.ok(createGenericStylizedViewRigKit(NexusRealtime).provides.includes("camera:2.5d"));
-assert.ok(createGenericCelMaterialKit(NexusRealtime).provides.includes("style:cel-materials"));
-assert.ok(createGenericInkOutlineKit(NexusRealtime).provides.includes("style:outline"));
-assert.ok(createGenericDefensePresentationStackKit(NexusRealtime).provides.includes("presentation:stack"));
+assert.ok(createGenericStylizedViewRigKit(NexusEngine).provides.includes("camera:2.5d"));
+assert.ok(createGenericCelMaterialKit(NexusEngine).provides.includes("style:cel-materials"));
+assert.ok(createGenericInkOutlineKit(NexusEngine).provides.includes("style:outline"));
+assert.ok(createGenericDefensePresentationStackKit(NexusEngine).provides.includes("presentation:stack"));
 
 console.log("generic-defense-presentation-stack-kit smoke passed");

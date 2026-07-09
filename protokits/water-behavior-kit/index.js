@@ -20,8 +20,8 @@ function record(state, event) {
   return { ...state, recentEvents: [event, ...state.recentEvents].slice(0, 24) };
 }
 
-export function createWaterBehaviorKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createWaterBehaviorKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: WATER_BEHAVIOR_KIT_VERSION,
     factoryName: "createWaterBehaviorKit",
     kitId: "water-behavior-kit",

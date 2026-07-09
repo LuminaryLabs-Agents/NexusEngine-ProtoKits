@@ -86,13 +86,13 @@ export function createVegetationArchetypeLibrary(data = {}, options = {}) {
   return Object.freeze({ species: Object.freeze([...species]), getSpecies, sampleSpeciesForBiome, sampleInstanceForBiome, getScaleRange, getSinkRange, getLodSet, getMaterialSlots });
 }
 
-export function createVegetationArchetypeKit(nexusRealtime = {}, options = {}) {
+export function createVegetationArchetypeKit(nexusEngine = {}, options = {}) {
   const library = createVegetationArchetypeLibrary(options.data ?? options, options);
   const api = Object.freeze({ id: options.id ?? "vegetation-archetype-kit", version: VEGETATION_ARCHETYPE_KIT_VERSION, ...library });
   return Object.freeze({
     ...api,
     createRuntimeKit(runtimeOptions = {}) {
-      return defineInjectedRuntimeKit(nexusRealtime, {
+      return defineInjectedRuntimeKit(nexusEngine, {
         id: runtimeOptions.id ?? api.id,
         provides: runtimeOptions.provides ?? ["domain:vegetation-archetype", "service:vegetation-species", "service:vegetation-sampling"],
         bindings: { vegetationArchetypeKit: api },

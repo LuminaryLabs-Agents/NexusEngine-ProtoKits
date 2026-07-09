@@ -54,9 +54,9 @@ export const ARTICULATED_RIG_DESCRIPTOR_KIT_DEFINITION = Object.freeze({
   requires: ['aerial:body'],
   purpose: 'Renderer-neutral articulated body, joint, and part descriptor service.'
 });
-export function createArticulatedRigDescriptorKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createArticulatedRigDescriptorKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: config.kitId ?? ARTICULATED_RIG_DESCRIPTOR_KIT_DEFINITION.id,
     provides: ARTICULATED_RIG_DESCRIPTOR_KIT_DEFINITION.provides,
     requires: ARTICULATED_RIG_DESCRIPTOR_KIT_DEFINITION.requires,
@@ -81,9 +81,9 @@ export const PROCEDURAL_WING_FLAP_KIT_DEFINITION = Object.freeze({
   requires: ['aerial:body', 'rig:definition'],
   purpose: 'Procedural wing-flap phase, amplitude, and stroke timing from flight state.'
 });
-export function createProceduralWingFlapKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createProceduralWingFlapKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: config.kitId ?? PROCEDURAL_WING_FLAP_KIT_DEFINITION.id,
     provides: PROCEDURAL_WING_FLAP_KIT_DEFINITION.provides,
     requires: PROCEDURAL_WING_FLAP_KIT_DEFINITION.requires,
@@ -117,9 +117,9 @@ export const FLIGHT_POSE_DRIVER_KIT_DEFINITION = Object.freeze({
   requires: ['aerial:body', 'rig:wing-flap'],
   purpose: 'Flight-mode pose weights for glide, flap, boost, climb, dive, and stall.'
 });
-export function createFlightPoseDriverKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createFlightPoseDriverKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: config.kitId ?? FLIGHT_POSE_DRIVER_KIT_DEFINITION.id,
     provides: FLIGHT_POSE_DRIVER_KIT_DEFINITION.provides,
     requires: FLIGHT_POSE_DRIVER_KIT_DEFINITION.requires,
@@ -148,9 +148,9 @@ export const RIG_ANIMATION_DESCRIPTOR_KIT_DEFINITION = Object.freeze({
   requires: ['rig:definition', 'rig:wing-flap', 'rig:flight-pose'],
   purpose: 'Final renderer-neutral joint rotations and body offsets for articulated rigs.'
 });
-export function createRigAnimationDescriptorKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createRigAnimationDescriptorKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: config.kitId ?? RIG_ANIMATION_DESCRIPTOR_KIT_DEFINITION.id,
     provides: RIG_ANIMATION_DESCRIPTOR_KIT_DEFINITION.provides,
     requires: RIG_ANIMATION_DESCRIPTOR_KIT_DEFINITION.requires,

@@ -23,7 +23,7 @@ Use this checklist while implementing a DSM.
 ## Runtime-kit implementation
 
 ```txt
-[ ] Factory accepts supplied NexusRealtime dependency object.
+[ ] Factory accepts supplied NexusEngine dependency object.
 [ ] Uses defineRuntimeKit from supplied dependency.
 [ ] Uses defineResource from supplied dependency.
 [ ] Uses defineEvent from supplied dependency.

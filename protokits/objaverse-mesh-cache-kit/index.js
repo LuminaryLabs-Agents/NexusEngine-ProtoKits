@@ -32,12 +32,12 @@ export function summarizeObjaverseMeshCache(state = {}) {
   return { total: entries.length, bytes, budgetBytes: number(state.budgetBytes, 0), budgetUsed: state.budgetBytes ? bytes / state.budgetBytes : 0, instanceCount: entries.reduce((sum, entry) => sum + number(entry.instanceCount, 0), 0) };
 }
 
-export function createObjaverseMeshCacheKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjaverseMeshCacheKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objaverseMeshCache.state");
   const Updated = event("objaverseMeshCache.updated");
   const initial = () => createObjaverseMeshCacheState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "objaverse-mesh-cache-kit",
     resources: { State },
     events: { Updated },

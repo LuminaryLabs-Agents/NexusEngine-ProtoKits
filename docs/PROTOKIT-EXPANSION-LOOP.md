@@ -1,20 +1,20 @@
 # ProtoKit Expansion Loop
 
-Use this file when an agent needs to build or refine reusable NexusRealtime behavior without editing NexusRealtime core.
+Use this file when an agent needs to build or refine reusable NexusEngine behavior without editing NexusEngine core.
 
 ## Goal
 
-Grow NexusRealtime capability by adding reusable ProtoKits that can be composed by many experiments, games, and app hosts.
+Grow NexusEngine capability by adding reusable ProtoKits that can be composed by many experiments, games, and app hosts.
 
 ## Boundary
 
 ```txt
-NexusRealtime = read-only runtime contract and stable DSK base
-NexusRealtime-ProtoKits = reusable domain/service kit behavior
-NexusRealtime-Experiments = playable proof and game-specific composition
+NexusEngine = read-only runtime contract and stable DSK base
+NexusEngine-ProtoKits = reusable domain/service kit behavior
+NexusEngine-Experiments = playable proof and game-specific composition
 ```
 
-Do not move gameplay, rendering, controls, presets, or app-specific copy into NexusRealtime core. Do not put one-off game behavior into ProtoKits unless it has been generalized into a reusable domain service.
+Do not move gameplay, rendering, controls, presets, or app-specific copy into NexusEngine core. Do not put one-off game behavior into ProtoKits unless it has been generalized into a reusable domain service.
 
 ## Required Reads
 
@@ -31,7 +31,7 @@ docs/DSK-FIRST-WAVE-LEDGER.md
 If the work is driven by a playable scene, also read:
 
 ```txt
-/Users/crimsonwheeler/Documents/GitHub/NexusRealtime-Experiments/docs/VISUAL-EXPERIMENT-LOOP.md
+/Users/crimsonwheeler/Documents/GitHub/NexusEngine-Experiments/docs/VISUAL-EXPERIMENT-LOOP.md
 ```
 
 ## Kit Contract
@@ -58,7 +58,7 @@ proof: experiment or test proving it composes
 5. Keep old wrappers only as explicit migration shims.
 6. Add or update README/spec/catalog entries when the contract changes.
 7. Validate with npm run check.
-8. If visual/playable proof is needed, update NexusRealtime-Experiments instead of adding demo-only behavior here.
+8. If visual/playable proof is needed, update NexusEngine-Experiments instead of adding demo-only behavior here.
 ```
 
 ## Reject Conditions
@@ -66,7 +66,7 @@ proof: experiment or test proving it composes
 Reject or refactor the change if:
 
 ```txt
-it edits NexusRealtime core
+it edits NexusEngine core
 it hardcodes one experiment's art direction into a ProtoKit
 it owns DOM, browser input listeners, canvas drawing, WebGL, or page UI
 it adds state without snapshot/reset expectations
@@ -85,5 +85,5 @@ npm run check
 If an experiment consumes the kit, also validate the Experiments repo:
 
 ```sh
-cd /Users/crimsonwheeler/Documents/GitHub/NexusRealtime-Experiments && npm run check
+cd /Users/crimsonwheeler/Documents/GitHub/NexusEngine-Experiments && npm run check
 ```

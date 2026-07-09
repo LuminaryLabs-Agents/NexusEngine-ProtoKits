@@ -47,13 +47,13 @@ export function validateDeployManifest(manifestInput = {}) {
   return { ok: errors.length === 0, errors, manifest };
 }
 
-export function createDeployManifestKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createDeployManifestKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const DeployManifestState = resource(options.resourceName ?? "deployManifest.state");
   const DeployManifestRegistered = event("deployManifest.registered");
   const DeployManifestRejected = event("deployManifest.rejected");
   const createState = () => ({ version: DEPLOY_MANIFEST_KIT_VERSION, manifests: {} });
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "deploy-manifest-kit",
     resources: { DeployManifestState },
     events: { DeployManifestRegistered, DeployManifestRejected },

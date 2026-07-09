@@ -6,11 +6,11 @@ This module keeps the HTML launcher tiny while moving gameplay into a ProtoKit-o
 
 ## Reliability additions
 
-- startup health report for NexusRealtime and canvas capabilities
+- startup health report for NexusEngine and canvas capabilities
 - visible startup/runtime error overlay
-- fallback loop when NexusRealtime is unavailable
+- fallback loop when NexusEngine is unavailable
 - defensive canvas resize and context checks
-- state exposed through a NexusRealtime resource when the runtime is available
+- state exposed through a NexusEngine resource when the runtime is available
 - tick and phase-change events emitted by the gameplay runtime kit
 
 ## Features
@@ -24,15 +24,15 @@ This module keeps the HTML launcher tiny while moving gameplay into a ProtoKit-o
 - ship upgrades for sails, hull, rudder, and diving gear
 - chase, map, and first-person-ish camera modes
 - generated HUD and objective tracker
-- appends a real NexusRealtime runtime kit with resources, events, bindings, and a simulate system
+- appends a real NexusEngine runtime kit with resources, events, bindings, and a simulate system
 
 ## Import
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
-import { createBlackwakeIslesGame } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/blackwake-game-isles/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
+import { createBlackwakeIslesGame } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/blackwake-game-isles/index.js";
 
-createBlackwakeIslesGame(NexusRealtime, {
+createBlackwakeIslesGame(NexusEngine, {
   canvas: document.getElementById("game"),
   seed: "public-demo-001"
 }).start();

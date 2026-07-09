@@ -66,15 +66,15 @@ function available(routeState, climbState = {}, swingState = {}, options = {}) {
   return Object.keys(routeState.nodes ?? {}).filter((id) => canReachRouteNode(routeState, fromId, id, { climbState, swingState, mode: climbState.mode, momentum: swingState.horizontalMomentum, momentumReachScale: options.momentumReachScale }).reachable);
 }
 
-export function createLedgeRouteKit(nexusRealtime = {}, options = {}) {
-  const definitions = createVerticalClimbDefinitions(nexusRealtime, options);
+export function createLedgeRouteKit(nexusEngine = {}, options = {}) {
+  const definitions = createVerticalClimbDefinitions(nexusEngine, options);
   const { resources } = definitions;
   const system = (world) => {
     const routeState = ensureResource(world, resources.RouteState, () => createInitialState(options));
     routeState.availableTargetIds = available(routeState, world.getResource(resources.ClimbState) ?? {}, world.getResource(resources.SwingState) ?? {}, options);
     world.setResource(resources.RouteState, routeState);
   };
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "ledge-route-kit",
     resources: { RouteState: resources.RouteState, ClimbState: resources.ClimbState, SwingState: resources.SwingState },
     systems: [{ phase: "resolve", name: "ledgeRouteAvailabilitySystem", system }],

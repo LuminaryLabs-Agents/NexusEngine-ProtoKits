@@ -61,14 +61,14 @@ function publish(world, State, Updated, next, eventRecord) {
   return clone(next);
 }
 
-export function createKitLoadPlanKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createKitLoadPlanKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "kitLoadPlan.state");
   const Updated = event("kitLoadPlan.updated");
   const EntryUpdated = event("kitLoadPlan.entryUpdated");
   const initial = () => createKitLoadPlanState(options);
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "kit-load-plan-kit",
     resources: { State },
     events: { Updated, EntryUpdated },

@@ -5,9 +5,9 @@ const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [
 const idOf = (value, fallback = "item") => String(value ?? fallback).trim() || fallback;
 const number = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createPerceptionKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createPerceptionKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -89,9 +89,9 @@ function visibleFactsForAgent(state, agentId, visibleEntityIds) {
   });
 }
 
-export function createPerceptionKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createPerceptionKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const PerceptionState = defineResource(config.resourceName ?? "perception.state");
   const EntityRegistered = defineEvent("perception.entityRegistered");
   const EntityUpdated = defineEvent("perception.entityUpdated");

@@ -23,13 +23,13 @@ function checkScenario(scenario = {}, context = {}) {
   return { ok: warnings.length === 0, warningCount: warnings.length, warnings, checks };
 }
 
-export function createScenarioQaHarness(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createScenarioQaHarness(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const ScenarioQaState = resource(options.resourceName ?? "scenarioQa.state");
   const ScenarioRegistered = event("scenarioQa.registered");
   const ScenarioRun = event("scenarioQa.run");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "scenario-qa-harness",
     resources: { ScenarioQaState },
     events: { ScenarioRegistered, ScenarioRun },

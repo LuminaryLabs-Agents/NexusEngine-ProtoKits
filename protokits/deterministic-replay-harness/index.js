@@ -44,13 +44,13 @@ function compareRuns(a = {}, b = {}) {
   return { ok: warnings.length === 0, warningCount: warnings.length, warnings, hashA: a.hash, hashB: b.hash };
 }
 
-export function createDeterministicReplayHarness(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createDeterministicReplayHarness(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const ReplayHarnessState = resource(options.resourceName ?? "deterministicReplay.state");
   const ReplayRunRecorded = event("deterministicReplay.runRecorded");
   const ReplayCompared = event("deterministicReplay.compared");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "deterministic-replay-harness",
     resources: { ReplayHarnessState },
     events: { ReplayRunRecorded, ReplayCompared },

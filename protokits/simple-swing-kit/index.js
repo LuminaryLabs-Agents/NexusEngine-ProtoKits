@@ -27,8 +27,8 @@ export function swingPlayerPosition(swingState = {}) {
   return { x: number(anchor.x) + Math.sin(angle) * length, y: number(anchor.y) - Math.cos(angle) * length, z: number(anchor.z), rotation: -angle * 0.55 };
 }
 
-export function createSimpleSwingKit(nexusRealtime = {}, options = {}) {
-  const definitions = createVerticalClimbDefinitions(nexusRealtime, options);
+export function createSimpleSwingKit(nexusEngine = {}, options = {}) {
+  const definitions = createVerticalClimbDefinitions(nexusEngine, options);
   const { resources, events } = definitions;
   const system = (world) => {
     let swingState = ensureResource(world, resources.SwingState, () => createDefaultSwingState(options));
@@ -40,7 +40,7 @@ export function createSimpleSwingKit(nexusRealtime = {}, options = {}) {
     if (swingState.attached && climbState && options.bindClimbState !== false) world.setResource(resources.ClimbState, patchClimbState(climbState, { player: swingPlayerPosition(swingState), mode: "swinging" }));
     world.setResource(resources.SwingState, swingState);
   };
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "simple-swing-kit",
     resources: { SwingState: resources.SwingState, ClimbState: resources.ClimbState },
     events: { SwingInput: events.SwingInput, SwingStarted: events.SwingStarted, SwingReleased: events.SwingReleased },

@@ -2,9 +2,9 @@ export const ONNX_LOADER_KIT_VERSION = "0.1.0";
 
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createOnnxLoaderKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createOnnxLoaderKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -16,9 +16,9 @@ function normalizeInputs(namedInputs = {}) {
   return Object.fromEntries(Object.entries(namedInputs).map(([key, value]) => [key, Array.isArray(value) ? value.map(Number) : value]));
 }
 
-export function createOnnxLoaderKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createOnnxLoaderKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const OnnxLoaderState = defineResource(config.resourceName ?? "onnxLoader.state");
   const OnnxSessionLoaded = defineEvent("onnx.sessionLoaded");
   const OnnxRunRequested = defineEvent("onnx.runRequested");

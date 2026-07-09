@@ -5,10 +5,10 @@ const toBool = (value) => value === true || value === "true" || value === 1;
 
 export const STONEWAKE_SYSTEMS_DOMAIN_KITS_VERSION = "0.1.0";
 
-function requireNexus(NexusRealtime, factoryName) {
+function requireNexus(NexusEngine, factoryName) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`${factoryName} requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`${factoryName} requires NexusEngine.${key}.`);
     }
   }
 }
@@ -40,9 +40,9 @@ function eventPayload(id, payload = {}) {
   return { id, commandId: payload.commandId ?? payload.signalId ?? payload.operationId ?? `${id}:${Date.now?.() ?? 0}`, ...payload };
 }
 
-export function createAcousticSignalDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime, "createAcousticSignalDomainKit");
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createAcousticSignalDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine, "createAcousticSignalDomainKit");
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const AcousticSignalState = defineResource(config.resourceName ?? "acousticSignal.state");
   const SignalEmitted = defineEvent("acousticSignal.emitted");
   const SignalReachedListener = defineEvent("acousticSignal.reachedListener");
@@ -193,9 +193,9 @@ export function createAcousticSignalDomainKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createWeightedTriggerDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime, "createWeightedTriggerDomainKit");
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createWeightedTriggerDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine, "createWeightedTriggerDomainKit");
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const WeightedTriggerState = defineResource(config.resourceName ?? "weightedTrigger.state");
   const TriggerActivated = defineEvent("weightedTrigger.activated");
   const TriggerReleased = defineEvent("weightedTrigger.released");
@@ -267,9 +267,9 @@ export function createWeightedTriggerDomainKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createConditionGateDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime, "createConditionGateDomainKit");
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createConditionGateDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine, "createConditionGateDomainKit");
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const ConditionGateState = defineResource(config.resourceName ?? "conditionGate.state");
   const GateOpened = defineEvent("conditionGate.opened");
   const GateClosed = defineEvent("conditionGate.closed");
@@ -333,9 +333,9 @@ export function createConditionGateDomainKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createPhysicsBodyLiteDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime, "createPhysicsBodyLiteDomainKit");
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createPhysicsBodyLiteDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine, "createPhysicsBodyLiteDomainKit");
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const PhysicsBodyLiteState = defineResource(config.resourceName ?? "physicsBodyLite.state");
   const BodyMoved = defineEvent("physicsBodyLite.bodyMoved");
   const BodyImpulsed = defineEvent("physicsBodyLite.bodyImpulsed");
@@ -428,9 +428,9 @@ export function createPhysicsBodyLiteDomainKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createProjectileLiteDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime, "createProjectileLiteDomainKit");
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createProjectileLiteDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine, "createProjectileLiteDomainKit");
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const ProjectileLiteState = defineResource(config.resourceName ?? "projectileLite.state");
   const ProjectileSpawned = defineEvent("projectileLite.spawned");
   const ProjectileImpacted = defineEvent("projectileLite.impacted");
@@ -504,9 +504,9 @@ export function createProjectileLiteDomainKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createSensoryAgentDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime, "createSensoryAgentDomainKit");
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createSensoryAgentDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine, "createSensoryAgentDomainKit");
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const SensoryAgentState = defineResource(config.resourceName ?? "sensoryAgent.state");
   const AgentRegistered = defineEvent("sensoryAgent.registered");
   const AgentStateChanged = defineEvent("sensoryAgent.stateChanged");
@@ -579,14 +579,14 @@ export function createSensoryAgentDomainKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createStonewakeSystemsDomainKits(NexusRealtime, config = {}) {
+export function createStonewakeSystemsDomainKits(NexusEngine, config = {}) {
   return [
-    createAcousticSignalDomainKit(NexusRealtime, config.acousticSignal ?? {}),
-    createWeightedTriggerDomainKit(NexusRealtime, config.weightedTrigger ?? {}),
-    createConditionGateDomainKit(NexusRealtime, config.conditionGate ?? {}),
-    createPhysicsBodyLiteDomainKit(NexusRealtime, config.physicsBodyLite ?? {}),
-    createProjectileLiteDomainKit(NexusRealtime, config.projectileLite ?? {}),
-    createSensoryAgentDomainKit(NexusRealtime, config.sensoryAgent ?? {})
+    createAcousticSignalDomainKit(NexusEngine, config.acousticSignal ?? {}),
+    createWeightedTriggerDomainKit(NexusEngine, config.weightedTrigger ?? {}),
+    createConditionGateDomainKit(NexusEngine, config.conditionGate ?? {}),
+    createPhysicsBodyLiteDomainKit(NexusEngine, config.physicsBodyLite ?? {}),
+    createProjectileLiteDomainKit(NexusEngine, config.projectileLite ?? {}),
+    createSensoryAgentDomainKit(NexusEngine, config.sensoryAgent ?? {})
   ];
 }
 

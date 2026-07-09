@@ -4,7 +4,7 @@ Branch: `0.0.1`
 
 ## One-sentence thesis
 
-Build a cohesive generic Domain Service Kit core by upgrading overlapping ProtoKits into atomic, idempotent, renderer-independent services that can power tower defense, survival, tactics, racing, flight, first-person exploration, building games, and other NexusRealtime experiments without becoming game-specific engines.
+Build a cohesive generic Domain Service Kit core by upgrading overlapping ProtoKits into atomic, idempotent, renderer-independent services that can power tower defense, survival, tactics, racing, flight, first-person exploration, building games, and other NexusEngine experiments without becoming game-specific engines.
 
 ## Non-negotiable rules
 
@@ -42,7 +42,7 @@ protokits/<kit-name>/index.js
 protokits/<kit-name>/README.md
 protokits/<kit-name>/tests/<kit-name>.test.mjs
 VERSION constant
-createXKit(NexusRealtime, config = {})
+createXKit(NexusEngine, config = {})
 resources/events/components where needed
 systems with deterministic phase names
 small public engine API
@@ -511,49 +511,49 @@ Gate: 500+ agent headless simulation passes perf/determinism smoke.
 This is intentionally generic. A tower-defense game configures structures as emitters and enemies as agents.
 
 ```js
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createGenericSeedKit(NexusRealtime, { seed }),
-    createGenericClockKit(NexusRealtime),
-    createCommandLedgerKit(NexusRealtime),
-    createEventLedgerKit(NexusRealtime),
-    createGamehostStandardKit(NexusRealtime),
+    createGenericSeedKit(NexusEngine, { seed }),
+    createGenericClockKit(NexusEngine),
+    createCommandLedgerKit(NexusEngine),
+    createEventLedgerKit(NexusEngine),
+    createGamehostStandardKit(NexusEngine),
 
-    createLaneFieldKit(NexusRealtime, map.lanes),
-    createPathNetworkKit(NexusRealtime, map.paths),
-    createBuildSlotKit(NexusRealtime, map.slots),
-    createVitalTargetKit(NexusRealtime, map.vitalTargets),
+    createLaneFieldKit(NexusEngine, map.lanes),
+    createPathNetworkKit(NexusEngine, map.paths),
+    createBuildSlotKit(NexusEngine, map.slots),
+    createVitalTargetKit(NexusEngine, map.vitalTargets),
 
-    createBlueprintKit(NexusRealtime, content.blueprints),
-    createPlacementValidationKit(NexusRealtime),
-    createStructureBuildKit(NexusRealtime),
-    createStructureRuntimeKit(NexusRealtime),
+    createBlueprintKit(NexusEngine, content.blueprints),
+    createPlacementValidationKit(NexusEngine),
+    createStructureBuildKit(NexusEngine),
+    createStructureRuntimeKit(NexusEngine),
 
-    createAgentRosterKit(NexusRealtime, content.agents),
-    createAgentSpawnKit(NexusRealtime),
-    createAgentPathFollowKit(NexusRealtime),
-    createWaveDefinitionKit(NexusRealtime, content.waves),
-    createWaveDirectorKit(NexusRealtime),
+    createAgentRosterKit(NexusEngine, content.agents),
+    createAgentSpawnKit(NexusEngine),
+    createAgentPathFollowKit(NexusEngine),
+    createWaveDefinitionKit(NexusEngine, content.waves),
+    createWaveDirectorKit(NexusEngine),
 
-    createTargetRegistryKit(NexusRealtime),
-    createTargetQueryKit(NexusRealtime),
-    createActorAttackKit(NexusRealtime),
-    createProjectileSpawnKit(NexusRealtime),
-    createProjectileMotionKit(NexusRealtime),
-    createDamageRequestKit(NexusRealtime),
-    createDamageResolutionKit(NexusRealtime),
-    createHealthPoolKit(NexusRealtime),
+    createTargetRegistryKit(NexusEngine),
+    createTargetQueryKit(NexusEngine),
+    createActorAttackKit(NexusEngine),
+    createProjectileSpawnKit(NexusEngine),
+    createProjectileMotionKit(NexusEngine),
+    createDamageRequestKit(NexusEngine),
+    createDamageResolutionKit(NexusEngine),
+    createHealthPoolKit(NexusEngine),
 
-    createCurrencyKit(NexusRealtime),
-    createCostResolutionKit(NexusRealtime),
-    createObjectiveKit(NexusRealtime),
-    createCompletionLedgerKit(NexusRealtime),
+    createCurrencyKit(NexusEngine),
+    createCostResolutionKit(NexusEngine),
+    createObjectiveKit(NexusEngine),
+    createCompletionLedgerKit(NexusEngine),
 
-    createRenderDescriptorKit(NexusRealtime),
-    createDiegeticFeedbackSignalKit(NexusRealtime),
-    createHudDescriptorKit(NexusRealtime),
-    createScenarioQaHarness(NexusRealtime),
-    createDeterministicReplayHarness(NexusRealtime)
+    createRenderDescriptorKit(NexusEngine),
+    createDiegeticFeedbackSignalKit(NexusEngine),
+    createHudDescriptorKit(NexusEngine),
+    createScenarioQaHarness(NexusEngine),
+    createDeterministicReplayHarness(NexusEngine)
   ]
 });
 ```

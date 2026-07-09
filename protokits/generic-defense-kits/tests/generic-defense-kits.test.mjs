@@ -63,13 +63,13 @@ function createMiniNexus() {
   return { defineResource, defineEvent, defineRuntimeKit, createRealtimeGame };
 }
 
-const NexusRealtime = createMiniNexus();
+const NexusEngine = createMiniNexus();
 const level = createGenericDefenseLevel();
 assert.equal(GENERIC_DEFENSE_KITS_VERSION, "0.1.0");
 assert.ok(level.path.length >= 2);
-assert.ok(createGenericDefenseKits(NexusRealtime).length >= 6);
+assert.ok(createGenericDefenseKits(NexusEngine).length >= 6);
 
-const engine = createGenericDefenseGame(NexusRealtime, {
+const engine = createGenericDefenseGame(NexusEngine, {
   level: { startingCurrency: 180 }
 });
 

@@ -18,12 +18,12 @@ export function describeTimeOfDay(state = createTimeOfDayState()) {
   return { normalizedTime: t, phase, daylight, sunDirection, moonDirection };
 }
 
-export function createTimeOfDayKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createTimeOfDayKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const TimeOfDayState = resource(options.resourceName ?? "timeOfDay.state");
   const TimeOfDayUpdated = event("timeOfDay.updated");
   const initial = () => createTimeOfDayState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "time-of-day-kit",
     resources: { TimeOfDayState },
     events: { TimeOfDayUpdated },

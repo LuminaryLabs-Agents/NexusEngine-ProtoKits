@@ -1,6 +1,6 @@
 # Experiments Cutover Guide
 
-This guide describes how NexusRealtime-Experiments can move toward the new domain-kit foundation without losing feature capability.
+This guide describes how NexusEngine-Experiments can move toward the new domain-kit foundation without losing feature capability.
 
 ## Host responsibilities
 

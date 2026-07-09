@@ -99,13 +99,13 @@ Track scenario QA and deterministic replay coverage.
 ### 2026-06-23 — Signal Bastion executable route replay in Experiments
 
 - Scenario: browserless route-domain replay for the canonical `signal-bastion` strategic-pressure lane.
-- Kits: real Core `nexusrealtime` plus ProtoKits `@luminarylabs/nexusrealtime-protokits` generic-defense DSK aliases and `generic-defense-session-command-kit`.
-- Seed/config: Signal Bastion debug preset from `LuminaryLabs-Agents/NexusRealtime-Experiments`, not copied ProtoKit fixtures.
+- Kits: real Core `nexusengine` plus ProtoKits `@luminarylabs/nexusengine-protokits` generic-defense DSK aliases and `generic-defense-session-command-kit`.
+- Seed/config: Signal Bastion debug preset from `LuminaryLabs-Agents/NexusEngine-Experiments`, not copied ProtoKit fixtures.
 - Inputs: semantic blueprint selection, build, upgrade, wave-start, sell-method availability, and snapshot bridge calls from `experiments/signal-bastion-route-domain-replay.json`.
 - Fixed ticks: 30 ticks at `0.1s` using the checked strategic-pressure route contract.
 - Expected snapshots: map/vital, economy, structures, agents, combat, and render descriptor digest equality across fresh runs.
 - Nondeterminism risks: DOM, Canvas, WebGL, Three.js, requestAnimationFrame, browser audio, asset loading, and route-local simulation copies remain excluded.
-- Status: covered downstream by `LuminaryLabs-Agents/NexusRealtime-Experiments` `tests/signal-bastion-executable-route-replay-smoke.mjs`.
+- Status: covered downstream by `LuminaryLabs-Agents/NexusEngine-Experiments` `tests/signal-bastion-executable-route-replay-smoke.mjs`.
 - Promotion implication: `generic-defense-dsk-boundaries` plus `generic-defense-session-command-kit` now have route-level consumption proof beyond ProtoKits-local smoke, and the browser route can remove broad build/wave compatibility facades while staying on namespaced DSK calls.
 
 ## Open gaps

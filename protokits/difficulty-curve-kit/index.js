@@ -105,8 +105,8 @@ function createDifficultySystem(definitions, options = {}) {
   };
 }
 
-export function createDifficultyCurveKit(nexusRealtime = {}, options = {}) {
-  const definitions = createArcadeRaceDefinitions(nexusRealtime, options);
+export function createDifficultyCurveKit(nexusEngine = {}, options = {}) {
+  const definitions = createArcadeRaceDefinitions(nexusEngine, options);
   const { components, resources, events } = definitions;
   const config = createDifficultyConfig(options);
 
@@ -129,7 +129,7 @@ export function createDifficultyCurveKit(nexusRealtime = {}, options = {}) {
     }
   };
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: "difficulty-curve-kit",
     components: {
       AIRacer: components.AIRacer,

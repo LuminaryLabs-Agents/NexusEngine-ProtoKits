@@ -155,9 +155,9 @@ export function forwardFromRotation(rotation = {}) {
   return norm3({ x: -Math.sin(yaw) * Math.cos(pitch), y: Math.sin(pitch), z: -Math.cos(yaw) * Math.cos(pitch) });
 }
 
-export function createDefinitions(NexusRealtime = {}) {
-  const defineResource = NexusRealtime.defineResource ?? ((name) => Object.freeze({ kind: 'resource', name }));
-  const defineEvent = NexusRealtime.defineEvent ?? ((name) => Object.freeze({ kind: 'event', name }));
+export function createDefinitions(NexusEngine = {}) {
+  const defineResource = NexusEngine.defineResource ?? ((name) => Object.freeze({ kind: 'resource', name }));
+  const defineEvent = NexusEngine.defineEvent ?? ((name) => Object.freeze({ kind: 'event', name }));
   return {
     State: defineResource('generic.aerial.state'),
     Command: defineEvent('generic.aerial.command'),
@@ -214,8 +214,8 @@ export function writeState(world, definitions, state) {
   world.setResource(definitions.State, { ...state, updatedAt: now(world) });
 }
 
-export function makeRuntimeKit(NexusRealtime, config) {
-  return (NexusRealtime.defineRuntimeKit ?? ((kit) => Object.freeze(kit)))(config);
+export function makeRuntimeKit(NexusEngine, config) {
+  return (NexusEngine.defineRuntimeKit ?? ((kit) => Object.freeze(kit)))(config);
 }
 
 export function installApi(engine, world, definitions, key, config) {

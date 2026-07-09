@@ -36,11 +36,11 @@ export function stepFlock(state = {}, target = {}, dt = 1 / 60) {
   return next;
 }
 
-export function createFlockAgentKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createFlockAgentKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const FlockAgentState = resource(options.resourceName ?? "flockAgent.state");
   const FlockAgentUpdated = event("flockAgent.updated");
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "flock-agent-kit",
     resources: { FlockAgentState },
     events: { FlockAgentUpdated },

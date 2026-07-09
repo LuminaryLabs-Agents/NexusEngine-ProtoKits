@@ -408,9 +408,9 @@ function installTerrainStreamerApi(engine, world, definitions, config, key) {
 
 export const TERRAIN_STREAMER_KIT_DEFINITION = Object.freeze({ id: 'terrain-streamer-kit', provides: ['world:patch-window', 'world:streaming-descriptors', 'world:patch-registry', 'world:patch-build-queue', 'world:terrain-lod', 'world:terrain-preload', 'render:terrain-material-descriptor', 'render:far-terrain', 'render:horizon-terrain'], requires: ['terrain:height-sampler', 'aerial:body'], purpose: 'Domain-service terrain streamer with LOD rings, predictive preload, patch registry, build budget, far terrain, horizon terrain, and material descriptors.' });
 export const GENERIC_WORLD_PATCH_KIT_DEFINITION = TERRAIN_STREAMER_KIT_DEFINITION;
-export function createTerrainStreamerKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createTerrainStreamerKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: config.kitId ?? TERRAIN_STREAMER_KIT_DEFINITION.id,
     provides: TERRAIN_STREAMER_KIT_DEFINITION.provides,
     requires: TERRAIN_STREAMER_KIT_DEFINITION.requires,
@@ -427,8 +427,8 @@ export function createTerrainStreamerKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericWorldPatchKit(NexusRealtime, config = {}) {
-  return createTerrainStreamerKit(NexusRealtime, { ...config, kitId: config.kitId ?? 'generic-world-patch-kit' });
+export function createGenericWorldPatchKit(NexusEngine, config = {}) {
+  return createTerrainStreamerKit(NexusEngine, { ...config, kitId: config.kitId ?? 'generic-world-patch-kit' });
 }
 
 function checkpointForPatch(world, state, config, patch, index) {
@@ -448,9 +448,9 @@ function liftForPatch(world, state, config, patch, index) {
 }
 
 export const GENERIC_CHECKPOINT_VOLUME_KIT_DEFINITION = Object.freeze({ id: 'generic-checkpoint-volume-kit', provides: ['aerial:checkpoint-volume'], requires: ['aerial:body', 'terrain:height-sampler', 'world:patch-window'], purpose: 'Patch-stable airborne ring, gate, and checkpoint volumes.' });
-export function createGenericCheckpointVolumeKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericCheckpointVolumeKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_CHECKPOINT_VOLUME_KIT_DEFINITION.id,
     provides: GENERIC_CHECKPOINT_VOLUME_KIT_DEFINITION.provides,
     requires: GENERIC_CHECKPOINT_VOLUME_KIT_DEFINITION.requires,
@@ -489,9 +489,9 @@ export function createGenericCheckpointVolumeKit(NexusRealtime, config = {}) {
 }
 
 export const GENERIC_LIFT_VOLUME_KIT_DEFINITION = Object.freeze({ id: 'generic-lift-volume-kit', provides: ['aerial:lift-volume'], requires: ['aerial:body', 'terrain:height-sampler', 'world:patch-window'], purpose: 'Patch-stable thermals, vents, fans, and vertical force columns.' });
-export function createGenericLiftVolumeKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericLiftVolumeKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_LIFT_VOLUME_KIT_DEFINITION.id,
     provides: GENERIC_LIFT_VOLUME_KIT_DEFINITION.provides,
     requires: GENERIC_LIFT_VOLUME_KIT_DEFINITION.requires,
@@ -522,9 +522,9 @@ export function createGenericLiftVolumeKit(NexusRealtime, config = {}) {
 }
 
 export const GENERIC_FLOCK_AGENT_KIT_DEFINITION = Object.freeze({ id: 'generic-flock-agent-kit', provides: ['ai:flock-agent'], requires: ['aerial:body', 'terrain:height-sampler'], purpose: 'Ambient companion flock agent state.' });
-export function createGenericFlockAgentKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createGenericFlockAgentKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: GENERIC_FLOCK_AGENT_KIT_DEFINITION.id,
     provides: GENERIC_FLOCK_AGENT_KIT_DEFINITION.provides,
     requires: GENERIC_FLOCK_AGENT_KIT_DEFINITION.requires,

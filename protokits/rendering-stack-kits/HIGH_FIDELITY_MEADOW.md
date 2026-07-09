@@ -31,7 +31,7 @@ The browser experiment owns WebGL/Three.js material compilation, instancing, mes
 ```js
 import {
   createHighFidelityMeadowSceneKit
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/rendering-stack-kits/high-fidelity-meadow.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/rendering-stack-kits/high-fidelity-meadow.js";
 ```
 
 ## Example

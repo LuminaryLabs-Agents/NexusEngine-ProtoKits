@@ -11,17 +11,17 @@ export const GENERIC_ROUTE_PACING_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const n = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireRuntime(NexusRealtime, factoryName) {
+function requireRuntime(NexusEngine, factoryName) {
   for (const key of ["defineRuntimeKit", "defineResource"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`${factoryName} requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`${factoryName} requires NexusEngine.${key}.`);
   }
 }
 
-function createConfigKit(NexusRealtime, config = {}, shape) {
-  requireRuntime(NexusRealtime, shape.factoryName);
-  const State = NexusRealtime.defineResource(config.resourceName ?? shape.resourceName);
+function createConfigKit(NexusEngine, config = {}, shape) {
+  requireRuntime(NexusEngine, shape.factoryName);
+  const State = NexusEngine.defineResource(config.resourceName ?? shape.resourceName);
   const createState = () => ({ version: shape.version, id: config.id ?? shape.id, status: "ready", settings: { ...shape.defaults, ...(config.settings ?? config) }, lastReason: "initialized" });
-  return NexusRealtime.defineRuntimeKit({
+  return NexusEngine.defineRuntimeKit({
     id: config.kitId ?? shape.kitId,
     provides: shape.provides,
     resources: { [shape.stateName]: State },
@@ -89,25 +89,25 @@ export const traversalCueDefaults = Object.freeze({ actionHint: "Release / fire"
 export const traversalFeedbackDefaults = Object.freeze({ trailMax: 44, sparksOnLatch: 14, sparksOnWall: 18, cameraImpulseLatch: 0.16, cameraImpulseFail: 0.38, audioEventNames: ["released", "grapple-fired", "grapple-latched", "restored", "failed", "summit-reached"] });
 export const routePacingDefaults = Object.freeze({ summitBaseY: 2200, summitPerSectorY: 760, sampleSpacingY: 125, minAnchors: 14, jitterX: 165, jitterY: 36, minSpacing: 54, maxEdgeDistance: 205, restEvery: 4, anchorRadius: 6.5 });
 
-export function createGenericTetherMotionKit(NexusRealtime, config = {}) { return createConfigKit(NexusRealtime, config, { factoryName: "createGenericTetherMotionKit", kitId: "generic-tether-motion-kit", id: "tether-motion", resourceName: "genericTetherMotion.state", stateName: "TetherMotionState", apiName: "tetherMotion", version: GENERIC_TETHER_MOTION_KIT_VERSION, domain: "traversal", provides: ["traversal:tether-motion"], defaults: tetherMotionDefaults, purpose: "Reusable tether and swing motion tuning." }); }
-export function createGenericCableLaunchKit(NexusRealtime, config = {}) { return createConfigKit(NexusRealtime, config, { factoryName: "createGenericCableLaunchKit", kitId: "generic-cable-launch-kit", id: "cable-launch", resourceName: "genericCableLaunch.state", stateName: "CableLaunchState", apiName: "cableLaunch", version: GENERIC_CABLE_LAUNCH_KIT_VERSION, domain: "traversal", provides: ["traversal:cable-launch"], defaults: cableLaunchDefaults, purpose: "Reusable projectile cable launch, latch, retract, and aim assist tuning." }); }
-export function createGenericTraversalVitalsKit(NexusRealtime, config = {}) { return createConfigKit(NexusRealtime, config, { factoryName: "createGenericTraversalVitalsKit", kitId: "generic-traversal-vitals-kit", id: "traversal-vitals", resourceName: "genericTraversalVitals.state", stateName: "TraversalVitalsState", apiName: "traversalVitals", version: GENERIC_TRAVERSAL_VITALS_KIT_VERSION, domain: "traversal", provides: ["traversal:vitals"], defaults: traversalVitalsDefaults, purpose: "Reusable stamina and traversal vital tuning." }); }
-export function createGenericTraversalRecoveryKit(NexusRealtime, config = {}) { return createConfigKit(NexusRealtime, config, { factoryName: "createGenericTraversalRecoveryKit", kitId: "generic-traversal-recovery-kit", id: "traversal-recovery", resourceName: "genericTraversalRecovery.state", stateName: "TraversalRecoveryState", apiName: "traversalRecovery", version: GENERIC_TRAVERSAL_RECOVERY_KIT_VERSION, domain: "traversal", provides: ["traversal:recovery"], defaults: traversalRecoveryDefaults, purpose: "Reusable fail floor, boundary, checkpoint, and retry tuning." }); }
-export function createGenericTraversalCameraKit(NexusRealtime, config = {}) { return createConfigKit(NexusRealtime, config, { factoryName: "createGenericTraversalCameraKit", kitId: "generic-traversal-camera-kit", id: "traversal-camera", resourceName: "genericTraversalCamera.state", stateName: "TraversalCameraState", apiName: "traversalCamera", version: GENERIC_TRAVERSAL_CAMERA_KIT_VERSION, domain: "camera", provides: ["camera:traversal-framing"], defaults: traversalCameraDefaults, purpose: "Reusable traversal camera framing and anticipation tuning." }); }
-export function createGenericTraversalCueKit(NexusRealtime, config = {}) { return createConfigKit(NexusRealtime, config, { factoryName: "createGenericTraversalCueKit", kitId: "generic-traversal-cue-kit", id: "traversal-cue", resourceName: "genericTraversalCue.state", stateName: "TraversalCueState", apiName: "traversalCue", version: GENERIC_TRAVERSAL_CUE_KIT_VERSION, domain: "feedback", provides: ["feedback:diegetic-cues"], defaults: traversalCueDefaults, purpose: "Reusable diegetic cue copy and cue budget." }); }
-export function createGenericTraversalFeedbackKit(NexusRealtime, config = {}) { return createConfigKit(NexusRealtime, config, { factoryName: "createGenericTraversalFeedbackKit", kitId: "generic-traversal-feedback-kit", id: "traversal-feedback", resourceName: "genericTraversalFeedback.state", stateName: "TraversalFeedbackState", apiName: "traversalFeedback", version: GENERIC_TRAVERSAL_FEEDBACK_KIT_VERSION, domain: "feedback", provides: ["feedback:kinetic-traversal"], defaults: traversalFeedbackDefaults, purpose: "Reusable trails, sparks, camera impulses, and audio event mapping." }); }
-export function createGenericRoutePacingKit(NexusRealtime, config = {}) { return createConfigKit(NexusRealtime, config, { factoryName: "createGenericRoutePacingKit", kitId: "generic-route-pacing-kit", id: "route-pacing", resourceName: "genericRoutePacing.state", stateName: "RoutePacingState", apiName: "routePacing", version: GENERIC_ROUTE_PACING_KIT_VERSION, domain: "route", provides: ["route:pacing"], defaults: routePacingDefaults, purpose: "Reusable route height, anchor density, rest cadence, and jitter tuning." }); }
+export function createGenericTetherMotionKit(NexusEngine, config = {}) { return createConfigKit(NexusEngine, config, { factoryName: "createGenericTetherMotionKit", kitId: "generic-tether-motion-kit", id: "tether-motion", resourceName: "genericTetherMotion.state", stateName: "TetherMotionState", apiName: "tetherMotion", version: GENERIC_TETHER_MOTION_KIT_VERSION, domain: "traversal", provides: ["traversal:tether-motion"], defaults: tetherMotionDefaults, purpose: "Reusable tether and swing motion tuning." }); }
+export function createGenericCableLaunchKit(NexusEngine, config = {}) { return createConfigKit(NexusEngine, config, { factoryName: "createGenericCableLaunchKit", kitId: "generic-cable-launch-kit", id: "cable-launch", resourceName: "genericCableLaunch.state", stateName: "CableLaunchState", apiName: "cableLaunch", version: GENERIC_CABLE_LAUNCH_KIT_VERSION, domain: "traversal", provides: ["traversal:cable-launch"], defaults: cableLaunchDefaults, purpose: "Reusable projectile cable launch, latch, retract, and aim assist tuning." }); }
+export function createGenericTraversalVitalsKit(NexusEngine, config = {}) { return createConfigKit(NexusEngine, config, { factoryName: "createGenericTraversalVitalsKit", kitId: "generic-traversal-vitals-kit", id: "traversal-vitals", resourceName: "genericTraversalVitals.state", stateName: "TraversalVitalsState", apiName: "traversalVitals", version: GENERIC_TRAVERSAL_VITALS_KIT_VERSION, domain: "traversal", provides: ["traversal:vitals"], defaults: traversalVitalsDefaults, purpose: "Reusable stamina and traversal vital tuning." }); }
+export function createGenericTraversalRecoveryKit(NexusEngine, config = {}) { return createConfigKit(NexusEngine, config, { factoryName: "createGenericTraversalRecoveryKit", kitId: "generic-traversal-recovery-kit", id: "traversal-recovery", resourceName: "genericTraversalRecovery.state", stateName: "TraversalRecoveryState", apiName: "traversalRecovery", version: GENERIC_TRAVERSAL_RECOVERY_KIT_VERSION, domain: "traversal", provides: ["traversal:recovery"], defaults: traversalRecoveryDefaults, purpose: "Reusable fail floor, boundary, checkpoint, and retry tuning." }); }
+export function createGenericTraversalCameraKit(NexusEngine, config = {}) { return createConfigKit(NexusEngine, config, { factoryName: "createGenericTraversalCameraKit", kitId: "generic-traversal-camera-kit", id: "traversal-camera", resourceName: "genericTraversalCamera.state", stateName: "TraversalCameraState", apiName: "traversalCamera", version: GENERIC_TRAVERSAL_CAMERA_KIT_VERSION, domain: "camera", provides: ["camera:traversal-framing"], defaults: traversalCameraDefaults, purpose: "Reusable traversal camera framing and anticipation tuning." }); }
+export function createGenericTraversalCueKit(NexusEngine, config = {}) { return createConfigKit(NexusEngine, config, { factoryName: "createGenericTraversalCueKit", kitId: "generic-traversal-cue-kit", id: "traversal-cue", resourceName: "genericTraversalCue.state", stateName: "TraversalCueState", apiName: "traversalCue", version: GENERIC_TRAVERSAL_CUE_KIT_VERSION, domain: "feedback", provides: ["feedback:diegetic-cues"], defaults: traversalCueDefaults, purpose: "Reusable diegetic cue copy and cue budget." }); }
+export function createGenericTraversalFeedbackKit(NexusEngine, config = {}) { return createConfigKit(NexusEngine, config, { factoryName: "createGenericTraversalFeedbackKit", kitId: "generic-traversal-feedback-kit", id: "traversal-feedback", resourceName: "genericTraversalFeedback.state", stateName: "TraversalFeedbackState", apiName: "traversalFeedback", version: GENERIC_TRAVERSAL_FEEDBACK_KIT_VERSION, domain: "feedback", provides: ["feedback:kinetic-traversal"], defaults: traversalFeedbackDefaults, purpose: "Reusable trails, sparks, camera impulses, and audio event mapping." }); }
+export function createGenericRoutePacingKit(NexusEngine, config = {}) { return createConfigKit(NexusEngine, config, { factoryName: "createGenericRoutePacingKit", kitId: "generic-route-pacing-kit", id: "route-pacing", resourceName: "genericRoutePacing.state", stateName: "RoutePacingState", apiName: "routePacing", version: GENERIC_ROUTE_PACING_KIT_VERSION, domain: "route", provides: ["route:pacing"], defaults: routePacingDefaults, purpose: "Reusable route height, anchor density, rest cadence, and jitter tuning." }); }
 
-export function createGenericTetherTraversalDomainKits(NexusRealtime, config = {}) {
+export function createGenericTetherTraversalDomainKits(NexusEngine, config = {}) {
   return [
-    createGenericRoutePacingKit(NexusRealtime, config.routePacing ?? {}),
-    createGenericTetherMotionKit(NexusRealtime, config.tetherMotion ?? {}),
-    createGenericCableLaunchKit(NexusRealtime, config.cableLaunch ?? {}),
-    createGenericTraversalVitalsKit(NexusRealtime, config.traversalVitals ?? config.vitals ?? {}),
-    createGenericTraversalRecoveryKit(NexusRealtime, config.traversalRecovery ?? config.recovery ?? {}),
-    createGenericTraversalCameraKit(NexusRealtime, config.traversalCamera ?? config.camera ?? {}),
-    createGenericTraversalCueKit(NexusRealtime, config.traversalCue ?? config.cues ?? {}),
-    createGenericTraversalFeedbackKit(NexusRealtime, config.traversalFeedback ?? config.feedback ?? {})
+    createGenericRoutePacingKit(NexusEngine, config.routePacing ?? {}),
+    createGenericTetherMotionKit(NexusEngine, config.tetherMotion ?? {}),
+    createGenericCableLaunchKit(NexusEngine, config.cableLaunch ?? {}),
+    createGenericTraversalVitalsKit(NexusEngine, config.traversalVitals ?? config.vitals ?? {}),
+    createGenericTraversalRecoveryKit(NexusEngine, config.traversalRecovery ?? config.recovery ?? {}),
+    createGenericTraversalCameraKit(NexusEngine, config.traversalCamera ?? config.camera ?? {}),
+    createGenericTraversalCueKit(NexusEngine, config.traversalCue ?? config.cues ?? {}),
+    createGenericTraversalFeedbackKit(NexusEngine, config.traversalFeedback ?? config.feedback ?? {})
   ];
 }
 

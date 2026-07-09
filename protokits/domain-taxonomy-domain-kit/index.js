@@ -73,15 +73,15 @@ export function validateDomainName(id, options = {}) {
   return { ok: warnings.length === 0, warningCount: warnings.length, warnings, name };
 }
 
-export function createDomainTaxonomyDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createDomainTaxonomyDomainKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const DomainTaxonomyState = resource(options.resourceName ?? "domainTaxonomy.state");
   const DomainClassified = event("domainTaxonomy.classified");
   const DomainNameValidated = event("domainTaxonomy.nameValidated");
   const DomainScopeRegistered = event("domainTaxonomy.scopeRegistered");
   const DomainTaxonomyReset = event("domainTaxonomy.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "domain-taxonomy-domain-kit",
     resources: { DomainTaxonomyState },
     events: { DomainClassified, DomainNameValidated, DomainScopeRegistered, DomainTaxonomyReset },

@@ -22,11 +22,11 @@ function namespace(engine) {
   return engine.n.visualFx;
 }
 
-export function createGenericAtmosphereLayerDescriptorKit(NexusRealtime = {}, config = {}) {
-  const State = resource(NexusRealtime, config.resourceName ?? "genericVisualFx.atmosphereLayer.state");
-  const SetLayer = event(NexusRealtime, config.setEventName ?? "genericVisualFx.atmosphereLayer.set");
-  const RemoveLayer = event(NexusRealtime, config.removeEventName ?? "genericVisualFx.atmosphereLayer.remove");
-  const SetPreset = event(NexusRealtime, config.presetEventName ?? "genericVisualFx.atmosphereLayer.setPreset");
+export function createGenericAtmosphereLayerDescriptorKit(NexusEngine = {}, config = {}) {
+  const State = resource(NexusEngine, config.resourceName ?? "genericVisualFx.atmosphereLayer.state");
+  const SetLayer = event(NexusEngine, config.setEventName ?? "genericVisualFx.atmosphereLayer.set");
+  const RemoveLayer = event(NexusEngine, config.removeEventName ?? "genericVisualFx.atmosphereLayer.remove");
+  const SetPreset = event(NexusEngine, config.presetEventName ?? "genericVisualFx.atmosphereLayer.setPreset");
   const presets = clone(config.presets ?? {});
   const defaultPresetId = config.presetId ?? config.defaultPresetId ?? "default";
 
@@ -105,7 +105,7 @@ export function createGenericAtmosphereLayerDescriptorKit(NexusRealtime = {}, co
     world.setResource(State, state);
   }
 
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "generic-atmosphere-layer-descriptor-kit",
     provides: ["atmosphere:layer-descriptors", "render:sky-layer-descriptors", "render:volumetric-layer-descriptors"],
     resources: { State },

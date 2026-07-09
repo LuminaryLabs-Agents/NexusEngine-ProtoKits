@@ -194,11 +194,11 @@ export function createOceanFloorRenderContract(stateInput = createOceanFloorStat
   };
 }
 
-export function createOceanFloorDomainKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createOceanFloorDomainKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const State = defs.resource(options.resourceName ?? "oceanFloor.state");
   const initial = () => createOceanFloorState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.kitId ?? "ocean-floor-domain",
     resources: { State },
     provides: ["ocean:floor-heightfield", "ocean:island-floor-influence", "ocean:floor-object-placement", "render:ocean-floor-contract"],

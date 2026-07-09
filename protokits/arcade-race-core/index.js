@@ -43,9 +43,9 @@ export function getClockElapsed(world, fallback = 0) {
   return number(world?.__nexusClock?.elapsed, fallback);
 }
 
-export function defineInjectedRuntimeKit(nexusRealtime = {}, config = {}) {
-  if (typeof nexusRealtime.defineRuntimeKit === "function") {
-    return nexusRealtime.defineRuntimeKit(config);
+export function defineInjectedRuntimeKit(nexusEngine = {}, config = {}) {
+  if (typeof nexusEngine.defineRuntimeKit === "function") {
+    return nexusEngine.defineRuntimeKit(config);
   }
 
   return Object.freeze({
@@ -79,15 +79,15 @@ function createFallbackDefinition(kind, name) {
   return Object.freeze({ kind, name });
 }
 
-function getCommonDefinitions(nexusRealtime = {}) {
-  if (typeof nexusRealtime.getCommonGameDefinitions === "function") {
-    return nexusRealtime.getCommonGameDefinitions();
+function getCommonDefinitions(nexusEngine = {}) {
+  if (typeof nexusEngine.getCommonGameDefinitions === "function") {
+    return nexusEngine.getCommonGameDefinitions();
   }
 
   return {
-    components: nexusRealtime.CommonGameComponents ?? {},
-    resources: nexusRealtime.CommonGameResources ?? {},
-    events: nexusRealtime.CommonGameEvents ?? {}
+    components: nexusEngine.CommonGameComponents ?? {},
+    resources: nexusEngine.CommonGameResources ?? {},
+    events: nexusEngine.CommonGameEvents ?? {}
   };
 }
 
@@ -96,12 +96,12 @@ function prefixedName(namespace, localName) {
   return cleanNamespace ? `${cleanNamespace}-${localName}` : localName;
 }
 
-export function createArcadeRaceDefinitions(nexusRealtime = {}, options = {}) {
-  const common = getCommonDefinitions(nexusRealtime);
+export function createArcadeRaceDefinitions(nexusEngine = {}, options = {}) {
+  const common = getCommonDefinitions(nexusEngine);
   const namespace = options.namespace ?? "arcade-race";
-  const defineComponent = nexusRealtime.defineComponent ?? ((name) => createFallbackDefinition("component", name));
-  const defineResource = nexusRealtime.defineResource ?? ((name) => createFallbackDefinition("resource", name));
-  const defineEvent = nexusRealtime.defineEvent ?? ((name) => createFallbackDefinition("event", name));
+  const defineComponent = nexusEngine.defineComponent ?? ((name) => createFallbackDefinition("component", name));
+  const defineResource = nexusEngine.defineResource ?? ((name) => createFallbackDefinition("resource", name));
+  const defineEvent = nexusEngine.defineEvent ?? ((name) => createFallbackDefinition("event", name));
   const providedComponents = options.components ?? {};
   const providedResources = options.resources ?? {};
   const providedEvents = options.events ?? {};

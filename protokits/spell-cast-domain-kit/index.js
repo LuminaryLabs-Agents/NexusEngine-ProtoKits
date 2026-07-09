@@ -3,9 +3,9 @@ export const SPELL_CAST_DOMAIN_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createSpellCastDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createSpellCastDomainKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -13,9 +13,9 @@ function createState(config = {}) {
   return { version: SPELL_CAST_DOMAIN_KIT_VERSION, id: config.stateId ?? "spell-cast-domain", domain: "spell-cast", mana: toNumber(config.mana, 100), maxMana: toNumber(config.maxMana, 100), casts: [], lastCast: null, lastRejection: null };
 }
 
-export function createSpellCastDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createSpellCastDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const SpellCastState = defineResource(config.resourceName ?? "spellCastDomain.state");
   const SpellCastRequested = defineEvent("spellCast.requested");
   const SpellCastReleased = defineEvent("spellCast.released");

@@ -1,6 +1,6 @@
 # Action Input Kit
 
-Contextual NexusRealtime ProtoKit for converting host-level input calls into semantic action events and durable intent state.
+Contextual NexusEngine ProtoKit for converting host-level input calls into semantic action events and durable intent state.
 
 ## Purpose
 
@@ -43,15 +43,15 @@ The kit stores held state, detects edges, derives axis state, and emits semantic
 ## Import
 
 ```js
-import { createActionInputKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/action-input-kit/index.js";
+import { createActionInputKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/action-input-kit/index.js";
 ```
 
 ## Install
 
 ```js
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createActionInputKit(NexusRealtime, {
+    createActionInputKit(NexusEngine, {
       context: "next-ledge-grapple",
       bindings: {
         left: ["a", "arrowleft"],
@@ -60,7 +60,7 @@ const engine = NexusRealtime.createRealtimeGame({
         restart: ["r"]
       }
     }),
-    createNextLedgeGrappleKit(NexusRealtime)
+    createNextLedgeGrappleKit(NexusEngine)
   ]
 });
 ```
@@ -141,11 +141,11 @@ Install this kit before gameplay kits that need same-tick events.
 
 ```js
 kits: [
-  createActionInputKit(NexusRealtime),
-  createSomeGameplayKit(NexusRealtime)
+  createActionInputKit(NexusEngine),
+  createSomeGameplayKit(NexusEngine)
 ]
 ```
 
 ## Promotion notes
 
-This should be validated in multiple experiments before promotion. If stable, it can become a generic `createActionIntentKit` or `createInputActionsKit` in NexusRealtime core.
+This should be validated in multiple experiments before promotion. If stable, it can become a generic `createActionIntentKit` or `createInputActionsKit` in NexusEngine core.

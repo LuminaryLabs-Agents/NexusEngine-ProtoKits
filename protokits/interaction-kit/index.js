@@ -35,7 +35,7 @@ export function createInteractionRegistry(options = {}) {
   };
 }
 
-export function createInteractionKit(nexusRealtime = {}, options = {}) {
+export function createInteractionKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "interaction-kit", version: INTERACTION_KIT_VERSION, createInteractable, findFocusedInteractable, createInteractionRegistry };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["interaction:focus", "interaction:items", "interaction:prompts"], bindings: { interactionKit: kit }, metadata: { version: INTERACTION_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["interaction:focus", "interaction:items", "interaction:prompts"], bindings: { interactionKit: kit }, metadata: { version: INTERACTION_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

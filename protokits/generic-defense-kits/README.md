@@ -53,13 +53,13 @@ A host should map input into `engine.genericDefense` and draw `engine.defenseRen
 ## Import
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
 import {
   createGenericDefenseKits
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@0.0.1/protokits/generic-defense-kits/index.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@0.0.1/protokits/generic-defense-kits/index.js";
 
-const engine = NexusRealtime.createRealtimeGame({
-  kits: createGenericDefenseKits(NexusRealtime)
+const engine = NexusEngine.createRealtimeGame({
+  kits: createGenericDefenseKits(NexusEngine)
 });
 ```
 

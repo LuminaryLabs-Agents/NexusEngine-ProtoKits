@@ -33,13 +33,13 @@ export function createObjectAudioEventDescriptor(input = {}) {
   };
 }
 
-export function createAudioEventFeedbackMakerKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createAudioEventFeedbackMakerKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const AudioFeedbackState = resource(options.resourceName ?? "audioFeedback.state");
   const AudioCueRegistered = event("audioFeedback.cueRegistered");
   const AudioCueTriggered = event("audioFeedback.cueTriggered");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "audio-event-feedback-maker-kit",
     resources: { AudioFeedbackState },
     events: { AudioCueRegistered, AudioCueTriggered },

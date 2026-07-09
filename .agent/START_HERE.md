@@ -1,6 +1,6 @@
 # ProtoKits Agent Start Here
 
-`.agent/` is the repo-local source of truth for agent work in `NexusRealtime-ProtoKits`.
+`.agent/` is the repo-local source of truth for agent work in `NexusEngine-ProtoKits`.
 
 Before changing kit implementation, exports, manifests, tests, docs, promotion status, replay status, or downstream-consumption claims:
 
@@ -14,7 +14,7 @@ Before changing kit implementation, exports, manifests, tests, docs, promotion s
 
 ## Operating Rule
 
-ProtoKits is the incubation factory for reusable NexusRealtime domain services.
+ProtoKits is the incubation factory for reusable NexusEngine domain services.
 
 Agent work should preserve these constraints:
 

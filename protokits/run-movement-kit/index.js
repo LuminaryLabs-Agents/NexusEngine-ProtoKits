@@ -193,8 +193,8 @@ function ensureNamespace(engine) {
   return engine.n[RUN_MOVEMENT_ENGINE_NAMESPACE];
 }
 
-export function createRunMovementDefinitions(NexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(NexusRealtime);
+export function createRunMovementDefinitions(NexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(NexusEngine);
   const prefix = options.namespace ?? "runMovement";
   return {
     resources: {
@@ -210,8 +210,8 @@ export function createRunMovementDefinitions(NexusRealtime = {}, options = {}) {
   };
 }
 
-export function createRunMovementKit(NexusRealtime = {}, options = {}) {
-  const definitions = createRunMovementDefinitions(NexusRealtime, options);
+export function createRunMovementKit(NexusEngine = {}, options = {}) {
+  const definitions = createRunMovementDefinitions(NexusEngine, options);
   const { resources, events } = definitions;
 
   function emitForLastEvent(world, controller) {
@@ -229,7 +229,7 @@ export function createRunMovementKit(NexusRealtime = {}, options = {}) {
     for (const controller of Object.values(next.controllers)) emitForLastEvent(world, controller);
   }
 
-  return defineInjectedRuntimeKit(NexusRealtime, {
+  return defineInjectedRuntimeKit(NexusEngine, {
     id: options.id ?? "run-movement-kit",
     resources,
     events,

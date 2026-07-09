@@ -1,5 +1,5 @@
-// Smoke signature: NexusRealtime-generic-defense-dsk-boundaries::headless::2026-06-23
-import { assert, createMockNexusRealtime, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
+// Smoke signature: NexusEngine-generic-defense-dsk-boundaries::headless::2026-06-23
+import { assert, createMockNexusEngine, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
 import {
   GENERIC_DEFENSE_DSK_BOUNDARIES,
   GENERIC_DEFENSE_DSK_ENGINE_NAMESPACE,
@@ -90,41 +90,41 @@ const individualFactories = [
 ];
 
 for (const [kitId, boundaryId, factory] of individualFactories) {
-  const kit = factory(createMockNexusRealtime());
+  const kit = factory(createMockNexusEngine());
   assert.equal(kit.id, kitId, `${kitId}: individual DSK alias returns the backing kit`);
   assert.equal(Boolean(kit.metadata?.dskBoundary), true, `${kitId}: individual alias annotates DSK boundary metadata`);
   assert.equal(Boolean(kit.metadata?.apiSurface), true, `${kitId}: individual alias annotates API surface metadata`);
   assert.equal(kit.metadata?.engineNamespace, `engine.n.genericDefense.${boundaryId}`, `${kitId}: individual alias annotates pruned engine namespace`);
 }
 
-const bridgeMapKit = createGenericDefenseAaaBridgeMapDsk(createMockNexusRealtime());
+const bridgeMapKit = createGenericDefenseAaaBridgeMapDsk(createMockNexusEngine());
 assert.equal(bridgeMapKit.id, "generic-defense-map-kit", "AAA DSK bridge keeps the map DSK alias available beside the broad compatibility facade");
 assert.equal(Boolean(bridgeMapKit.metadata?.apiSurface), true, "AAA DSK bridge annotates atomic DSK API surface metadata");
 
-const bridgeCompatibilityKits = createGenericDefenseAaaBridgeKits(createMockNexusRealtime());
+const bridgeCompatibilityKits = createGenericDefenseAaaBridgeKits(createMockNexusEngine());
 assert.equal(
   bridgeCompatibilityKits.some((kit) => kit.id === "generic-defense-build-kit"),
   true,
   "AAA DSK bridge keeps the existing broad build facade available for compatibility hosts"
 );
 assert.equal(
-  createGenericDefenseBuildKit(createMockNexusRealtime()).id,
+  createGenericDefenseBuildKit(createMockNexusEngine()).id,
   "generic-defense-build-kit",
   "AAA DSK bridge directly exports the compatibility build facade"
 );
 assert.equal(
-  createGenericDefenseAuthoringQaKit(createMockNexusRealtime()).id,
+  createGenericDefenseAuthoringQaKit(createMockNexusEngine()).id,
   "generic-defense-authoring-qa-kit",
   "AAA DSK bridge directly exports the compatibility authoring QA facade"
 );
 assert.deepEqual(
-  createGenericDefenseAaaBridgeDskBundle(createMockNexusRealtime(), {}, ["map", "renderDescriptors"]).map((kit) => kit.id),
+  createGenericDefenseAaaBridgeDskBundle(createMockNexusEngine(), {}, ["map", "renderDescriptors"]).map((kit) => kit.id),
   ["generic-defense-map-kit", "generic-defense-render-descriptor-kit"],
   "AAA DSK bridge can return the smallest requested DSK subset without forcing the broad compatibility bundle"
 );
 
-const NexusRealtime = createMockNexusRealtime();
-const kits = createGenericDefenseDskBundle(NexusRealtime, {}, expectedBoundaryIds);
+const NexusEngine = createMockNexusEngine();
+const kits = createGenericDefenseDskBundle(NexusEngine, {}, expectedBoundaryIds);
 assert.deepEqual(kits.map((kit) => kit.id), individualFactories.map(([kitId]) => kitId), "bundle selector preserves layered kit order");
 
 const world = createSmokeWorld();

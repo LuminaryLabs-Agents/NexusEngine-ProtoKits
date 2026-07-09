@@ -47,9 +47,9 @@ function cycleSky(world, config = {}) {
 
 export const SKY_CYCLE_KIT_DEFINITION = Object.freeze({ id: 'sky-cycle-kit', provides: ['environment:sky-cycle', 'environment:sky', 'environment:lighting'], requires: ['environment:sky'], purpose: 'Sky, sun, ambient, and haze cycle descriptor.' });
 
-export function createSkyCycleKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createSkyCycleKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: SKY_CYCLE_KIT_DEFINITION.id,
     provides: SKY_CYCLE_KIT_DEFINITION.provides,
     requires: SKY_CYCLE_KIT_DEFINITION.requires,

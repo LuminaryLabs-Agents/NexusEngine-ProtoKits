@@ -3,9 +3,9 @@ export const VEGETATION_FOOTPRINT_DOMAIN_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createVegetationFootprintDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createVegetationFootprintDomainKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -22,9 +22,9 @@ function overlaps(a, b, extra = 0) {
   return distance < toNumber(a.radius, 0) + toNumber(b.radius, 0) + extra;
 }
 
-export function createVegetationFootprintDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createVegetationFootprintDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const VegetationFootprintState = defineResource(config.resourceName ?? "vegetationFootprintDomain.state");
   const VegetationFootprintAccepted = defineEvent("vegetationFootprint.accepted");
   const VegetationFootprintRejected = defineEvent("vegetationFootprint.rejected");

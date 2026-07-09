@@ -1,20 +1,29 @@
-// Smoke signature: NexusRealtime-generic-defense-placement-projector-namespace::headless::2026-06-24
-import { assert, createMockNexusRealtime, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
+// Smoke signature: NexusEngine-generic-defense-placement-projector-namespace::headless::2026-06-24
+import { assert, createMockNexusEngine, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
 import { createGenericPlacementProjectorKit } from "../protokits/generic-defense-presentation-stack-kit/index.js";
 import {
   createGenericDefenseDskBundle,
   syncGenericDefenseDskEngineNamespace
 } from "../protokits/generic-defense-dsk-boundaries/index.js";
 
-const NexusRealtime = createMockNexusRealtime();
-const defenseKits = createGenericDefenseDskBundle(NexusRealtime);
-const projectorKit = createGenericPlacementProjectorKit(NexusRealtime);
+const NexusEngine = createMockNexusEngine();
+const defenseKits = createGenericDefenseDskBundle(NexusEngine);
+const projectorKit = createGenericPlacementProjectorKit(NexusEngine);
 const world = createSmokeWorld();
 const engine = { clock: world.__nexusClock };
 
 for (const kit of defenseKits) kit.initWorld?.({ world, engine });
 for (const kit of defenseKits) kit.install?.({ world, engine });
 projectorKit.install?.({ world, engine });
+
+function tick(frames = 1, dt = 1 / 60) {
+  for (let frame = 0; frame < frames; frame += 1) {
+    world.advance(dt);
+    for (const kit of defenseKits) {
+      for (const entry of kit.systems ?? []) entry.system(world);
+    }
+  }
+}
 
 const namespace = syncGenericDefenseDskEngineNamespace(engine);
 assert.equal(namespace, engine.n.genericDefense, "smoke uses the synced engine.n.genericDefense namespace");
@@ -49,6 +58,7 @@ assert.equal(moved.slotId, slot.id, "projector resolves the intended slot from t
 
 const confirmation = engine.placementProjector.confirm({ commandId: "placement-projector-namespace-smoke:build" });
 assert.equal(confirmation.accepted, true, "projector confirms through the namespaced DSK session facade");
+tick(2);
 
 const nextSnapshot = namespace.sessionFacade.getSnapshot();
 const structures = Object.values(nextSnapshot.structures.structures);

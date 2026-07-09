@@ -50,13 +50,13 @@ export function forceFromVolumes(position = {}, volumes = []) {
   return force;
 }
 
-export function createUpdraftVolumeKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createUpdraftVolumeKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const UpdraftVolumeState = resource(options.resourceName ?? "updraftVolume.state");
   const UpdraftVolumesGenerated = event("updraftVolume.generated");
   const initial = () => createVolumeState(options);
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "updraft-volume-kit",
     resources: { UpdraftVolumeState },
     events: { UpdraftVolumesGenerated },

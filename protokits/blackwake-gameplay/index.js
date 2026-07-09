@@ -12,21 +12,21 @@ export { createInput } from "./input.js";
 import { createBlackwakePlayableGame } from "./runtime.js";
 import { createBlackwakeProtoKit } from "../blackwake-kit-registry/index.js";
 
-export function createBlackwakeIslesGame(NexusRealtime, options = {}) {
-  return createBlackwakePlayableGame(NexusRealtime, "blackwake-game-isles", options);
+export function createBlackwakeIslesGame(NexusEngine, options = {}) {
+  return createBlackwakePlayableGame(NexusEngine, "blackwake-game-isles", options);
 }
 
-export function createStormlineRescueGame(NexusRealtime, options = {}) {
-  return createBlackwakePlayableGame(NexusRealtime, "blackwake-game-stormline-rescue", {
+export function createStormlineRescueGame(NexusEngine, options = {}) {
+  return createBlackwakePlayableGame(NexusEngine, "blackwake-game-stormline-rescue", {
     seed: "stormline-rescue-vertical-slice",
     ...options
   });
 }
 
-export function createBlackwakeIslesProtoKit(NexusRealtime, options = {}) {
-  return createBlackwakeProtoKit(NexusRealtime, "blackwake-game-isles", { status: "playable", ...options });
+export function createBlackwakeIslesProtoKit(NexusEngine, options = {}) {
+  return createBlackwakeProtoKit(NexusEngine, "blackwake-game-isles", { status: "playable", ...options });
 }
 
-export function createStormlineRescueProtoKit(NexusRealtime, options = {}) {
-  return createBlackwakeProtoKit(NexusRealtime, "blackwake-game-stormline-rescue", { status: "playable", ...options });
+export function createStormlineRescueProtoKit(NexusEngine, options = {}) {
+  return createBlackwakeProtoKit(NexusEngine, "blackwake-game-stormline-rescue", { status: "playable", ...options });
 }

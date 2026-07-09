@@ -23,12 +23,12 @@ export function buildFoliageImpostors(instances = [], viewer = {}, state = creat
   return Array.from(groups.values());
 }
 
-export function createFoliageImpostorKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createFoliageImpostorKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "foliageImpostors.state");
   const Updated = event("foliageImpostors.updated");
   const initial = () => createFoliageImpostorState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, { id: options.id ?? "foliage-impostor-kit", resources: { State }, events: { Updated }, requires: ["vegetation:placement"], provides: ["foliage:impostors", "render:foliage-impostor-descriptors"], initWorld({ world }) { ensureResource(world, State, initial); }, install({ engine, world }) { const state = () => ensureResource(world, State, initial); const api = { getState: state, buildFromInstances(instances = engine.vegetationPlacement?.listInstances?.() ?? [], viewer = {}) { const next = { ...state(), cards: buildFoliageImpostors(instances, viewer, state()) }; world.setResource(State, next); world.emit?.(Updated, { state: clone(next) }); return clone(next.cards); }, getCards() { return clone(state().cards); }, snapshot: () => clone(state()) }; engine.foliageImpostors = api; engine.n ??= {}; engine.n.foliageImpostors = api; }, metadata: { version: FOLIAGE_IMPOSTOR_KIT_VERSION, purpose: "Renderer-agnostic far foliage billboard cluster descriptors." } });
+  return defineInjectedRuntimeKit(nexusEngine, { id: options.id ?? "foliage-impostor-kit", resources: { State }, events: { Updated }, requires: ["vegetation:placement"], provides: ["foliage:impostors", "render:foliage-impostor-descriptors"], initWorld({ world }) { ensureResource(world, State, initial); }, install({ engine, world }) { const state = () => ensureResource(world, State, initial); const api = { getState: state, buildFromInstances(instances = engine.vegetationPlacement?.listInstances?.() ?? [], viewer = {}) { const next = { ...state(), cards: buildFoliageImpostors(instances, viewer, state()) }; world.setResource(State, next); world.emit?.(Updated, { state: clone(next) }); return clone(next.cards); }, getCards() { return clone(state().cards); }, snapshot: () => clone(state()) }; engine.foliageImpostors = api; engine.n ??= {}; engine.n.foliageImpostors = api; }, metadata: { version: FOLIAGE_IMPOSTOR_KIT_VERSION, purpose: "Renderer-agnostic far foliage billboard cluster descriptors." } });
 }
 
 export default createFoliageImpostorKit;

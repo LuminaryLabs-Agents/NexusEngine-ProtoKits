@@ -4,7 +4,7 @@ Status: active
 
 ## Purpose
 
-Use this `.agent` workspace to coordinate NexusRealtime-ProtoKits planning, idea inventory, and docs-only domain-kit expansion work.
+Use this `.agent` workspace to coordinate NexusEngine-ProtoKits planning, idea inventory, and docs-only domain-kit expansion work.
 
 ## Notes
 

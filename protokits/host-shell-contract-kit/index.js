@@ -38,12 +38,12 @@ export function createHostShellDescriptor(contractInput = {}, runtime = {}) {
   };
 }
 
-export function createHostShellContractKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createHostShellContractKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const HostShellContractState = resource(options.resourceName ?? "hostShellContract.state");
   const HostShellContractUpdated = event("hostShellContract.updated");
   const createState = () => ({ version: HOST_SHELL_CONTRACT_KIT_VERSION, contract: normalizeHostShellContract(options.contract ?? options), descriptors: [] });
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "host-shell-contract-kit",
     resources: { HostShellContractState },
     events: { HostShellContractUpdated },

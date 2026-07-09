@@ -1,6 +1,6 @@
 # DSM Start Here
 
-This is the first document an agent should read before creating, refining, splitting, or promoting any NexusRealtime ProtoKit.
+This is the first document an agent should read before creating, refining, splitting, or promoting any NexusEngine ProtoKit.
 
 DSM means **Domain Service Module**.
 

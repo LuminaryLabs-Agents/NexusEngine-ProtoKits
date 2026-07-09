@@ -14,7 +14,7 @@ Cloud lighting descriptor kit for the `mattatz-clouds-domain`.
 ## Public implementation
 
 ```js
-import { createMattatzCloudLightingKit } from "@luminarylabs/nexusrealtime-protokits/mattatz-clouds-domain";
+import { createMattatzCloudLightingKit } from "@luminarylabs/nexusengine-protokits/mattatz-clouds-domain";
 ```
 
 Renderers consume these values when shading volumetric cloud boxes, impostor cards, or horizon cloud bands.

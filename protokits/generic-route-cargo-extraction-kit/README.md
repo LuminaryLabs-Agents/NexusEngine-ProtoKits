@@ -31,9 +31,9 @@ Not owned here:
 ## Example
 
 ```js
-import { createGenericRouteCargoExtractionKit } from "@luminarylabs/nexusrealtime-protokits/generic-route-cargo-extraction-kit";
+import { createGenericRouteCargoExtractionKit } from "@luminarylabs/nexusengine-protokits/generic-route-cargo-extraction-kit";
 
-const kit = createGenericRouteCargoExtractionKit(NexusRealtime, {
+const kit = createGenericRouteCargoExtractionKit(NexusEngine, {
   routeId: "harbor-salvage-loop",
   checkpoints: [
     { id: "dock", label: "Dock" },

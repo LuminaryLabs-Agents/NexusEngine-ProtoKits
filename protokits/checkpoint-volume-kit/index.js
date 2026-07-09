@@ -32,14 +32,14 @@ export function generateCheckpointsForPatch(patch = {}, state = {}) {
   return out;
 }
 
-export function createCheckpointVolumeKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createCheckpointVolumeKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const CheckpointVolumeState = resource(options.resourceName ?? "checkpointVolume.state");
   const CheckpointPassed = event("checkpointVolume.passed");
   const CheckpointsGenerated = event("checkpointVolume.generated");
   const initial = () => createCheckpointState(options);
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "checkpoint-volume-kit",
     resources: { CheckpointVolumeState },
     events: { CheckpointPassed, CheckpointsGenerated },

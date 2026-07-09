@@ -3,7 +3,7 @@ import {
   createStonewakeParticleKits
 } from "../protokits/reactive-particle-field-kit/index.js";
 
-const NexusRealtime = {
+const NexusEngine = {
   defineResource(name) { return name; },
   defineEvent(name) { return name; },
   defineRuntimeKit(spec) { return spec; }
@@ -35,7 +35,7 @@ function harness(kits) {
   };
 }
 
-const kits = createStonewakeParticleKits(NexusRealtime);
+const kits = createStonewakeParticleKits(NexusEngine);
 assert.equal(kits.length, 15);
 
 const h = harness(kits);

@@ -5,7 +5,7 @@ Date: 2026-06-22
 
 ## Purpose
 
-Capture a broad backlog of reusable NexusRealtime ProtoKit candidates. These are idea seeds, not implementation commitments.
+Capture a broad backlog of reusable NexusEngine ProtoKit candidates. These are idea seeds, not implementation commitments.
 
 Use this file to choose future DSM specs, proof experiments, and promotion candidates. Before building any seed, search existing `protokits/`, check `docs/DSM-CATALOG.md`, and decide whether the seed should refine an existing kit, split into a child kit, remain a bridge/preset, or become experiment-only data.
 

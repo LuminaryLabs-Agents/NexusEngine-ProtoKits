@@ -1,6 +1,6 @@
 # Electron Desktop Composition
 
-Electron should be a thin host for NexusRealtime composition. It should not become a gameplay runtime.
+Electron should be a thin host for NexusEngine composition. It should not become a gameplay runtime.
 
 ## Desktop ownership split
 
@@ -8,7 +8,7 @@ Electron should be a thin host for NexusRealtime composition. It should not beco
 Electron host
   owns windows, native menus, filesystem, auto-update, process boundaries, app settings
 
-NexusRealtime runtime
+NexusEngine runtime
   owns tick, resources, events, systems, kit installation, sequence execution
 
 ProtoKit composition layer

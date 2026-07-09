@@ -52,11 +52,11 @@ export function createCameraModeState(options = {}) {
   return { id: options.id ?? "camera-mode-domain", version: CAMERA_MODE_DOMAIN_VERSION, descriptor: createCameraModeDescriptor(options) };
 }
 
-export function createCameraModeDomainKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createCameraModeDomainKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const State = defs.resource(options.resourceName ?? "cameraMode.state");
   const initial = () => createCameraModeState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.kitId ?? "camera-mode-domain",
     resources: { State },
     provides: ["camera:mode-descriptor", "camera:first-person-mode", "camera:zoom-transition"],

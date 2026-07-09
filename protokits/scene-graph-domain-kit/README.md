@@ -15,7 +15,7 @@ Atomic Domain Service Kit.
 ## Factory
 
 ```js
-createSceneGraphDomainKit(NexusRealtime, options)
+createSceneGraphDomainKit(NexusEngine, options)
 ```
 
 ## Provides

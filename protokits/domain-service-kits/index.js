@@ -47,37 +47,37 @@ export const DOMAIN_SERVICE_KIT_DEFINITIONS = Object.freeze([
   ASSET_DESCRIPTOR_KIT_DEFINITION
 ]);
 
-export function createViewRigKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, VIEW_RIG_KIT_DEFINITION, config); }
-export function createSpatialInteractionKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, SPATIAL_INTERACTION_KIT_DEFINITION, config); }
-export function createCompletionLedgerKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, COMPLETION_LEDGER_KIT_DEFINITION, config); }
-export function createObjectiveBridgeKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, OBJECTIVE_BRIDGE_KIT_DEFINITION, config); }
-export function createLockGroupKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, LOCK_GROUP_KIT_DEFINITION, config); }
-export function createDamageHealthKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, DAMAGE_HEALTH_KIT_DEFINITION, config); }
-export function createEncounterDirectorKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, ENCOUNTER_DIRECTOR_KIT_DEFINITION, config); }
-export function createResourceNodeKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, RESOURCE_NODE_KIT_DEFINITION, config); }
-export function createBuildPlacementKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, BUILD_PLACEMENT_KIT_DEFINITION, config); }
-export function createStructureRuntimeKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, STRUCTURE_RUNTIME_KIT_DEFINITION, config); }
-export function createDiegeticFeedbackSignalKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, DIEGETIC_FEEDBACK_SIGNAL_KIT_DEFINITION, config); }
-export function createAssetDescriptorKit(NexusRealtime, config = {}) { return createGenericProtoKit(NexusRealtime, ASSET_DESCRIPTOR_KIT_DEFINITION, config); }
+export function createViewRigKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, VIEW_RIG_KIT_DEFINITION, config); }
+export function createSpatialInteractionKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, SPATIAL_INTERACTION_KIT_DEFINITION, config); }
+export function createCompletionLedgerKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, COMPLETION_LEDGER_KIT_DEFINITION, config); }
+export function createObjectiveBridgeKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, OBJECTIVE_BRIDGE_KIT_DEFINITION, config); }
+export function createLockGroupKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, LOCK_GROUP_KIT_DEFINITION, config); }
+export function createDamageHealthKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, DAMAGE_HEALTH_KIT_DEFINITION, config); }
+export function createEncounterDirectorKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, ENCOUNTER_DIRECTOR_KIT_DEFINITION, config); }
+export function createResourceNodeKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, RESOURCE_NODE_KIT_DEFINITION, config); }
+export function createBuildPlacementKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, BUILD_PLACEMENT_KIT_DEFINITION, config); }
+export function createStructureRuntimeKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, STRUCTURE_RUNTIME_KIT_DEFINITION, config); }
+export function createDiegeticFeedbackSignalKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, DIEGETIC_FEEDBACK_SIGNAL_KIT_DEFINITION, config); }
+export function createAssetDescriptorKit(NexusEngine, config = {}) { return createGenericProtoKit(NexusEngine, ASSET_DESCRIPTOR_KIT_DEFINITION, config); }
 
 export const createNCompletionLedgerKit = createCompletionLedgerKit;
 
-export function createDomainServiceKits(NexusRealtime, config = {}) {
-  ({ NexusRealtime, config } = normalizeProtoKitFactoryArgs(NexusRealtime, config));
+export function createDomainServiceKits(NexusEngine, config = {}) {
+  ({ NexusEngine, config } = normalizeProtoKitFactoryArgs(NexusEngine, config));
   const cfg = config ?? {};
   return [
-    createViewRigKit(NexusRealtime, cfg.viewRig ?? {}),
-    createSpatialInteractionKit(NexusRealtime, cfg.spatialInteraction ?? {}),
-    createCompletionLedgerKit(NexusRealtime, cfg.completionLedger ?? {}),
-    createObjectiveBridgeKit(NexusRealtime, cfg.objectiveBridge ?? {}),
-    createLockGroupKit(NexusRealtime, cfg.lockGroup ?? {}),
-    createDamageHealthKit(NexusRealtime, cfg.damageHealth ?? {}),
-    createEncounterDirectorKit(NexusRealtime, cfg.encounterDirector ?? {}),
-    createResourceNodeKit(NexusRealtime, cfg.resourceNode ?? {}),
-    createBuildPlacementKit(NexusRealtime, cfg.buildPlacement ?? {}),
-    createStructureRuntimeKit(NexusRealtime, cfg.structureRuntime ?? {}),
-    createDiegeticFeedbackSignalKit(NexusRealtime, cfg.diegeticFeedback ?? {}),
-    createAssetDescriptorKit(NexusRealtime, cfg.assetDescriptor ?? {})
+    createViewRigKit(NexusEngine, cfg.viewRig ?? {}),
+    createSpatialInteractionKit(NexusEngine, cfg.spatialInteraction ?? {}),
+    createCompletionLedgerKit(NexusEngine, cfg.completionLedger ?? {}),
+    createObjectiveBridgeKit(NexusEngine, cfg.objectiveBridge ?? {}),
+    createLockGroupKit(NexusEngine, cfg.lockGroup ?? {}),
+    createDamageHealthKit(NexusEngine, cfg.damageHealth ?? {}),
+    createEncounterDirectorKit(NexusEngine, cfg.encounterDirector ?? {}),
+    createResourceNodeKit(NexusEngine, cfg.resourceNode ?? {}),
+    createBuildPlacementKit(NexusEngine, cfg.buildPlacement ?? {}),
+    createStructureRuntimeKit(NexusEngine, cfg.structureRuntime ?? {}),
+    createDiegeticFeedbackSignalKit(NexusEngine, cfg.diegeticFeedback ?? {}),
+    createAssetDescriptorKit(NexusEngine, cfg.assetDescriptor ?? {})
   ];
 }
 

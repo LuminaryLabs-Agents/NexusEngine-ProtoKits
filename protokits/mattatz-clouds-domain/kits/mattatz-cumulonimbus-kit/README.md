@@ -18,5 +18,5 @@ Cumulonimbus clouds need vertical structure and stacked volume intent. Keeping t
 ## Public implementation
 
 ```js
-import { createMattatzCumulonimbusKit } from "@luminarylabs/nexusrealtime-protokits/mattatz-clouds-domain";
+import { createMattatzCumulonimbusKit } from "@luminarylabs/nexusengine-protokits/mattatz-clouds-domain";
 ```

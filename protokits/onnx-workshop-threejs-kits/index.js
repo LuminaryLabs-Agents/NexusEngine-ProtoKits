@@ -13,17 +13,17 @@ const lerp = (a, b, t) => a + (b - a) * t;
 const lerpVec3 = (a, b, t) => ({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), z: lerp(a.z, b.z, t) });
 const lerpTransform = (a, b, t) => ({ position: lerpVec3(a.position, b.position, t), rotation: lerpVec3(a.rotation, b.rotation, t), scale: lerpVec3(a.scale, b.scale, t) });
 
-function requireNexus(NexusRealtime, kitId) {
+function requireNexus(NexusEngine, kitId) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`${kitId} requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`${kitId} requires NexusEngine.${key}.`);
   }
 }
 
-function buildKit(NexusRealtime, { id, resourceName, provides, events, initialState, install, metadata }) {
-  requireNexus(NexusRealtime, id);
-  const State = NexusRealtime.defineResource(resourceName);
-  const Ev = Object.fromEntries(events.map((eventName) => [eventName.replace(/(^|\.)([a-z])/g, (_, p, c) => p + c.toUpperCase()).replace(/\./g, ""), NexusRealtime.defineEvent(eventName)]));
-  return NexusRealtime.defineRuntimeKit({
+function buildKit(NexusEngine, { id, resourceName, provides, events, initialState, install, metadata }) {
+  requireNexus(NexusEngine, id);
+  const State = NexusEngine.defineResource(resourceName);
+  const Ev = Object.fromEntries(events.map((eventName) => [eventName.replace(/(^|\.)([a-z])/g, (_, p, c) => p + c.toUpperCase()).replace(/\./g, ""), NexusEngine.defineEvent(eventName)]));
+  return NexusEngine.defineRuntimeKit({
     id,
     provides,
     resources: { State },
@@ -101,8 +101,8 @@ export const DEFAULT_WORKSHOP_OBJECTS = [
   { id: "force-gauge", label: "Force Gauge", type: "force-gauge", domain: "measurement", spawn: { position: { x: 2.55, y: 1.35, z: -1.92 } }, reviewActions: ["read-force", "connect-physics-prop", "show-needle"], compatibleTypes: ["hammer", "lever", "spring", "mass-block"], physics: { maxForce: 100, value: 0 }, mesh: "gauge" }
 ];
 
-export function createOnnxWorkshopSceneDomainKit(NexusRealtime, config = {}) {
-  return buildKit(NexusRealtime, {
+export function createOnnxWorkshopSceneDomainKit(NexusEngine, config = {}) {
+  return buildKit(NexusEngine, {
     id: config.kitId ?? "onnx-workshop-scene-domain-kit",
     resourceName: config.resourceName ?? "onnxWorkshop.scene",
     provides: ["onnx-workshop:scene", "workshop:physical-objects", "render:three-workshop-descriptors"],
@@ -156,8 +156,8 @@ export function createOnnxWorkshopSceneDomainKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createWorkshopObjectReviewDomainKit(NexusRealtime, config = {}) {
-  return buildKit(NexusRealtime, {
+export function createWorkshopObjectReviewDomainKit(NexusEngine, config = {}) {
+  return buildKit(NexusEngine, {
     id: config.kitId ?? "workshop-object-review-domain-kit",
     resourceName: config.resourceName ?? "onnxWorkshop.review",
     provides: ["workshop:object-review", "workshop:selected-object", "workshop:review-motion"],
@@ -181,8 +181,8 @@ export function createWorkshopObjectReviewDomainKit(NexusRealtime, config = {}) 
   });
 }
 
-export function createWorkshopCompanionVisionDomainKit(NexusRealtime, config = {}) {
-  return buildKit(NexusRealtime, {
+export function createWorkshopCompanionVisionDomainKit(NexusEngine, config = {}) {
+  return buildKit(NexusEngine, {
     id: config.kitId ?? "workshop-companion-vision-domain-kit",
     resourceName: config.resourceName ?? "onnxWorkshop.companionVision",
     provides: ["workshop:companion-vision", "onnx:object-question", "workshop:inspection-result"],
@@ -214,8 +214,8 @@ export function createWorkshopCompanionVisionDomainKit(NexusRealtime, config = {
   });
 }
 
-export function createWorkshopSignalFlowDomainKit(NexusRealtime, config = {}) {
-  return buildKit(NexusRealtime, {
+export function createWorkshopSignalFlowDomainKit(NexusEngine, config = {}) {
+  return buildKit(NexusEngine, {
     id: config.kitId ?? "workshop-signal-flow-domain-kit",
     resourceName: config.resourceName ?? "onnxWorkshop.signalFlow",
     provides: ["workshop:connections", "workshop:data-packets", "render:flow-descriptors"],
@@ -234,8 +234,8 @@ export function createWorkshopSignalFlowDomainKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createWorkshopThreeRenderPlanDomainKit(NexusRealtime, config = {}) {
-  return buildKit(NexusRealtime, {
+export function createWorkshopThreeRenderPlanDomainKit(NexusEngine, config = {}) {
+  return buildKit(NexusEngine, {
     id: config.kitId ?? "workshop-three-render-plan-domain-kit",
     resourceName: config.resourceName ?? "onnxWorkshop.threePlan",
     provides: ["render:three-workshop-plan", "render:wound-triangle-mesh-plan", "render:walkable-workshop"],
@@ -251,13 +251,13 @@ export function createWorkshopThreeRenderPlanDomainKit(NexusRealtime, config = {
   });
 }
 
-export function createOnnxWorkshopThreeJsKits(NexusRealtime, config = {}) {
+export function createOnnxWorkshopThreeJsKits(NexusEngine, config = {}) {
   return [
-    createOnnxWorkshopSceneDomainKit(NexusRealtime, config.scene ?? {}),
-    createWorkshopObjectReviewDomainKit(NexusRealtime, config.review ?? {}),
-    createWorkshopCompanionVisionDomainKit(NexusRealtime, config.companionVision ?? {}),
-    createWorkshopSignalFlowDomainKit(NexusRealtime, config.signalFlow ?? {}),
-    createWorkshopThreeRenderPlanDomainKit(NexusRealtime, config.threePlan ?? {})
+    createOnnxWorkshopSceneDomainKit(NexusEngine, config.scene ?? {}),
+    createWorkshopObjectReviewDomainKit(NexusEngine, config.review ?? {}),
+    createWorkshopCompanionVisionDomainKit(NexusEngine, config.companionVision ?? {}),
+    createWorkshopSignalFlowDomainKit(NexusEngine, config.signalFlow ?? {}),
+    createWorkshopThreeRenderPlanDomainKit(NexusEngine, config.threePlan ?? {})
   ];
 }
 

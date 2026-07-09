@@ -59,7 +59,7 @@ export const ENVIRONMENT_DOMAIN_MANIFEST = Object.freeze({
   kits: Object.freeze(ENVIRONMENT_KIT_SPECS.map(([id]) => id))
 });
 
-export function createEnvironmentKitById(NexusRealtime, kitId, config = {}) {
+export function createEnvironmentKitById(NexusEngine, kitId, config = {}) {
   const spec = ENVIRONMENT_KIT_SPECS.find(([id]) => id === kitId);
   if (!spec) throw new Error(`Unknown environment kit: ${kitId}`);
   const [id, subdomain, category, purpose, requires, provides] = spec;
@@ -77,7 +77,7 @@ export function createEnvironmentKitById(NexusRealtime, kitId, config = {}) {
     describe() { return Object.freeze({ id: api.id, version: api.version, domain: api.domain, subdomain, category, purpose, requires: api.requires.slice(), provides: api.provides.slice() }); },
     getState() { return copy(state); },
     createRuntimeKit(options = {}) {
-      return defineInjectedRuntimeKit(NexusRealtime, {
+      return defineInjectedRuntimeKit(NexusEngine, {
         id: options.id ?? api.id,
         requires: options.requires ?? api.requires,
         provides: options.provides ?? api.provides,
@@ -89,9 +89,9 @@ export function createEnvironmentKitById(NexusRealtime, kitId, config = {}) {
   return api;
 }
 
-export function createEnvironmentDomainKits(NexusRealtime, config = {}) {
+export function createEnvironmentDomainKits(NexusEngine, config = {}) {
   const omit = new Set(arr(config.omit));
-  return ENVIRONMENT_KIT_SPECS.filter(([id]) => !omit.has(id)).map(([id]) => createEnvironmentKitById(NexusRealtime, id, config[id] ?? {}));
+  return ENVIRONMENT_KIT_SPECS.filter(([id]) => !omit.has(id)).map(([id]) => createEnvironmentKitById(NexusEngine, id, config[id] ?? {}));
 }
 
 export default createEnvironmentDomainKits;

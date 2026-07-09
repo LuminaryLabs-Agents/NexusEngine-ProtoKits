@@ -344,8 +344,8 @@ function createRoundProgressionSystem(definitions, options) {
   };
 }
 
-export function createDownhillRaceKit(nexusRealtime = {}, options = {}) {
-  const definitions = createArcadeRaceDefinitions(nexusRealtime, options);
+export function createDownhillRaceKit(nexusEngine = {}, options = {}) {
+  const definitions = createArcadeRaceDefinitions(nexusEngine, options);
   const { components, resources, events } = definitions;
 
   const bindings = {
@@ -373,7 +373,7 @@ export function createDownhillRaceKit(nexusRealtime = {}, options = {}) {
     })
   };
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: "downhill-race-kit",
     components: {
       Racer: components.Racer,
@@ -422,7 +422,7 @@ export function createDownhillRaceKit(nexusRealtime = {}, options = {}) {
       version: DOWNHILL_RACE_KIT_VERSION,
       coreVersion: ARCADE_RACE_CORE_VERSION,
       purpose: "Race countdown, registration, finish detection, placement, rounds, and win/loss events.",
-      usesNexusRealtimeKits: ["runtime-kit", "surfaces", "common-game-definitions"]
+      usesNexusEngineKits: ["runtime-kit", "surfaces", "common-game-definitions"]
     }
   });
 }

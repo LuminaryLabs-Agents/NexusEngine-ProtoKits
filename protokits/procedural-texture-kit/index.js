@@ -87,7 +87,7 @@ export function createTextureCanvas(material = "concrete", options = {}) {
   return canvas;
 }
 
-export function createProceduralTextureKit(nexusRealtime = {}, options = {}) {
+export function createProceduralTextureKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "procedural-texture-kit", version: PROCEDURAL_TEXTURE_KIT_VERSION, palettes: materialPalettes, hash2, noise2, fbm2, paletteSample, sampleProceduralMaterial, createTextureSampler, createTextureCanvas };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["texture:procedural", "texture:noise", "material:palettes"], bindings: { proceduralTextureKit: kit }, metadata: { version: PROCEDURAL_TEXTURE_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["texture:procedural", "texture:noise", "material:palettes"], bindings: { proceduralTextureKit: kit }, metadata: { version: PROCEDURAL_TEXTURE_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

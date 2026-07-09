@@ -15,7 +15,7 @@ Composition kit.
 ## Factory
 
 ```js
-createSceneTransitionKit(NexusRealtime, options)
+createSceneTransitionKit(NexusEngine, options)
 ```
 
 ## Requires

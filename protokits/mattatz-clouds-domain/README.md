@@ -19,7 +19,7 @@ mattatz-clouds-domain
 
 This is not a scene demo and it is not a hardcoded sky. It is a reusable cloud/weather rendering domain that scenes can consume.
 
-## NexusRealtime base it extends
+## NexusEngine base it extends
 
 This domain extends the ProtoKit rendering-descriptor pattern:
 
@@ -119,7 +119,7 @@ import {
   createMattatzCloudsDomainKit,
   createMattatzCloudRenderContract,
   createMattatzCloudsState
-} from "@luminarylabs/nexusrealtime-protokits/mattatz-clouds-domain";
+} from "@luminarylabs/nexusengine-protokits/mattatz-clouds-domain";
 ```
 
 Installed engine API:
@@ -167,7 +167,7 @@ ProtoKit descriptor domain
 -> smoke validation for state/snapshot/render contract
 -> Domain Service Module candidate
 -> Domain Service Kit candidate
--> stable NexusRealtime rendering/weather capability
+-> stable NexusEngine rendering/weather capability
 ```
 
 ## Status

@@ -1,9 +1,9 @@
 export const KIT_MANIFEST_DOMAIN_KIT_VERSION = "0.1.0";
 
-export function createKitManifestDomainKit(NexusRealtime = {}, config = {}) {
-  const defineResource = NexusRealtime.defineResource ?? ((name) => ({ kind: "resource", name }));
-  const defineEvent = NexusRealtime.defineEvent ?? ((name) => ({ kind: "event", name }));
-  const defineRuntimeKit = NexusRealtime.defineRuntimeKit ?? ((spec) => Object.freeze(spec));
+export function createKitManifestDomainKit(NexusEngine = {}, config = {}) {
+  const defineResource = NexusEngine.defineResource ?? ((name) => ({ kind: "resource", name }));
+  const defineEvent = NexusEngine.defineEvent ?? ((name) => ({ kind: "event", name }));
+  const defineRuntimeKit = NexusEngine.defineRuntimeKit ?? ((spec) => Object.freeze(spec));
   const State = defineResource(config.resourceName ?? "kitManifest.state");
   const Registered = defineEvent("kitManifest.registered");
   const Validated = defineEvent("kitManifest.validated");

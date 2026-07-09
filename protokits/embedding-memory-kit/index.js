@@ -3,9 +3,9 @@ export const EMBEDDING_MEMORY_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createEmbeddingMemoryKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createEmbeddingMemoryKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -16,9 +16,9 @@ function normalizeVector(vector = []) { return asArray(vector).map(Number).filte
 
 function initialState() { return { version: EMBEDDING_MEMORY_KIT_VERSION, memories: {}, searches: [] }; }
 
-export function createEmbeddingMemoryKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createEmbeddingMemoryKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const EmbeddingMemoryState = defineResource(config.resourceName ?? "embeddingMemory.state");
   const EmbeddingMemoryAdded = defineEvent("embeddingMemory.added");
   const EmbeddingMemorySearched = defineEvent("embeddingMemory.searched");

@@ -95,8 +95,8 @@ function isSlotOccupied(snapshot, slotId) {
   return Object.values(snapshot?.structures?.structures ?? {}).some((structure) => structure.slotId === slotId);
 }
 
-function makeKit(NexusRealtime, spec) {
-  return NexusRealtime.defineRuntimeKit({
+function makeKit(NexusEngine, spec) {
+  return NexusEngine.defineRuntimeKit({
     id: spec.id,
     requires: spec.requires ?? ["game:generic-defense"],
     provides: spec.provides ?? [],
@@ -113,7 +113,7 @@ function makeKit(NexusRealtime, spec) {
   });
 }
 
-export function createGenericStylizedViewRigKit(NexusRealtime, config = {}) {
+export function createGenericStylizedViewRigKit(NexusEngine, config = {}) {
   const state = {
     mode: "oblique-2.5d",
     pitch: n(config.pitch, 58),
@@ -126,7 +126,7 @@ export function createGenericStylizedViewRigKit(NexusRealtime, config = {}) {
     yCompression: n(config.yCompression, 0.78),
     zLift: n(config.zLift, 0.72)
   };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-stylized-view-rig-kit",
     requires: [],
     provides: ["view:stylized-rig", "camera:2.5d", "camera:screen-to-world", "camera:world-to-screen"],
@@ -144,9 +144,9 @@ export function createGenericStylizedViewRigKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericCelMaterialKit(NexusRealtime, config = {}) {
+export function createGenericCelMaterialKit(NexusEngine, config = {}) {
   const state = { shadowBands: 3, highlightBands: 2, rimStrength: 0.55, saturation: 1.08, palette: config.palette ?? {} };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-cel-material-kit",
     requires: [],
     provides: ["style:cel-materials", "render:material-descriptors"],
@@ -161,9 +161,9 @@ export function createGenericCelMaterialKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericInkOutlineKit(NexusRealtime, config = {}) {
+export function createGenericInkOutlineKit(NexusEngine, config = {}) {
   const state = { hoverId: null, selectedId: null, defaultWidth: 2, selectedWidth: 4, hoverWidth: 3, bossWidth: 5, colors: { ally: "#101820", enemy: "#241018", selected: "#ffe36d", hover: "#8bd3ff", boss: "#ff7a5c", ...(config.colors ?? {}) } };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-ink-outline-kit",
     requires: [],
     provides: ["style:outline", "render:outline-descriptors"],
@@ -185,7 +185,7 @@ export function createGenericInkOutlineKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericStylizedLightingKit(NexusRealtime, config = {}) {
+export function createGenericStylizedLightingKit(NexusEngine, config = {}) {
   const state = {
     mood: config.mood ?? "dawn-bastion",
     keyLight: config.keyLight ?? { direction: { x: -0.4, y: -0.7, z: 0.6 }, color: "#ffe1a8", intensity: 1.2 },
@@ -193,7 +193,7 @@ export function createGenericStylizedLightingKit(NexusRealtime, config = {}) {
     shadowTint: config.shadowTint ?? "#182433",
     ambientRamp: config.ambientRamp ?? ["#061018", "#132434", "#274557"]
   };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-stylized-lighting-kit",
     requires: [],
     provides: ["style:lighting", "render:lighting-descriptors"],
@@ -208,9 +208,9 @@ export function createGenericStylizedLightingKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseGroundReadabilityKit(NexusRealtime, config = {}) {
+export function createGenericDefenseGroundReadabilityKit(NexusEngine, config = {}) {
   const state = { laneStyle: "painted-cel-ribbon", pathEdgeWidth: 6, buildZoneStyle: "soft-rings", blockedZoneStyle: "hatched-red", gridVisible: false, ...(config.state ?? {}) };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-ground-readability-kit",
     provides: ["ground:readability", "render:ground-descriptors", "placement:affordance-descriptors"],
     purpose: "Emits authored-looking path, lane, build affordance, and blocked-zone descriptors.",
@@ -231,9 +231,9 @@ export function createGenericDefenseGroundReadabilityKit(NexusRealtime, config =
   });
 }
 
-export function createGenericPlacementProjectorKit(NexusRealtime, config = {}) {
+export function createGenericPlacementProjectorKit(NexusEngine, config = {}) {
   const state = { active: false, blueprintId: null, worldPoint: null, valid: false, reason: null, collisionRadius: 24, rangePreview: 120, ghostOpacity: 0.72, slotId: null };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-placement-projector-kit",
     provides: ["placement:projector", "placement:ghost", "placement:validity-feedback"],
     purpose: "Supports free-placement-style ghosts and closest-valid-anchor confirmation while keeping simulation validation reusable.",
@@ -269,9 +269,9 @@ export function createGenericPlacementProjectorKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericRangeRingKit(NexusRealtime, config = {}) {
+export function createGenericRangeRingKit(NexusEngine, config = {}) {
   const state = { visiblePolicy: "selected-or-placement", selectedOpacity: 0.34, placementOpacity: 0.22, upgradeDeltaOpacity: 0.18, fadeMs: 160, ...(config.state ?? {}) };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-range-ring-kit",
     provides: ["render:range-rings", "selection:range-preview", "upgrade:range-delta-preview"],
     purpose: "Emits selected, placement, and upgrade delta range rings without clutter.",
@@ -293,9 +293,9 @@ export function createGenericRangeRingKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefenseUnitRenderKit(NexusRealtime, config = {}) {
+export function createGenericDefenseUnitRenderKit(NexusEngine, config = {}) {
   const state = { towerScale: 1, enemyScale: 1, bossScale: 1.45, idleBob: true, attackPose: true, healthBarPolicy: "damaged-or-selected", roleIconPolicy: "elite-and-boss", ...(config.state ?? {}) };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-unit-render-kit",
     provides: ["render:unit-descriptors", "render:tower-descriptors", "render:enemy-descriptors"],
     purpose: "Creates renderer-agnostic tower/enemy descriptors with cel material and outline roles.",
@@ -313,8 +313,8 @@ export function createGenericDefenseUnitRenderKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericTowerIdentityLayerKit(NexusRealtime, config = {}) {
-  return makeKit(NexusRealtime, {
+export function createGenericTowerIdentityLayerKit(NexusEngine, config = {}) {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-tower-identity-layer-kit",
     provides: ["tower:visual-identity", "render:tower-identity-descriptors"],
     purpose: "Maps tower blueprints to silhouettes, motifs, emitters, geometry keys, and VFX keys.",
@@ -327,8 +327,8 @@ export function createGenericTowerIdentityLayerKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericEnemyReadabilityLayerKit(NexusRealtime, config = {}) {
-  return makeKit(NexusRealtime, {
+export function createGenericEnemyReadabilityLayerKit(NexusEngine, config = {}) {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-enemy-readability-layer-kit",
     provides: ["enemy:readability", "render:enemy-badge-descriptors"],
     purpose: "Emits badges and posture descriptors for shield, stealth, split, aura, flying, elite, and boss enemies.",
@@ -340,9 +340,9 @@ export function createGenericEnemyReadabilityLayerKit(NexusRealtime, config = {}
   });
 }
 
-export function createGenericCombatVfxKit(NexusRealtime, config = {}) {
+export function createGenericCombatVfxKit(NexusEngine, config = {}) {
   const state = { projectileTrails: true, impactBursts: true, deathBursts: true, muzzleFlashes: true, maxActiveVfx: n(config.maxActiveVfx, 180) };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-combat-vfx-kit",
     provides: ["vfx:combat", "render:vfx-descriptors"],
     purpose: "Converts projectiles and combat effects into stylized trail, muzzle, impact, and death-burst descriptors.",
@@ -360,9 +360,9 @@ export function createGenericCombatVfxKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericHitFeedbackKit(NexusRealtime, config = {}) {
+export function createGenericHitFeedbackKit(NexusEngine, config = {}) {
   const state = { damagePips: true, shieldHitStyle: "blue-spark", armorHitStyle: "orange-chip", statusPopStyle: "small-icon", bossHitScale: 1.4 };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-hit-feedback-kit",
     provides: ["feedback:hit", "render:hit-feedback-descriptors"],
     purpose: "Provides clean hit-feedback descriptor policy without raw debug damage numbers.",
@@ -375,9 +375,9 @@ export function createGenericHitFeedbackKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericLayeredHudShellKit(NexusRealtime, config = {}) {
+export function createGenericLayeredHudShellKit(NexusEngine, config = {}) {
   const state = { zones: { topStats: { anchor: "top-center", height: 48 }, towerPalette: { anchor: "bottom-center", height: 112 }, contextPanel: { anchor: "right", width: 320 }, upgradeTree: { anchor: "right", width: 340 } }, theme: "sleek-dark-cel", controlsTextVisible: false, ...(config.state ?? {}) };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-layered-hud-shell-kit",
     provides: ["ui:hud-shell", "ui:layout-zones"],
     purpose: "Defines sleek gameplay-only HUD layout zones and suppresses controls tutorial text.",
@@ -385,9 +385,9 @@ export function createGenericLayeredHudShellKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericGameplayStatStripKit(NexusRealtime, config = {}) {
+export function createGenericGameplayStatStripKit(NexusEngine, config = {}) {
   const state = { fields: ["wave", "currency", "core", "enemyCount"], compact: true, showControls: false, ...(config.state ?? {}) };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-gameplay-stat-strip-kit",
     provides: ["ui:gameplay-stats"],
     purpose: "Emits only gameplay stats: wave, currency, core, and threats.",
@@ -409,9 +409,9 @@ export function createGenericGameplayStatStripKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericTowerSelectionPanelKit(NexusRealtime, config = {}) {
+export function createGenericTowerSelectionPanelKit(NexusEngine, config = {}) {
   const state = { layout: "bottom-card-strip", columns: 12, selectedBlueprintId: null, cardSize: "compact", showCost: true, showRoleIcon: true };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-tower-selection-panel-kit",
     provides: ["ui:tower-selection", "ui:tower-cards"],
     purpose: "Emits compact tower cards for all tower blueprints with cost, role, affordability, and identity icons.",
@@ -434,9 +434,9 @@ export function createGenericTowerSelectionPanelKit(NexusRealtime, config = {}) 
   });
 }
 
-export function createGenericUpgradeTreePanelKit(NexusRealtime, config = {}) {
+export function createGenericUpgradeTreePanelKit(NexusEngine, config = {}) {
   const state = { layout: "right-branch-tree", showStatDelta: true, showSell: true, showRepair: false, maxBranches: 3 };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-upgrade-tree-panel-kit",
     provides: ["ui:upgrade-tree", "structure:upgrade-preview"],
     purpose: "Emits upgrade tree, next stat deltas, affordability, and sell/refund descriptors for selected tower.",
@@ -461,8 +461,8 @@ export function createGenericUpgradeTreePanelKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericSelectionContextPanelKit(NexusRealtime, config = {}) {
-  return makeKit(NexusRealtime, {
+export function createGenericSelectionContextPanelKit(NexusEngine, config = {}) {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-selection-context-panel-kit",
     provides: ["ui:selection-context"],
     purpose: "Emits selected tower/enemy context panel descriptors.",
@@ -480,9 +480,9 @@ export function createGenericSelectionContextPanelKit(NexusRealtime, config = {}
   });
 }
 
-export function createGenericUiMotionPolishKit(NexusRealtime, config = {}) {
+export function createGenericUiMotionPolishKit(NexusEngine, config = {}) {
   const state = { easing: "out-cubic", hoverMs: 120, panelOpenMs: 180, statPulseMs: 260, confirmPulseMs: 220, denyShakeMs: 180, lastSelection: null };
-  return makeKit(NexusRealtime, {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-ui-motion-polish-kit",
     provides: ["ui:motion", "ui:transitions"],
     purpose: "Provides timing descriptors for sleek hover, panel, selection, stat, confirm, and deny motion.",
@@ -490,8 +490,8 @@ export function createGenericUiMotionPolishKit(NexusRealtime, config = {}) {
   });
 }
 
-export function createGenericDefensePresentationStackKit(NexusRealtime, config = {}) {
-  return makeKit(NexusRealtime, {
+export function createGenericDefensePresentationStackKit(NexusEngine, config = {}) {
+  return makeKit(NexusEngine, {
     id: config.kitId ?? "generic-defense-presentation-stack-kit",
     provides: ["presentation:stack", "render:descriptor-surfaces", "ui:descriptor-surfaces"],
     purpose: "Coordinates all generic 2.5D cel-shaded defense presentation surfaces.",
@@ -540,27 +540,27 @@ export function createGenericDefensePresentationStackKit(NexusRealtime, config =
   });
 }
 
-export function createGenericDefensePresentationStackKits(NexusRealtime, config = {}) {
+export function createGenericDefensePresentationStackKits(NexusEngine, config = {}) {
   return [
-    createGenericStylizedViewRigKit(NexusRealtime, config.viewRig ?? {}),
-    createGenericCelMaterialKit(NexusRealtime, config.celMaterials ?? {}),
-    createGenericInkOutlineKit(NexusRealtime, config.inkOutline ?? {}),
-    createGenericStylizedLightingKit(NexusRealtime, config.lighting ?? {}),
-    createGenericDefenseGroundReadabilityKit(NexusRealtime, config.ground ?? {}),
-    createGenericPlacementProjectorKit(NexusRealtime, config.placement ?? {}),
-    createGenericRangeRingKit(NexusRealtime, config.rangeRing ?? {}),
-    createGenericDefenseUnitRenderKit(NexusRealtime, config.units ?? {}),
-    createGenericTowerIdentityLayerKit(NexusRealtime, config.towerIdentity ?? {}),
-    createGenericEnemyReadabilityLayerKit(NexusRealtime, config.enemyReadability ?? {}),
-    createGenericCombatVfxKit(NexusRealtime, config.combatVfx ?? {}),
-    createGenericHitFeedbackKit(NexusRealtime, config.hitFeedback ?? {}),
-    createGenericLayeredHudShellKit(NexusRealtime, config.hudShell ?? {}),
-    createGenericGameplayStatStripKit(NexusRealtime, config.statStrip ?? {}),
-    createGenericTowerSelectionPanelKit(NexusRealtime, config.towerSelection ?? {}),
-    createGenericUpgradeTreePanelKit(NexusRealtime, config.upgradeTree ?? {}),
-    createGenericSelectionContextPanelKit(NexusRealtime, config.selectionContext ?? {}),
-    createGenericUiMotionPolishKit(NexusRealtime, config.uiMotion ?? {}),
-    createGenericDefensePresentationStackKit(NexusRealtime, config.stack ?? {})
+    createGenericStylizedViewRigKit(NexusEngine, config.viewRig ?? {}),
+    createGenericCelMaterialKit(NexusEngine, config.celMaterials ?? {}),
+    createGenericInkOutlineKit(NexusEngine, config.inkOutline ?? {}),
+    createGenericStylizedLightingKit(NexusEngine, config.lighting ?? {}),
+    createGenericDefenseGroundReadabilityKit(NexusEngine, config.ground ?? {}),
+    createGenericPlacementProjectorKit(NexusEngine, config.placement ?? {}),
+    createGenericRangeRingKit(NexusEngine, config.rangeRing ?? {}),
+    createGenericDefenseUnitRenderKit(NexusEngine, config.units ?? {}),
+    createGenericTowerIdentityLayerKit(NexusEngine, config.towerIdentity ?? {}),
+    createGenericEnemyReadabilityLayerKit(NexusEngine, config.enemyReadability ?? {}),
+    createGenericCombatVfxKit(NexusEngine, config.combatVfx ?? {}),
+    createGenericHitFeedbackKit(NexusEngine, config.hitFeedback ?? {}),
+    createGenericLayeredHudShellKit(NexusEngine, config.hudShell ?? {}),
+    createGenericGameplayStatStripKit(NexusEngine, config.statStrip ?? {}),
+    createGenericTowerSelectionPanelKit(NexusEngine, config.towerSelection ?? {}),
+    createGenericUpgradeTreePanelKit(NexusEngine, config.upgradeTree ?? {}),
+    createGenericSelectionContextPanelKit(NexusEngine, config.selectionContext ?? {}),
+    createGenericUiMotionPolishKit(NexusEngine, config.uiMotion ?? {}),
+    createGenericDefensePresentationStackKit(NexusEngine, config.stack ?? {})
   ];
 }
 

@@ -5,12 +5,12 @@ import { createGenericAtmosphereLayerDescriptorKit } from "./generic-atmosphere-
 
 export const GENERIC_VISUAL_FX_DESCRIPTOR_KITS_VERSION = "0.1.0";
 
-export function createGenericVisualFxDescriptorKits(NexusRealtime = {}, config = {}) {
+export function createGenericVisualFxDescriptorKits(NexusEngine = {}, config = {}) {
   return [
-    createGenericFxEmitterDescriptorKit(NexusRealtime, config.fxEmitter ?? {}),
-    createGenericParticleFieldDescriptorKit(NexusRealtime, config.particleFields ?? {}),
-    createGenericShockwaveDescriptorKit(NexusRealtime, config.shockwaves ?? {}),
-    createGenericAtmosphereLayerDescriptorKit(NexusRealtime, config.atmosphereLayers ?? {})
+    createGenericFxEmitterDescriptorKit(NexusEngine, config.fxEmitter ?? {}),
+    createGenericParticleFieldDescriptorKit(NexusEngine, config.particleFields ?? {}),
+    createGenericShockwaveDescriptorKit(NexusEngine, config.shockwaves ?? {}),
+    createGenericAtmosphereLayerDescriptorKit(NexusEngine, config.atmosphereLayers ?? {})
   ];
 }
 

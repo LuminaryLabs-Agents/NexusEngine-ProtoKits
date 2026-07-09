@@ -40,9 +40,9 @@ const SHADER_SNIPPETS = Object.freeze({
   "foam-line": "vec4 shadeParticle(vec2 uv,float age,float seed){float line=smoothstep(.06,.0,abs(uv.y-.5+sin(uv.x*12.0)*.04));return vec4(.76,.96,1.0,line*(1.0-age));}"
 });
 
-function requireNexus(NexusRealtime, factoryName) {
+function requireNexus(NexusEngine, factoryName) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`${factoryName} requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`${factoryName} requires NexusEngine.${key}.`);
   }
 }
 
@@ -53,12 +53,12 @@ function ensureNamespace(engine, namespace) {
   return engine.n[namespace];
 }
 
-export function createReactiveParticleFieldKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime, "createReactiveParticleFieldKit");
+export function createReactiveParticleFieldKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine, "createReactiveParticleFieldKit");
   const presetId = config.presetId ?? config.kitId ?? "reactive-particle-field-kit";
   const preset = { ...PRESETS["reactive-particle-field-kit"], ...(PRESETS[presetId] ?? {}), ...config.preset };
   const namespace = config.engineNamespace ?? preset.namespace;
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const ParticleFieldState = defineResource(config.resourceName ?? `${namespace}.state`);
   const BurstRequested = defineEvent(`${namespace}.burstRequested`);
   const FieldUpdated = defineEvent(`${namespace}.fieldUpdated`);
@@ -185,8 +185,8 @@ export function createReactiveParticleFieldKit(NexusRealtime, config = {}) {
 }
 
 function createPresetFactory(presetId) {
-  return function createPresetParticleKit(NexusRealtime, config = {}) {
-    return createReactiveParticleFieldKit(NexusRealtime, { ...config, presetId, kitId: config.kitId ?? presetId });
+  return function createPresetParticleKit(NexusEngine, config = {}) {
+    return createReactiveParticleFieldKit(NexusEngine, { ...config, presetId, kitId: config.kitId ?? presetId });
   };
 }
 
@@ -205,23 +205,23 @@ export const createGpuShadowFlickerKit = createPresetFactory("gpu-shadow-flicker
 export const createGpuAmbientCaveDustKit = createPresetFactory("gpu-ambient-cave-dust-kit");
 export const createGpuFoamLineKit = createPresetFactory("gpu-foam-line-kit");
 
-export function createStonewakeParticleKits(NexusRealtime, config = {}) {
+export function createStonewakeParticleKits(NexusEngine, config = {}) {
   return [
-    createReactiveParticleFieldKit(NexusRealtime, config.reactiveParticleField ?? {}),
-    createGpuSparkBurstKit(NexusRealtime, config.gpuSparkBurst ?? {}),
-    createGpuDustCloudKit(NexusRealtime, config.gpuDustCloud ?? {}),
-    createGpuWaterMistKit(NexusRealtime, config.gpuWaterMist ?? {}),
-    createGpuBubbleColumnKit(NexusRealtime, config.gpuBubbleColumn ?? {}),
-    createGpuRuneSparkKit(NexusRealtime, config.gpuRuneSpark ?? {}),
-    createGpuSoundWaveParticleKit(NexusRealtime, config.gpuSoundWaveParticle ?? {}),
-    createGpuLanternMoteKit(NexusRealtime, config.gpuLanternMote ?? {}),
-    createGpuImpactChipKit(NexusRealtime, config.gpuImpactChip ?? {}),
-    createGpuCreatureAlertPulseKit(NexusRealtime, config.gpuCreatureAlertPulse ?? {}),
-    createGpuDoorAwakeningKit(NexusRealtime, config.gpuDoorAwakening ?? {}),
-    createGpuWaterSurfaceShimmerKit(NexusRealtime, config.gpuWaterSurfaceShimmer ?? {}),
-    createGpuShadowFlickerKit(NexusRealtime, config.gpuShadowFlicker ?? {}),
-    createGpuAmbientCaveDustKit(NexusRealtime, config.gpuAmbientCaveDust ?? {}),
-    createGpuFoamLineKit(NexusRealtime, config.gpuFoamLine ?? {})
+    createReactiveParticleFieldKit(NexusEngine, config.reactiveParticleField ?? {}),
+    createGpuSparkBurstKit(NexusEngine, config.gpuSparkBurst ?? {}),
+    createGpuDustCloudKit(NexusEngine, config.gpuDustCloud ?? {}),
+    createGpuWaterMistKit(NexusEngine, config.gpuWaterMist ?? {}),
+    createGpuBubbleColumnKit(NexusEngine, config.gpuBubbleColumn ?? {}),
+    createGpuRuneSparkKit(NexusEngine, config.gpuRuneSpark ?? {}),
+    createGpuSoundWaveParticleKit(NexusEngine, config.gpuSoundWaveParticle ?? {}),
+    createGpuLanternMoteKit(NexusEngine, config.gpuLanternMote ?? {}),
+    createGpuImpactChipKit(NexusEngine, config.gpuImpactChip ?? {}),
+    createGpuCreatureAlertPulseKit(NexusEngine, config.gpuCreatureAlertPulse ?? {}),
+    createGpuDoorAwakeningKit(NexusEngine, config.gpuDoorAwakening ?? {}),
+    createGpuWaterSurfaceShimmerKit(NexusEngine, config.gpuWaterSurfaceShimmer ?? {}),
+    createGpuShadowFlickerKit(NexusEngine, config.gpuShadowFlicker ?? {}),
+    createGpuAmbientCaveDustKit(NexusEngine, config.gpuAmbientCaveDust ?? {}),
+    createGpuFoamLineKit(NexusEngine, config.gpuFoamLine ?? {})
   ];
 }
 

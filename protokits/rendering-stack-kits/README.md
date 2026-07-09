@@ -1,6 +1,6 @@
 # Rendering Stack ProtoKits
 
-`rendering-stack-kits` is the designated ProtoKits module for high-fidelity, renderer-neutral NexusRealtime rendering services.
+`rendering-stack-kits` is the designated ProtoKits module for high-fidelity, renderer-neutral NexusEngine rendering services.
 
 The module is kit-shaped. Every factory returns an API object with `createRuntimeKit()`, so the stack can be installed through `createRealtimeGame({ kits })`. Generic kits expose descriptors, services, policies, and validation helpers. Renderer hosts still own WebGL, Three.js, WebGPU, Canvas, DOM, asset loading, requestAnimationFrame, and actual draw calls.
 
@@ -14,7 +14,7 @@ import {
   createTriangleWindingKit,
   createTerrainMeshKit,
   createThreeRenderAdapterKit
-} from "@luminarylabs/nexusrealtime-protokits/rendering-stack-kits";
+} from "@luminarylabs/nexusengine-protokits/rendering-stack-kits";
 ```
 
 CDN path:
@@ -22,15 +22,15 @@ CDN path:
 ```js
 import {
   createRenderingStackKits
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/rendering-stack-kits/index.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/rendering-stack-kits/index.js";
 ```
 
 ## Install
 
 ```js
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    ...createRenderingStackKits(NexusRealtime)
+    ...createRenderingStackKits(NexusEngine)
   ]
 });
 ```
@@ -38,9 +38,9 @@ const engine = NexusRealtime.createRealtimeGame({
 For the meadow scene, start narrower:
 
 ```js
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    ...createMeadowRenderingStackKits(NexusRealtime)
+    ...createMeadowRenderingStackKits(NexusEngine)
   ]
 });
 ```

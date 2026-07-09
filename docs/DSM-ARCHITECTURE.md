@@ -79,9 +79,9 @@ fogline-everything-kit
   owns route, terrain, trees, scan, fog, enemies, rendering, mission logic
 ```
 
-## DSM and NexusRealtime runtime kits
+## DSM and NexusEngine runtime kits
 
-A DSM intended to install into NexusRealtime should expose a runtime-kit-compatible factory using normal kit naming:
+A DSM intended to install into NexusEngine should expose a runtime-kit-compatible factory using normal kit naming:
 
 ```txt
 createTreeKit()
@@ -89,7 +89,7 @@ createRouteKit()
 createBiomeFieldKit()
 ```
 
-The runtime-facing surface should follow the NexusRealtime contract:
+The runtime-facing surface should follow the NexusEngine contract:
 
 - `defineRuntimeKit`
 - `defineResource`

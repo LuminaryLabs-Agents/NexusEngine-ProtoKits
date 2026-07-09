@@ -14,12 +14,12 @@ export function describeObjectGroundingProfile(asset = {}, instance = {}, terrai
   return { kind, rootSink: profile.rootSink, embedDepth: profile.embedDepth, normalAlign: profile.normalAlign, maxSlope: profile.maxSlope, slope, valid: slope <= profile.maxSlope, normal: clone(normal), rejectReason: slope > profile.maxSlope ? "slope" : null };
 }
 
-export function createObjectGroundingProfileKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjectGroundingProfileKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objectGroundingProfile.state");
   const Updated = event("objectGroundingProfile.updated");
   const initial = () => createObjectGroundingProfileState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "object-grounding-profile-kit",
     resources: { State },
     events: { Updated },

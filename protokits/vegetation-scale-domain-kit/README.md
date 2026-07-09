@@ -11,7 +11,7 @@ What if a tree species rolls scale 12 but its collider and clear space stay tiny
   The renderer does not invent tree size rules.
 ```
 
-Extends: NexusRealtime runtime-shaped DomainServiceKit via `defineRuntimeKit`.
+Extends: NexusEngine runtime-shaped DomainServiceKit via `defineRuntimeKit`.
 
 Composes:
 
@@ -34,5 +34,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-scoped-domain-rpg-batch-01::vegetation-scale-domain-kit::2026-06-20
+NexusEngine-scoped-domain-rpg-batch-01::vegetation-scale-domain-kit::2026-06-20
 ```

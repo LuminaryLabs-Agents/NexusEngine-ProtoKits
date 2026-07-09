@@ -15,7 +15,7 @@ Composition kit.
 ## Factory
 
 ```js
-createSaveDeltaKit(NexusRealtime, options)
+createSaveDeltaKit(NexusEngine, options)
 ```
 
 ## Provides

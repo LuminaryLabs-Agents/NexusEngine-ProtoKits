@@ -31,12 +31,12 @@ export function describeCloudWind(cloud = {}, wind = defaultWind(), state = crea
   return { dx: number(wind.direction?.x, 1) * (6 + number(wind.strength, 0) * 13) * state.cloudDrift, dz: number(wind.direction?.z, 0) * (4 + number(wind.strength, 0) * 9) * state.cloudDrift, swell: 1 + Math.sin(number(cloud.seed, 0) + number(wind.phase, 0) * 0.23) * 0.035 + number(wind.gust, 0) * 0.035 };
 }
 
-export function createWindResponseKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createWindResponseKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const WindResponseState = resource(options.resourceName ?? "windResponse.state");
   const WindResponseUpdated = event("windResponse.updated");
   const initial = () => createWindResponseState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "wind-response-kit",
     resources: { WindResponseState },
     events: { WindResponseUpdated },

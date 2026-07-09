@@ -66,13 +66,13 @@ export function evaluateObjectBudget(metrics = {}, budgets = DEFAULT_OBJECT_PROO
   return { ...report, ok: warnings.length === 0, warningCount: warnings.length, warnings };
 }
 
-export function createPerformanceBudgetKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createPerformanceBudgetKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const PerformanceBudgetState = resource(options.resourceName ?? "performanceBudget.state");
   const PerformanceBudgetUpdated = event("performanceBudget.updated");
   const ObjectBudgetReported = event("performanceBudget.objectBudgetReported");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "performance-budget-kit",
     resources: { PerformanceBudgetState },
     events: { PerformanceBudgetUpdated, ObjectBudgetReported },

@@ -41,8 +41,8 @@ function createInitial(config = {}) {
   };
 }
 
-export function createWaterDataKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createWaterDataKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: WATER_DATA_KIT_VERSION,
     factoryName: "createWaterDataKit",
     kitId: "water-data-kit",

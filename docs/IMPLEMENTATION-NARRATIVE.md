@@ -1,6 +1,6 @@
 # Implementation Narrative
 
-This document records the reasoning path that led to the additive DSK composition layer in `NexusRealtime-ProtoKits`.
+This document records the reasoning path that led to the additive DSK composition layer in `NexusEngine-ProtoKits`.
 
 ## 1. From game ideas to high-fidelity candidates
 

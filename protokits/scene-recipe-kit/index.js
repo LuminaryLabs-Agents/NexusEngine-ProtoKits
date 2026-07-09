@@ -18,7 +18,7 @@ export function composeSceneRecipe(recipes = [], overrides = {}) {
   return Object.freeze(list.reduce((acc, recipe) => createSceneRecipe(recipe.id ?? acc.id, { ...acc, ...recipe, materials: { ...(acc.materials ?? {}), ...(recipe.materials ?? {}) }, scatter: { ...(acc.scatter ?? {}), ...(recipe.scatter ?? {}) }, decals: { ...(acc.decals ?? {}), ...(recipe.decals ?? {}) }, fog: { ...(acc.fog ?? {}), ...(recipe.fog ?? {}) }, lighting: { ...(acc.lighting ?? {}), ...(recipe.lighting ?? {}) } }), createSceneRecipe("rustyGarage", overrides)));
 }
 
-export function createSceneRecipeKit(nexusRealtime = {}, options = {}) {
+export function createSceneRecipeKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "scene-recipe-kit", version: SCENE_RECIPE_KIT_VERSION, sceneRecipes, createSceneRecipe, composeSceneRecipe };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["scene:recipes", "scene:detail-presets"], bindings: { sceneRecipeKit: kit }, metadata: { version: SCENE_RECIPE_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["scene:recipes", "scene:detail-presets"], bindings: { sceneRecipeKit: kit }, metadata: { version: SCENE_RECIPE_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-generic-promotion-gate::headless::2026-06-23
+// Smoke signature: NexusEngine-generic-promotion-gate::headless::2026-06-23
 import { assert, installKit } from "./aaa-domain-spine-smoke-harness.mjs";
 import { createGenericPressureLoopKit } from "../protokits/generic-pressure-loop-kit/index.js";
 import { createGenericResourceLoopKit } from "../protokits/generic-resource-loop-kit/index.js";

@@ -155,11 +155,11 @@ function registerManifest(state, bucket, entry = {}) {
   return next;
 }
 
-export function createQuaterniusTerrainWalkerKit(nexusRealtime = {}, options = {}) {
-  const { resource } = createDefinitionFactory(nexusRealtime);
+export function createQuaterniusTerrainWalkerKit(nexusEngine = {}, options = {}) {
+  const { resource } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "quaterniusTerrainWalker.state");
   const initial = () => createQuaterniusTerrainWalkerState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "quaternius-terrain-walker-kit",
     resources: { State },
     requires: ["terrain-sampler"],
@@ -196,12 +196,12 @@ export function createQuaterniusTerrainWalkerKit(nexusRealtime = {}, options = {
   });
 }
 
-function createDescriptorRuntimeKit(nexusRealtime = {}, spec = {}, options = {}) {
-  const { resource } = createDefinitionFactory(nexusRealtime);
+function createDescriptorRuntimeKit(nexusEngine = {}, spec = {}, options = {}) {
+  const { resource } = createDefinitionFactory(nexusEngine);
   const apiName = options.apiName ?? camel(spec.name ?? "descriptor-kit");
   const State = resource(options.resourceName ?? `${apiName}.state`);
   const initial = () => ({ version: QUATERNIUS_TERRAIN_WALKER_KIT_VERSION, ...spec, stage: options.stage ?? "planned-descriptor", descriptors: list(options.descriptors) });
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? spec.name,
     resources: { State },
     provides: [spec.name, spec.domain].filter(Boolean),
@@ -216,7 +216,7 @@ function createDescriptorRuntimeKit(nexusRealtime = {}, spec = {}, options = {})
 }
 
 const byName = Object.fromEntries(QUATERNIUS_TERRAIN_WALKER_KIT_GRAPH.map((spec) => [spec.name, spec]));
-const descriptorFactory = (name) => (nexusRealtime = {}, options = {}) => createDescriptorRuntimeKit(nexusRealtime, byName[name], options);
+const descriptorFactory = (name) => (nexusEngine = {}, options = {}) => createDescriptorRuntimeKit(nexusEngine, byName[name], options);
 
 export const createQuaterniusSourceManifestKit = descriptorFactory("quaternius-source-manifest-kit");
 export const createQuaterniusPackImportKit = descriptorFactory("quaternius-pack-import-kit");
@@ -257,28 +257,28 @@ export const createAnimationPreviewModeKit = descriptorFactory("animation-previe
 export const createSpawnPointKit = descriptorFactory("spawn-point-kit");
 export const createWorldResetKit = descriptorFactory("world-reset-kit");
 
-export function createQuaterniusTerrainWalkerKitSuite(nexusRealtime = {}, options = {}) {
+export function createQuaterniusTerrainWalkerKitSuite(nexusEngine = {}, options = {}) {
   return [
-    createTerrainSamplerKit(nexusRealtime, options.terrainSampler ?? { terrain: options.terrain }),
-    createQuaterniusSourceManifestKit(nexusRealtime, options.sourceManifest),
-    createQuaterniusCharacterProfileKit(nexusRealtime, options.characterProfile),
-    createQuaterniusAnimationManifestKit(nexusRealtime, options.animationManifest),
-    createAnimationBankKit(nexusRealtime, options.animationBank),
-    createHumanoidSkeletonBindingKit(nexusRealtime, options.skeletonBinding),
-    createRootMotionPolicyKit(nexusRealtime, options.rootMotionPolicy),
-    createQuaternionOrientationKit(nexusRealtime, options.orientation),
-    createThirdPersonInputKit(nexusRealtime, options.input),
-    createCharacterMotorKit(nexusRealtime, options.motor),
-    createLocomotionStateKit(nexusRealtime, options.locomotion),
-    createAnimationBlendKit(nexusRealtime, options.animationBlend),
-    createCameraRelativeMovementKit(nexusRealtime, options.cameraRelative),
-    createThirdPersonCameraKit(nexusRealtime, options.camera),
-    createCharacterGroundingKit(nexusRealtime, options.grounding),
-    createTerrainHeightfieldKit(nexusRealtime, options.heightfield),
-    createTerrainCollisionLiteKit(nexusRealtime, options.collision),
-    createSpawnPointKit(nexusRealtime, options.spawn),
-    createWorldResetKit(nexusRealtime, options.reset),
-    createQuaterniusTerrainWalkerKit(nexusRealtime, options.walker)
+    createTerrainSamplerKit(nexusEngine, options.terrainSampler ?? { terrain: options.terrain }),
+    createQuaterniusSourceManifestKit(nexusEngine, options.sourceManifest),
+    createQuaterniusCharacterProfileKit(nexusEngine, options.characterProfile),
+    createQuaterniusAnimationManifestKit(nexusEngine, options.animationManifest),
+    createAnimationBankKit(nexusEngine, options.animationBank),
+    createHumanoidSkeletonBindingKit(nexusEngine, options.skeletonBinding),
+    createRootMotionPolicyKit(nexusEngine, options.rootMotionPolicy),
+    createQuaternionOrientationKit(nexusEngine, options.orientation),
+    createThirdPersonInputKit(nexusEngine, options.input),
+    createCharacterMotorKit(nexusEngine, options.motor),
+    createLocomotionStateKit(nexusEngine, options.locomotion),
+    createAnimationBlendKit(nexusEngine, options.animationBlend),
+    createCameraRelativeMovementKit(nexusEngine, options.cameraRelative),
+    createThirdPersonCameraKit(nexusEngine, options.camera),
+    createCharacterGroundingKit(nexusEngine, options.grounding),
+    createTerrainHeightfieldKit(nexusEngine, options.heightfield),
+    createTerrainCollisionLiteKit(nexusEngine, options.collision),
+    createSpawnPointKit(nexusEngine, options.spawn),
+    createWorldResetKit(nexusEngine, options.reset),
+    createQuaterniusTerrainWalkerKit(nexusEngine, options.walker)
   ];
 }
 

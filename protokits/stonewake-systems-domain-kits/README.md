@@ -44,7 +44,7 @@ These kits own reusable gameplay state and descriptors. They do not own Canvas d
 ```js
 import { createStonewakeSystemsDomainKits } from "./protokits/stonewake-systems-domain-kits/index.js";
 
-const kits = createStonewakeSystemsDomainKits(NexusRealtime);
+const kits = createStonewakeSystemsDomainKits(NexusEngine);
 ```
 
 Each kit is also available through its own entrypoint.

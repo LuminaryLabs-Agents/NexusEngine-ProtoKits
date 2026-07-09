@@ -51,23 +51,23 @@ function install(kits) {
   return { engine, world, events };
 }
 
-const NexusRealtime = createNexusStub();
-const kits = createOnnxWorkspaceKits(NexusRealtime, {
+const NexusEngine = createNexusStub();
+const kits = createOnnxWorkspaceKits(NexusEngine, {
   selfTalkLoop: { defaultAgentId: "guide", defaultModelId: "onnx-community/Qwen2.5-0.5B-Instruct", maxTurns: 4 },
   promptComposer: { defaultAgentId: "guide", defaultModelId: "onnx-community/Qwen2.5-0.5B-Instruct" }
 });
 
 assert.ok(kits.some((kit) => kit.id === "chat-io-domain-kit"));
-assert.equal(createChatIoDomainKit(NexusRealtime).id, "chat-io-domain-kit");
-assert.equal(createSelfTalkLoopDomainKit(NexusRealtime).id, "self-talk-loop-domain-kit");
-assert.equal(createModelOutputDecoderDomainKit(NexusRealtime).id, "model-output-decoder-domain-kit");
-assert.equal(createConversationBubbleDomainKit(NexusRealtime).id, "conversation-bubble-domain-kit");
-assert.equal(createInferenceTraceDomainKit(NexusRealtime).id, "inference-trace-domain-kit");
-assert.equal(createWorkspaceEntityDomainKit(NexusRealtime).id, "workspace-entity-domain-kit");
-assert.equal(createWorkspaceLayoutDomainKit(NexusRealtime).id, "workspace-layout-domain-kit");
-assert.equal(createModelCoreVisualDomainKit(NexusRealtime).id, "model-core-visual-domain-kit");
-assert.equal(createAgentAvatarDomainKit(NexusRealtime).id, "agent-avatar-domain-kit");
-assert.equal(createThreeRenderAdapterKit(NexusRealtime).id, "three-render-adapter-kit");
+assert.equal(createChatIoDomainKit(NexusEngine).id, "chat-io-domain-kit");
+assert.equal(createSelfTalkLoopDomainKit(NexusEngine).id, "self-talk-loop-domain-kit");
+assert.equal(createModelOutputDecoderDomainKit(NexusEngine).id, "model-output-decoder-domain-kit");
+assert.equal(createConversationBubbleDomainKit(NexusEngine).id, "conversation-bubble-domain-kit");
+assert.equal(createInferenceTraceDomainKit(NexusEngine).id, "inference-trace-domain-kit");
+assert.equal(createWorkspaceEntityDomainKit(NexusEngine).id, "workspace-entity-domain-kit");
+assert.equal(createWorkspaceLayoutDomainKit(NexusEngine).id, "workspace-layout-domain-kit");
+assert.equal(createModelCoreVisualDomainKit(NexusEngine).id, "model-core-visual-domain-kit");
+assert.equal(createAgentAvatarDomainKit(NexusEngine).id, "agent-avatar-domain-kit");
+assert.equal(createThreeRenderAdapterKit(NexusEngine).id, "three-render-adapter-kit");
 
 const { engine } = install(kits);
 

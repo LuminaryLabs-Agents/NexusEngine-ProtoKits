@@ -48,7 +48,7 @@ The defense split is pointing toward a higher-level `strategic-pressure-loop` do
 
 - Compatibility bridge: `generic-defense-aaa-dsk-bridge` now re-exports the broad `generic-defense-aaa-kits` facade and the pruned `generic-defense-dsk-boundaries` aliases from one module.
 - Purpose: let Signal Bastion-style hosts keep current AAA facade methods while migrating one seam at a time to smaller map/economy/build/wave/combat/session/render DSK aliases.
-- Package export: `@luminarylabs/nexusrealtime-protokits/generic-defense-aaa-dsk-bridge`.
+- Package export: `@luminarylabs/nexusengine-protokits/generic-defense-aaa-dsk-bridge`.
 - Docs: `docs/generic-defense-api-surface-pruner.md` records the migration rule: prefer the smallest boundary before writing route-local state machines.
 - Test coverage: `tests/generic-defense-dsk-boundaries-smoke.test.mjs` now verifies the bridge keeps compatibility exports and can return a smallest requested DSK subset without forcing the broad compatibility bundle.
 
@@ -64,7 +64,7 @@ The defense split is pointing toward a higher-level `strategic-pressure-loop` do
 
 - New atomic kit: `generic-route-progress-kit`.
 - Boundary: ordered route/checkpoint/objective progress through `genericRouteProgress.state`, checkpoint entered/completed, route advanced/completed/reset/rejected events, host methods on `engine.n.genericRouteProgress` plus compatibility `engine.genericRouteProgress`, snapshots for active/completed checkpoints, and renderer-agnostic `route-checkpoint` descriptors.
-- Package exposure: available through the package wildcard as `@luminarylabs/nexusrealtime-protokits/generic-route-progress-kit`.
+- Package exposure: available through the package wildcard as `@luminarylabs/nexusengine-protokits/generic-route-progress-kit`.
 - Docs/manifest: `protokits/generic-route-progress-kit/README.md` and `kit.manifest.json` define the renderer/browser exclusion boundary.
 - Test coverage: `tests/generic-route-progress-kit-smoke.test.mjs` and `tests/generic-route-progress-replay-smoke.test.mjs` are now wired into `npm test` after the generic promotion replay smoke and before the route-cargo composite smoke.
 - Replay coverage: `tests/fixtures/generic-route-progress-replay-fixtures.mjs` covers fixed-tick checkpoint progression plus rejection/reset and validates fresh-run digest equality through `engine.n.genericRouteProgress`.

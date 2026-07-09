@@ -3,9 +3,9 @@ export const VEGETATION_SCALE_DOMAIN_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const toNumber = (value, fallback = 1) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createVegetationScaleDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createVegetationScaleDomainKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -34,9 +34,9 @@ function createState(config = {}) {
   return { version: VEGETATION_SCALE_DOMAIN_KIT_VERSION, id: config.stateId ?? "vegetation-scale-domain", domain: "vegetation-scale", descriptors: [], descriptorsById: {}, lastDescriptor: null };
 }
 
-export function createVegetationScaleDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createVegetationScaleDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const VegetationScaleState = defineResource(config.resourceName ?? "vegetationScaleDomain.state");
   const VegetationScaleDescribed = defineEvent("vegetationScale.described");
 

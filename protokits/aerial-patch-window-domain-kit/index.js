@@ -2,8 +2,8 @@ import { defineInjectedRuntimeKit, number } from "../foundation-kit/index.js";
 
 export const AERIAL_PATCH_WINDOW_DOMAIN_KIT_VERSION = "0.1.2";
 
-function defineResource(NexusRealtime, name) {
-  return typeof NexusRealtime.defineResource === "function" ? NexusRealtime.defineResource(name) : `resource:${name}`;
+function defineResource(NexusEngine, name) {
+  return typeof NexusEngine.defineResource === "function" ? NexusEngine.defineResource(name) : `resource:${name}`;
 }
 
 function clone(value) {
@@ -93,8 +93,8 @@ function initialState(config = {}, reason = "initialized") {
   };
 }
 
-export function createAerialPatchWindowDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialPatchWindow.state");
+export function createAerialPatchWindowDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialPatchWindow.state");
   let installedEngine = null;
 
   function system(world) {
@@ -149,7 +149,7 @@ export function createAerialPatchWindowDomainKit(NexusRealtime = {}, config = {}
     });
   }
 
-  return defineInjectedRuntimeKit(NexusRealtime, {
+  return defineInjectedRuntimeKit(NexusEngine, {
     id: config.kitId ?? "aerial-patch-window-domain-kit",
     requires: ["terrain:height-sampler", "aerial:body"],
     provides: ["world:patch-window", "world:streaming-descriptors", "world:terrain-lod", "render:terrain-material-descriptor"],

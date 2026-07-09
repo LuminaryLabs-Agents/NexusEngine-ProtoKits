@@ -165,8 +165,8 @@ function snapshot(state) {
   };
 }
 
-export function createLayeredObjectKit(nexusRealtime = {}, options = {}) {
-  const { component, resource, event } = createDefinitionFactory(nexusRealtime);
+export function createLayeredObjectKit(nexusEngine = {}, options = {}) {
+  const { component, resource, event } = createDefinitionFactory(nexusEngine);
   const LayeredObject = component("layeredObject.object");
   const LayeredAttachment = component("layeredObject.attachment");
   const LayeredInteractive = component("layeredObject.interactive");
@@ -176,7 +176,7 @@ export function createLayeredObjectKit(nexusRealtime = {}, options = {}) {
   const LayeredObjectAttached = event("layeredObject.attached");
   const LayeredObjectPruned = event("layeredObject.pruned");
   const LayeredObjectStateChanged = event("layeredObject.stateChanged");
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "layered-object-kit",
     components: { LayeredObject, LayeredAttachment, LayeredInteractive },
     resources: { LayeredObjectState },

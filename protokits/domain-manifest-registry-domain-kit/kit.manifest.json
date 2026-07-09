@@ -1,5 +1,6 @@
 {
   "id": "domain-manifest-registry-domain-kit",
+  "type": "domain-service-kit",
   "domain": "domain-manifest-registry",
   "parentDomain": "domain-control-plane",
   "scope": "control-domain",
@@ -13,5 +14,11 @@
   "exportPath": "./domain-manifest-registry-domain-kit",
   "sourcePath": "protokits/domain-manifest-registry-domain-kit/index.js",
   "testPaths": ["tests/domain-control-plane-smoke.test.mjs"],
-  "status": "experimental"
+  "status": "experimental",
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "ownsDom": false,
+    "ownsCanvas": false,
+    "ownsThreeObjects": false
+  }
 }

@@ -1,8 +1,8 @@
-# NexusRealtime ProtoKits
+# NexusEngine ProtoKits
 
-NexusRealtime ProtoKits is the proving ground for the NexusRealtime operating system.
+NexusEngine ProtoKits is the proving ground for the NexusEngine operating system.
 
-This repository exists so agents and humans can build, split, test, and refine reusable game and simulation domains before stable capabilities promote into the core `NexusRealtime` engine.
+This repository exists so agents and humans can build, split, test, and refine reusable game and simulation domains before stable capabilities promote into `NexusEngine-Kits`.
 
 ProtoKits is not a loose demo pile. It is not a place for game-specific feature blobs. It is the experimental domain foundry for a realtime-first, kit-first AI engine.
 
@@ -14,7 +14,7 @@ idea
 -> deterministic validation
 -> reconciliation
 -> promotion candidate
--> NexusRealtime core capability
+-> stable NexusEngine Kit or required runtime primitive
 ```
 
 ## Core Rule
@@ -135,13 +135,13 @@ ProtoKits uses domain-first architecture.
 
 A Domain Service Module is a reusable module that defines a domain and exposes the services or APIs that make that domain happen. Games compose those domains through data, presets, bridges, and hosts. Games should not define reusable architecture directly.
 
-When a ProtoKit is ready to install into the NexusRealtime runtime, it should move toward the Domain Service Kit contract:
+When a ProtoKit is ready to install into the NexusEngine runtime, it should move toward the Domain Service Kit contract:
 
 ```txt
 ProtoKit
 -> Domain Service Module
 -> Domain Service Kit
--> promoted NexusRealtime core kit
+-> promoted NexusEngine Kit
 ```
 
 A promoted DSK should define:
@@ -160,7 +160,7 @@ A promoted DSK should define:
 - human README
 - agent-readable contract
 
-First-wave DSK ProtoKits may import `nexusrealtime` directly and return `defineDomainServiceKit()` kits when the core runtime is available. Migration shims may remain while older call styles are still being reconciled, but the target is direct kit creation and clear domain contracts.
+First-wave DSK ProtoKits may import `nexusengine` directly and return `defineDomainServiceKit()` kits when the core runtime is available. Migration shims may remain while older call styles are still being reconciled, but the target is direct kit creation and clear domain contracts.
 
 ## Realtime-Proved Behavior
 
@@ -251,11 +251,11 @@ ProtoKits currently contains reusable domains across several families.
 
 These are not just feature buckets. They are the starting vocabulary for larger domain composition.
 
-## Example: Composing A ProtoKit With NexusRealtime
+## Example: Composing A ProtoKit With NexusEngine
 
 ```js
-import { createRealtimeGame } from "nexusrealtime";
-import { createNScanSurveyKit } from "@luminarylabs/nexusrealtime-protokits/scan-survey-kit";
+import { createRealtimeGame } from "nexusengine";
+import { createNScanSurveyKit } from "@luminarylabs/nexusengine-protokits/scan-survey-kit";
 
 const engine = createRealtimeGame({
   kits: [
@@ -274,16 +274,16 @@ The important part is not only that the code runs. The important part is that th
 ## Example: Generic World / Flight Composition
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
-import { createFlightMotionKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/flight-motion-kit/index.js";
-import { createTerrainSamplerKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/terrain-sampler-kit/index.js";
-import { createWorldPatchKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/world-patch-kit/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
+import { createFlightMotionKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/flight-motion-kit/index.js";
+import { createTerrainSamplerKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/terrain-sampler-kit/index.js";
+import { createWorldPatchKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/world-patch-kit/index.js";
 
-const game = NexusRealtime.createRealtimeGame({
+const game = NexusEngine.createRealtimeGame({
   kits: [
-    createTerrainSamplerKit(NexusRealtime, { seed: "terrain-seed" }),
-    createWorldPatchKit(NexusRealtime, { patchSize: 500, radius: 2 }),
-    createFlightMotionKit(NexusRealtime, { actorId: "player" })
+    createTerrainSamplerKit(NexusEngine, { seed: "terrain-seed" }),
+    createWorldPatchKit(NexusEngine, { patchSize: 500, radius: 2 }),
+    createFlightMotionKit(NexusEngine, { actorId: "player" })
   ]
 });
 
@@ -364,7 +364,7 @@ If a capability is only a bridge, call it a bridge.
 
 If a capability is only a host route, keep it in the host.
 
-If a capability is stable enough for core, prepare it for promotion instead of duplicating it.
+If a capability is stable enough for the official catalog, prepare it for NexusEngine-Kits promotion instead of duplicating it. Change NexusEngine core only when the runtime contract itself must change.
 
 ## Core Principle
 
@@ -376,4 +376,4 @@ Every stable capability can promote.
 Every world can keep expanding.
 ```
 
-ProtoKits is where that operating model learns, proves, and prepares domains for NexusRealtime core.
+ProtoKits is where that operating model learns, proves, and prepares domains for NexusEngine-Kits.

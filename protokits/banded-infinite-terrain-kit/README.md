@@ -13,7 +13,7 @@ banded-infinite-terrain-kit
 - terrain-render-contract
 ```
 
-The goal is simple: CPU/NexusRealtime owns terrain intent, while renderer adapters own GPU execution.
+The goal is simple: CPU/NexusEngine owns terrain intent, while renderer adapters own GPU execution.
 
 ## What it solves
 
@@ -42,7 +42,7 @@ Renderers should sample terrain from the snapped origin instead of using raw fra
 ## Public API
 
 ```js
-import { createBandedInfiniteTerrainKit } from "@luminarylabs/nexusrealtime-protokits/banded-infinite-terrain-kit";
+import { createBandedInfiniteTerrainKit } from "@luminarylabs/nexusengine-protokits/banded-infinite-terrain-kit";
 ```
 
 The kit installs `engine.bandedInfiniteTerrain` with:

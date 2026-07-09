@@ -29,7 +29,7 @@ full scenario authoring
 Extends:
 
 ```txt
-NexusRealtime HarnessKit shape through defineRuntimeKit
+NexusEngine HarnessKit shape through defineRuntimeKit
 ```
 
 Composes:
@@ -60,5 +60,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-AAA-domain-spine-batch-01::scenario-smoke-domain-kit::2026-06-20
+NexusEngine-AAA-domain-spine-batch-01::scenario-smoke-domain-kit::2026-06-20
 ```

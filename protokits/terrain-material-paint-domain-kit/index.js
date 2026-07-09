@@ -83,8 +83,8 @@ export function sampleTerrainMaterialPaint(sample = {}, options = {}) {
   };
 }
 
-export function createTerrainMaterialPaintDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource } = createDefinitionFactory(nexusRealtime);
+export function createTerrainMaterialPaintDomainKit(nexusEngine = {}, options = {}) {
+  const { resource } = createDefinitionFactory(nexusEngine);
   const TerrainMaterialPaintState = resource(options.resourceName ?? "terrainMaterialPaint.state");
   const initial = () => ({
     version: TERRAIN_MATERIAL_PAINT_DOMAIN_KIT_VERSION,
@@ -92,7 +92,7 @@ export function createTerrainMaterialPaintDomainKit(nexusRealtime = {}, options 
     config: { ...DEFAULT_TERRAIN_MATERIAL_PAINT_CONFIG, ...(options.materialPaint ?? options.config ?? options) }
   });
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "terrain-material-paint-domain-kit",
     resources: { TerrainMaterialPaintState },
     provides: ["terrain:material-paint", "terrain:texture-layers"],

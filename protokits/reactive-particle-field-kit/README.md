@@ -29,9 +29,9 @@ These kits own renderer-facing particle descriptors, shader snippets, and partic
 ## Usage
 
 ```js
-import { createGpuSparkBurstKit } from "@luminarylabs/nexusrealtime-protokits/gpu-spark-burst-kit";
+import { createGpuSparkBurstKit } from "@luminarylabs/nexusengine-protokits/gpu-spark-burst-kit";
 
-const kit = createGpuSparkBurstKit(NexusRealtime);
+const kit = createGpuSparkBurstKit(NexusEngine);
 ```
 
 The renderer consumes `getDescriptors()` and decides whether to draw via Canvas, WebGL, Three.js, or native GPU pipelines.

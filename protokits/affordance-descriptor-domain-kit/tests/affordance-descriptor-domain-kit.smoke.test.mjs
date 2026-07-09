@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-AAA-domain-spine-batch-01::affordance-descriptor-domain-kit::2026-06-20
+// Smoke signature: NexusEngine-AAA-domain-spine-batch-01::affordance-descriptor-domain-kit::2026-06-20
 import {
   assert,
   FIVE_SMOKE_ENVIRONMENTS,

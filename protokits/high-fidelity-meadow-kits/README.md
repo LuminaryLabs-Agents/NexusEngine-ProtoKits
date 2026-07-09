@@ -52,9 +52,9 @@ createHighFidelityMeadowKits
 ## Example
 
 ```js
-import { createMeadowSimulationModeKit } from "@luminarylabs/nexusrealtime-protokits/high-fidelity-meadow-kits";
+import { createMeadowSimulationModeKit } from "@luminarylabs/nexusengine-protokits/high-fidelity-meadow-kits";
 
-const mode = createMeadowSimulationModeKit(NexusRealtime, {
+const mode = createMeadowSimulationModeKit(NexusEngine, {
   livestockCount: 8,
   grassDensity: 2.8,
   smokeCapacity: 2048

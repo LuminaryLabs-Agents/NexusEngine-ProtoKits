@@ -59,15 +59,15 @@ function buildIndexes(nodes = {}) {
   return { byProvides, byRequires, byDomain, edges };
 }
 
-export function createCapabilityGraphDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createCapabilityGraphDomainKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const CapabilityGraphState = resource(options.resourceName ?? "capabilityGraph.state");
   const DomainNodeRegistered = event("capabilityGraph.nodeRegistered");
   const CapabilityGraphBuilt = event("capabilityGraph.built");
   const CapabilityGraphClusterFound = event("capabilityGraph.clusterFound");
   const CapabilityGraphReset = event("capabilityGraph.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "capability-graph-domain-kit",
     resources: { CapabilityGraphState },
     events: { DomainNodeRegistered, CapabilityGraphBuilt, CapabilityGraphClusterFound, CapabilityGraphReset },

@@ -49,12 +49,12 @@ export function pickFromContentPalette(state = {}, request = {}) {
   return variant ? { paletteId: palette.id, slot, seed: rng.seed, variant: clone(variant) } : null;
 }
 
-export function createContentPaletteKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createContentPaletteKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const ContentPaletteState = resource(options.resourceName ?? "contentPalette.state");
   const ContentPalettePicked = event("contentPalette.picked");
   const ContentPaletteRegistered = event("contentPalette.registered");
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "content-palette-kit",
     resources: { ContentPaletteState },
     events: { ContentPalettePicked, ContentPaletteRegistered },

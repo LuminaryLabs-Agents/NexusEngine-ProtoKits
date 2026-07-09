@@ -17,8 +17,8 @@ function clone(value) {
   return value == null ? value : JSON.parse(JSON.stringify(value));
 }
 
-function defineResource(NexusRealtime, name) {
-  return typeof NexusRealtime.defineResource === "function" ? NexusRealtime.defineResource(name) : `resource:${name}`;
+function defineResource(NexusEngine, name) {
+  return typeof NexusEngine.defineResource === "function" ? NexusEngine.defineResource(name) : `resource:${name}`;
 }
 
 function safeVec3(value = {}) {
@@ -158,9 +158,9 @@ export function createTerrainErosionSolverState(options = {}) {
   };
 }
 
-export function createTerrainErosionSolverDomainKit(NexusRealtime = {}, options = {}) {
-  const State = defineResource(NexusRealtime, options.resourceName ?? "terrainErosionSolver.state");
-  return defineInjectedRuntimeKit(NexusRealtime, {
+export function createTerrainErosionSolverDomainKit(NexusEngine = {}, options = {}) {
+  const State = defineResource(NexusEngine, options.resourceName ?? "terrainErosionSolver.state");
+  return defineInjectedRuntimeKit(NexusEngine, {
     id: options.kitId ?? "terrain-erosion-solver-domain-kit",
     provides: ["terrain:erosion-solver", "terrain:erosion-response", "terrain:erosion-descriptors"],
     requires: [],

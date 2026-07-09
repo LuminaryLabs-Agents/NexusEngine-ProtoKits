@@ -74,7 +74,7 @@ export function createRaycasterRenderer(canvas, scene, options = {}) {
   return { id: options.id ?? "raycaster-renderer", ctx, canvas, scene, render(camera, renderOptions = {}) { const size = resize(); const view = { ...options.view, ...renderOptions, width: size.width, height: size.height }; renderRaycasterBackground(ctx, size.width, size.height, scene.background); return renderRaycasterWalls(ctx, scene, camera, view); } };
 }
 
-export function createRaycasterRenderKit(nexusRealtime = {}, options = {}) {
+export function createRaycasterRenderKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "raycaster-render-kit", version: RAYCASTER_RENDER_KIT_VERSION, createRaycasterScene, renderRaycasterBackground, renderRaycasterWalls, createRaycasterRenderer, colorForTile };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["render:raycaster", "render:walls", "render:depth-buffer"], requires: runtimeOptions.requires ?? [], bindings: { raycasterRenderKit: kit }, metadata: { version: RAYCASTER_RENDER_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["render:raycaster", "render:walls", "render:depth-buffer"], requires: runtimeOptions.requires ?? [], bindings: { raycasterRenderKit: kit }, metadata: { version: RAYCASTER_RENDER_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

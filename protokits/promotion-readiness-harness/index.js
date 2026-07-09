@@ -35,8 +35,8 @@ function evaluateKit(kit = {}, tests = [], proofs = [], criteria = defaultCriter
   return { ok: failed.length === 0, status: failed.length === 0 ? "ready" : "needs-work", score: checks.length ? (checks.length - failed.length) / checks.length : 0, checks, failedChecks: failed.map((check) => check.id) };
 }
 
-export function createPromotionReadinessHarness(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createPromotionReadinessHarness(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const PromotionReadinessState = resource(options.resourceName ?? "promotionReadiness.state");
   const KitRegistered = event("promotionReadiness.kitRegistered");
   const TestResultAttached = event("promotionReadiness.testResultAttached");
@@ -44,7 +44,7 @@ export function createPromotionReadinessHarness(nexusRealtime = {}, options = {}
   const ReadinessEvaluated = event("promotionReadiness.evaluated");
   const PromotionReadinessReset = event("promotionReadiness.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "promotion-readiness-harness",
     resources: { PromotionReadinessState },
     events: { KitRegistered, TestResultAttached, ExperimentProofAttached, ReadinessEvaluated, PromotionReadinessReset },

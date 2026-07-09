@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { createMiniNexusRuntime } from "../../../tests/helpers/mini-nexus-runtime.mjs";
 import { createActionInputKit } from "../index.js";
 
-const NexusRealtime = createMiniNexusRuntime();
-const engine = NexusRealtime.createRealtimeGame({
-  kits: [createActionInputKit(NexusRealtime, { context: "test" })]
+const NexusEngine = createMiniNexusRuntime();
+const engine = NexusEngine.createRealtimeGame({
+  kits: [createActionInputKit(NexusEngine, { context: "test" })]
 });
 
 engine.actionInput.key("a", true);

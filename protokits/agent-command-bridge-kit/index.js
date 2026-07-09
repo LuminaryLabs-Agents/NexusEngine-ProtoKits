@@ -39,8 +39,8 @@ function commandFromRoute(route, proposal = {}, payload = {}) {
   };
 }
 
-export function createAgentCommandBridgeKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createAgentCommandBridgeKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const AgentCommandBridgeState = resource(options.resourceName ?? "agentCommandBridge.state");
   const RouteRegistered = event("agentCommandBridge.routeRegistered");
   const CommandPreviewed = event("agentCommandBridge.previewed");
@@ -48,7 +48,7 @@ export function createAgentCommandBridgeKit(nexusRealtime = {}, options = {}) {
   const CommandRejected = event("agentCommandBridge.rejected");
   const AgentCommandBridgeReset = event("agentCommandBridge.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "agent-command-bridge-kit",
     resources: { AgentCommandBridgeState },
     events: { RouteRegistered, CommandPreviewed, CommandCommitted, CommandRejected, AgentCommandBridgeReset },

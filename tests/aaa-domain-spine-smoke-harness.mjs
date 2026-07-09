@@ -1,9 +1,9 @@
-// Smoke signature: NexusRealtime-AAA-domain-spine-batch-01::harness::2026-06-20
+// Smoke signature: NexusEngine-AAA-domain-spine-batch-01::harness::2026-06-20
 import assert from "node:assert/strict";
 
 export { assert };
 
-export function createMockNexusRealtime() {
+export function createMockNexusEngine() {
   return {
     defineResource(name) {
       return { kind: "resource", name: String(name) };
@@ -74,8 +74,8 @@ export function createSmokeWorld() {
 }
 
 export function installKit(factory, config = {}) {
-  const NexusRealtime = createMockNexusRealtime();
-  const kit = factory(NexusRealtime, config);
+  const NexusEngine = createMockNexusEngine();
+  const kit = factory(NexusEngine, config);
   const world = createSmokeWorld();
   const engine = {};
 
@@ -89,7 +89,7 @@ export function installKit(factory, config = {}) {
     }
   }
 
-  return { NexusRealtime, kit, world, engine, tick };
+  return { NexusEngine, kit, world, engine, tick };
 }
 
 export function assertKitContract(kit, expected = {}) {

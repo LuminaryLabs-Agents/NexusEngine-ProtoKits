@@ -22,10 +22,10 @@
   </head>
   <body>
     <main>
-      <canvas id="game" aria-label="Generic NexusRealtime ProtoKits canvas smoke app"></canvas>
+      <canvas id="game" aria-label="Generic NexusEngine ProtoKits canvas smoke app"></canvas>
       <aside aria-label="Generic ProtoKit status">
         <h1>Generic ProtoKits Canvas Smoke App</h1>
-        <p>This host imports the aggregate generic ProtoKit stack, installs every factory into NexusRealtime, drives real kit APIs, ticks the runtime, and renders the resulting kit state.</p>
+        <p>This host imports the aggregate generic ProtoKit stack, installs every factory into NexusEngine, drives real kit APIs, ticks the runtime, and renders the resulting kit state.</p>
         <dl>
           <div class="metric"><dt>Factories</dt><dd id="factoryCount">0</dd></div>
           <div class="metric"><dt>Installed</dt><dd id="installedCount">0</dd></div>
@@ -136,8 +136,8 @@
       }
 
       async function boot() {
-        const nexusUrl = "https://cdn.jsdelivr.net/gh/" + "LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
-        const [NexusRealtime, GenericKits] = await Promise.all([
+        const nexusUrl = "https://cdn.jsdelivr.net/gh/" + "LuminaryLabs-Dev/NexusEngine@main/src/index.js";
+        const [NexusEngine, GenericKits] = await Promise.all([
           import(nexusUrl),
           import("../../protokits/generic-kits/index.js")
         ]);
@@ -151,13 +151,13 @@
         });
 
         const seed = new URLSearchParams(location.search).get("seed") || "generic-protokit-smoke";
-        const kits = factories.map(([name, factory]) => factory(NexusRealtime, {
+        const kits = factories.map(([name, factory]) => factory(NexusEngine, {
           seed,
           currency: 250,
           preset: { app: "generic-protokits-canvas", factory: name }
         }));
 
-        const engine = NexusRealtime.createRealtimeGame({ kits });
+        const engine = NexusEngine.createRealtimeGame({ kits });
         window.GenericProtoKitHost = {
           engine,
           factories: factories.map(([name]) => name),

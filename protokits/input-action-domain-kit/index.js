@@ -3,10 +3,10 @@ export const INPUT_ACTION_DOMAIN_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createInputActionDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createInputActionDomainKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -26,9 +26,9 @@ function createState(config = {}) {
   };
 }
 
-export function createInputActionDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createInputActionDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
 
   const InputActionState = defineResource(config.resourceName ?? "inputActionDomain.state");
   const InputActionRequested = defineEvent("inputAction.requested");
@@ -113,7 +113,7 @@ export function createInputActionDomainKit(NexusRealtime, config = {}) {
       domain: "input-action",
       scope: "large-domain",
       extendsBase: "DomainServiceKit",
-      composes: ["NexusRealtime InputIntentKit", "command surface"],
+      composes: ["NexusEngine InputIntentKit", "command surface"],
       ownsLoop: false,
       purpose: "Maps host input requests into validated domain actions without owning browser input or gameplay outcomes."
     }

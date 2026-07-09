@@ -32,34 +32,32 @@ These are not game-specific. Theme details belong in preset data or the host.
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime@main/dist/nexus-core.js"></script>
 <script type="module">
-  import { createDomainServiceKits } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/domain-service-kits/index.js";
-  import { createAerialRenderBundleDomainKits } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/aerial-render-bundle-kits/index.js";
-  import { createGenericDefenseWaveAgentDirectorDsk, createGenericDefenseCombatResolverDsk, createGenericDefenseRenderDescriptorDsk } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/generic-defense-dsk-boundaries/index.js";
-  import { createGenericVisualFxDescriptorKits } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/generic-visual-fx-descriptor-kits/index.js";
+  import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
+  import { createDomainServiceKits } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/domain-service-kits/index.js";
+  import { createAerialRenderBundleDomainKits } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/aerial-render-bundle-kits/index.js";
+  import { createGenericDefenseWaveAgentDirectorDsk, createGenericDefenseCombatResolverDsk, createGenericDefenseRenderDescriptorDsk } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/generic-defense-dsk-boundaries/index.js";
+  import { createGenericVisualFxDescriptorKits } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/generic-visual-fx-descriptor-kits/index.js";
 
-  const NexusRealtime = window.NexusRealtime || window.NexusCore || window.Nexus;
-  const host = new NexusRealtime.Host();
+  const host = NexusEngine.createNexusHost();
 
   const kits = [
-    ...createDomainServiceKits(NexusRealtime, { viewRig: {}, damageHealth: {}, encounterDirector: {}, diegeticFeedback: {}, assetDescriptor: {} }),
-    ...createAerialRenderBundleDomainKits(NexusRealtime, { sky: { id: "host-sky-descriptor" } }),
-    createGenericDefenseWaveAgentDirectorDsk(NexusRealtime, {}),
-    createGenericDefenseCombatResolverDsk(NexusRealtime, {}),
-    createGenericDefenseRenderDescriptorDsk(NexusRealtime, {}),
-    ...createGenericVisualFxDescriptorKits(NexusRealtime, {
+    ...createDomainServiceKits(NexusEngine, { viewRig: {}, damageHealth: {}, encounterDirector: {}, diegeticFeedback: {}, assetDescriptor: {} }),
+    ...createAerialRenderBundleDomainKits(NexusEngine, { sky: { id: "host-sky-descriptor" } }),
+    createGenericDefenseWaveAgentDirectorDsk(NexusEngine, {}),
+    createGenericDefenseCombatResolverDsk(NexusEngine, {}),
+    createGenericDefenseRenderDescriptorDsk(NexusEngine, {}),
+    ...createGenericVisualFxDescriptorKits(NexusEngine, {
       fxEmitter: { presets: { impact: { family: "burst", count: 24 } } },
       particleFields: { fields: [{ id: "ambient-field", kind: "ambient-particles", capacity: 1200 }] },
       atmosphereLayers: { layers: [{ id: "horizon", kind: "horizon-band", order: 10 }] }
     })
   ];
 
-  for (const kit of kits) host.registerKit(kit);
+  for (const kit of kits) host.installKit(kit);
 
-  host.active = true;
   function frame() {
-    host.tick();
+    host.engine.tick();
     requestAnimationFrame(frame);
   }
   frame();

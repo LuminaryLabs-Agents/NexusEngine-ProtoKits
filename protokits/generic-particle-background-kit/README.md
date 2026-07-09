@@ -9,9 +9,9 @@ It does not draw WebGL, Canvas, DOM, or Three.js particles directly. It defines 
 ```js
 import { createGenericParticleBackgroundKit } from "./index.js";
 
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createGenericParticleBackgroundKit(NexusRealtime, {
+    createGenericParticleBackgroundKit(NexusEngine, {
       preset: "nexusGallery",
       intensity: 1
     })

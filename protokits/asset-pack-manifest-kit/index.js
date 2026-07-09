@@ -46,8 +46,8 @@ export function createAssetPackRegistry(manifests = []) {
   }.seed();
 }
 
-export function createAssetPackManifestKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createAssetPackManifestKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const AssetPackState = resource(options.resourceName ?? "assetPackManifest.state");
   const AssetPackRegistered = event("assetPackManifest.registered");
   const createState = () => ({
@@ -57,7 +57,7 @@ export function createAssetPackManifestKit(nexusRealtime = {}, options = {}) {
       return [manifest.id, manifest];
     }))
   });
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "asset-pack-manifest-kit",
     resources: { AssetPackState },
     events: { AssetPackRegistered },

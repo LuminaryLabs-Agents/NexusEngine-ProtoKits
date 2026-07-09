@@ -23,22 +23,22 @@ export const defaultRenderStyleProfile = Object.freeze({
 const resource = (N, name) => N.defineResource?.(name) ?? Object.freeze({ kind: "resource", name });
 const event = (N, name) => N.defineEvent?.(name) ?? Object.freeze({ kind: "event", name });
 
-export function createConfigurableRenderLayerDefinitions(NexusRealtime = {}, options = {}) {
+export function createConfigurableRenderLayerDefinitions(NexusEngine = {}, options = {}) {
   const prefix = options.namespace ?? "configurableRenderLayers";
   return {
     resources: {
-      ConfigurableRenderLayerState: resource(NexusRealtime, `${prefix}.state`),
-      RenderStyleProfileState: resource(NexusRealtime, `${prefix}.profiles`),
-      RenderStyleDesignationState: resource(NexusRealtime, `${prefix}.designations`),
-      ResolvedRenderStyleState: resource(NexusRealtime, `${prefix}.resolved`),
-      RenderStyleValidationState: resource(NexusRealtime, `${prefix}.validation`),
-      RenderStyleDebugState: resource(NexusRealtime, `${prefix}.debug`)
+      ConfigurableRenderLayerState: resource(NexusEngine, `${prefix}.state`),
+      RenderStyleProfileState: resource(NexusEngine, `${prefix}.profiles`),
+      RenderStyleDesignationState: resource(NexusEngine, `${prefix}.designations`),
+      ResolvedRenderStyleState: resource(NexusEngine, `${prefix}.resolved`),
+      RenderStyleValidationState: resource(NexusEngine, `${prefix}.validation`),
+      RenderStyleDebugState: resource(NexusEngine, `${prefix}.debug`)
     },
     events: {
-      RenderStyleProfileRegistered: event(NexusRealtime, `${prefix}.profileRegistered`),
-      RenderStyleDesignationChanged: event(NexusRealtime, `${prefix}.designationChanged`),
-      RenderStyleResolved: event(NexusRealtime, `${prefix}.resolved`),
-      RenderStyleValidationWarning: event(NexusRealtime, `${prefix}.validationWarning`)
+      RenderStyleProfileRegistered: event(NexusEngine, `${prefix}.profileRegistered`),
+      RenderStyleDesignationChanged: event(NexusEngine, `${prefix}.designationChanged`),
+      RenderStyleResolved: event(NexusEngine, `${prefix}.resolved`),
+      RenderStyleValidationWarning: event(NexusEngine, `${prefix}.validationWarning`)
     }
   };
 }
@@ -194,8 +194,8 @@ function initialState(options = {}) {
   return { version: CONFIGURABLE_RENDER_LAYER_KIT_VERSION, status: "ready", defaultStyle: options.defaultStyle ?? options.defaultStyleId ?? defaultRenderStyleProfile.id, profiles: asList(options.profiles), designations: asList(options.designations), scene: options.scene ?? options.sceneId ?? null, region: options.region ?? options.regionId ?? null, mode: options.mode ?? null, targets: asList(options.targets ?? options.objects ?? options.descriptors), lastReason: "initialized" };
 }
 
-export function createConfigurableRenderLayerKit(NexusRealtime = {}, options = {}) {
-  const definitions = createConfigurableRenderLayerDefinitions(NexusRealtime, options);
+export function createConfigurableRenderLayerKit(NexusEngine = {}, options = {}) {
+  const definitions = createConfigurableRenderLayerDefinitions(NexusEngine, options);
   const { resources, events } = definitions;
   function renderStyleSystem(world) {
     const state = world.getResource(resources.ConfigurableRenderLayerState) ?? initialState(options);
@@ -209,7 +209,7 @@ export function createConfigurableRenderLayerKit(NexusRealtime = {}, options = {
     world.emit(events.RenderStyleResolved, { targetCount: snapshot.debug.targetCount });
     for (const warning of snapshot.validation.warnings) world.emit(events.RenderStyleValidationWarning, warning);
   }
-  return defineInjectedRuntimeKit(NexusRealtime, {
+  return defineInjectedRuntimeKit(NexusEngine, {
     id: options.id ?? "configurable-render-layer-kit",
     resources,
     events,

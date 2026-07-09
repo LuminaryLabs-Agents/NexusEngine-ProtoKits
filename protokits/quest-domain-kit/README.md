@@ -12,7 +12,7 @@ What if an open-world route needs authored progression?
   Sequences own the player-facing pacing and copy.
 ```
 
-Extends: NexusRealtime runtime-shaped DomainServiceKit via `defineRuntimeKit`.
+Extends: NexusEngine runtime-shaped DomainServiceKit via `defineRuntimeKit`.
 
 Composes:
 
@@ -35,5 +35,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-scoped-domain-rpg-batch-01::quest-domain-kit::2026-06-20
+NexusEngine-scoped-domain-rpg-batch-01::quest-domain-kit::2026-06-20
 ```

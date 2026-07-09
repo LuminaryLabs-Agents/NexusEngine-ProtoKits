@@ -1,5 +1,6 @@
 {
   "id": "domain-inventory-domain-kit",
+  "type": "domain-service-kit",
   "domain": "domain-inventory",
   "parentDomain": "domain-control-plane",
   "scope": "control-domain",
@@ -13,5 +14,11 @@
   "exportPath": "./domain-inventory-domain-kit",
   "sourcePath": "protokits/domain-inventory-domain-kit/index.js",
   "testPaths": ["tests/domain-control-plane-smoke.test.mjs"],
-  "status": "experimental"
+  "status": "experimental",
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "ownsDom": false,
+    "ownsCanvas": false,
+    "ownsThreeObjects": false
+  }
 }

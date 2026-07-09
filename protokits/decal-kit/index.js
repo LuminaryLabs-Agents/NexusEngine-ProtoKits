@@ -70,7 +70,7 @@ export function drawTopDownDecals(ctx, decals = [], options = {}) {
   }
 }
 
-export function createDecalKit(nexusRealtime = {}, options = {}) {
+export function createDecalKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "decal-kit", version: DECAL_KIT_VERSION, defaultDecalTypes, createDecal, generateDecals, sampleDecalAt, drawTopDownDecals };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["detail:decals", "surface:decal-sampling"], bindings: { decalKit: kit }, metadata: { version: DECAL_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["detail:decals", "surface:decal-sampling"], bindings: { decalKit: kit }, metadata: { version: DECAL_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

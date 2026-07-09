@@ -415,14 +415,14 @@ export function validateMattatzCloudsState(state = createMattatzCloudsState()) {
   return { ok: errors.length === 0, errors };
 }
 
-function createCloudSuiteRuntimeKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+function createCloudSuiteRuntimeKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const CloudSuiteState = defs.resource(options.resourceName ?? "mattatzClouds.state");
   const CloudSuiteUpdated = defs.event("mattatzClouds.updated");
   const WeatherChanged = defs.event("mattatzClouds.weatherChanged");
   const initial = () => createMattatzCloudsState(options);
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "mattatz-clouds-domain",
     resources: { CloudSuiteState },
     events: { CloudSuiteUpdated, WeatherChanged },
@@ -477,32 +477,32 @@ function createCloudSuiteRuntimeKit(nexusRealtime = {}, options = {}) {
   });
 }
 
-export function createMattatzCloudsDomainKit(nexusRealtime = {}, options = {}) {
-  return createCloudSuiteRuntimeKit(nexusRealtime, { ...options, id: options.id ?? "mattatz-clouds-domain", role: "composite-domain" });
+export function createMattatzCloudsDomainKit(nexusEngine = {}, options = {}) {
+  return createCloudSuiteRuntimeKit(nexusEngine, { ...options, id: options.id ?? "mattatz-clouds-domain", role: "composite-domain" });
 }
 
-export function createMattatzCloudCoreKit(nexusRealtime = {}, options = {}) {
-  return createCloudSuiteRuntimeKit(nexusRealtime, { ...options, id: options.id ?? "mattatz-cloud-core-kit", role: "cloud-primitive-descriptor" });
+export function createMattatzCloudCoreKit(nexusEngine = {}, options = {}) {
+  return createCloudSuiteRuntimeKit(nexusEngine, { ...options, id: options.id ?? "mattatz-cloud-core-kit", role: "cloud-primitive-descriptor" });
 }
 
-export function createMattatzCloudLayerKit(nexusRealtime = {}, options = {}) {
-  return createCloudSuiteRuntimeKit(nexusRealtime, { ...options, id: options.id ?? "mattatz-cloud-layer-kit", role: "cloud-layer-composition" });
+export function createMattatzCloudLayerKit(nexusEngine = {}, options = {}) {
+  return createCloudSuiteRuntimeKit(nexusEngine, { ...options, id: options.id ?? "mattatz-cloud-layer-kit", role: "cloud-layer-composition" });
 }
 
-export function createMattatzCloudWeatherKit(nexusRealtime = {}, options = {}) {
-  return createCloudSuiteRuntimeKit(nexusRealtime, { ...options, id: options.id ?? "mattatz-cloud-weather-kit", role: "weather-preset-composition" });
+export function createMattatzCloudWeatherKit(nexusEngine = {}, options = {}) {
+  return createCloudSuiteRuntimeKit(nexusEngine, { ...options, id: options.id ?? "mattatz-cloud-weather-kit", role: "weather-preset-composition" });
 }
 
-export function createMattatzCumulonimbusKit(nexusRealtime = {}, options = {}) {
-  return createCloudSuiteRuntimeKit(nexusRealtime, { ...options, id: options.id ?? "mattatz-cumulonimbus-kit", role: "storm-tower-descriptor" });
+export function createMattatzCumulonimbusKit(nexusEngine = {}, options = {}) {
+  return createCloudSuiteRuntimeKit(nexusEngine, { ...options, id: options.id ?? "mattatz-cumulonimbus-kit", role: "storm-tower-descriptor" });
 }
 
-export function createMattatzCloudLightingKit(nexusRealtime = {}, options = {}) {
-  return createCloudSuiteRuntimeKit(nexusRealtime, { ...options, id: options.id ?? "mattatz-cloud-lighting-kit", role: "cloud-lighting-descriptor" });
+export function createMattatzCloudLightingKit(nexusEngine = {}, options = {}) {
+  return createCloudSuiteRuntimeKit(nexusEngine, { ...options, id: options.id ?? "mattatz-cloud-lighting-kit", role: "cloud-lighting-descriptor" });
 }
 
-export function createMattatzCloudLodKit(nexusRealtime = {}, options = {}) {
-  return createCloudSuiteRuntimeKit(nexusRealtime, { ...options, id: options.id ?? "mattatz-cloud-lod-kit", role: "cloud-lod-policy" });
+export function createMattatzCloudLodKit(nexusEngine = {}, options = {}) {
+  return createCloudSuiteRuntimeKit(nexusEngine, { ...options, id: options.id ?? "mattatz-cloud-lod-kit", role: "cloud-lod-policy" });
 }
 
 export default createMattatzCloudsDomainKit;

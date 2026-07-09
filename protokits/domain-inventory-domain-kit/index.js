@@ -72,14 +72,14 @@ function summarizeEntries(entries = {}) {
   };
 }
 
-export function createDomainInventoryDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createDomainInventoryDomainKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const DomainInventoryState = resource(options.resourceName ?? "domainInventory.state");
   const DomainInventoryEntryRegistered = event("domainInventory.entryRegistered");
   const DomainInventorySummarized = event("domainInventory.summarized");
   const DomainInventoryReset = event("domainInventory.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "domain-inventory-domain-kit",
     resources: { DomainInventoryState },
     events: { DomainInventoryEntryRegistered, DomainInventorySummarized, DomainInventoryReset },

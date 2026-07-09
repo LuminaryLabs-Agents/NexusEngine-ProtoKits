@@ -202,8 +202,8 @@ export function computeStereoscopicRenderSnapshot(previous = {}, camera = {}, dt
   };
 }
 
-export function createStereoscopicRenderDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createStereoscopicRenderDomainKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const StereoscopicRenderState = resource(options.resourceName ?? "stereoscopicRender.state");
   const StereoscopicRenderRequested = event("stereoscopicRender.requested");
   const StereoscopicRenderUpdated = event("stereoscopicRender.updated");
@@ -225,7 +225,7 @@ export function createStereoscopicRenderDomainKit(nexusRealtime = {}, options = 
     }
   }
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "stereoscopic-render-domain-kit",
     resources: { StereoscopicRenderState },
     events: { StereoscopicRenderRequested, StereoscopicRenderUpdated, StereoscopicRenderConfigured },

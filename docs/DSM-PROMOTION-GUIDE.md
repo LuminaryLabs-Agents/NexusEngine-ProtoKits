@@ -1,6 +1,6 @@
 # DSM Promotion Guide
 
-ProtoKits exist to prove reusable game architecture before stable surfaces are promoted into NexusRealtime core.
+ProtoKits exist to prove reusable game architecture before stable surfaces are promoted into NexusEngine core.
 
 A DSM can be experimental, promoted-within-ProtoKits, or stable-candidate-for-core.
 
@@ -33,7 +33,7 @@ Requirements:
 
 ### Stable core candidate
 
-Ready to consider for NexusRealtime core.
+Ready to consider for NexusEngine core.
 
 Requirements:
 
@@ -67,7 +67,7 @@ Requirements:
 
 ## What must stay out of core
 
-Core NexusRealtime should not receive:
+Core NexusEngine should not receive:
 
 - game-specific content
 - one-off presets
@@ -106,7 +106,7 @@ Experiment behavior
   -> thin bridge/preset in Experiments
   -> reusable DSM in ProtoKits
   -> hardened promoted DSM in ProtoKits
-  -> stable NexusRealtime core surface if broadly reusable
+  -> stable NexusEngine core surface if broadly reusable
 ```
 
 ## Evidence required

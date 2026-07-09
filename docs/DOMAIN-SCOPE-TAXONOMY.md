@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the domain scope taxonomy used by NexusRealtime-ProtoKits.
+This document defines the domain scope taxonomy used by NexusEngine-ProtoKits.
 
 A domain is a boundary of meaning. Scope is the size of that boundary. The boundary can be tiny, large, abstract, physical, authored, simulated, proof-oriented, or host-adapter oriented. The important question is whether the boundary owns a service responsibility.
 
@@ -66,7 +66,7 @@ What events does it emit?
 What validation does it perform?
 What descriptors does it provide?
 What other domains does it compose?
-What NexusRealtime base does it extend?
+What NexusEngine base does it extend?
 Can it be reused outside one game?
 ```
 

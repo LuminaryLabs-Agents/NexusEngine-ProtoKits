@@ -3,9 +3,9 @@ import { clamp, clone, createDefinitionFactory, defineInjectedRuntimeKit, ensure
 export const VERTICAL_CLIMB_CORE_VERSION = "0.0.1";
 const prefixed = (namespace, local) => `${namespace ?? "verticalClimb"}.${local}`;
 
-export function createVerticalClimbDefinitions(nexusRealtime = {}, options = {}) {
+export function createVerticalClimbDefinitions(nexusEngine = {}, options = {}) {
   const namespace = options.namespace ?? "verticalClimb";
-  const { component, resource, event } = createDefinitionFactory(nexusRealtime);
+  const { component, resource, event } = createDefinitionFactory(nexusEngine);
   const components = Object.freeze({
     Climber: component(prefixed(namespace, "climber")),
     ClimbPosition: component(prefixed(namespace, "position")),
@@ -87,10 +87,10 @@ export function patchClimbState(state = {}, patch = {}) {
   return next;
 }
 
-export function createVerticalClimbCore(nexusRealtime = {}, options = {}) {
-  const definitions = createVerticalClimbDefinitions(nexusRealtime, options);
+export function createVerticalClimbCore(nexusEngine = {}, options = {}) {
+  const definitions = createVerticalClimbDefinitions(nexusEngine, options);
   const { resources, events, components } = definitions;
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "vertical-climb-core",
     components,
     resources: { ClimbConfig: resources.ClimbConfig, ClimbState: resources.ClimbState, VisualTheme: resources.VisualTheme },

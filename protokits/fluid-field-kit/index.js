@@ -28,10 +28,10 @@ export function sampleFluidWave(position = {}, options = {}) {
   return Math.sin(phase) * amplitude + Math.sin(phase * 0.37 + z * frequency) * amplitude * 0.42;
 }
 
-function requireNexus(NexusRealtime, factoryName) {
+function requireNexus(NexusEngine, factoryName) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`${factoryName} requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`${factoryName} requires NexusEngine.${key}.`);
     }
   }
 }
@@ -51,10 +51,10 @@ function createFallbackState(spec, config = {}) {
   };
 }
 
-export function createFluidServiceKit(NexusRealtime, spec = {}, config = {}) {
+export function createFluidServiceKit(NexusEngine, spec = {}, config = {}) {
   const factoryName = spec.factoryName ?? "createFluidServiceKit";
-  requireNexus(NexusRealtime, factoryName);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+  requireNexus(NexusEngine, factoryName);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const State = defineResource(config.resourceName ?? spec.resourceName ?? `${spec.service ?? spec.kitId}.state`);
   const Action = defineEvent(config.actionEventName ?? `${spec.eventStem ?? spec.service ?? spec.kitId}.action`);
   const Updated = defineEvent(config.updatedEventName ?? `${spec.eventStem ?? spec.service ?? spec.kitId}.updated`);
@@ -154,8 +154,8 @@ function createInitial(config = {}) {
   };
 }
 
-export function createFluidFieldKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createFluidFieldKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: FLUID_FIELD_KIT_VERSION,
     factoryName: "createFluidFieldKit",
     kitId: "fluid-field-kit",

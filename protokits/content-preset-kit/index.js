@@ -36,13 +36,13 @@ function normalizePreset(preset = {}, context = {}) {
   };
 }
 
-export function createContentPresetKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createContentPresetKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const ContentPresetState = resource(options.resourceName ?? "contentPreset.state");
   const PresetRegistered = event("contentPreset.registered");
   const BundleComposed = event("contentPreset.bundleComposed");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "content-preset-kit",
     resources: { ContentPresetState },
     events: { PresetRegistered, BundleComposed },

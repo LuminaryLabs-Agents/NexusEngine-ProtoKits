@@ -11,16 +11,16 @@ import {
   createRigAnimationDescriptorKit
 } from '../protokits/aerial-flight-kits/rig.js';
 
-const NexusRealtime = {
+const NexusEngine = {
   defineResource: (name) => ({ kind: 'resource', name }),
   defineEvent: (name) => ({ kind: 'event', name }),
   defineRuntimeKit: (kit) => kit
 };
 
-const rig = createArticulatedRigDescriptorKit(NexusRealtime, { wingSpan: 9 });
-const flap = createProceduralWingFlapKit(NexusRealtime, { tipLag: 0.58 });
-const pose = createFlightPoseDriverKit(NexusRealtime, {});
-const anim = createRigAnimationDescriptorKit(NexusRealtime, {});
+const rig = createArticulatedRigDescriptorKit(NexusEngine, { wingSpan: 9 });
+const flap = createProceduralWingFlapKit(NexusEngine, { tipLag: 0.58 });
+const pose = createFlightPoseDriverKit(NexusEngine, {});
+const anim = createRigAnimationDescriptorKit(NexusEngine, {});
 
 assert.equal(typeof ARTICULATED_RIG_DESCRIPTOR_KIT_VERSION, 'string');
 assert.equal(typeof PROCEDURAL_WING_FLAP_KIT_VERSION, 'string');

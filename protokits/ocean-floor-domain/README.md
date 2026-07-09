@@ -38,7 +38,7 @@ import {
   createOceanFloorHeightfield,
   createOceanFloorObjectPlacements,
   sampleOceanFloorHeight
-} from "@luminarylabs/nexusrealtime-protokits/ocean-floor-domain";
+} from "@luminarylabs/nexusengine-protokits/ocean-floor-domain";
 ```
 
 ## Composition

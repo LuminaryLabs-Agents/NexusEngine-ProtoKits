@@ -20,8 +20,8 @@ function normalizePacket(packet = {}, state = createInitialState(), options = {}
   return { id, providerId: packet.providerId ?? state.defaultProviderId ?? options.defaultProviderId ?? "manual", modelId: packet.modelId ?? options.defaultModelId ?? null, purpose: String(packet.purpose ?? "agent-proposal"), agentId: packet.agentId == null ? null : String(packet.agentId), inputId: packet.inputId ?? null, prompt: packet.prompt == null ? null : String(packet.prompt), messages: clone(asList(packet.messages)), context: clone(packet.context ?? {}), metadata: clone(packet.metadata ?? {}) };
 }
 
-export function createModelProviderAdapterKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createModelProviderAdapterKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const ModelProviderState = resource(options.resourceName ?? "modelProvider.state");
   const ProviderRegistered = event("modelProvider.providerRegistered");
   const RequestQueued = event("modelProvider.requested");
@@ -29,7 +29,7 @@ export function createModelProviderAdapterKit(nexusRealtime = {}, options = {}) 
   const RequestFailed = event("modelProvider.failed");
   const ModelProviderReset = event("modelProvider.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "model-provider-adapter-kit",
     resources: { ModelProviderState },
     events: { ProviderRegistered, RequestQueued, ResponseSubmitted, RequestFailed, ModelProviderReset },

@@ -44,14 +44,14 @@ function smoke(snapshot = {}) {
   return { ok: warnings.length === 0, warningCount: warnings.length, warnings };
 }
 
-export function createGamehostStandardKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createGamehostStandardKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const GamehostStandardState = resource(options.resourceName ?? "gamehostStandard.state");
   const HostSnapshotCreated = event("gamehostStandard.snapshotCreated");
   const SmokeResultCreated = event("gamehostStandard.smokeResultCreated");
   const HostRestarted = event("gamehostStandard.restarted");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "gamehost-standard-kit",
     resources: { GamehostStandardState },
     events: { HostSnapshotCreated, SmokeResultCreated, HostRestarted },

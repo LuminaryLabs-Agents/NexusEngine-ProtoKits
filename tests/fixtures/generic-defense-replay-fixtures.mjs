@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-generic-defense-replay::fixtures::2026-06-23
+// Smoke signature: NexusEngine-generic-defense-replay::fixtures::2026-06-23
 
 const fastDefenseLevel = Object.freeze({
   id: "generic-defense-replay-fast-clear",

@@ -1,12 +1,12 @@
-import { assert, createMockNexusRealtime, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
+import { assert, createMockNexusEngine, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
 import { createAgentPolicyValidationKit } from "../protokits/agent-policy-validation-kit/index.js";
 import { createAgentCommandBridgeKit } from "../protokits/agent-command-bridge-kit/index.js";
 
-const NexusRealtime = createMockNexusRealtime();
+const NexusEngine = createMockNexusEngine();
 const world = createSmokeWorld();
 const engine = {};
-const policyKit = createAgentPolicyValidationKit(NexusRealtime, { allowedIntents: ["open"], allowedActionTypes: ["command"], knownTargets: ["gate"] });
-const bridgeKit = createAgentCommandBridgeKit(NexusRealtime, { routes: [{ intent: "open", commandType: "gate.open.request" }] });
+const policyKit = createAgentPolicyValidationKit(NexusEngine, { allowedIntents: ["open"], allowedActionTypes: ["command"], knownTargets: ["gate"] });
+const bridgeKit = createAgentCommandBridgeKit(NexusEngine, { routes: [{ intent: "open", commandType: "gate.open.request" }] });
 
 for (const kit of [policyKit, bridgeKit]) kit.initWorld?.({ world, engine });
 for (const kit of [policyKit, bridgeKit]) kit.install?.({ world, engine });

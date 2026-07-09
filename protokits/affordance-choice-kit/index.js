@@ -5,9 +5,9 @@ const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [
 const idOf = (value, fallback = "item") => String(value ?? fallback).trim() || fallback;
 const number = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createAffordanceChoiceKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createAffordanceChoiceKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -79,9 +79,9 @@ function scoreOf(scoreMap = {}, action) {
   return number(scoreMap[action.id] ?? scoreMap[action.label] ?? scoreMap[action.intent], null);
 }
 
-export function createAffordanceChoiceKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createAffordanceChoiceKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const ChoiceState = defineResource(config.resourceName ?? "affordanceChoice.state");
   const ActionRegistered = defineEvent("affordanceChoice.actionRegistered");
   const PacketBuilt = defineEvent("affordanceChoice.packetBuilt");

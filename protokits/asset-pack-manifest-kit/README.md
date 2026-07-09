@@ -15,7 +15,7 @@ Composition kit.
 ## Factory
 
 ```js
-createAssetPackManifestKit(NexusRealtime, options)
+createAssetPackManifestKit(NexusEngine, options)
 ```
 
 ## Provides

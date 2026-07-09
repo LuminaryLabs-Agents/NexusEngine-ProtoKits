@@ -24,7 +24,7 @@ The current implementation keeps the proven `generic-defense-kits` simulation co
 ## Import
 
 ```js
-import { createGenericDefenseKits } from "@luminarylabs/nexusrealtime-protokits/generic-defense-aaa-kits";
+import { createGenericDefenseKits } from "@luminarylabs/nexusengine-protokits/generic-defense-aaa-kits";
 ```
 
 ## Rule

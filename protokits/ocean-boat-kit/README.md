@@ -1,19 +1,19 @@
 # Ocean Boat Kit
 
-High fidelity ocean and boating prototype kit for NexusRealtime games.
+High fidelity ocean and boating prototype kit for NexusEngine games.
 
-The kit is designed to be loaded beside the core NexusRealtime package:
+The kit is designed to be loaded beside the core NexusEngine package:
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/npm/nexusrealtime/dist/index.js";
-import { createOceanBoatKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/ocean-boat-kit/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/npm/nexusengine/dist/index.js";
+import { createOceanBoatKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/ocean-boat-kit/index.js";
 
-const oceanBoatKit = createOceanBoatKit(NexusRealtime);
+const oceanBoatKit = createOceanBoatKit(NexusEngine);
 ```
 
 ## Exports
 
-- `createOceanBoatKit(nexusRealtime, options)`
+- `createOceanBoatKit(nexusEngine, options)`
 - `OCEAN_BOAT_KIT_VERSION`
 
 ## Kit Surface
@@ -30,9 +30,9 @@ const oceanBoatKit = createOceanBoatKit(NexusRealtime);
 - `createWebGLRenderer(canvas, options)`
 - `createOceanBoatGame(options)`
 
-## NexusRealtime Integration
+## NexusEngine Integration
 
-The kit accepts NexusRealtime as an injected dependency.
+The kit accepts NexusEngine as an injected dependency.
 
 It uses core surfaces when present:
 

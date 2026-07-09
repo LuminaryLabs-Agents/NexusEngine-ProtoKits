@@ -3,9 +3,9 @@ export const RENDER_DESCRIPTOR_DOMAIN_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createRenderDescriptorDomainKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createRenderDescriptorDomainKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -14,9 +14,9 @@ function createState(config = {}) {
   return { version: RENDER_DESCRIPTOR_DOMAIN_KIT_VERSION, id: config.stateId ?? "render-descriptor-domain", domain: "render-descriptor", descriptors, descriptorsById: Object.fromEntries(descriptors.map((item) => [item.id, item])), lastDescriptor: null };
 }
 
-export function createRenderDescriptorDomainKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createRenderDescriptorDomainKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const RenderDescriptorState = defineResource(config.resourceName ?? "renderDescriptorDomain.state");
   const RenderDescriptorRegistered = defineEvent("renderDescriptor.registered");
 

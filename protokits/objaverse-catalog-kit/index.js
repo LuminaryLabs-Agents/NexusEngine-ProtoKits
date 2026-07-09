@@ -47,14 +47,14 @@ export function queryObjaverseCatalog(state = {}, filter = {}) {
   }).map(clone);
 }
 
-export function createObjaverseCatalogKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjaverseCatalogKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objaverseCatalog.state");
   const Updated = event("objaverseCatalog.updated");
   const AssetRegistered = event("objaverseCatalog.assetRegistered");
   const initial = () => createObjaverseCatalogState(options);
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "objaverse-catalog-kit",
     resources: { State },
     events: { Updated, AssetRegistered },

@@ -32,8 +32,8 @@ export function createDeployRegistry(manifests = []) {
   };
 }
 
-export function createDeployRegistryKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createDeployRegistryKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const DeployRegistryState = resource(options.resourceName ?? "deployRegistry.state");
   const DeployRegistered = event("deployRegistry.registered");
   const DeployRejected = event("deployRegistry.rejected");
@@ -44,7 +44,7 @@ export function createDeployRegistryKit(nexusRealtime = {}, options = {}) {
       return [normalized.id, normalized];
     }))
   });
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "deploy-registry-kit",
     resources: { DeployRegistryState },
     events: { DeployRegistered, DeployRejected },

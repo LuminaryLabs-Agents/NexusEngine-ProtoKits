@@ -39,12 +39,12 @@ export function summarizeMeshRequests(state = {}) {
   return { total: requests.length, queued: requests.filter((r) => r.status === "queued").length, running: requests.filter((r) => r.status === "running").length, done: requests.filter((r) => r.status === "done").length, failed: requests.filter((r) => r.status === "failed").length, progress: requests.length ? requests.reduce((sum, r) => sum + (r.status === "done" ? 1 : r.status === "failed" ? 0 : clamp01(r.progress)), 0) / requests.length : 1 };
 }
 
-export function createObjaverseMeshRequestKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjaverseMeshRequestKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objaverseMeshRequest.state");
   const Updated = event("objaverseMeshRequest.updated");
   const initial = () => createObjaverseMeshRequestState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "objaverse-mesh-request-kit",
     resources: { State },
     events: { Updated },

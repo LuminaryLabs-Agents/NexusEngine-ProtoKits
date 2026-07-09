@@ -31,7 +31,7 @@ export function objectiveSummary(flow) {
   return { id: flow.id, completed: flow.completed, failed: flow.failed, index: flow.index, total: flow.steps.length, current: current ? { id: current.id, label: current.label } : null, progress: flow.steps.length ? flow.index / flow.steps.length : 1 };
 }
 
-export function createObjectiveFlowKit(nexusRealtime = {}, options = {}) {
+export function createObjectiveFlowKit(nexusEngine = {}, options = {}) {
   const kit = { id: options.id ?? "objective-flow-kit", version: OBJECTIVE_FLOW_KIT_VERSION, createObjectiveFlow, completeCurrentObjective, updateObjectiveFlow, objectiveSummary };
-  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusRealtime, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["objective:flow", "objective:steps", "objective:summary"], bindings: { objectiveFlowKit: kit }, metadata: { version: OBJECTIVE_FLOW_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
+  return Object.freeze({ ...kit, createRuntimeKit(runtimeOptions = {}) { return defineInjectedRuntimeKit(nexusEngine, { id: runtimeOptions.id ?? kit.id, provides: runtimeOptions.provides ?? ["objective:flow", "objective:steps", "objective:summary"], bindings: { objectiveFlowKit: kit }, metadata: { version: OBJECTIVE_FLOW_KIT_VERSION, ...(runtimeOptions.metadata ?? {}) } }); } });
 }

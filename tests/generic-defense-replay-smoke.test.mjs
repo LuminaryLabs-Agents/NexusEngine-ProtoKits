@@ -1,11 +1,11 @@
-// Smoke signature: NexusRealtime-generic-defense-replay::headless::2026-06-23
-import { assert, createMockNexusRealtime, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
+// Smoke signature: NexusEngine-generic-defense-replay::headless::2026-06-23
+import { assert, createMockNexusEngine, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
 import { createGenericDefenseKits } from "../protokits/generic-defense-kits/index.js";
 import { genericDefenseReplayFixtures } from "./fixtures/generic-defense-replay-fixtures.mjs";
 
 function installKits(factory, config = {}) {
-  const NexusRealtime = createMockNexusRealtime();
-  const kits = factory(NexusRealtime, config);
+  const NexusEngine = createMockNexusEngine();
+  const kits = factory(NexusEngine, config);
   assert.equal(Array.isArray(kits), true, "generic defense factory returns layered kits");
 
   const world = createSmokeWorld();
@@ -21,7 +21,7 @@ function installKits(factory, config = {}) {
     }
   }
 
-  return { NexusRealtime, kits, world, engine, tick };
+  return { NexusEngine, kits, world, engine, tick };
 }
 
 function getPath(value, path) {

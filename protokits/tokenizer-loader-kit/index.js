@@ -3,9 +3,9 @@ export const TOKENIZER_LOADER_KIT_VERSION = "0.1.0";
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") throw new TypeError(`createTokenizerLoaderKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") throw new TypeError(`createTokenizerLoaderKit requires NexusEngine.${key}.`);
   }
 }
 
@@ -28,9 +28,9 @@ function simpleEncode(text, options = {}) {
 
 function initialState() { return { version: TOKENIZER_LOADER_KIT_VERSION, tokenizers: {}, encodes: [] }; }
 
-export function createTokenizerLoaderKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createTokenizerLoaderKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const TokenizerState = defineResource(config.resourceName ?? "tokenizerLoader.state");
   const TokenizerLoaded = defineEvent("tokenizer.loaded");
   const TextEncoded = defineEvent("tokenizer.textEncoded");

@@ -1,4 +1,4 @@
-# NexusRealtime ProtoKits Documentation Map
+# NexusEngine ProtoKits Documentation Map
 
 The main usage README remains focused on package examples and kit family summaries. This supplemental root doc points to the composition and changelog documentation added during the June 2026 DSK composition rollout.
 

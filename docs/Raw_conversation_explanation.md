@@ -16,7 +16,7 @@ what was pushed
 what still needs to happen
 ```
 
-The central topic was the NexusRealtime DSK / ProtoKit architecture.
+The central topic was the NexusEngine DSK / ProtoKit architecture.
 
 The conversation moved from simple idea storage into a deeper model:
 
@@ -49,7 +49,7 @@ tracking/
 
 Those were accidental or duplicate planning surfaces.
 
-They were not part of the canonical NexusRealtime Ideas system.
+They were not part of the canonical NexusEngine Ideas system.
 
 The clean version should keep only:
 
@@ -68,7 +68,7 @@ Then `main` was merged into `0.0.2` through PR #5.
 PR:
 
 ```txt
-https://github.com/LuminaryLabs-Agents/NexusRealtime-Experiments/pull/5
+https://github.com/LuminaryLabs-Agents/NexusEngine-Experiments/pull/5
 ```
 
 The merge completed.
@@ -81,20 +81,20 @@ The `Ideas/` system is now present on `0.0.2`.
 
 ## What happened
 
-We listed the public-facing NexusRealtime surfaces.
+We listed the public-facing NexusEngine surfaces.
 
 The short review format became:
 
 ```md
 REVIEW:
 
-Nexus Realtime: https://github.com/LuminaryLabs-Dev/NexusRealtime
+Nexus Engine: https://github.com/LuminaryLabs-Dev/NexusEngine
 
-Nexus Realtime ProtoKits: https://github.com/LuminaryLabs-Agents/NexusRealtime-ProtoKits
+Nexus Engine ProtoKits: https://github.com/LuminaryLabs-Agents/NexusEngine-ProtoKits
 
-Nexus Realtime Experiments: https://luminarylabs-agents.github.io/NexusRealtime-Experiments/
+Nexus Engine Experiments: https://luminarylabs-agents.github.io/NexusEngine-Experiments/
 
-Nexus Realtime Ideas: https://github.com/LuminaryLabs-Agents/NexusRealtime-Experiments/tree/0.0.2/Ideas
+Nexus Engine Ideas: https://github.com/LuminaryLabs-Agents/NexusEngine-Experiments/tree/0.0.2/Ideas
 ```
 
 ## What it meant
@@ -120,7 +120,7 @@ We confirmed that the Ideas are stored and stable.
 The Ideas live here:
 
 ```txt
-NexusRealtime-Experiments/Ideas/
+NexusEngine-Experiments/Ideas/
 ```
 
 The important packet groups are:
@@ -354,7 +354,7 @@ and:
 
 ```txt
 A DSK is a disciplined plugin:
-a bounded mini-application that installs into NexusRealtime to enhance the engine with one domain perspective, serving its internal domains through a public kit API.
+a bounded mini-application that installs into NexusEngine to enhance the engine with one domain perspective, serving its internal domains through a public kit API.
 ```
 
 ---
@@ -363,7 +363,7 @@ a bounded mini-application that installs into NexusRealtime to enhance the engin
 
 ## What happened
 
-We reviewed the public NexusRealtime repo mentality.
+We reviewed the public NexusEngine repo mentality.
 
 The core repo already describes:
 
@@ -381,7 +381,7 @@ renderer-agnostic descriptors
 
 ## What it meant
 
-NexusRealtime already supports a DSK model where kits install reusable domain services.
+NexusEngine already supports a DSK model where kits install reusable domain services.
 
 But our documentation needs to be clearer:
 
@@ -701,7 +701,7 @@ It stated that object-specific kits should not be created.
 ## Main idea
 
 ```txt
-NexusRealtime object proofs should be packet-driven compositions of bounded DSK containers, where each kit owns one replaceable capability and emits stable descriptors consumed by the next kit or by the renderer.
+NexusEngine object proofs should be packet-driven compositions of bounded DSK containers, where each kit owns one replaceable capability and emits stable descriptors consumed by the next kit or by the renderer.
 ```
 
 ---
@@ -710,7 +710,7 @@ NexusRealtime object proofs should be packet-driven compositions of bounded DSK 
 
 ## What happened
 
-The plan was implemented and pushed to `main` in `NexusRealtime-ProtoKits`.
+The plan was implemented and pushed to `main` in `NexusEngine-ProtoKits`.
 
 ## What changed
 
@@ -878,7 +878,7 @@ The next docs should explain how they overlap by bound and perspective.
 
 ## What happened
 
-We reviewed the ideal setup against the public NexusRealtime repo.
+We reviewed the ideal setup against the public NexusEngine repo.
 
 ## What it meant
 
@@ -933,7 +933,7 @@ It means we may need arbitration or priority rules.
 ```txt
 A domain is a bounded role serving a need.
 
-A DSK is a plugin-shaped miniature application that installs that role into NexusRealtime.
+A DSK is a plugin-shaped miniature application that installs that role into NexusEngine.
 
 The same subject may cross many bounds.
 
@@ -970,7 +970,7 @@ Overlap by authority is not allowed.
 
 # 21. Current repo state
 
-## NexusRealtime-Experiments
+## NexusEngine-Experiments
 
 The Experiments repo now has:
 
@@ -984,7 +984,7 @@ The cleanup files were removed from `main`.
 
 PR #5 merged `main` into `0.0.2`.
 
-## NexusRealtime-ProtoKits
+## NexusEngine-ProtoKits
 
 The ProtoKits repo now has:
 
@@ -995,7 +995,7 @@ docs/dsk-composition-implementation-ledger.md
 
 and upgraded bounded-container implementations.
 
-## NexusRealtime core repo
+## NexusEngine core repo
 
 The core repo was read for alignment.
 
@@ -1109,7 +1109,7 @@ Objects should not be the top-level architecture.
 
 # 24. Final summary
 
-This conversation moved the NexusRealtime architecture forward in four major ways.
+This conversation moved the NexusEngine architecture forward in four major ways.
 
 ## 1. Ideas became stable
 
@@ -1137,7 +1137,7 @@ They are proof packets that compose existing DSKs.
 ```txt
 Domains are not objects.
 Domains are bounded roles serving needs.
-DSKs install those roles into NexusRealtime.
+DSKs install those roles into NexusEngine.
 ```
 
 ---
@@ -1145,5 +1145,5 @@ DSKs install those roles into NexusRealtime.
 # 25. One-sentence final doctrine
 
 ```txt
-NexusRealtime should grow as a web of plugin-shaped DSK mini-applications, where each DSK owns one bounded need-serving role, exposes a public API, emits descriptors/events/snapshots, and composes with other DSKs through stable refs rather than shared private state.
+NexusEngine should grow as a web of plugin-shaped DSK mini-applications, where each DSK owns one bounded need-serving role, exposes a public API, emits descriptors/events/snapshots, and composes with other DSKs through stable refs rather than shared private state.
 ```

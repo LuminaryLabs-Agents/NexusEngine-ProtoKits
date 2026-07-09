@@ -5,7 +5,7 @@ Date: 2026-06-22
 
 ## Summary
 
-This pass reviewed the public NexusRealtime, NexusRealtime-ProtoKits, NexusRealtime-Experiments, and NexusRealtime Ideas surfaces, then tried five game ideas as DSK extraction probes.
+This pass reviewed the public NexusEngine, NexusEngine-ProtoKits, NexusEngine-Experiments, and NexusEngine Ideas surfaces, then tried five game ideas as DSK extraction probes.
 
 Best master extraction target: `Stormgrid Salvage`.
 
@@ -13,10 +13,10 @@ Reason: it forces many reusable domains to compose horizontally: spatial city st
 
 ## Public Review Notes
 
-- NexusRealtime is the stable runtime/core layer: ECS, engine surfaces, runtime kits, terrain, physics, locomotion, camera, procedural, navmesh, pathfinding, operations, AR, and sequence runtime.
-- NexusRealtime-ProtoKits is the incubation layer: it proves reusable DSKs before promotion, including direct `nexusrealtime` DSK contracts and renderer-agnostic descriptor kits.
-- NexusRealtime-Experiments is the playable proof layer: experiments, games, workshops, and simulations validate composition in browser-facing slices.
-- NexusRealtime Ideas is the backlog layer: idea packets should keep concepts, prototype plans, scoring notes, playtest notes, and lifecycle status findable outside chat.
+- NexusEngine is the stable runtime/core layer: ECS, engine surfaces, runtime kits, terrain, physics, locomotion, camera, procedural, navmesh, pathfinding, operations, AR, and sequence runtime.
+- NexusEngine-ProtoKits is the incubation layer: it proves reusable DSKs before promotion, including direct `nexusengine` DSK contracts and renderer-agnostic descriptor kits.
+- NexusEngine-Experiments is the playable proof layer: experiments, games, workshops, and simulations validate composition in browser-facing slices.
+- NexusEngine Ideas is the backlog layer: idea packets should keep concepts, prototype plans, scoring notes, playtest notes, and lifecycle status findable outside chat.
 
 ## DSK Intention
 
@@ -42,7 +42,7 @@ Good long-term effect:
 one game idea -> many reusable domains
 many reusable domains -> many future games
 many future games -> promotion evidence
-promotion evidence -> stable NexusRealtime core surface
+promotion evidence -> stable NexusEngine core surface
 ```
 
 ## Target
@@ -505,7 +505,7 @@ modular-room-graph-kit
 
 ## Target Alignment
 
-This remains aligned with the original target because the game ideas are used only as probes. The output is not a request to build `Stormgrid Salvage`; it is a broad DSK discovery map for NexusRealtime.
+This remains aligned with the original target because the game ideas are used only as probes. The output is not a request to build `Stormgrid Salvage`; it is a broad DSK discovery map for NexusEngine.
 
 ## Notes
 

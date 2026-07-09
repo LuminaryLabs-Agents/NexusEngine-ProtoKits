@@ -14,13 +14,13 @@ export function summarizeObjectResidency(state = {}) {
   return { total: entries.length, ready: entries.filter((entry) => entry.status === "ready").length, loading: entries.filter((entry) => entry.status === "loading").length, failed: entries.filter((entry) => entry.status === "failed").length, fallback: entries.filter((entry) => entry.status === "fallback").length, bytes, budgetBytes: number(state.budgetBytes, 0), budgetUsed: state.budgetBytes ? bytes / state.budgetBytes : 0 };
 }
 
-export function createObjectResidencyKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjectResidencyKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objectResidency.state");
   const Updated = event("objectResidency.updated");
   const Ready = event("objectResidency.ready");
   const initial = () => createObjectResidencyState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "object-residency-kit",
     resources: { State },
     events: { Updated, Ready },

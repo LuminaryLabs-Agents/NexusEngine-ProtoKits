@@ -18,12 +18,12 @@ export function summarizeObjaverseMetadataStreams(state = {}) {
   return { total: streams.length, queued: streams.filter((s) => s.status === "queued").length, running: streams.filter((s) => s.status === "running").length, done: streams.filter((s) => s.status === "done").length, failed: streams.filter((s) => s.status === "failed").length, records: streams.reduce((sum, s) => sum + asList(s.records).length, 0), chunks: streams.reduce((sum, s) => sum + asList(s.chunks).length, 0) };
 }
 
-export function createObjaverseMetadataStreamKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createObjaverseMetadataStreamKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "objaverseMetadataStream.state");
   const Updated = event("objaverseMetadataStream.updated");
   const initial = () => createObjaverseMetadataStreamState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "objaverse-metadata-stream-kit",
     resources: { State },
     events: { Updated },

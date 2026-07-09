@@ -19,7 +19,7 @@ Browser, DOM, Canvas, WebGL, Three.js, pointer lock, browser audio, asset loadin
 
 ## Atomic DSK aliases
 
-Use `@luminarylabs/nexusrealtime-protokits/generic-defense-dsk-boundaries` when a host can compose the atomic DSKs directly:
+Use `@luminarylabs/nexusengine-protokits/generic-defense-dsk-boundaries` when a host can compose the atomic DSKs directly:
 
 ```js
 import {
@@ -30,7 +30,7 @@ import {
   createGenericDefenseCombatResolverDsk,
   createGenericDefenseSessionFacadeDsk,
   createGenericDefenseRenderDescriptorDsk
-} from "@luminarylabs/nexusrealtime-protokits/generic-defense-dsk-boundaries";
+} from "@luminarylabs/nexusengine-protokits/generic-defense-dsk-boundaries";
 ```
 
 Boundary map:
@@ -70,7 +70,7 @@ const descriptors = engine.n.genericDefense.renderDescriptors.getSnapshot().desc
 
 ## AAA compatibility plus DSK aliases
 
-Use `@luminarylabs/nexusrealtime-protokits/generic-defense-aaa-dsk-bridge` when a route still needs the current broad AAA facade while it migrates toward smaller DSK boundaries:
+Use `@luminarylabs/nexusengine-protokits/generic-defense-aaa-dsk-bridge` when a route still needs the current broad AAA facade while it migrates toward smaller DSK boundaries:
 
 ```js
 import {
@@ -80,7 +80,7 @@ import {
   createGenericDefenseRenderDescriptorDsk,
   createGenericDefenseDskBundle,
   syncGenericDefenseDskEngineNamespace
-} from "@luminarylabs/nexusrealtime-protokits/generic-defense-aaa-dsk-bridge";
+} from "@luminarylabs/nexusengine-protokits/generic-defense-aaa-dsk-bridge";
 ```
 
 This bridge preserves the existing broad compatibility exports and adds the atomic DSK alias exports in one module. It lets an Experiment migrate one host seam at a time without importing two modules and without moving reusable simulation into Experiments.

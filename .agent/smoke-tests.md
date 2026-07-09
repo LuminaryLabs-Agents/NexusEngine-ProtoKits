@@ -54,7 +54,7 @@ Track headless validation coverage for kits, composite kits, domain boundaries, 
 ## 2026-06-23 — Downstream executable route smoke update
 
 - Experiments now includes `tests/signal-bastion-executable-route-replay-smoke.mjs` in its full check suite.
-- The smoke imports real Core plus the package export `@luminarylabs/nexusrealtime-protokits` generic-defense DSK aliases, composes the Signal Bastion debug preset through the seven named DSK aliases, advances fixed ticks, and compares deterministic resource/snapshot/descriptor digests across fresh runs.
+- The smoke imports real Core plus the package export `@luminarylabs/nexusengine-protokits` generic-defense DSK aliases, composes the Signal Bastion debug preset through the seven named DSK aliases, advances fixed ticks, and compares deterministic resource/snapshot/descriptor digests across fresh runs.
 - This gives `generic-defense-dsk-boundaries` route-level consumption proof without moving reusable implementation into Experiments.
 
 ## 2026-06-23 — engine.n generic-defense namespace smoke update

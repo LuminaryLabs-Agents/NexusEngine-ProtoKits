@@ -9,10 +9,10 @@ const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createGenericRouteCargoExtractionKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createGenericRouteCargoExtractionKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -159,9 +159,9 @@ function pressureConfigFor(config = {}) {
   };
 }
 
-export function createGenericRouteCargoExtractionKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createGenericRouteCargoExtractionKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
 
   const RouteCargoExtractionState = defineResource(config.resourceName ?? "genericRouteCargoExtraction.state");
   const SnapshotUpdated = defineEvent("genericRouteCargoExtraction.snapshot.updated");
@@ -171,9 +171,9 @@ export function createGenericRouteCargoExtractionKit(NexusRealtime, config = {})
   const Rejected = defineEvent("genericRouteCargoExtraction.rejected");
 
   const childKits = [
-    createGenericRouteProgressKit(NexusRealtime, routeConfigFor(config)),
-    createGenericResourceLoopKit(NexusRealtime, resourceConfigFor(config)),
-    createGenericPressureLoopKit(NexusRealtime, pressureConfigFor(config))
+    createGenericRouteProgressKit(NexusEngine, routeConfigFor(config)),
+    createGenericResourceLoopKit(NexusEngine, resourceConfigFor(config)),
+    createGenericPressureLoopKit(NexusEngine, pressureConfigFor(config))
   ];
 
   function refresh(world, engine, reason = "refresh", emitEvent = false) {
@@ -290,7 +290,7 @@ export function createGenericRouteCargoExtractionKit(NexusRealtime, config = {})
       ownsLoop: false,
       composes: ["generic-route-progress-kit", "generic-resource-loop-kit", "generic-pressure-loop-kit"],
       purpose: "Composite route/cargo/extraction coordination over atomic route progress, resource ledger, and pressure loop DSKs.",
-      boundary: "Coordinates existing route, cargo/resource, and pressure boundaries through a composite session facade, snapshot, and descriptors. It does not own renderer, browser input, hit testing, camera, physics, cargo fiction, hazard simulation, DOM, Canvas, WebGL, audio, or asset loading.",
+      boundary: "Coordinates existing route, cargo/resource, and pressure boundaries through a composite session facade, snapshot, and descriptors. It does not own renderer APIs, browser input, hit testing, camera, physics, cargo fiction, hazard simulation, audio, or asset loading.",
       apiSurface: {
         resources: ["genericRouteCargoExtraction.state", "genericRouteCargoExtraction.routeProgress.state", "genericRouteCargoExtraction.cargo.state", "genericRouteCargoExtraction.pressure.state"],
         events: ["genericRouteCargoExtraction.snapshot.updated", "genericRouteCargoExtraction.cargo.changed", "genericRouteCargoExtraction.pressure.changed", "genericRouteCargoExtraction.completed", "genericRouteCargoExtraction.rejected"],

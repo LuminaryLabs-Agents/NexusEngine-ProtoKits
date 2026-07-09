@@ -130,7 +130,7 @@ export const GENERIC_DEFENSE_DSK_BOUNDARIES = Object.freeze([
     ],
     snapshots: ["render.hud", "render.descriptors", "render.world"],
     descriptors: ["path", "vital", "build-slot", "structure", "agent", "projectile", "effect"],
-    boundary: "Renderer-agnostic HUD and world descriptors with no DOM, Canvas, WebGL, audio, or asset loading ownership."
+    boundary: "Renderer-agnostic HUD and world descriptors with no renderer API, audio, or asset loading ownership."
   })
 ]);
 
@@ -231,8 +231,8 @@ export function listGenericDefenseDskBoundaries() {
   return [...GENERIC_DEFENSE_DSK_BOUNDARIES];
 }
 
-export function createGenericDefenseDskBundle(NexusRealtime, config = {}, ids) {
-  const kits = createGenericDefenseKits(NexusRealtime, config);
+export function createGenericDefenseDskBundle(NexusEngine, config = {}, ids) {
+  const kits = createGenericDefenseKits(NexusEngine, config);
   const selected = boundaryIds(ids).map(resolveBoundary);
   return selected.map((boundary) => {
     const kitId = customKitIdFor(boundary, config);
@@ -244,32 +244,32 @@ export function createGenericDefenseDskBundle(NexusRealtime, config = {}, ids) {
   });
 }
 
-export function createGenericDefenseMapDsk(NexusRealtime, config = {}) {
-  return createGenericDefenseDskBundle(NexusRealtime, config, ["map"])[0];
+export function createGenericDefenseMapDsk(NexusEngine, config = {}) {
+  return createGenericDefenseDskBundle(NexusEngine, config, ["map"])[0];
 }
 
-export function createGenericDefenseEconomyWalletDsk(NexusRealtime, config = {}) {
-  return createGenericDefenseDskBundle(NexusRealtime, config, ["economyWallet"])[0];
+export function createGenericDefenseEconomyWalletDsk(NexusEngine, config = {}) {
+  return createGenericDefenseDskBundle(NexusEngine, config, ["economyWallet"])[0];
 }
 
-export function createGenericDefenseBuildPlacementDsk(NexusRealtime, config = {}) {
-  return createGenericDefenseDskBundle(NexusRealtime, config, ["buildPlacement"])[0];
+export function createGenericDefenseBuildPlacementDsk(NexusEngine, config = {}) {
+  return createGenericDefenseDskBundle(NexusEngine, config, ["buildPlacement"])[0];
 }
 
-export function createGenericDefenseWaveAgentDirectorDsk(NexusRealtime, config = {}) {
-  return createGenericDefenseDskBundle(NexusRealtime, config, ["waveAgentDirector"])[0];
+export function createGenericDefenseWaveAgentDirectorDsk(NexusEngine, config = {}) {
+  return createGenericDefenseDskBundle(NexusEngine, config, ["waveAgentDirector"])[0];
 }
 
-export function createGenericDefenseCombatResolverDsk(NexusRealtime, config = {}) {
-  return createGenericDefenseDskBundle(NexusRealtime, config, ["combatResolver"])[0];
+export function createGenericDefenseCombatResolverDsk(NexusEngine, config = {}) {
+  return createGenericDefenseDskBundle(NexusEngine, config, ["combatResolver"])[0];
 }
 
-export function createGenericDefenseSessionFacadeDsk(NexusRealtime, config = {}) {
-  return createGenericDefenseDskBundle(NexusRealtime, config, ["sessionFacade"])[0];
+export function createGenericDefenseSessionFacadeDsk(NexusEngine, config = {}) {
+  return createGenericDefenseDskBundle(NexusEngine, config, ["sessionFacade"])[0];
 }
 
-export function createGenericDefenseRenderDescriptorDsk(NexusRealtime, config = {}) {
-  return createGenericDefenseDskBundle(NexusRealtime, config, ["renderDescriptors"])[0];
+export function createGenericDefenseRenderDescriptorDsk(NexusEngine, config = {}) {
+  return createGenericDefenseDskBundle(NexusEngine, config, ["renderDescriptors"])[0];
 }
 
 export default createGenericDefenseDskBundle;

@@ -2,12 +2,12 @@
 
 Branch scope: `0.0.2`.
 
-This document applies the NexusRealtime cutover rule to the existing ProtoKits package exports.
+This document applies the NexusEngine cutover rule to the existing ProtoKits package exports.
 
 The rule is:
 
 ```txt
-Every ProtoKit extends the correct NexusRealtime base contract.
+Every ProtoKit extends the correct NexusEngine base contract.
 Every ProtoKit may compose other kits through declared dependencies.
 A kit may own an internal loop only when the loop is a controlled subsystem under engine lifecycle.
 ```
@@ -16,7 +16,7 @@ A kit may own an internal loop only when the loop is a controlled subsystem unde
 
 ```txt
 Extend
-  The kit conforms to an official NexusRealtime base contract.
+  The kit conforms to an official NexusEngine base contract.
 
 Compose
   The kit uses other kits as dependencies or collaborators.
@@ -25,7 +25,7 @@ Own loop
   The kit runs an internal scheduler, worker, model loop, audio scheduler, polling loop, or render adapter loop.
 
 Global loop
-  The NexusRealtime engine tick. Gameplay truth should flow through this unless an exception is explicitly declared.
+  The NexusEngine engine tick. Gameplay truth should flow through this unless an exception is explicitly declared.
 ```
 
 ## 2. Mandatory metadata for every ProtoKit
@@ -131,10 +131,10 @@ renderer loop mutating authoritative game state
 
 ```txt
 aligned-core-extension
-  Already follows the expected NexusRealtime contract shape.
+  Already follows the expected NexusEngine contract shape.
 
 wrap-core-base
-  Should import or adapt a NexusRealtime base kit and expose a narrower ProtoKit API.
+  Should import or adapt a NexusEngine base kit and expose a narrower ProtoKit API.
 
 domain-composition
   Should become a manifest/index that composes other kits.
@@ -152,10 +152,10 @@ compatibility-wrapper
   Old flat export path remains but delegates to the new domain location.
 
 promote-to-core-candidate
-  Mature enough to consider moving into NexusRealtime core.
+  Mature enough to consider moving into NexusEngine core.
 
 replace-with-core
-  Duplicates NexusRealtime core behavior and should be deprecated after replacement.
+  Duplicates NexusEngine core behavior and should be deprecated after replacement.
 
 archive
   Historical or obsolete after cutover.
@@ -169,8 +169,8 @@ The following rows cover the current package exports on branch `0.0.2`.
 
 | Existing exports | Extends | Composes | Loop policy | Status | Cutover action |
 |---|---|---|---|---|---|
-| `foundation-kit`, `domain-foundation`, `domain-kits`, `domain-service-kits` | CompositionKit + DomainServiceKit compatibility | NexusRealtime `defineRuntimeKit`, `defineDomainServiceKit`, `extendDomainServiceKit` | engine-tick-only | compatibility-wrapper | Keep flat exports; move shared helper behavior into `protokits/_core/` and treat these as compatibility surfaces. |
-| `gamehost-standard-kit` | HarnessKit + RuntimeKit | Engine lifecycle, state inspection, smoke hooks | engine-tick-only | wrap-core-base | Extend the NexusRealtime runtime/host contract; no separate runtime ownership. |
+| `foundation-kit`, `domain-foundation`, `domain-kits`, `domain-service-kits` | CompositionKit + DomainServiceKit compatibility | NexusEngine `defineRuntimeKit`, `defineDomainServiceKit`, `extendDomainServiceKit` | engine-tick-only | compatibility-wrapper | Keep flat exports; move shared helper behavior into `protokits/_core/` and treat these as compatibility surfaces. |
+| `gamehost-standard-kit` | HarnessKit + RuntimeKit | Engine lifecycle, state inspection, smoke hooks | engine-tick-only | wrap-core-base | Extend the NexusEngine runtime/host contract; no separate runtime ownership. |
 | `scenario-qa-harness`, `deterministic-replay-harness` | HarnessKit | Engine snapshots, command replay, smoke sequences | engine-tick-only | aligned-core-extension | Keep as harnesses; require lifecycle-aware setup/teardown. |
 | `debug-overlay-kit` | HarnessKit / DescriptorKit | Engine surfaces, telemetry, debug descriptors | adapter-loop-exception only if UI polling is isolated | compatibility-wrapper | Debug UI cannot own gameplay truth. |
 | `token-registry-kit` | ContentKit / RegistryKit | DSK tokens, package export metadata | engine-tick-only | content-descriptor | Use as token manifest bridge during cutover. |
@@ -180,7 +180,7 @@ The following rows cover the current package exports on branch `0.0.2`.
 
 | Existing exports | Extends | Composes | Loop policy | Status | Cutover action |
 |---|---|---|---|---|---|
-| `action-input-kit`, `input-kit` | DomainServiceKit / InputIntentKit | Command queue, action maps, engine input surface | engine-tick-only | wrap-core-base | Align to NexusRealtime input-intent API; no direct DOM listener ownership except host adapter scope. |
+| `action-input-kit`, `input-kit` | DomainServiceKit / InputIntentKit | Command queue, action maps, engine input surface | engine-tick-only | wrap-core-base | Align to NexusEngine input-intent API; no direct DOM listener ownership except host adapter scope. |
 | `generic-action-window-kit` | DomainServiceKit | InputIntentKit, timing/resource validators | engine-tick-only | aligned-core-extension | Keep as generic timing service; add `extendsBase` metadata. |
 | `generic-affordance-descriptor-kit`, `generic-anchor-descriptor-kit` | DescriptorKit | InteractionTargetKit, spatial/query surfaces | engine-tick-only | content-descriptor | Descriptor only; no state mutation. |
 
@@ -199,7 +199,7 @@ The following rows cover the current package exports on branch `0.0.2`.
 | Existing exports | Extends | Composes | Loop policy | Status | Cutover action |
 |---|---|---|---|---|---|
 | `spatial-interaction-kit` | DomainServiceKit / InteractionTargetKit | Spatial queries, target descriptors, engine command surface | engine-tick-only | aligned-core-extension | Keep as core interaction composition surface. |
-| `zone-field-kit` | DomainServiceKit / SpatialLayoutKit | RouteFieldKit, TransferZoneKit, hazard/director domains | engine-tick-only | wrap-core-base | Align zone membership and zone events to NexusRealtime surfaces. |
+| `zone-field-kit` | DomainServiceKit / SpatialLayoutKit | RouteFieldKit, TransferZoneKit, hazard/director domains | engine-tick-only | wrap-core-base | Align zone membership and zone events to NexusEngine surfaces. |
 | `raycast-placement-kit` | DomainServiceKit / PlacementKit | TerrainKit, CameraKit, InteractionTargetKit | engine-tick-only | wrap-core-base | Placement queries only; renderer/host owns actual pointer source. |
 | `scene-recipe-kit`, `content-preset-kit`, `asset-descriptor-kit` | ContentKit / DescriptorKit | ProceduralKit, RenderDescriptorKit, domain manifests | engine-tick-only | content-descriptor | Static authoring data; no runtime loop. |
 | `route-checkpoint-kit`, `generic-mode-projected-route` | DomainServiceKit / ObjectiveFlowKit | RouteFieldKit, CompletionLedgerKit, SequenceNode | engine-tick-only | wrap-core-base | Checkpoints become objective/route services. |
@@ -208,7 +208,7 @@ The following rows cover the current package exports on branch `0.0.2`.
 
 | Existing exports | Extends | Composes | Loop policy | Status | Cutover action |
 |---|---|---|---|---|---|
-| `objective-flow-kit`, `objective-bridge-kit`, `completion-ledger-kit` | DomainServiceKit / ObjectiveFlowKit | SequenceNode runtime, engine events, completion ledger resources | engine-tick-only | aligned-core-extension | Add explicit NexusRealtime base metadata and `n:` tokens. |
+| `objective-flow-kit`, `objective-bridge-kit`, `completion-ledger-kit` | DomainServiceKit / ObjectiveFlowKit | SequenceNode runtime, engine events, completion ledger resources | engine-tick-only | aligned-core-extension | Add explicit NexusEngine base metadata and `n:` tokens. |
 | `lock-group-kit` | DomainServiceKit / PuzzleSignalKit | InteractionTargetKit, ObjectiveFlowKit, ActionWindowKit | engine-tick-only | wrap-core-base | Move under puzzle-signal/lock domain. |
 
 ### 6.6 Pressure, resources, hazards, combat, and encounters
@@ -326,12 +326,12 @@ adapters/
 2. Add domain manifests that classify existing exports.
 3. Keep flat package exports stable.
 4. Move bundles first: universal-game-domain-kits, generic-defense, blackwake, meadow.
-5. Wrap runtime/host/QA kits over NexusRealtime base contracts.
+5. Wrap runtime/host/QA kits over NexusEngine base contracts.
 6. Wrap input/action/objective/pressure/hazard/economy kits.
 7. Wrap traversal/spatial/environment/water/visual/audio/agent kits.
 8. Add loop exception manifests for render/audio/model/streaming kits.
 9. Add tests that verify every package export has a rule record.
-10. Promote stable kits back into NexusRealtime core only after tests and experiment proof.
+10. Promote stable kits back into NexusEngine core only after tests and experiment proof.
 ```
 
 ## 9. Acceptance checks

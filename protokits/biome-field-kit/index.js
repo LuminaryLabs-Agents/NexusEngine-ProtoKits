@@ -89,13 +89,13 @@ export function createBiomeField(data = {}, options = {}) {
   return Object.freeze({ biomes: Object.freeze([...biomes]), fallbackBiome, zones: Object.freeze([...zones]), getBiome, biomeAt, getBiomeWeights, getBiomePlacementRules, getBiomeMaterialOverrides });
 }
 
-export function createBiomeFieldKit(nexusRealtime = {}, options = {}) {
+export function createBiomeFieldKit(nexusEngine = {}, options = {}) {
   const field = createBiomeField(options.data ?? options, options);
   const api = Object.freeze({ id: options.id ?? "biome-field-kit", version: BIOME_FIELD_KIT_VERSION, ...field });
   return Object.freeze({
     ...api,
     createRuntimeKit(runtimeOptions = {}) {
-      return defineInjectedRuntimeKit(nexusRealtime, {
+      return defineInjectedRuntimeKit(nexusEngine, {
         id: runtimeOptions.id ?? api.id,
         provides: runtimeOptions.provides ?? ["domain:biome-field", "service:biome-query", "service:biome-placement-rules"],
         bindings: { biomeFieldKit: api },

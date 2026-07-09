@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NexusRealtime Render Layer Kit Demo</title>
+  <title>NexusEngine Render Layer Kit Demo</title>
   <style>
     html, body { margin: 0; height: 100%; background: #071019; color: #dff7ff; font: 14px/1.4 system-ui, sans-serif; }
     main { min-height: 100%; display: grid; place-items: center; padding: 24px; box-sizing: border-box; }
@@ -15,7 +15,7 @@
   <pre id="out">Booting…</pre>
 </main>
 <script type="module">
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@0.0.1/src/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
 import {
   createRenderLayerKit,
   createFoglineVisualPreset
@@ -36,17 +36,17 @@ const level = {
   }
 };
 
-const realismKit = NexusRealtime.createRealismKit({
+const realismKit = NexusEngine.createRealismKit({
   preset: createFoglineVisualPreset(),
   quality: "medium"
 });
 
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    NexusRealtime.createRenderDescriptorKit(level),
+    NexusEngine.createRenderDescriptorKit(level),
     realismKit,
-    createRenderLayerKit(NexusRealtime, {
-      renderDescriptorResource: NexusRealtime.RenderDescriptorState,
+    createRenderLayerKit(NexusEngine, {
+      renderDescriptorResource: NexusEngine.RenderDescriptorState,
       realismSnapshotResource: realismKit.definitions.resources.RealismSnapshot,
       preset: createFoglineVisualPreset()
     })

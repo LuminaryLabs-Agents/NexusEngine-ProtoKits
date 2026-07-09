@@ -28,20 +28,20 @@ const resource = (N, name) => N.defineResource?.(name) ?? Object.freeze({ kind: 
 const event = (N, name) => N.defineEvent?.(name) ?? Object.freeze({ kind: "event", name });
 const objectMap = (value = {}) => Array.isArray(value) ? byId(value) : { ...value };
 
-export function createParallaxDefinitions(NexusRealtime = {}, options = {}) {
+export function createParallaxDefinitions(NexusEngine = {}, options = {}) {
   const prefix = options.namespace ?? "parallax";
   return {
     resources: {
-      ParallaxState: resource(NexusRealtime, `${prefix}.state`),
-      ParallaxDescriptorState: resource(NexusRealtime, `${prefix}.descriptors`),
-      ParallaxValidationState: resource(NexusRealtime, `${prefix}.validation`),
-      ParallaxDebugState: resource(NexusRealtime, `${prefix}.debug`)
+      ParallaxState: resource(NexusEngine, `${prefix}.state`),
+      ParallaxDescriptorState: resource(NexusEngine, `${prefix}.descriptors`),
+      ParallaxValidationState: resource(NexusEngine, `${prefix}.validation`),
+      ParallaxDebugState: resource(NexusEngine, `${prefix}.debug`)
     },
     events: {
-      ParallaxConfigured: event(NexusRealtime, `${prefix}.configured`),
-      ParallaxProfileChanged: event(NexusRealtime, `${prefix}.profileChanged`),
-      ParallaxBindingChanged: event(NexusRealtime, `${prefix}.bindingChanged`),
-      ParallaxValidationWarning: event(NexusRealtime, `${prefix}.validationWarning`)
+      ParallaxConfigured: event(NexusEngine, `${prefix}.configured`),
+      ParallaxProfileChanged: event(NexusEngine, `${prefix}.profileChanged`),
+      ParallaxBindingChanged: event(NexusEngine, `${prefix}.bindingChanged`),
+      ParallaxValidationWarning: event(NexusEngine, `${prefix}.validationWarning`)
     }
   };
 }
@@ -207,8 +207,8 @@ function initialState(options = {}) {
   return { version: PARALLAX_KIT_VERSION, status: "ready", activeProfileId: options.activeProfileId ?? options.profileId ?? defaultParallaxProfile.id, profiles: asList(options.profiles), camera: camera(options.camera), viewport: merge(defaultParallaxProfile.viewport, options.viewport ?? {}), depthPlanes: clone(options.depthPlanes ?? defaultParallaxProfile.depthPlanes), layers: clone(options.layers ?? defaultParallaxProfile.layers), bindings: asList(options.bindings), objects: asList(options.objects), budget: merge(defaultParallaxProfile.budget, options.budget ?? {}), lastReason: "initialized" };
 }
 
-export function createParallaxKit(NexusRealtime = {}, options = {}) {
-  const definitions = createParallaxDefinitions(NexusRealtime, options);
+export function createParallaxKit(NexusEngine = {}, options = {}) {
+  const definitions = createParallaxDefinitions(NexusEngine, options);
   const { resources, events } = definitions;
   function parallaxSystem(world) {
     const state = world.getResource(resources.ParallaxState) ?? initialState(options);
@@ -219,7 +219,7 @@ export function createParallaxKit(NexusRealtime = {}, options = {}) {
     world.setResource(resources.ParallaxState, { ...state, status: snapshot.validation.ok ? "ready" : "warning", frame: number(world.__nexusClock?.frame, number(state.frame, 0) + 1), elapsed: getClockElapsed(world, 0) });
     for (const warning of snapshot.validation.warnings) world.emit(events.ParallaxValidationWarning, warning);
   }
-  return defineInjectedRuntimeKit(NexusRealtime, {
+  return defineInjectedRuntimeKit(NexusEngine, {
     id: options.id ?? "parallax-kit",
     resources,
     events,

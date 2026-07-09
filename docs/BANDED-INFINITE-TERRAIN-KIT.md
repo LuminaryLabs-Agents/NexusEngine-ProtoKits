@@ -97,7 +97,7 @@ shader owns displacement
 ## Import
 
 ```js
-import { createBandedInfiniteTerrainKit } from "@luminarylabs/nexusrealtime-protokits/banded-infinite-terrain-kit";
+import { createBandedInfiniteTerrainKit } from "@luminarylabs/nexusengine-protokits/banded-infinite-terrain-kit";
 ```
 
 ## Validation

@@ -136,7 +136,7 @@ export function createKeyboardMouseInput(options = {}) {
   };
 }
 
-export function createInputKit(nexusRealtime = {}, options = {}) {
+export function createInputKit(nexusEngine = {}, options = {}) {
   const kit = {
     id: options.id ?? "input-kit",
     version: INPUT_KIT_VERSION,
@@ -152,7 +152,7 @@ export function createInputKit(nexusRealtime = {}, options = {}) {
   return Object.freeze({
     ...kit,
     createRuntimeKit(runtimeOptions = {}) {
-      return defineInjectedRuntimeKit(nexusRealtime, {
+      return defineInjectedRuntimeKit(nexusEngine, {
         id: runtimeOptions.id ?? kit.id,
         provides: runtimeOptions.provides ?? ["input:keyboard-mouse", "input:actions", "input:pointer-look"],
         bindings: { inputKit: kit },

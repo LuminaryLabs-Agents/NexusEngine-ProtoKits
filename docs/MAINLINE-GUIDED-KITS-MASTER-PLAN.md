@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This plan defines the next main-branch implementation track for NexusRealtime-ProtoKits.
+This plan defines the next main-branch implementation track for NexusEngine-ProtoKits.
 
 It is intentionally **mainline**, not a `v3` branch or a separate V3 package. The target is to improve the current `main` branch so agents and developers can create, refine, test, and promote reusable kits using the existing DSM / DSK architecture.
 
@@ -631,7 +631,7 @@ Tasks:
 
 ### Phase 12 — Browser route and social capture handoff
 
-Most browser capture belongs in `NexusRealtime-Experiments`, but ProtoKits should provide shared descriptors and standards.
+Most browser capture belongs in `NexusEngine-Experiments`, but ProtoKits should provide shared descriptors and standards.
 
 Add or update:
 
@@ -786,7 +786,7 @@ Use this process for each implementation batch:
 ### P4: Experiments integration
 
 ```txt
-1. Update NexusRealtime-Experiments capture metadata to use GameHost standard.
+1. Update NexusEngine-Experiments capture metadata to use GameHost standard.
 2. Use scenario/replay readiness reports in social capture manifest.
 3. Use agent/model kits in Living Agent Lab and ONNX Agent Lab.
 4. Add browser route screenshots/video in Experiments tooling, not core gameplay kits.
@@ -795,7 +795,7 @@ Use this process for each implementation batch:
 ## Definition of done for this mainline track
 
 ```txt
-A new agent/developer can open START-HERE, follow the guided kit plan, create a kit spec, validate the boundary, generate a readiness report, install the kit into NexusRealtime, run headless tests, and use an Experiment to prove it.
+A new agent/developer can open START-HERE, follow the guided kit plan, create a kit spec, validate the boundary, generate a readiness report, install the kit into NexusEngine, run headless tests, and use an Experiment to prove it.
 
 Agent/model kits can propose gameplay commands but cannot bypass DSK validation.
 

@@ -83,14 +83,14 @@ function indexesFor(manifests = {}) {
   return { byDomain, byScope, byProvides, byRequires };
 }
 
-export function createDomainManifestRegistryDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createDomainManifestRegistryDomainKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const DomainManifestRegistryState = resource(options.resourceName ?? "domainManifestRegistry.state");
   const ManifestRegistered = event("domainManifestRegistry.registered");
   const ManifestValidated = event("domainManifestRegistry.validated");
   const DomainManifestRegistryReset = event("domainManifestRegistry.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "domain-manifest-registry-domain-kit",
     resources: { DomainManifestRegistryState },
     events: { ManifestRegistered, ManifestValidated, DomainManifestRegistryReset },

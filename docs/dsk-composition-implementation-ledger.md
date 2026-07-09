@@ -7,12 +7,12 @@ The pass keeps object-specific ideas as proof packets and upgrades bounded conta
 ## Alignment Sources
 
 - `docs/dsk-composition-upgrade-plan.md`
-- `NexusRealtime-Experiments/Ideas/README.md`
-- `NexusRealtime-Experiments/Ideas/templates/idea-packet-template/README.md`
-- `NexusRealtime-Experiments/Ideas/packets/object-proof-packets-index.md`
-- `NexusRealtime-Experiments/Ideas/domain-ideas/README.md`
-- `NexusRealtime-Experiments/Ideas/domain-ideas/tracking/domain-index.md`
-- `LuminaryLabs-Dev/NexusRealtime` public README
+- `NexusEngine-Experiments/Ideas/README.md`
+- `NexusEngine-Experiments/Ideas/templates/idea-packet-template/README.md`
+- `NexusEngine-Experiments/Ideas/packets/object-proof-packets-index.md`
+- `NexusEngine-Experiments/Ideas/domain-ideas/README.md`
+- `NexusEngine-Experiments/Ideas/domain-ideas/tracking/domain-index.md`
+- `LuminaryLabs-Dev/NexusEngine` public README
 
 ## Implemented Container Upgrades
 

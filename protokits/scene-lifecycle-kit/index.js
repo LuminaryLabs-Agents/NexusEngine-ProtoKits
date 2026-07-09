@@ -50,8 +50,8 @@ export function disposeScene(state = createSceneLifecycleState(), reason = "disp
   return transitionState(state, "disposed", { reason, previousSceneId: state.currentSceneId ?? null, currentSceneId: null, currentScene: null });
 }
 
-export function createSceneLifecycleKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createSceneLifecycleKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const SceneLifecycleState = resource(options.resourceName ?? "sceneLifecycle.state");
   const SceneEntered = event("sceneLifecycle.entered");
   const ScenePaused = event("sceneLifecycle.paused");
@@ -59,7 +59,7 @@ export function createSceneLifecycleKit(nexusRealtime = {}, options = {}) {
   const SceneExited = event("sceneLifecycle.exited");
   const SceneDisposed = event("sceneLifecycle.disposed");
   const createState = () => createSceneLifecycleState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "scene-lifecycle-kit",
     resources: { SceneLifecycleState },
     events: { SceneEntered, ScenePaused, SceneResumed, SceneExited, SceneDisposed },

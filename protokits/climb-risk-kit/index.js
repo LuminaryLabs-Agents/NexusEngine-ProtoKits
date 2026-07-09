@@ -25,8 +25,8 @@ function createInitialState(options = {}) {
   return { version: CLIMB_RISK_KIT_VERSION, evaluations: {}, lastEvaluation: null, options: { overlayUi: options.overlayUi ?? false } };
 }
 
-export function createClimbRiskKit(nexusRealtime = {}, options = {}) {
-  const definitions = createVerticalClimbDefinitions(nexusRealtime, options);
+export function createClimbRiskKit(nexusEngine = {}, options = {}) {
+  const definitions = createVerticalClimbDefinitions(nexusEngine, options);
   const { resources } = definitions;
   const system = (world) => {
     const state = ensureResource(world, resources.RiskState, () => createInitialState(options));
@@ -37,7 +37,7 @@ export function createClimbRiskKit(nexusRealtime = {}, options = {}) {
     state.evaluations = Object.fromEntries(targets.map((targetId) => [targetId, evaluateClimbRisk({ routeState, climbState, swingState, fromId: climbState.currentLedgeId, toId: targetId }, options)]));
     world.setResource(resources.RiskState, state);
   };
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "climb-risk-kit",
     resources: { RiskState: resources.RiskState, ClimbState: resources.ClimbState, RouteState: resources.RouteState, SwingState: resources.SwingState },
     systems: [{ phase: "resolve", name: "climbRiskSystem", system }],

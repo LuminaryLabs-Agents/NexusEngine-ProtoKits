@@ -6,10 +6,10 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value));
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createGenericModeProjectedRoute requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createGenericModeProjectedRoute requires NexusEngine.${key}.`);
     }
   }
 }
@@ -188,9 +188,9 @@ function createState(config = {}) {
   };
 }
 
-export function createGenericModeProjectedRoute(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createGenericModeProjectedRoute(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
   const ProjectedRouteState = defineResource(config.resourceName ?? "genericProjectedRoute.state");
   const RebuildRoute = defineEvent("genericProjectedRoute.rebuild");
   const ProjectedRouteUpdated = defineEvent("genericProjectedRoute.updated");

@@ -7,9 +7,9 @@ This document records the mental "what would happen if" loop used for scoped dom
 The rule is:
 
 ```txt
-NexusRealtime is the core.
+NexusEngine is the core.
 Every ProtoKit is a scoped domain boundary.
-Every domain kit extends the NexusRealtime runtime-shaped contract directly.
+Every domain kit extends the NexusEngine runtime-shaped contract directly.
 Every domain kit composes horizontally with other domain kits.
 No game-branded DSKs by default.
 ```

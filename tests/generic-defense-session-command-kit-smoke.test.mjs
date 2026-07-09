@@ -1,13 +1,13 @@
-// Smoke signature: NexusRealtime-generic-defense-session-command-kit::headless::2026-06-24
+// Smoke signature: NexusEngine-generic-defense-session-command-kit::headless::2026-06-24
 import { readFileSync } from "node:fs";
-import { assert, createMockNexusRealtime, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
+import { assert, createMockNexusEngine, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
 import { createGenericDefenseDskBundle } from "../protokits/generic-defense-dsk-boundaries/index.js";
 import {
   GENERIC_DEFENSE_SESSION_COMMAND_ENGINE_NAMESPACE,
   createGenericDefenseSessionCommandKit
 } from "../protokits/generic-defense-session-command-kit/index.js";
 
-const NexusRealtime = createMockNexusRealtime();
+const NexusEngine = createMockNexusEngine();
 const boundaryIds = [
   "map",
   "economyWallet",
@@ -18,8 +18,8 @@ const boundaryIds = [
   "renderDescriptors"
 ];
 const kits = [
-  ...createGenericDefenseDskBundle(NexusRealtime, {}, boundaryIds),
-  createGenericDefenseSessionCommandKit(NexusRealtime)
+  ...createGenericDefenseDskBundle(NexusEngine, {}, boundaryIds),
+  createGenericDefenseSessionCommandKit(NexusEngine)
 ];
 
 const world = createSmokeWorld();

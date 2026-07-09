@@ -37,14 +37,14 @@ export function recordSessionSnapshot(state = createSessionFacadeState(), snapsh
   return { ...state, snapshots: [...state.snapshots.slice(-31), record], lastSnapshot: record };
 }
 
-export function createSessionFacadeKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createSessionFacadeKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const SessionFacadeState = resource(options.resourceName ?? "sessionFacade.state");
   const SessionCommandDispatched = event("sessionFacade.commandDispatched");
   const SessionSnapshotCaptured = event("sessionFacade.snapshotCaptured");
   const SessionRestarted = event("sessionFacade.restarted");
   const createState = () => createSessionFacadeState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "session-facade-kit",
     resources: { SessionFacadeState },
     events: { SessionCommandDispatched, SessionSnapshotCaptured, SessionRestarted },

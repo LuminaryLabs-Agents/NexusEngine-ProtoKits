@@ -5,7 +5,7 @@ This note records the implementation status for the top-level `banded-infinite-t
 ## Repository
 
 ```txt
-LuminaryLabs-Agents/NexusRealtime-ProtoKits
+LuminaryLabs-Agents/NexusEngine-ProtoKits
 ```
 
 ## Implemented on main

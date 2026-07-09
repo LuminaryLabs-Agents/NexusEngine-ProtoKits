@@ -20,8 +20,8 @@ const normalizePhase = (phase, fallback = "simulate") => {
   if (value === "post" || value === "render") return "cleanup";
   return VALID_PHASES.has(value) ? value : fallback;
 };
-function defineResource(NexusRealtime, name) { return typeof NexusRealtime.defineResource === "function" ? NexusRealtime.defineResource(name) : `resource:${name}`; }
-function defineEvent(NexusRealtime, name) { return typeof NexusRealtime.defineEvent === "function" ? NexusRealtime.defineEvent(name) : `event:${name}`; }
+function defineResource(NexusEngine, name) { return typeof NexusEngine.defineResource === "function" ? NexusEngine.defineResource(name) : `resource:${name}`; }
+function defineEvent(NexusEngine, name) { return typeof NexusEngine.defineEvent === "function" ? NexusEngine.defineEvent(name) : `event:${name}`; }
 function dist3(a = {}, b = {}) { return Math.hypot(number(a.x) - number(b.x), number(a.y) - number(b.y), number(a.z) - number(b.z)); }
 function stableUnit(seed) { return (hashString(seed) % 1000003) / 1000003; }
 function mix(a, b, t) { return number(a) + (number(b) - number(a)) * clamp(t, 0, 1); }
@@ -44,8 +44,8 @@ function chooseBiomeForPatch(patch = {}, config = {}) {
   return DEFAULT_AERIAL_CANYON_BIOMES[id] ? id : "red-canyon-floor";
 }
 
-export function createBiomeTransitionDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "biomeTransition.state");
+export function createBiomeTransitionDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "biomeTransition.state");
   let installedEngine = null;
   function initial() { return { id: config.id ?? "biome-transition", version: BIOME_TRANSITION_DOMAIN_KIT_VERSION, patchBiomes: {}, dominantCounts: {}, frame: 0 }; }
   function system(world) {
@@ -62,11 +62,11 @@ export function createBiomeTransitionDomainKit(NexusRealtime = {}, config = {}) 
     }
     world.setResource(State, { id: config.id ?? "biome-transition", version: BIOME_TRANSITION_DOMAIN_KIT_VERSION, frame: number(world.__nexusClock?.frame, 0), patchBiomes, dominantCounts, biomes });
   }
-  return defineInjectedRuntimeKit(NexusRealtime, { id: config.kitId ?? "biome-transition-domain-kit", requires: ["world:patch-window"], provides: ["biome:transition", "terrain:biome-weights", "render:biome-descriptors"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "simulate"), name: "biomeTransitionSystem", system }], initWorld({ world }) { world.setResource(State, initial()); }, install({ engine, world }) { installedEngine = engine; engine.biomeTransition = { getState: () => world.getResource(State), getPatchBiome: (patchId) => world.getResource(State)?.patchBiomes?.[patchId] ?? null, getBiome: (id) => world.getResource(State)?.biomes?.[id] ?? null }; }, metadata: { version: BIOME_TRANSITION_DOMAIN_KIT_VERSION, domain: "biome-transition", purpose: "Patch-level biome weights and transition descriptors for terrain, vegetation, atmosphere, contracts, and props." } });
+  return defineInjectedRuntimeKit(NexusEngine, { id: config.kitId ?? "biome-transition-domain-kit", requires: ["world:patch-window"], provides: ["biome:transition", "terrain:biome-weights", "render:biome-descriptors"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "simulate"), name: "biomeTransitionSystem", system }], initWorld({ world }) { world.setResource(State, initial()); }, install({ engine, world }) { installedEngine = engine; engine.biomeTransition = { getState: () => world.getResource(State), getPatchBiome: (patchId) => world.getResource(State)?.patchBiomes?.[patchId] ?? null, getBiome: (id) => world.getResource(State)?.biomes?.[id] ?? null }; }, metadata: { version: BIOME_TRANSITION_DOMAIN_KIT_VERSION, domain: "biome-transition", purpose: "Patch-level biome weights and transition descriptors for terrain, vegetation, atmosphere, contracts, and props." } });
 }
 
-export function createTerrainMaterialDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "terrainMaterial.state");
+export function createTerrainMaterialDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "terrainMaterial.state");
   let installedEngine = null;
   function system(world) {
     const transition = installedEngine?.biomeTransition?.getState?.();
@@ -77,12 +77,12 @@ export function createTerrainMaterialDomainKit(NexusRealtime = {}, config = {}) 
     }
     world.setResource(State, { id: config.id ?? "terrain-material", version: TERRAIN_MATERIAL_DOMAIN_KIT_VERSION, frame: number(world.__nexusClock?.frame, 0), patchMaterials, palette: biomeConfig(config) });
   }
-  return defineInjectedRuntimeKit(NexusRealtime, { id: config.kitId ?? "terrain-material-domain-kit", requires: ["biome:transition"], provides: ["terrain:material-descriptors", "render:terrain-material-descriptors"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "terrainMaterialSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "terrain-material", version: TERRAIN_MATERIAL_DOMAIN_KIT_VERSION, patchMaterials: {}, palette: biomeConfig(config), frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.terrainMaterials = { getState: () => world.getResource(State), getMaterialForPatch: (patchId) => world.getResource(State)?.patchMaterials?.[patchId] ?? null }; }, metadata: { version: TERRAIN_MATERIAL_DOMAIN_KIT_VERSION, domain: "terrain-material", purpose: "Biome-driven terrain material descriptors: palette, strata, slope darkening, and dust blend data." } });
+  return defineInjectedRuntimeKit(NexusEngine, { id: config.kitId ?? "terrain-material-domain-kit", requires: ["biome:transition"], provides: ["terrain:material-descriptors", "render:terrain-material-descriptors"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "terrainMaterialSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "terrain-material", version: TERRAIN_MATERIAL_DOMAIN_KIT_VERSION, patchMaterials: {}, palette: biomeConfig(config), frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.terrainMaterials = { getState: () => world.getResource(State), getMaterialForPatch: (patchId) => world.getResource(State)?.patchMaterials?.[patchId] ?? null }; }, metadata: { version: TERRAIN_MATERIAL_DOMAIN_KIT_VERSION, domain: "terrain-material", purpose: "Biome-driven terrain material descriptors: palette, strata, slope darkening, and dust blend data." } });
 }
 
 function patchBounds(patch = {}) { const size = number(patch.size, 768); return { size, x: number(patch.center?.x, number(patch.px) * size), z: number(patch.center?.z, number(patch.pz) * size) }; }
-export function createGeologyPropDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "geologyProp.state");
+export function createGeologyPropDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "geologyProp.state");
   let installedEngine = null;
   function system(world) {
     const patches = (installedEngine?.aerialPatchWindow?.getPatches?.() ?? []).filter((p) => p.lod !== "far").slice(0, number(config.patchLimit, 60));
@@ -109,11 +109,11 @@ export function createGeologyPropDomainKit(NexusRealtime = {}, config = {}) {
     }
     world.setResource(State, { id: config.id ?? "geology-props", version: GEOLOGY_PROP_DOMAIN_KIT_VERSION, frame: number(world.__nexusClock?.frame, 0), descriptors, stats: { count: descriptors.length } });
   }
-  return defineInjectedRuntimeKit(NexusRealtime, { id: config.kitId ?? "geology-prop-domain-kit", requires: ["world:patch-window", "biome:transition", "terrain:height-sampler"], provides: ["world:geology-props", "render:geology-descriptors", "collision:geology-proxies"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "simulate"), name: "geologyPropSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "geology-props", version: GEOLOGY_PROP_DOMAIN_KIT_VERSION, descriptors: [], stats: {}, frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.geologyProps = { getState: () => world.getResource(State), getDescriptors: () => world.getResource(State)?.descriptors ?? [] }; }, metadata: { version: GEOLOGY_PROP_DOMAIN_KIT_VERSION, domain: "geology-prop", purpose: "Biome-driven landmark and geology descriptors: arches, basalt, mesas, boulders, towers, and wreck traces." } });
+  return defineInjectedRuntimeKit(NexusEngine, { id: config.kitId ?? "geology-prop-domain-kit", requires: ["world:patch-window", "biome:transition", "terrain:height-sampler"], provides: ["world:geology-props", "render:geology-descriptors", "collision:geology-proxies"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "simulate"), name: "geologyPropSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "geology-props", version: GEOLOGY_PROP_DOMAIN_KIT_VERSION, descriptors: [], stats: {}, frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.geologyProps = { getState: () => world.getResource(State), getDescriptors: () => world.getResource(State)?.descriptors ?? [] }; }, metadata: { version: GEOLOGY_PROP_DOMAIN_KIT_VERSION, domain: "geology-prop", purpose: "Biome-driven landmark and geology descriptors: arches, basalt, mesas, boulders, towers, and wreck traces." } });
 }
 
-export function createCloudBankDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "cloudBank.state");
+export function createCloudBankDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "cloudBank.state");
   let installedEngine = null;
   function system(world) {
     const patches = (installedEngine?.aerialPatchWindow?.getPatches?.() ?? []).filter((p) => p.lod !== "near").slice(0, number(config.patchLimit, 40));
@@ -126,11 +126,11 @@ export function createCloudBankDomainKit(NexusRealtime = {}, config = {}) {
     }
     world.setResource(State, { id: config.id ?? "cloud-banks", version: CLOUD_BANK_DOMAIN_KIT_VERSION, frame: number(world.__nexusClock?.frame, 0), descriptors, stats: { count: descriptors.length } });
   }
-  return defineInjectedRuntimeKit(NexusRealtime, { id: config.kitId ?? "cloud-bank-domain-kit", requires: ["world:patch-window", "biome:transition"], provides: ["weather:cloud-banks", "render:cloud-descriptors"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "cloudBankSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "cloud-banks", version: CLOUD_BANK_DOMAIN_KIT_VERSION, descriptors: [], stats: {}, frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.cloudBanks = { getState: () => world.getResource(State), getDescriptors: () => world.getResource(State)?.descriptors ?? [] }; }, metadata: { version: CLOUD_BANK_DOMAIN_KIT_VERSION, domain: "cloud-bank", purpose: "Biome and storm-front cloud bank descriptors." } });
+  return defineInjectedRuntimeKit(NexusEngine, { id: config.kitId ?? "cloud-bank-domain-kit", requires: ["world:patch-window", "biome:transition"], provides: ["weather:cloud-banks", "render:cloud-descriptors"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "cloudBankSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "cloud-banks", version: CLOUD_BANK_DOMAIN_KIT_VERSION, descriptors: [], stats: {}, frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.cloudBanks = { getState: () => world.getResource(State), getDescriptors: () => world.getResource(State)?.descriptors ?? [] }; }, metadata: { version: CLOUD_BANK_DOMAIN_KIT_VERSION, domain: "cloud-bank", purpose: "Biome and storm-front cloud bank descriptors." } });
 }
 
-export function createStormFrontDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "stormFront.state");
+export function createStormFrontDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "stormFront.state");
   let installedEngine = null;
   function system(world) {
     const body = installedEngine?.poweredAerialFlight?.getBody?.();
@@ -140,12 +140,12 @@ export function createStormFrontDomainKit(NexusRealtime = {}, config = {}) {
     const descriptors = intensity > 0 ? [{ id: "storm-wall-main", kind: "weather", type: "storm-front", position: { x: 0, y: 1000, z: start + 2800 }, size: 3000 + intensity * 3600, intensity, materialId: "weather.storm" }] : [];
     world.setResource(State, { id: config.id ?? "storm-front", version: STORM_FRONT_DOMAIN_KIT_VERSION, frame: number(world.__nexusClock?.frame, 0), intensity, wind: { x: Math.sin(z * 0.001) * intensity * 14, y: 0, z: -intensity * 8 }, atmosphere: { fogDensity: 0.012 + intensity * 0.025, fogColor: intensity > 0.4 ? "#4d4056" : "#b87852", skyColor: intensity > 0.4 ? "#3d3048" : "#d86822" }, descriptors });
   }
-  return defineInjectedRuntimeKit(NexusRealtime, { id: config.kitId ?? "storm-front-domain-kit", requires: ["aerial:body"], provides: ["weather:storm-front", "hazard:storm-zone", "render:storm-descriptors"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "stormFrontSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "storm-front", version: STORM_FRONT_DOMAIN_KIT_VERSION, intensity: 0, descriptors: [], atmosphere: {}, frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.stormFront = { getState: () => world.getResource(State), getDescriptors: () => world.getResource(State)?.descriptors ?? [] }; }, metadata: { version: STORM_FRONT_DOMAIN_KIT_VERSION, domain: "storm-front", purpose: "Storm intensity, wind, atmosphere and hazard descriptors from route position." } });
+  return defineInjectedRuntimeKit(NexusEngine, { id: config.kitId ?? "storm-front-domain-kit", requires: ["aerial:body"], provides: ["weather:storm-front", "hazard:storm-zone", "render:storm-descriptors"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "stormFrontSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "storm-front", version: STORM_FRONT_DOMAIN_KIT_VERSION, intensity: 0, descriptors: [], atmosphere: {}, frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.stormFront = { getState: () => world.getResource(State), getDescriptors: () => world.getResource(State)?.descriptors ?? [] }; }, metadata: { version: STORM_FRONT_DOMAIN_KIT_VERSION, domain: "storm-front", purpose: "Storm intensity, wind, atmosphere and hazard descriptors from route position." } });
 }
 
-export function createAerialContractObjectiveBridgeKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "contractObjectiveBridge.state");
-  const Completed = defineEvent(NexusRealtime, "contractObjectiveBridge.completed");
+export function createAerialContractObjectiveBridgeKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "contractObjectiveBridge.state");
+  const Completed = defineEvent(NexusEngine, "contractObjectiveBridge.completed");
   let installedEngine = null;
   function system(world) {
     const active = installedEngine?.contractBoard?.getActiveContract?.();
@@ -164,11 +164,11 @@ export function createAerialContractObjectiveBridgeKit(NexusRealtime = {}, confi
     }
     world.setResource(State, { id: config.id ?? "contract-objective-bridge", version: AERIAL_CONTRACT_OBJECTIVE_BRIDGE_KIT_VERSION, activeContractId: active?.id ?? null, activeType: active?.type ?? null, prompt: active?.label ?? "Choose a contract", distance, progress, completedIds: state.completedIds ?? [], frame: number(world.__nexusClock?.frame, 0) });
   }
-  return defineInjectedRuntimeKit(NexusRealtime, { id: config.kitId ?? "aerial-contract-objective-bridge-kit", requires: ["contract:board", "aerial:body"], provides: ["objective:contract-bridge", "ui:contract-objective"], resources: { State }, events: { Completed }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "aerialContractObjectiveBridgeSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "contract-objective-bridge", version: AERIAL_CONTRACT_OBJECTIVE_BRIDGE_KIT_VERSION, completedIds: [], progress: 0, frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.contractObjectiveBridge = { getState: () => world.getResource(State) }; }, metadata: { version: AERIAL_CONTRACT_OBJECTIVE_BRIDGE_KIT_VERSION, domain: "contract-objective-bridge", purpose: "Bridges active contracts to objective progress and completion facts." } });
+  return defineInjectedRuntimeKit(NexusEngine, { id: config.kitId ?? "aerial-contract-objective-bridge-kit", requires: ["contract:board", "aerial:body"], provides: ["objective:contract-bridge", "ui:contract-objective"], resources: { State }, events: { Completed }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "aerialContractObjectiveBridgeSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "contract-objective-bridge", version: AERIAL_CONTRACT_OBJECTIVE_BRIDGE_KIT_VERSION, completedIds: [], progress: 0, frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.contractObjectiveBridge = { getState: () => world.getResource(State) }; }, metadata: { version: AERIAL_CONTRACT_OBJECTIVE_BRIDGE_KIT_VERSION, domain: "contract-objective-bridge", purpose: "Bridges active contracts to objective progress and completion facts." } });
 }
 
-export function createAerialScanLockDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialScanLock.state");
+export function createAerialScanLockDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialScanLock.state");
   let installedEngine = null;
   function system(world) {
     const target = installedEngine?.aerialReticleTargeting?.getTarget?.();
@@ -178,11 +178,11 @@ export function createAerialScanLockDomainKit(NexusRealtime = {}, config = {}) {
     const progress = scanning ? clamp(number(prev.progress) + number(world.__nexusClock?.delta, 1 / 60) * number(config.scanRate, 0.35), 0, 1) : Math.max(0, number(prev.progress) - 0.025);
     world.setResource(State, { id: config.id ?? "aerial-scan-lock", version: AERIAL_SCAN_LOCK_DOMAIN_KIT_VERSION, targetId: target?.targetId ?? null, scanning: Boolean(scanning), progress, completed: progress >= 1, frame: number(world.__nexusClock?.frame, 0) });
   }
-  return defineInjectedRuntimeKit(NexusRealtime, { id: config.kitId ?? "aerial-scan-lock-domain-kit", requires: ["ui:reticle-descriptor", "contract:board"], provides: ["scan:lock", "ui:scan-descriptor"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "aerialScanLockSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "aerial-scan-lock", version: AERIAL_SCAN_LOCK_DOMAIN_KIT_VERSION, progress: 0, completed: false, frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.aerialScanLock = { getState: () => world.getResource(State) }; }, metadata: { version: AERIAL_SCAN_LOCK_DOMAIN_KIT_VERSION, domain: "aerial-scan-lock", purpose: "Survey scan progress from reticle target focus and active contract type." } });
+  return defineInjectedRuntimeKit(NexusEngine, { id: config.kitId ?? "aerial-scan-lock-domain-kit", requires: ["ui:reticle-descriptor", "contract:board"], provides: ["scan:lock", "ui:scan-descriptor"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "aerialScanLockSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "aerial-scan-lock", version: AERIAL_SCAN_LOCK_DOMAIN_KIT_VERSION, progress: 0, completed: false, frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.aerialScanLock = { getState: () => world.getResource(State) }; }, metadata: { version: AERIAL_SCAN_LOCK_DOMAIN_KIT_VERSION, domain: "aerial-scan-lock", purpose: "Survey scan progress from reticle target focus and active contract type." } });
 }
 
-export function createAerialCargoStatusDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialCargoStatus.state");
+export function createAerialCargoStatusDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialCargoStatus.state");
   let installedEngine = null;
   function system(world) {
     const body = installedEngine?.poweredAerialFlight?.getBody?.();
@@ -193,11 +193,11 @@ export function createAerialCargoStatusDomainKit(NexusRealtime = {}, config = {}
     const integrity = clamp(number(prev.integrity, 1) - stress, 0, 1);
     world.setResource(State, { id: config.id ?? "aerial-cargo-status", version: AERIAL_CARGO_STATUS_DOMAIN_KIT_VERSION, carrying, contractId: active?.id ?? null, integrity, status: carrying ? integrity < 0.35 ? "critical" : integrity < 0.72 ? "strained" : "secure" : "empty", frame: number(world.__nexusClock?.frame, 0) });
   }
-  return defineInjectedRuntimeKit(NexusRealtime, { id: config.kitId ?? "aerial-cargo-status-domain-kit", requires: ["contract:board", "aerial:body"], provides: ["cargo:status", "ui:cargo-descriptor"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "aerialCargoStatusSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "aerial-cargo-status", version: AERIAL_CARGO_STATUS_DOMAIN_KIT_VERSION, carrying: false, integrity: 1, status: "empty", frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.aerialCargoStatus = { getState: () => world.getResource(State) }; }, metadata: { version: AERIAL_CARGO_STATUS_DOMAIN_KIT_VERSION, domain: "aerial-cargo-status", purpose: "Cargo integrity and strain descriptors for courier, rescue, and salvage contracts." } });
+  return defineInjectedRuntimeKit(NexusEngine, { id: config.kitId ?? "aerial-cargo-status-domain-kit", requires: ["contract:board", "aerial:body"], provides: ["cargo:status", "ui:cargo-descriptor"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "aerialCargoStatusSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "aerial-cargo-status", version: AERIAL_CARGO_STATUS_DOMAIN_KIT_VERSION, carrying: false, integrity: 1, status: "empty", frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.aerialCargoStatus = { getState: () => world.getResource(State) }; }, metadata: { version: AERIAL_CARGO_STATUS_DOMAIN_KIT_VERSION, domain: "aerial-cargo-status", purpose: "Cargo integrity and strain descriptors for courier, rescue, and salvage contracts." } });
 }
 
-export function createAerialHazardFeedbackDomainKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialHazardFeedback.state");
+export function createAerialHazardFeedbackDomainKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialHazardFeedback.state");
   let installedEngine = null;
   function system(world) {
     const storm = installedEngine?.stormFront?.getState?.(); const body = installedEngine?.poweredAerialFlight?.getBody?.(); const warnings = [];
@@ -205,20 +205,20 @@ export function createAerialHazardFeedbackDomainKit(NexusRealtime = {}, config =
     if (number(body?.agl, 100) < number(config.lowAgl, 55)) warnings.push({ id: "terrain", severity: "danger", text: "TERRAIN" });
     world.setResource(State, { id: config.id ?? "aerial-hazard-feedback", version: AERIAL_HAZARD_FEEDBACK_DOMAIN_KIT_VERSION, frame: number(world.__nexusClock?.frame, 0), warnings, atmosphere: storm?.atmosphere ?? null, wind: storm?.wind ?? null });
   }
-  return defineInjectedRuntimeKit(NexusRealtime, { id: config.kitId ?? "aerial-hazard-feedback-domain-kit", requires: ["aerial:body", "weather:storm-front"], provides: ["hazard:feedback", "ui:hazard-warnings", "audio:hazard-cues"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "aerialHazardFeedbackSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "aerial-hazard-feedback", version: AERIAL_HAZARD_FEEDBACK_DOMAIN_KIT_VERSION, warnings: [], frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.aerialHazardFeedback = { getState: () => world.getResource(State), getWarnings: () => world.getResource(State)?.warnings ?? [] }; }, metadata: { version: AERIAL_HAZARD_FEEDBACK_DOMAIN_KIT_VERSION, domain: "aerial-hazard-feedback", purpose: "Condenses terrain and storm hazards into UI/audio/atmosphere feedback descriptors." } });
+  return defineInjectedRuntimeKit(NexusEngine, { id: config.kitId ?? "aerial-hazard-feedback-domain-kit", requires: ["aerial:body", "weather:storm-front"], provides: ["hazard:feedback", "ui:hazard-warnings", "audio:hazard-cues"], resources: { State }, systems: [{ phase: normalizePhase(config.phase, "cleanup"), name: "aerialHazardFeedbackSystem", system }], initWorld({ world }) { world.setResource(State, { id: config.id ?? "aerial-hazard-feedback", version: AERIAL_HAZARD_FEEDBACK_DOMAIN_KIT_VERSION, warnings: [], frame: 0 }); }, install({ engine, world }) { installedEngine = engine; engine.aerialHazardFeedback = { getState: () => world.getResource(State), getWarnings: () => world.getResource(State)?.warnings ?? [] }; }, metadata: { version: AERIAL_HAZARD_FEEDBACK_DOMAIN_KIT_VERSION, domain: "aerial-hazard-feedback", purpose: "Condenses terrain and storm hazards into UI/audio/atmosphere feedback descriptors." } });
 }
 
-export function createAerialBiomeFidelityDomainKits(NexusRealtime = {}, config = {}) {
+export function createAerialBiomeFidelityDomainKits(NexusEngine = {}, config = {}) {
   return [
-    createBiomeTransitionDomainKit(NexusRealtime, config.biomeTransition ?? config.biomes ?? {}),
-    createTerrainMaterialDomainKit(NexusRealtime, config.terrainMaterial ?? config.materials ?? {}),
-    createGeologyPropDomainKit(NexusRealtime, config.geology ?? {}),
-    createCloudBankDomainKit(NexusRealtime, config.clouds ?? {}),
-    createStormFrontDomainKit(NexusRealtime, config.storm ?? {}),
-    createAerialContractObjectiveBridgeKit(NexusRealtime, config.contractObjective ?? {}),
-    createAerialScanLockDomainKit(NexusRealtime, config.scanLock ?? {}),
-    createAerialCargoStatusDomainKit(NexusRealtime, config.cargoStatus ?? {}),
-    createAerialHazardFeedbackDomainKit(NexusRealtime, config.hazardFeedback ?? {})
+    createBiomeTransitionDomainKit(NexusEngine, config.biomeTransition ?? config.biomes ?? {}),
+    createTerrainMaterialDomainKit(NexusEngine, config.terrainMaterial ?? config.materials ?? {}),
+    createGeologyPropDomainKit(NexusEngine, config.geology ?? {}),
+    createCloudBankDomainKit(NexusEngine, config.clouds ?? {}),
+    createStormFrontDomainKit(NexusEngine, config.storm ?? {}),
+    createAerialContractObjectiveBridgeKit(NexusEngine, config.contractObjective ?? {}),
+    createAerialScanLockDomainKit(NexusEngine, config.scanLock ?? {}),
+    createAerialCargoStatusDomainKit(NexusEngine, config.cargoStatus ?? {}),
+    createAerialHazardFeedbackDomainKit(NexusEngine, config.hazardFeedback ?? {})
   ];
 }
 

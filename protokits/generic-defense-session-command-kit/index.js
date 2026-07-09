@@ -50,14 +50,14 @@ function reject(world, engine, payload = {}) {
   return { accepted: false, ...payload };
 }
 
-export function createGenericDefenseSessionCommandKit(NexusRealtime, config = {}) {
-  if (typeof NexusRealtime?.defineRuntimeKit !== "function") {
-    throw new TypeError("createGenericDefenseSessionCommandKit requires NexusRealtime.defineRuntimeKit.");
+export function createGenericDefenseSessionCommandKit(NexusEngine, config = {}) {
+  if (typeof NexusEngine?.defineRuntimeKit !== "function") {
+    throw new TypeError("createGenericDefenseSessionCommandKit requires NexusEngine.defineRuntimeKit.");
   }
 
   const processedCommandIds = new Set();
 
-  return NexusRealtime.defineRuntimeKit({
+  return NexusEngine.defineRuntimeKit({
     id: config.kitId ?? "generic-defense-session-command-kit",
     requires: ["game:generic-defense"],
     provides: ["session:commands", "build:blueprint-selection", "structure:sell"],
@@ -120,10 +120,11 @@ export function createGenericDefenseSessionCommandKit(NexusRealtime, config = {}
         sell,
         getSnapshot: () => clone(snapshotFor(engine)?.session ?? {})
       };
+      const commandExtensions = { setBlueprint, sell };
 
       namespace.sessionCommands = commands;
-      if (namespace.sessionFacade && typeof namespace.sessionFacade === "object") Object.assign(namespace.sessionFacade, commands);
-      if (engine.genericDefense && typeof engine.genericDefense === "object") Object.assign(engine.genericDefense, commands);
+      if (namespace.sessionFacade && typeof namespace.sessionFacade === "object") Object.assign(namespace.sessionFacade, commandExtensions);
+      if (engine.genericDefense && typeof engine.genericDefense === "object") Object.assign(engine.genericDefense, commandExtensions);
     },
     metadata: {
       version: GENERIC_DEFENSE_SESSION_COMMAND_VERSION,

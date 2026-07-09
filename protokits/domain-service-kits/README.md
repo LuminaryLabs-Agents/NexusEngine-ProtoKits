@@ -1,8 +1,8 @@
 # Domain Service Kits
 
-Renderer-independent, atomic domain-purpose ProtoKits for NexusRealtime games.
+Renderer-independent, atomic domain-purpose ProtoKits for NexusEngine games.
 
-These kits are meant to sit between stable NexusRealtime engine kits and game-specific presets/deploy packages. They own reusable state transitions and events, not Canvas, DOM, Three.js, asset loading, or authored tutorial flow.
+These kits are meant to sit between stable NexusEngine engine kits and game-specific presets/deploy packages. They own reusable state transitions and events, not Canvas, DOM, Three.js, asset loading, or authored tutorial flow.
 
 ## Included kits
 
@@ -29,24 +29,24 @@ import {
   createSpatialInteractionKit,
   createCompletionLedgerKit,
   createLockGroupKit
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/domain-service-kits/index.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/domain-service-kits/index.js";
 ```
 
 Each service also has an individual import wrapper, for example:
 
 ```js
-import { createSpatialInteractionKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/spatial-interaction-kit/index.js";
+import { createSpatialInteractionKit } from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/spatial-interaction-kit/index.js";
 ```
 
 ## Install
 
 ```js
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createSpatialInteractionKit(NexusRealtime),
-    createCompletionLedgerKit(NexusRealtime),
-    createObjectiveBridgeKit(NexusRealtime),
-    createLockGroupKit(NexusRealtime)
+    createSpatialInteractionKit(NexusEngine),
+    createCompletionLedgerKit(NexusEngine),
+    createObjectiveBridgeKit(NexusEngine),
+    createLockGroupKit(NexusEngine)
   ]
 });
 ```
@@ -54,8 +54,8 @@ const engine = NexusRealtime.createRealtimeGame({
 Or install the default bundle:
 
 ```js
-const engine = NexusRealtime.createRealtimeGame({
-  kits: createDomainServiceKits(NexusRealtime)
+const engine = NexusEngine.createRealtimeGame({
+  kits: createDomainServiceKits(NexusEngine)
 });
 ```
 
@@ -65,4 +65,4 @@ These kits do not draw, load files, listen to browser input, own `requestAnimati
 
 ## Promotion notes
 
-These are experimental ProtoKits. Promote individual services into NexusRealtime core only after stable API naming, headless tests, multi-configuration validation, docs, and at least one successful Experiment.
+These are experimental ProtoKits. Promote individual services into NexusEngine core only after stable API naming, headless tests, multi-configuration validation, docs, and at least one successful Experiment.

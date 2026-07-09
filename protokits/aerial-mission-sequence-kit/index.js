@@ -2,12 +2,12 @@ import { defineInjectedRuntimeKit, number } from "../foundation-kit/index.js";
 
 export const AERIAL_MISSION_SEQUENCE_KIT_VERSION = "0.1.1";
 
-function defineResource(NexusRealtime, name) {
-  return typeof NexusRealtime.defineResource === "function" ? NexusRealtime.defineResource(name) : `resource:${name}`;
+function defineResource(NexusEngine, name) {
+  return typeof NexusEngine.defineResource === "function" ? NexusEngine.defineResource(name) : `resource:${name}`;
 }
 
-function defineEvent(NexusRealtime, name) {
-  return typeof NexusRealtime.defineEvent === "function" ? NexusRealtime.defineEvent(name) : `event:${name}`;
+function defineEvent(NexusEngine, name) {
+  return typeof NexusEngine.defineEvent === "function" ? NexusEngine.defineEvent(name) : `event:${name}`;
 }
 
 function clone(value) {
@@ -35,10 +35,10 @@ function initialState(config = {}) {
   };
 }
 
-export function createAerialMissionSequenceKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "aerialMission.state");
-  const Start = defineEvent(NexusRealtime, "aerialMission.start");
-  const Reset = defineEvent(NexusRealtime, "aerialMission.reset");
+export function createAerialMissionSequenceKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "aerialMission.state");
+  const Start = defineEvent(NexusEngine, "aerialMission.start");
+  const Reset = defineEvent(NexusEngine, "aerialMission.reset");
   let installedEngine = null;
 
   function system(world) {
@@ -69,7 +69,7 @@ export function createAerialMissionSequenceKit(NexusRealtime = {}, config = {}) 
     world.setResource(State, state);
   }
 
-  return defineInjectedRuntimeKit(NexusRealtime, {
+  return defineInjectedRuntimeKit(NexusEngine, {
     id: config.kitId ?? "aerial-mission-sequence-kit",
     requires: ["aerial:body", "combat:events", "encounter:aerial"],
     provides: ["sequence:aerial-mission", "mission:objective", "mission:events", "ui:prompt-descriptors"],

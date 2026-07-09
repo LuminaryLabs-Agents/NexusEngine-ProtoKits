@@ -79,13 +79,13 @@ export function mergeSceneDelta(baseScene = {}, delta = {}) {
   return asList(delta.patches).reduce((scene, patch) => applyScenePatch(scene, patch), clone(baseScene));
 }
 
-export function createSaveDeltaKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createSaveDeltaKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const SaveDeltaState = resource(options.resourceName ?? "saveDelta.state");
   const SaveDeltaPatched = event("saveDelta.patched");
   const SaveDeltaReset = event("saveDelta.reset");
   const createState = () => createSaveDeltaState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "save-delta-kit",
     resources: { SaveDeltaState },
     events: { SaveDeltaPatched, SaveDeltaReset },

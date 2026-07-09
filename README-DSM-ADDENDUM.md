@@ -1,4 +1,4 @@
-# DSM Addendum for NexusRealtime ProtoKits
+# DSM Addendum for NexusEngine ProtoKits
 
 This addendum complements `README.md` without replacing the existing kit inventory.
 
@@ -61,4 +61,4 @@ Games should not define reusable architecture directly.
 
 ## Why this exists
 
-This repo is where experimental game systems become reusable kit architecture before promotion into NexusRealtime core. DSM docs give future agents and engineers a stable operating model for massive ProtoKit upgrades.
+This repo is where experimental game systems become reusable kit architecture before promotion into NexusEngine core. DSM docs give future agents and engineers a stable operating model for massive ProtoKit upgrades.

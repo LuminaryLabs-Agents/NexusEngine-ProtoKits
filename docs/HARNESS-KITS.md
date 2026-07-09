@@ -35,4 +35,4 @@ Harnesses should not draw, load assets, or decide gameplay outcomes.
 
 ## Route capture handoff
 
-Route loading and media capture should live in `NexusRealtime-Experiments` tooling or host scripts. ProtoKits should provide GameHost contracts, scenario descriptors, and proof/report state.
+Route loading and media capture should live in `NexusEngine-Experiments` tooling or host scripts. ProtoKits should provide GameHost contracts, scenario descriptors, and proof/report state.

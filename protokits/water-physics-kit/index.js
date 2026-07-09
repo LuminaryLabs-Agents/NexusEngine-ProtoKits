@@ -23,8 +23,8 @@ function sampleSurface(position = {}, time = 0) {
   return sampleFluidWave(position, { time, amplitude: 0.24, frequency: 0.075, flow: { x: 1, z: 0.35 } });
 }
 
-export function createWaterPhysicsKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createWaterPhysicsKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: WATER_PHYSICS_KIT_VERSION,
     factoryName: "createWaterPhysicsKit",
     kitId: "water-physics-kit",

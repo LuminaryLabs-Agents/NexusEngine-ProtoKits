@@ -30,8 +30,8 @@ export function computeClimbCameraTarget(climbState = {}, swingState = {}, cloud
   };
 }
 
-export function createClimbCameraKit(nexusRealtime = {}, options = {}) {
-  const definitions = createVerticalClimbDefinitions(nexusRealtime, options);
+export function createClimbCameraKit(nexusEngine = {}, options = {}) {
+  const definitions = createVerticalClimbDefinitions(nexusEngine, options);
   const { resources } = definitions;
   const system = (world) => {
     const state = ensureResource(world, resources.CameraState, () => createInitialState(options));
@@ -48,7 +48,7 @@ export function createClimbCameraKit(nexusRealtime = {}, options = {}) {
     state.target = target;
     world.setResource(resources.CameraState, state);
   };
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "climb-camera-kit",
     resources: { CameraState: resources.CameraState, ClimbState: resources.ClimbState, SwingState: resources.SwingState, CloudState: resources.CloudState },
     systems: [{ phase: "resolve", name: "climbCameraSystem", system }],

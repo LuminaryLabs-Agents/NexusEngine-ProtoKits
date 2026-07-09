@@ -1,4 +1,4 @@
-// Smoke signature: NexusRealtime-generic-route-progress::headless::2026-06-24
+// Smoke signature: NexusEngine-generic-route-progress::headless::2026-06-24
 import { assert, installKit } from "./aaa-domain-spine-smoke-harness.mjs";
 import {
   GENERIC_ROUTE_PROGRESS_ENGINE_NAMESPACE,

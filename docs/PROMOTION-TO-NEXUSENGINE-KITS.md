@@ -1,16 +1,16 @@
-# Promotion To NexusRealtime Kits
+# Promotion To NexusEngine Kits
 
-`NexusRealtime-ProtoKits` remains the incubation repo.
+`NexusEngine-ProtoKits` remains the incubation repo.
 
 Stable reusable kits now promote into:
 
 ```txt
-LuminaryLabs-Dev/NexusRealitime-Kits
-package: @luminarylabs/nexusrealtime-kits
+LuminaryLabs-Dev/NexusEngine-Kits
+package: @luminarylabs/nexusengine-kits
 branch: main
 ```
 
-Do not promote stable gameplay/domain kits directly into `LuminaryLabs-Dev/NexusRealtime` unless the runtime contract itself must change.
+Do not promote stable gameplay/domain kits directly into `LuminaryLabs-Dev/NexusEngine` unless the runtime contract itself must change.
 
 ## Promotion Ladder
 
@@ -18,13 +18,13 @@ Do not promote stable gameplay/domain kits directly into `LuminaryLabs-Dev/Nexus
 Experiment
 -> ProtoKit
 -> validated ProtoKit
--> NexusRealtime-Kits official kit
--> NexusRealtime runtime primitive only if necessary
+-> NexusEngine-Kits official kit
+-> NexusEngine runtime primitive only if necessary
 ```
 
 ## What Must Be True Before Promotion
 
-A ProtoKit can move into NexusRealtime Kits when it has:
+A ProtoKit can move into NexusEngine Kits when it has:
 
 - clear domain ownership
 - stable kit name
@@ -69,8 +69,8 @@ Do not delete old ProtoKit paths immediately. Prefer a migration note or bridge 
 Example:
 
 ```txt
-Old: @luminarylabs/nexusrealtime-protokits/damage-health-kit
-New: @luminarylabs/nexusrealtime-kits/damage-health-kit
+Old: @luminarylabs/nexusengine-protokits/damage-health-kit
+New: @luminarylabs/nexusengine-kits/damage-health-kit
 ```
 
 ## First Migration Targets

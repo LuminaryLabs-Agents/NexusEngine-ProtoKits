@@ -30,7 +30,7 @@ route art
 Extends:
 
 ```txt
-NexusRealtime DomainServiceKit shape through defineRuntimeKit
+NexusEngine DomainServiceKit shape through defineRuntimeKit
 ```
 
 Composes:
@@ -61,5 +61,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-AAA-domain-spine-batch-01::objective-flow-domain-kit::2026-06-20
+NexusEngine-AAA-domain-spine-batch-01::objective-flow-domain-kit::2026-06-20
 ```

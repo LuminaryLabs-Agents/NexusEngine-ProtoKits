@@ -44,15 +44,15 @@ export function applyCelShade(color = [1, 1, 1], sample = {}, options = {}) {
   return rgbMix(highlighted, [0.78, 0.90, 1.0], rim);
 }
 
-export function createCelShadingDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource } = createDefinitionFactory(nexusRealtime);
+export function createCelShadingDomainKit(nexusEngine = {}, options = {}) {
+  const { resource } = createDefinitionFactory(nexusEngine);
   const CelShadingState = resource(options.resourceName ?? "celShading.state");
   const initial = () => ({
     version: CEL_SHADING_DOMAIN_KIT_VERSION,
     config: { ...DEFAULT_CEL_SHADING_CONFIG, ...(options.celShading ?? options.config ?? options) }
   });
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "cel-shading-domain-kit",
     resources: { CelShadingState },
     provides: ["render:cel-shading", "terrain:cel-tone"],

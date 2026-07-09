@@ -69,12 +69,12 @@ export function applySceneGraphPatch(state = createSceneGraphState(), patch = {}
   return { ...state, rejectedPatches: [...(state.rejectedPatches ?? []), { ...clone(patch), id, status: "rejected", reason: "invalid-patch" }] };
 }
 
-export function createSceneGraphDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createSceneGraphDomainKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const SceneGraphState = resource(options.resourceName ?? "sceneGraph.state");
   const SceneGraphPatched = event("sceneGraph.patched");
   const createState = () => createSceneGraphState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "scene-graph-domain-kit",
     resources: { SceneGraphState },
     events: { SceneGraphPatched },

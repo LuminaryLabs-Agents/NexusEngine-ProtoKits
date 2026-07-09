@@ -15,7 +15,7 @@ Composition kit.
 ## Factory
 
 ```js
-createHostShellContractKit(NexusRealtime, options)
+createHostShellContractKit(NexusEngine, options)
 ```
 
 ## Provides

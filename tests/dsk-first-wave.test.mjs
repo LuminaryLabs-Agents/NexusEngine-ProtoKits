@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import * as NexusRealtime from "nexusrealtime";
+import * as NexusEngine from "nexusengine";
 import {
   createNHazardDirectorKit,
   createNResourcePressureKit,
@@ -26,7 +26,7 @@ assert.equal(directScanKit.metadata.execution.mode, "linear");
 assert.equal(directScanKit.metadata.execution.asyncReady, true);
 assert.ok(directScanKit.provides.includes("n:scan-survey"));
 
-const legacyScanKit = createScanSurveyKit(NexusRealtime, { radius: 3 });
+const legacyScanKit = createScanSurveyKit(NexusEngine, { radius: 3 });
 assert.equal(legacyScanKit.id, "n-scan-survey-kit");
 assert.ok(legacyScanKit.provides.includes("scan:survey"));
 
@@ -34,7 +34,7 @@ const completionLedgerKit = createNCompletionLedgerKit({ seed: "dsk-proof" });
 assert.equal(completionLedgerKit.id, "n-completion-ledger-kit");
 assert.ok(completionLedgerKit.provides.includes("n:completion-ledger"));
 
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
     createNZoneFieldKit(),
     directScanKit,
@@ -75,7 +75,7 @@ for (const key of ["zoneField", "scanSurvey", "routeCheckpoint", "resourcePressu
   assertSerializable(engine.n[key].getSnapshot());
 }
 
-const needsMissingToken = NexusRealtime.defineDomainServiceKit({
+const needsMissingToken = NexusEngine.defineDomainServiceKit({
   domain: "needs-missing",
   stability: "test",
   version: "0.0.0",
@@ -83,7 +83,7 @@ const needsMissingToken = NexusRealtime.defineDomainServiceKit({
 });
 
 assert.throws(
-  () => NexusRealtime.createEngine({ kits: [needsMissingToken] }),
+  () => NexusEngine.createEngine({ kits: [needsMissingToken] }),
   /requires missing token\(s\): n:not-installed/
 );
 

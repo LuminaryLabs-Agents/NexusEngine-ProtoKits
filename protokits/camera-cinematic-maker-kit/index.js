@@ -49,13 +49,13 @@ export function createInspectionCameraDescriptor(input = {}) {
   };
 }
 
-export function createCameraCinematicMakerKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createCameraCinematicMakerKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const CameraCinematicState = resource(options.resourceName ?? "cameraCinematic.state");
   const CameraShotRegistered = event("cameraCinematic.shotRegistered");
   const CameraSequenceComposed = event("cameraCinematic.sequenceComposed");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "camera-cinematic-maker-kit",
     resources: { CameraCinematicState },
     events: { CameraShotRegistered, CameraSequenceComposed },

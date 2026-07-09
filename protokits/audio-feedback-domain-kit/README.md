@@ -11,7 +11,7 @@ What if a domain event should produce sound?
   The kit does not own WebAudio or a local loop.
 ```
 
-Extends: NexusRealtime runtime-shaped DomainServiceKit via `defineRuntimeKit`.
+Extends: NexusEngine runtime-shaped DomainServiceKit via `defineRuntimeKit`.
 
 Composes:
 
@@ -34,5 +34,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-scoped-domain-rpg-batch-01::audio-feedback-domain-kit::2026-06-20
+NexusEngine-scoped-domain-rpg-batch-01::audio-feedback-domain-kit::2026-06-20
 ```

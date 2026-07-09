@@ -213,8 +213,8 @@ function createAIDriverSystem(definitions, options = {}) {
   };
 }
 
-export function createRacerAIKit(nexusRealtime = {}, options = {}) {
-  const definitions = createArcadeRaceDefinitions(nexusRealtime, options);
+export function createRacerAIKit(nexusEngine = {}, options = {}) {
+  const definitions = createArcadeRaceDefinitions(nexusEngine, options);
   const { components, resources, events } = definitions;
 
   const bindings = {
@@ -235,7 +235,7 @@ export function createRacerAIKit(nexusRealtime = {}, options = {}) {
     }
   };
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: "racer-ai-kit",
     components: {
       Racer: components.Racer,
@@ -269,7 +269,7 @@ export function createRacerAIKit(nexusRealtime = {}, options = {}) {
       version: RACER_AI_KIT_VERSION,
       coreVersion: ARCADE_RACE_CORE_VERSION,
       purpose: "AI route choice, obstacle avoidance, boost targeting, mistake injection, aggression tuning, and scalable driving skill.",
-      usesNexusRealtimeKits: ["runtime-kit", "pathfinding-compatible", "navmesh-compatible"]
+      usesNexusEngineKits: ["runtime-kit", "pathfinding-compatible", "navmesh-compatible"]
     }
   });
 }

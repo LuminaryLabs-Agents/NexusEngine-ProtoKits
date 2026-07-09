@@ -1,6 +1,6 @@
 # meadow-area-kit
 
-`meadow-area-kit` is a reusable, insertable meadow area service for NexusRealtime/NexusEngine proof scenes.
+`meadow-area-kit` is a reusable, insertable meadow area service for NexusEngine/NexusEngine proof scenes.
 
 It replaces one-off path-meadow composition logic with a generic area configuration that can be embedded into many worlds. The experiment supplies the area config inline; the kit owns deterministic meadow object planning.
 
@@ -26,7 +26,7 @@ It replaces one-off path-meadow composition logic with a generic area configurat
 ## Usage
 
 ```js
-import { createMeadowAreaKit } from "@luminarylabs/nexusrealtime-protokits/meadow-area-kit";
+import { createMeadowAreaKit } from "@luminarylabs/nexusengine-protokits/meadow-area-kit";
 
 const meadow = createMeadowAreaKit({
   seed: "path-meadow-v1",

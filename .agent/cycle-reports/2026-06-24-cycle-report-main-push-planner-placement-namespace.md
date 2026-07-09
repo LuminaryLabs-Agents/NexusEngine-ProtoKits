@@ -55,7 +55,7 @@ Still open: generic-defense AAA wall-clock/browser-timing compatibility exceptio
 
 ## Direct-main push plan executed
 
-Target repo: `LuminaryLabs-Agents/NexusRealtime-ProtoKits`
+Target repo: `LuminaryLabs-Agents/NexusEngine-ProtoKits`
 
 Target branch: `main`
 

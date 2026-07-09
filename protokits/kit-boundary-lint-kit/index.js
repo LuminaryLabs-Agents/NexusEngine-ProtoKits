@@ -34,14 +34,14 @@ function scanSource(path, source, rules = defaultRules, options = {}) {
   return { ok: findings.length === 0, findingCount: findings.length, findings };
 }
 
-export function createKitBoundaryLintKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createKitBoundaryLintKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const KitBoundaryLintState = resource(options.resourceName ?? "kitBoundaryLint.state");
   const TextScanned = event("kitBoundaryLint.textScanned");
   const ManifestScanned = event("kitBoundaryLint.manifestScanned");
   const KitBoundaryLintReset = event("kitBoundaryLint.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "kit-boundary-lint-kit",
     resources: { KitBoundaryLintState },
     events: { TextScanned, ManifestScanned, KitBoundaryLintReset },
@@ -67,7 +67,7 @@ export function createKitBoundaryLintKit(nexusRealtime = {}, options = {}) {
         scanManifest(manifest = {}) {
           const warnings = [];
           if (manifest.ownsLoop && !manifest.metadata?.loopContract) warnings.push({ ruleId: "loop-contract", message: "Loop-owning kits need explicit loop lifecycle metadata." });
-          if (manifest.extendsBase && !String(manifest.extendsBase).endsWith("Kit")) warnings.push({ ruleId: "extends-base", message: "extendsBase should name a NexusRealtime kit contract." });
+          if (manifest.extendsBase && !String(manifest.extendsBase).endsWith("Kit")) warnings.push({ ruleId: "extends-base", message: "extendsBase should name a NexusEngine kit contract." });
           const report = { id: `boundary-manifest-${state().reports.length + 1}`, path: manifest.sourcePath ?? manifest.id ?? "manifest", ok: warnings.length === 0, findingCount: warnings.length, findings: warnings };
           return record(report, ManifestScanned);
         },

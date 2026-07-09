@@ -22,12 +22,12 @@ export function generateCloudDescriptors(position = {}, state = createProcedural
   return items;
 }
 
-export function createProceduralCloudLayerKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createProceduralCloudLayerKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const State = resource(options.resourceName ?? "proceduralCloudLayer.state");
   const Updated = event("proceduralCloudLayer.updated");
   const initial = () => createProceduralCloudLayerState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, { id: options.id ?? "procedural-cloud-layer-kit", resources: { State }, events: { Updated }, requires: ["weather:wind-field"], provides: ["sky:cloud-layers", "cloud:layer-descriptors", "render:cloud-descriptors"], initWorld({ world }) { ensureResource(world, State, initial); }, install({ engine, world }) { const state = () => ensureResource(world, State, initial); const api = { getState: state, generateAround(position = {}) { const next = { ...state(), descriptors: generateCloudDescriptors(position, state()) }; world.setResource(State, next); world.emit?.(Updated, { state: clone(next) }); return clone(next); }, getDescriptors(context = {}) { const d = state().descriptors.length ? state().descriptors : generateCloudDescriptors(context.position ?? {}, state()); return d.map((cloud) => ({ ...clone(cloud), drift: engine.windResponse?.cloud?.(cloud, context) ?? { dx: 0, dz: 0, swell: 1 } })); }, snapshot: () => clone(state()) }; engine.proceduralCloudLayer = api; engine.n ??= {}; engine.n.proceduralCloudLayer = api; }, metadata: { version: PROCEDURAL_CLOUD_LAYER_KIT_VERSION, purpose: "Renderer-agnostic procedural cloud layer descriptors." } });
+  return defineInjectedRuntimeKit(nexusEngine, { id: options.id ?? "procedural-cloud-layer-kit", resources: { State }, events: { Updated }, requires: ["weather:wind-field"], provides: ["sky:cloud-layers", "cloud:layer-descriptors", "render:cloud-descriptors"], initWorld({ world }) { ensureResource(world, State, initial); }, install({ engine, world }) { const state = () => ensureResource(world, State, initial); const api = { getState: state, generateAround(position = {}) { const next = { ...state(), descriptors: generateCloudDescriptors(position, state()) }; world.setResource(State, next); world.emit?.(Updated, { state: clone(next) }); return clone(next); }, getDescriptors(context = {}) { const d = state().descriptors.length ? state().descriptors : generateCloudDescriptors(context.position ?? {}, state()); return d.map((cloud) => ({ ...clone(cloud), drift: engine.windResponse?.cloud?.(cloud, context) ?? { dx: 0, dz: 0, swell: 1 } })); }, snapshot: () => clone(state()) }; engine.proceduralCloudLayer = api; engine.n ??= {}; engine.n.proceduralCloudLayer = api; }, metadata: { version: PROCEDURAL_CLOUD_LAYER_KIT_VERSION, purpose: "Renderer-agnostic procedural cloud layer descriptors." } });
 }
 
 export default createProceduralCloudLayerKit;

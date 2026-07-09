@@ -136,8 +136,8 @@ function createPacingSystem(definitions, options = {}) {
   };
 }
 
-export function createRacePacingKit(nexusRealtime = {}, options = {}) {
-  const definitions = createArcadeRaceDefinitions(nexusRealtime, options);
+export function createRacePacingKit(nexusEngine = {}, options = {}) {
+  const definitions = createArcadeRaceDefinitions(nexusEngine, options);
   const { components, resources, events } = definitions;
 
   const bindings = {
@@ -155,7 +155,7 @@ export function createRacePacingKit(nexusRealtime = {}, options = {}) {
     }
   };
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: "race-pacing-kit",
     components: {
       Racer: components.Racer,
@@ -192,7 +192,7 @@ export function createRacePacingKit(nexusRealtime = {}, options = {}) {
       version: RACE_PACING_KIT_VERSION,
       coreVersion: ARCADE_RACE_CORE_VERSION,
       purpose: "Pack pressure, near-misses, comeback pressure, AI backing off, late-round intensity, and close-finish tuning.",
-      usesNexusRealtimeKits: ["runtime-kit", "surfaces"]
+      usesNexusEngineKits: ["runtime-kit", "surfaces"]
     }
   });
 }

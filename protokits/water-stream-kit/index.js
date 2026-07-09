@@ -31,8 +31,8 @@ function createInitial(config = {}) {
   return { focus, activeTiles, loadedTileIds: activeTiles.map((tile) => tile.id), budget: { maxTiles: toFluidNumber(config.maxTiles, 25), tileSize: toFluidNumber(config.tileSize, 32), radius: toFluidNumber(config.radius, 2) } };
 }
 
-export function createWaterStreamKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createWaterStreamKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: WATER_STREAM_KIT_VERSION,
     factoryName: "createWaterStreamKit",
     kitId: "water-stream-kit",

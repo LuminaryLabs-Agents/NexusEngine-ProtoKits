@@ -60,13 +60,13 @@ export function createGroundContactService(options = {}) {
   });
 }
 
-export function createGroundContactKit(nexusRealtime = {}, options = {}) {
+export function createGroundContactKit(nexusEngine = {}, options = {}) {
   const service = createGroundContactService(options);
   const api = Object.freeze({ id: options.id ?? "ground-contact-kit", version: GROUND_CONTACT_KIT_VERSION, ...service });
   return Object.freeze({
     ...api,
     createRuntimeKit(runtimeOptions = {}) {
-      return defineInjectedRuntimeKit(nexusRealtime, {
+      return defineInjectedRuntimeKit(nexusEngine, {
         id: runtimeOptions.id ?? api.id,
         provides: runtimeOptions.provides ?? ["domain:ground-contact", "service:ground-seating", "service:slope-filter"],
         bindings: { groundContactKit: api },

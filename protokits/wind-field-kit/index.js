@@ -29,12 +29,12 @@ export function sampleWindField(x = 0, y = 0, z = 0, time = 0, state = createWin
   return { direction, base: state.baseStrength, slow, gust, ripple: ripple * state.rippleScale, strength, phase: time * 1.4 + x * 0.035 + z * 0.027 };
 }
 
-export function createWindFieldKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createWindFieldKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const WindFieldState = defs.resource(options.resourceName ?? "windField.state");
   const WindFieldUpdated = defs.event("windField.updated");
   const initial = () => createWindFieldState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "wind-field-kit",
     resources: { WindFieldState },
     events: { WindFieldUpdated },

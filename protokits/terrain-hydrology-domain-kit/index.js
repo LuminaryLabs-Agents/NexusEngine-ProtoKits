@@ -65,8 +65,8 @@ export function sampleHydrology(x = 0, z = 0, options = {}) {
   };
 }
 
-export function createTerrainHydrologyDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createTerrainHydrologyDomainKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const TerrainHydrologyState = resource(options.resourceName ?? "terrainHydrology.state");
   const TerrainHydrologySampled = event("terrainHydrology.sampled");
   const initial = () => ({
@@ -75,7 +75,7 @@ export function createTerrainHydrologyDomainKit(nexusRealtime = {}, options = {}
     config: { ...DEFAULT_TERRAIN_HYDROLOGY_CONFIG, ...(options.hydrology ?? options.config ?? options) }
   });
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "terrain-hydrology-domain-kit",
     resources: { TerrainHydrologyState },
     events: { TerrainHydrologySampled },

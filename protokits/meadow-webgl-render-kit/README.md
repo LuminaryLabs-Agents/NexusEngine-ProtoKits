@@ -38,7 +38,7 @@ The renderer synthesizes a terrain surface from the render plan when one is not 
 ## Usage
 
 ```js
-import { createMeadowWebglRenderKit } from "@luminarylabs/nexusrealtime-protokits/meadow-webgl-render-kit";
+import { createMeadowWebglRenderKit } from "@luminarylabs/nexusengine-protokits/meadow-webgl-render-kit";
 
 const renderer = createMeadowWebglRenderKit({ canvas });
 renderer.render(meadow.getRenderPlan({ time: performance.now() / 1000 }));

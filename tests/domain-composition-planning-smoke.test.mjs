@@ -1,13 +1,13 @@
-import { assert, createMockNexusRealtime, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
+import { assert, createMockNexusEngine, createSmokeWorld } from "./aaa-domain-spine-smoke-harness.mjs";
 import { createCapabilityGraphDomainKit } from "../protokits/capability-graph-domain-kit/index.js";
 import { createCompositionPlanningDomainKit } from "../protokits/composition-planning-domain-kit/index.js";
 
-const NexusRealtime = createMockNexusRealtime();
+const NexusEngine = createMockNexusEngine();
 const world = createSmokeWorld();
 const engine = {};
 const kits = [
-  createCapabilityGraphDomainKit(NexusRealtime),
-  createCompositionPlanningDomainKit(NexusRealtime)
+  createCapabilityGraphDomainKit(NexusEngine),
+  createCompositionPlanningDomainKit(NexusEngine)
 ];
 
 for (const kit of kits) kit.initWorld?.({ world, engine });

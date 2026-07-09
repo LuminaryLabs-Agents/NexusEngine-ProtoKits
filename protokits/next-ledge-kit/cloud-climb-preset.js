@@ -21,7 +21,7 @@ function routeObjectsFromLevel(level = {}) {
   );
 }
 
-export function createNextLedgeCloudClimbKits(NexusRealtime = {}, options = {}) {
+export function createNextLedgeCloudClimbKits(NexusEngine = {}, options = {}) {
   const level = options.level ?? createDefaultNextLedgeLevel();
   const shared = {
     ...options,
@@ -36,28 +36,28 @@ export function createNextLedgeCloudClimbKits(NexusRealtime = {}, options = {}) 
     palettes: options.palettes ?? level.palettes ?? []
   };
   return [
-    createContentPaletteKit(NexusRealtime, shared),
-    createLayeredObjectKit(NexusRealtime, shared),
-    createVerticalClimbCore(NexusRealtime, shared),
-    createLedgeRouteKit(NexusRealtime, shared),
-    createSimpleSwingKit(NexusRealtime, shared),
-    createEndlessAscentKit(NexusRealtime, shared),
-    createCloudZoneKit(NexusRealtime, shared),
-    createClimbInputKit(NexusRealtime, shared),
-    createClimbRiskKit(NexusRealtime, shared),
-    createClimbCameraKit(NexusRealtime, shared),
-    createDiegeticFeedbackKit(NexusRealtime, { ...shared, overlayUi: options.overlayUi ?? false }),
-    createNextLedgeKit(NexusRealtime, shared)
+    createContentPaletteKit(NexusEngine, shared),
+    createLayeredObjectKit(NexusEngine, shared),
+    createVerticalClimbCore(NexusEngine, shared),
+    createLedgeRouteKit(NexusEngine, shared),
+    createSimpleSwingKit(NexusEngine, shared),
+    createEndlessAscentKit(NexusEngine, shared),
+    createCloudZoneKit(NexusEngine, shared),
+    createClimbInputKit(NexusEngine, shared),
+    createClimbRiskKit(NexusEngine, shared),
+    createClimbCameraKit(NexusEngine, shared),
+    createDiegeticFeedbackKit(NexusEngine, { ...shared, overlayUi: options.overlayUi ?? false }),
+    createNextLedgeKit(NexusEngine, shared)
   ];
 }
 
-export function createNextLedgeCloudClimb(NexusRealtime = {}, options = {}) {
-  if (typeof NexusRealtime.createRealtimeGame !== "function") {
-    throw new TypeError("createNextLedgeCloudClimb requires NexusRealtime.createRealtimeGame.");
+export function createNextLedgeCloudClimb(NexusEngine = {}, options = {}) {
+  if (typeof NexusEngine.createRealtimeGame !== "function") {
+    throw new TypeError("createNextLedgeCloudClimb requires NexusEngine.createRealtimeGame.");
   }
-  const game = NexusRealtime.createRealtimeGame({
+  const game = NexusEngine.createRealtimeGame({
     ...(options.engineOptions ?? {}),
-    kits: createNextLedgeCloudClimbKits(NexusRealtime, options)
+    kits: createNextLedgeCloudClimbKits(NexusEngine, options)
   });
   game.endlessAscent?.materializeExisting?.();
   return game;

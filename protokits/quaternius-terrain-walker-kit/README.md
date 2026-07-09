@@ -2,7 +2,7 @@
 
 `quaternius-terrain-walker-kit` is a composite ProtoKit packet for proving a Quaternius-friendly humanoid character can load semantic animation descriptors, walk over terrain, publish third-person camera descriptors, and stay renderer-agnostic.
 
-This kit follows the NexusRealtime / ProtoKits rule that reusable domain behavior stays in kits while DOM, Canvas, Three.js, GLTFLoader, pointer-lock, and visual debugging remain in host routes or adapter bridges.
+This kit follows the NexusEngine / ProtoKits rule that reusable domain behavior stays in kits while DOM, Canvas, Three.js, GLTFLoader, pointer-lock, and visual debugging remain in host routes or adapter bridges.
 
 ## Domain
 
@@ -33,14 +33,14 @@ The kit does not download or hotlink those assets. It defines the reusable runti
 ## Exported composite APIs
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
 import {
   createQuaterniusTerrainWalkerKitSuite,
   createQuaterniusTerrainWalkerKit
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/quaternius-terrain-walker-kit/index.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/quaternius-terrain-walker-kit/index.js";
 
-const engine = NexusRealtime.createRealtimeGame({
-  kits: createQuaterniusTerrainWalkerKitSuite(NexusRealtime)
+const engine = NexusEngine.createRealtimeGame({
+  kits: createQuaterniusTerrainWalkerKitSuite(NexusEngine)
 });
 
 engine.n.quaterniusTerrainWalker.registerSource({

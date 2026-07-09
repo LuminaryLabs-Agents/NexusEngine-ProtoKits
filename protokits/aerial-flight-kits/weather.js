@@ -33,9 +33,9 @@ export const ATMOSPHERIC_WEATHER_KIT_DEFINITION = Object.freeze({
   purpose: 'Renderer-neutral aerial weather descriptor for wind, cloud layers, fog, haze, and transition state.'
 });
 
-export function createAtmosphericWeatherKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createAtmosphericWeatherKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: config.kitId ?? ATMOSPHERIC_WEATHER_KIT_DEFINITION.id,
     provides: ATMOSPHERIC_WEATHER_KIT_DEFINITION.provides,
     requires: ATMOSPHERIC_WEATHER_KIT_DEFINITION.requires,
@@ -115,9 +115,9 @@ export const VOLUMETRIC_LIGHTING_KIT_DEFINITION = Object.freeze({
   purpose: 'Renderer-neutral sun-lit fog, aerial perspective, and god-ray descriptor service.'
 });
 
-export function createVolumetricLightingKit(NexusRealtime, config = {}) {
-  const definitions = createDefinitions(NexusRealtime);
-  return makeRuntimeKit(NexusRealtime, {
+export function createVolumetricLightingKit(NexusEngine, config = {}) {
+  const definitions = createDefinitions(NexusEngine);
+  return makeRuntimeKit(NexusEngine, {
     id: config.kitId ?? VOLUMETRIC_LIGHTING_KIT_DEFINITION.id,
     provides: VOLUMETRIC_LIGHTING_KIT_DEFINITION.provides,
     requires: VOLUMETRIC_LIGHTING_KIT_DEFINITION.requires,

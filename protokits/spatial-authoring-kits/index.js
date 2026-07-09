@@ -17,10 +17,10 @@ const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 const clockFrame = (world) => toNumber(world?.__nexusClock?.frame, 0);
 
-export function requireNexus(NexusRealtime, name = "hand authoring dsk") {
+export function requireNexus(NexusEngine, name = "hand authoring dsk") {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`${name} requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`${name} requires NexusEngine.${key}.`);
     }
   }
 }
@@ -128,9 +128,9 @@ export const SPATIAL_AUTHORING_CONTRACTS = Object.freeze({
   rawRuntimeObjectsForbidden: ["XrSession", "XrSpace", "XrSwapchain", "XRSession", "XRFrame", "XRInputSource", "HTMLCanvasElement", "THREE.Object3D"]
 });
 
-function defineAtomicKit(NexusRealtime, definition, config, spec) {
-  requireNexus(NexusRealtime, definition.id);
-  return NexusRealtime.defineRuntimeKit({
+function defineAtomicKit(NexusEngine, definition, config, spec) {
+  requireNexus(NexusEngine, definition.id);
+  return NexusEngine.defineRuntimeKit({
     id: config.kitId ?? definition.id,
     requires: definition.requires,
     provides: definition.provides,
@@ -144,10 +144,10 @@ function defineAtomicKit(NexusRealtime, definition, config, spec) {
   });
 }
 
-function createHandAdapterDsk(NexusRealtime, definition, config = {}) {
-  const State = NexusRealtime.defineResource(`${definition.id}.state`);
-  const Input = NexusRealtime.defineEvent(`${definition.id}.input`);
-  const Normalized = NexusRealtime.defineEvent(`${definition.id}.normalized`);
+function createHandAdapterDsk(NexusEngine, definition, config = {}) {
+  const State = NexusEngine.defineResource(`${definition.id}.state`);
+  const Input = NexusEngine.defineEvent(`${definition.id}.input`);
+  const Normalized = NexusEngine.defineEvent(`${definition.id}.normalized`);
   const createInitialState = () => ({
     version: SPATIAL_AUTHORING_KITS_VERSION,
     provider: definition.id.includes("webxr") ? "webxr" : "openxr",
@@ -180,7 +180,7 @@ function createHandAdapterDsk(NexusRealtime, definition, config = {}) {
     }
     world.setResource(State, state);
   }
-  return defineAtomicKit(NexusRealtime, definition, config, {
+  return defineAtomicKit(NexusEngine, definition, config, {
     resources: { State },
     events: { Input, Normalized },
     systems: [{ phase: "input", name: `${definition.engineKey}System`, system }],
@@ -196,15 +196,15 @@ function createHandAdapterDsk(NexusRealtime, definition, config = {}) {
   });
 }
 
-export function createWebXrHandAdapterDsk(NexusRealtime, config = {}) { return createHandAdapterDsk(NexusRealtime, WEBXR_HAND_ADAPTER_DSK_DEFINITION, config); }
-export function createOpenXrHandAdapterDsk(NexusRealtime, config = {}) { return createHandAdapterDsk(NexusRealtime, OPENXR_HAND_ADAPTER_DSK_DEFINITION, config); }
+export function createWebXrHandAdapterDsk(NexusEngine, config = {}) { return createHandAdapterDsk(NexusEngine, WEBXR_HAND_ADAPTER_DSK_DEFINITION, config); }
+export function createOpenXrHandAdapterDsk(NexusEngine, config = {}) { return createHandAdapterDsk(NexusEngine, OPENXR_HAND_ADAPTER_DSK_DEFINITION, config); }
 export const createWebXRHandAdapterDsk = createWebXrHandAdapterDsk;
 export const createOpenXRHandAdapterDsk = createOpenXrHandAdapterDsk;
 
-export function createHandGestureDsk(NexusRealtime, config = {}) {
-  const State = NexusRealtime.defineResource("handGesture.state");
-  const Command = NexusRealtime.defineEvent("handGesture.command");
-  const Recognized = NexusRealtime.defineEvent("handGesture.recognized");
+export function createHandGestureDsk(NexusEngine, config = {}) {
+  const State = NexusEngine.defineResource("handGesture.state");
+  const Command = NexusEngine.defineEvent("handGesture.command");
+  const Recognized = NexusEngine.defineEvent("handGesture.recognized");
   const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, active: {}, recent: [], lastGesture: null });
   function system(world) {
     let state = world.getResource(State) ?? createInitialState();
@@ -215,7 +215,7 @@ export function createHandGestureDsk(NexusRealtime, config = {}) {
     }
     world.setResource(State, state);
   }
-  return defineAtomicKit(NexusRealtime, HAND_GESTURE_DSK_DEFINITION, config, {
+  return defineAtomicKit(NexusEngine, HAND_GESTURE_DSK_DEFINITION, config, {
     resources: { State }, events: { Command, Recognized }, systems: [{ phase: "input", name: "handGestureDskSystem", system }],
     initWorld({ world }) { world.setResource(State, createInitialState()); },
     install({ engine, world }) { engine.handGestures = { command(payload = {}) { world.emit(Command, payload); return world.getResource(State); }, getState() { return world.getResource(State); } }; },
@@ -223,12 +223,12 @@ export function createHandGestureDsk(NexusRealtime, config = {}) {
   });
 }
 
-export function createSpatialSceneGraphDsk(NexusRealtime, config = {}) {
-  const State = NexusRealtime.defineResource("spatialSceneGraph.state");
-  const Create = NexusRealtime.defineEvent("spatialScene.object.create");
-  const Update = NexusRealtime.defineEvent("spatialScene.object.update");
-  const Patch = NexusRealtime.defineEvent("spatialScene.patch.apply");
-  const Applied = NexusRealtime.defineEvent("spatialScene.patch.applied");
+export function createSpatialSceneGraphDsk(NexusEngine, config = {}) {
+  const State = NexusEngine.defineResource("spatialSceneGraph.state");
+  const Create = NexusEngine.defineEvent("spatialScene.object.create");
+  const Update = NexusEngine.defineEvent("spatialScene.object.update");
+  const Patch = NexusEngine.defineEvent("spatialScene.patch.apply");
+  const Applied = NexusEngine.defineEvent("spatialScene.patch.applied");
   const createInitialState = () => {
     const objects = {};
     for (const [index, object] of asArray(config.objects).entries()) {
@@ -259,7 +259,7 @@ export function createSpatialSceneGraphDsk(NexusRealtime, config = {}) {
     if (state.lastPatchId) world.emit(Applied, { patchId: state.lastPatchId, dirtyObjectIds: state.dirtyObjectIds });
     world.setResource(State, state);
   }
-  return defineAtomicKit(NexusRealtime, SPATIAL_SCENE_GRAPH_DSK_DEFINITION, config, {
+  return defineAtomicKit(NexusEngine, SPATIAL_SCENE_GRAPH_DSK_DEFINITION, config, {
     resources: { State }, events: { Create, Update, Patch, Applied }, systems: [{ phase: "simulate", name: "spatialSceneGraphDskSystem", system }],
     initWorld({ world }) { world.setResource(State, createInitialState()); },
     install({ engine, world }) { engine.spatialScene = { createObject(object) { world.emit(Create, { object }); return world.getResource(State); }, updateObject(objectId, partial) { world.emit(Update, { objectId, partial }); return world.getResource(State); }, applyPatch(patch) { world.emit(Patch, patch); return world.getResource(State); }, getObject(id) { return world.getResource(State)?.objects?.[id] ?? null; }, getState() { return world.getResource(State); } }; },
@@ -267,11 +267,11 @@ export function createSpatialSceneGraphDsk(NexusRealtime, config = {}) {
   });
 }
 
-export function createSelectionDsk(NexusRealtime, config = {}) {
-  const State = NexusRealtime.defineResource("selection.state");
-  const Select = NexusRealtime.defineEvent("selection.pointSelect");
-  const Clear = NexusRealtime.defineEvent("selection.clear");
-  const Changed = NexusRealtime.defineEvent("selection.changed");
+export function createSelectionDsk(NexusEngine, config = {}) {
+  const State = NexusEngine.defineResource("selection.state");
+  const Select = NexusEngine.defineEvent("selection.pointSelect");
+  const Clear = NexusEngine.defineEvent("selection.clear");
+  const Changed = NexusEngine.defineEvent("selection.changed");
   const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, selectedObjectIds: [], hoveredObjectId: null, framedObjectIds: [], confidence: 0, lastReason: "initialized" });
   function system(world) {
     let state = world.getResource(State) ?? createInitialState();
@@ -287,7 +287,7 @@ export function createSelectionDsk(NexusRealtime, config = {}) {
     }
     world.setResource(State, state);
   }
-  return defineAtomicKit(NexusRealtime, SELECTION_DSK_DEFINITION, config, {
+  return defineAtomicKit(NexusEngine, SELECTION_DSK_DEFINITION, config, {
     resources: { State }, events: { Select, Clear, Changed }, systems: [{ phase: "simulate", name: "selectionDskSystem", system }],
     initWorld({ world }) { world.setResource(State, createInitialState()); },
     install({ engine, world }) { engine.selection = { pointSelect(payload = {}) { world.emit(Select, payload); return world.getResource(State); }, clear(payload = {}) { world.emit(Clear, payload); return world.getResource(State); }, getState() { return world.getResource(State); } }; },
@@ -295,10 +295,10 @@ export function createSelectionDsk(NexusRealtime, config = {}) {
   });
 }
 
-export function createTransformDsk(NexusRealtime, config = {}) {
-  const State = NexusRealtime.defineResource("transform.state");
-  const Move = NexusRealtime.defineEvent("transform.move");
-  const Resize = NexusRealtime.defineEvent("transform.resize");
+export function createTransformDsk(NexusEngine, config = {}) {
+  const State = NexusEngine.defineResource("transform.state");
+  const Move = NexusEngine.defineEvent("transform.move");
+  const Resize = NexusEngine.defineEvent("transform.resize");
   const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, lastPatch: null });
   const targetIds = (world, value) => asArray(value).length ? asArray(value).map(String) : (world.getResource({ name: "selection.state" })?.selectedObjectIds ?? []);
   function system(world) {
@@ -320,7 +320,7 @@ export function createTransformDsk(NexusRealtime, config = {}) {
     }
     world.setResource(State, state);
   }
-  return defineAtomicKit(NexusRealtime, TRANSFORM_DSK_DEFINITION, config, {
+  return defineAtomicKit(NexusEngine, TRANSFORM_DSK_DEFINITION, config, {
     resources: { State }, events: { Move, Resize }, systems: [{ phase: "simulate", name: "transformDskSystem", system }],
     initWorld({ world }) { world.setResource(State, createInitialState()); },
     install({ engine, world }) { engine.transforms = { move(targetIds, position) { world.emit(Move, { targetIds, position }); return world.getResource(State); }, resize(targetIds, value) { const payload = typeof value === "number" ? { scalar: value } : { scale: value }; world.emit(Resize, { targetIds, ...payload }); return world.getResource(State); }, getState() { return world.getResource(State); } }; },
@@ -328,9 +328,9 @@ export function createTransformDsk(NexusRealtime, config = {}) {
   });
 }
 
-export function createWidgetDsk(NexusRealtime, config = {}) {
-  const State = NexusRealtime.defineResource("widget.state");
-  const Create = NexusRealtime.defineEvent("widget.create");
+export function createWidgetDsk(NexusEngine, config = {}) {
+  const State = NexusEngine.defineResource("widget.state");
+  const Create = NexusEngine.defineEvent("widget.create");
   const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, types: ["panel", "note", "timer", "button"], instances: {}, lastCreatedObjectId: null });
   function system(world) {
     let state = world.getResource(State) ?? createInitialState();
@@ -343,7 +343,7 @@ export function createWidgetDsk(NexusRealtime, config = {}) {
     }
     world.setResource(State, state);
   }
-  return defineAtomicKit(NexusRealtime, WIDGET_DSK_DEFINITION, config, {
+  return defineAtomicKit(NexusEngine, WIDGET_DSK_DEFINITION, config, {
     resources: { State }, events: { Create }, systems: [{ phase: "simulate", name: "widgetDskSystem", system }],
     initWorld({ world }) { world.setResource(State, createInitialState()); },
     install({ engine, world }) { engine.widgets = { create(type, props = {}, transform = {}) { world.emit(Create, { type, props, transform }); return world.getResource(State); }, getState() { return world.getResource(State); } }; },
@@ -351,10 +351,10 @@ export function createWidgetDsk(NexusRealtime, config = {}) {
   });
 }
 
-export function createInteractionDsk(NexusRealtime, config = {}) {
-  const State = NexusRealtime.defineResource("interaction.state");
-  const Request = NexusRealtime.defineEvent("interaction.request");
-  const Completed = NexusRealtime.defineEvent("interaction.completed");
+export function createInteractionDsk(NexusEngine, config = {}) {
+  const State = NexusEngine.defineResource("interaction.state");
+  const Request = NexusEngine.defineEvent("interaction.request");
+  const Completed = NexusEngine.defineEvent("interaction.completed");
   const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, verbs: ["press", "toggle", "open", "close", "start", "pause", "reset", "inspect"], history: [], lastInteraction: null });
   function system(world) {
     let state = world.getResource(State) ?? createInitialState();
@@ -365,7 +365,7 @@ export function createInteractionDsk(NexusRealtime, config = {}) {
     }
     world.setResource(State, state);
   }
-  return defineAtomicKit(NexusRealtime, INTERACTION_DSK_DEFINITION, config, {
+  return defineAtomicKit(NexusEngine, INTERACTION_DSK_DEFINITION, config, {
     resources: { State }, events: { Request, Completed }, systems: [{ phase: "simulate", name: "interactionDskSystem", system }],
     initWorld({ world }) { world.setResource(State, createInitialState()); },
     install({ engine, world }) { engine.interactions = { request(payload = {}) { world.emit(Request, payload); return world.getResource(State); }, press(targetId, actorId = "user") { world.emit(Request, { targetId, actorId, verb: "press" }); return world.getResource(State); }, getState() { return world.getResource(State); } }; },
@@ -373,9 +373,9 @@ export function createInteractionDsk(NexusRealtime, config = {}) {
   });
 }
 
-export function createPersistenceDsk(NexusRealtime, config = {}) {
-  const State = NexusRealtime.defineResource("persistence.state");
-  const Capture = NexusRealtime.defineEvent("persistence.capture");
+export function createPersistenceDsk(NexusEngine, config = {}) {
+  const State = NexusEngine.defineResource("persistence.state");
+  const Capture = NexusEngine.defineEvent("persistence.capture");
   const createInitialState = () => ({ version: SPATIAL_AUTHORING_KITS_VERSION, snapshots: {}, currentSnapshotId: null, lastSerialized: null });
   function system(world) {
     let state = world.getResource(State) ?? createInitialState();
@@ -386,7 +386,7 @@ export function createPersistenceDsk(NexusRealtime, config = {}) {
     }
     world.setResource(State, state);
   }
-  return defineAtomicKit(NexusRealtime, PERSISTENCE_DSK_DEFINITION, config, {
+  return defineAtomicKit(NexusEngine, PERSISTENCE_DSK_DEFINITION, config, {
     resources: { State }, events: { Capture }, systems: [{ phase: "post", name: "persistenceDskSystem", system }],
     initWorld({ world }) { world.setResource(State, createInitialState()); },
     install({ engine, world }) { engine.persistence = { capture(label = "snapshot") { world.emit(Capture, { label }); return world.getResource(State); }, serialize() { return world.getResource(State)?.lastSerialized ?? JSON.stringify(world.getResource(State)); }, getState() { return world.getResource(State); } }; },
@@ -394,18 +394,18 @@ export function createPersistenceDsk(NexusRealtime, config = {}) {
   });
 }
 
-export function createHandAuthoringDsks(NexusRealtime, config = {}) {
+export function createHandAuthoringDsks(NexusEngine, config = {}) {
   const cfg = config ?? {};
   return [
-    createWebXrHandAdapterDsk(NexusRealtime, cfg.webxrHand ?? {}),
-    createOpenXrHandAdapterDsk(NexusRealtime, cfg.openxrHand ?? {}),
-    createHandGestureDsk(NexusRealtime, cfg.handGestures ?? {}),
-    createSpatialSceneGraphDsk(NexusRealtime, cfg.scene ?? {}),
-    createSelectionDsk(NexusRealtime, cfg.selection ?? {}),
-    createTransformDsk(NexusRealtime, cfg.transform ?? {}),
-    createWidgetDsk(NexusRealtime, cfg.widgets ?? {}),
-    createInteractionDsk(NexusRealtime, cfg.interactions ?? {}),
-    createPersistenceDsk(NexusRealtime, cfg.persistence ?? {})
+    createWebXrHandAdapterDsk(NexusEngine, cfg.webxrHand ?? {}),
+    createOpenXrHandAdapterDsk(NexusEngine, cfg.openxrHand ?? {}),
+    createHandGestureDsk(NexusEngine, cfg.handGestures ?? {}),
+    createSpatialSceneGraphDsk(NexusEngine, cfg.scene ?? {}),
+    createSelectionDsk(NexusEngine, cfg.selection ?? {}),
+    createTransformDsk(NexusEngine, cfg.transform ?? {}),
+    createWidgetDsk(NexusEngine, cfg.widgets ?? {}),
+    createInteractionDsk(NexusEngine, cfg.interactions ?? {}),
+    createPersistenceDsk(NexusEngine, cfg.persistence ?? {})
   ];
 }
 

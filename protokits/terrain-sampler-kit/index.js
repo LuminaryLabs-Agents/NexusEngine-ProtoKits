@@ -35,12 +35,12 @@ export function sampleBiome(x = 0, z = 0, config = {}) {
   return "highland";
 }
 
-export function createTerrainSamplerKit(nexusRealtime = {}, options = {}) {
-  const { resource } = createDefinitionFactory(nexusRealtime);
+export function createTerrainSamplerKit(nexusEngine = {}, options = {}) {
+  const { resource } = createDefinitionFactory(nexusEngine);
   const TerrainSamplerState = resource(options.resourceName ?? "terrainSampler.state");
   const initial = () => ({ version: TERRAIN_SAMPLER_KIT_VERSION, seed: options.seed ?? "terrain", config: { ...(options.terrain ?? options) } });
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "terrain-sampler-kit",
     resources: { TerrainSamplerState },
     provides: ["terrain-sampler", "ground-query"],

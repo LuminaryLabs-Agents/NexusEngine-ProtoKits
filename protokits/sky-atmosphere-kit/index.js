@@ -46,11 +46,11 @@ export function createSkySnapshot(options = {}) {
   };
 }
 
-export function createSkyAtmosphereKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createSkyAtmosphereKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const SkyAtmosphereState = resource(options.resourceName ?? "skyAtmosphere.state");
   const SkyAtmosphereUpdated = event("skyAtmosphere.updated");
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "sky-atmosphere-kit",
     resources: { SkyAtmosphereState },
     events: { SkyAtmosphereUpdated },

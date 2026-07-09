@@ -1,6 +1,6 @@
 # Foliage FPS Domain Stack
 
-This stack moves reusable procedural and Objaverse-derived foliage FPS behavior into ProtoKits while leaving browser rendering in NexusRealtime Experiments.
+This stack moves reusable procedural and Objaverse-derived foliage FPS behavior into ProtoKits while leaving browser rendering in NexusEngine Experiments.
 
 ## Implemented domains
 
@@ -52,4 +52,4 @@ A renderer should draw a real object when `objectResidency.isReady(assetId, lod)
 
 ## Next step
 
-Add `experiments/procedural-foliage-fps/` in NexusRealtime-Experiments, import the composition kit from the ProtoKits CDN, and connect a GLTF loader adapter to object mesh requests.
+Add `experiments/procedural-foliage-fps/` in NexusEngine-Experiments, import the composition kit from the ProtoKits CDN, and connect a GLTF loader adapter to object mesh requests.

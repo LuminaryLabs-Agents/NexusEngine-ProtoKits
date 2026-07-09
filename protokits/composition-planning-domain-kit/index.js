@@ -49,15 +49,15 @@ function providersFor(graph, token) {
   return asList(graph.indexes?.byProvides?.[token]).map((id) => graph.nodes?.[id]).filter(Boolean);
 }
 
-export function createCompositionPlanningDomainKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createCompositionPlanningDomainKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const CompositionPlanningState = resource(options.resourceName ?? "compositionPlanning.state");
   const CompositionRecipeRegistered = event("compositionPlanning.recipeRegistered");
   const CompositionPlanned = event("compositionPlanning.planned");
   const CompositionValidated = event("compositionPlanning.validated");
   const CompositionPlanningReset = event("compositionPlanning.reset");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? options.kitId ?? "composition-planning-domain-kit",
     resources: { CompositionPlanningState },
     events: { CompositionRecipeRegistered, CompositionPlanned, CompositionValidated, CompositionPlanningReset },

@@ -11,7 +11,7 @@ import {
   orchardBiomeDefaults,
   survivalRoundKitEvents as legacySurvivalRoundKitEvents,
   survivalRoundKitResources as legacySurvivalRoundKitResources
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@zombie-orchard-protokits/protokits/zombie-orchard/index.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@zombie-orchard-protokits/protokits/zombie-orchard/index.js";
 
 export const GENERIC_SURVIVAL_DOMAIN_KITS_VERSION = "0.1.0";
 export const GENERIC_GRID_LAYOUT_KIT_VERSION = "0.1.0";
@@ -27,9 +27,9 @@ export const FOUND_GEAR_KIT_VERSION = "0.1.0";
 
 const n = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
-function simpleResourceKit(nexusRealtime = {}, config = {}, shape) {
-  const { defineRuntimeKit, defineResource } = nexusRealtime;
-  if (typeof defineRuntimeKit !== "function" || typeof defineResource !== "function") throw new TypeError(`${shape.id} requires NexusRealtime runtime helpers.`);
+function simpleResourceKit(nexusEngine = {}, config = {}, shape) {
+  const { defineRuntimeKit, defineResource } = nexusEngine;
+  if (typeof defineRuntimeKit !== "function" || typeof defineResource !== "function") throw new TypeError(`${shape.id} requires NexusEngine runtime helpers.`);
   const State = defineResource(shape.resource);
   const initial = () => shape.initial(config);
   return defineRuntimeKit({
@@ -49,8 +49,8 @@ function simpleResourceKit(nexusRealtime = {}, config = {}, shape) {
   });
 }
 
-export function createGenericGridLayoutKit(nexusRealtime = {}, config = {}) {
-  return simpleResourceKit(nexusRealtime, config, {
+export function createGenericGridLayoutKit(nexusEngine = {}, config = {}) {
+  return simpleResourceKit(nexusEngine, config, {
     id: "generic-grid-layout-kit",
     resource: "generic-grid-layout.state",
     exportName: "GridLayoutState",
@@ -69,23 +69,23 @@ export function createGenericGridLayoutKit(nexusRealtime = {}, config = {}) {
   });
 }
 
-export function createGenericPlacementReservationKit(nexusRealtime = {}, config = {}) {
-  return simpleResourceKit(nexusRealtime, config, { id: "generic-placement-reservation-kit", resource: "placement-reservation.state", exportName: "PlacementReservationState", apiName: "placementReservations", version: GENERIC_PLACEMENT_RESERVATION_KIT_VERSION, domain: "layout", provides: ["layout:placement-reservations"], purpose: "Generic reservation descriptors for objects that block placement.", initial: (cfg = {}) => ({ id: cfg.id ?? "placement-reservations", reservations: cfg.reservations ?? [] }) });
+export function createGenericPlacementReservationKit(nexusEngine = {}, config = {}) {
+  return simpleResourceKit(nexusEngine, config, { id: "generic-placement-reservation-kit", resource: "placement-reservation.state", exportName: "PlacementReservationState", apiName: "placementReservations", version: GENERIC_PLACEMENT_RESERVATION_KIT_VERSION, domain: "layout", provides: ["layout:placement-reservations"], purpose: "Generic reservation descriptors for objects that block placement.", initial: (cfg = {}) => ({ id: cfg.id ?? "placement-reservations", reservations: cfg.reservations ?? [] }) });
 }
 
-export function createGenericWalkabilityFieldKit(nexusRealtime = {}, config = {}) {
-  return simpleResourceKit(nexusRealtime, config, { id: "generic-walkability-field-kit", resource: "walkability-field.state", exportName: "WalkabilityFieldState", apiName: "walkabilityField", version: GENERIC_WALKABILITY_FIELD_KIT_VERSION, domain: "navigation", provides: ["navigation:walkability-field"], purpose: "Generic walkability field service hook.", initial: (cfg = {}) => ({ id: cfg.id ?? "walkability-field", cells: [], blockedCells: [], spawnPoints: [], objectiveMarkers: [] }) });
+export function createGenericWalkabilityFieldKit(nexusEngine = {}, config = {}) {
+  return simpleResourceKit(nexusEngine, config, { id: "generic-walkability-field-kit", resource: "walkability-field.state", exportName: "WalkabilityFieldState", apiName: "walkabilityField", version: GENERIC_WALKABILITY_FIELD_KIT_VERSION, domain: "navigation", provides: ["navigation:walkability-field"], purpose: "Generic walkability field service hook.", initial: (cfg = {}) => ({ id: cfg.id ?? "walkability-field", cells: [], blockedCells: [], spawnPoints: [], objectiveMarkers: [] }) });
 }
 
-export function createGenericSpawnLaneKit(nexusRealtime = {}, config = {}) {
-  return simpleResourceKit(nexusRealtime, config, { id: "generic-spawn-lane-kit", resource: "spawn-lane.state", exportName: "SpawnLaneState", apiName: "spawnLanes", version: GENERIC_SPAWN_LANE_KIT_VERSION, domain: "spawn", provides: ["spawn:lanes"], purpose: "Generic spawn lane descriptors.", initial: (cfg = {}) => ({ id: cfg.id ?? "spawn-lanes", lanes: cfg.lanes ?? [] }) });
+export function createGenericSpawnLaneKit(nexusEngine = {}, config = {}) {
+  return simpleResourceKit(nexusEngine, config, { id: "generic-spawn-lane-kit", resource: "spawn-lane.state", exportName: "SpawnLaneState", apiName: "spawnLanes", version: GENERIC_SPAWN_LANE_KIT_VERSION, domain: "spawn", provides: ["spawn:lanes"], purpose: "Generic spawn lane descriptors.", initial: (cfg = {}) => ({ id: cfg.id ?? "spawn-lanes", lanes: cfg.lanes ?? [] }) });
 }
 
-export function createGenericNavigationGridAdapterKit(nexusRealtime = {}, config = {}) {
-  return simpleResourceKit(nexusRealtime, config, { id: "generic-navigation-grid-adapter-kit", resource: "navigation-grid-adapter.snapshot", exportName: "NavigationGridSnapshot", apiName: "navigationGridAdapter", version: GENERIC_NAVIGATION_GRID_ADAPTER_KIT_VERSION, domain: "navigation", provides: ["navigation:grid-snapshot"], purpose: "Generic nav-grid adapter service hook.", initial: (cfg = {}) => ({ id: cfg.id ?? "navigation-grid", cells: [], blockedCells: [], spawnPoints: [], objectiveMarkers: [] }) });
+export function createGenericNavigationGridAdapterKit(nexusEngine = {}, config = {}) {
+  return simpleResourceKit(nexusEngine, config, { id: "generic-navigation-grid-adapter-kit", resource: "navigation-grid-adapter.snapshot", exportName: "NavigationGridSnapshot", apiName: "navigationGridAdapter", version: GENERIC_NAVIGATION_GRID_ADAPTER_KIT_VERSION, domain: "navigation", provides: ["navigation:grid-snapshot"], purpose: "Generic nav-grid adapter service hook.", initial: (cfg = {}) => ({ id: cfg.id ?? "navigation-grid", cells: [], blockedCells: [], spawnPoints: [], objectiveMarkers: [] }) });
 }
 
-export function createGenericRowFieldLayoutKit(nexusRealtime = {}, config = {}) {
+export function createGenericRowFieldLayoutKit(nexusEngine = {}, config = {}) {
   const mapped = {
     ...config,
     targetActiveApples: config.targetActiveApples ?? config.targetActiveResources,
@@ -93,7 +93,7 @@ export function createGenericRowFieldLayoutKit(nexusRealtime = {}, config = {}) 
     hauntingShiftSeconds: config.hauntingShiftSeconds ?? config.hazardShiftSeconds,
     id: config.legacyId ?? config.id ?? "row-field-layout"
   };
-  const base = createLegacyOrchardBiomeKit(nexusRealtime, mapped);
+  const base = createLegacyOrchardBiomeKit(nexusEngine, mapped);
   return {
     ...base,
     id: config.kitId ?? "generic-row-field-layout-kit",
@@ -113,13 +113,13 @@ export function createGenericRowFieldLayoutKit(nexusRealtime = {}, config = {}) 
   };
 }
 
-export function createSurvivalRoundKit(nexusRealtime = {}, config = {}) {
-  const base = createLegacySurvivalRoundKit(nexusRealtime, { ...config, id: config.legacyId ?? config.id ?? "survival-rounds" });
+export function createSurvivalRoundKit(nexusEngine = {}, config = {}) {
+  const base = createLegacySurvivalRoundKit(nexusEngine, { ...config, id: config.legacyId ?? config.id ?? "survival-rounds" });
   return { ...base, id: config.kitId ?? "survival-round-kit", provides: ["survival:rounds"], install(ctx) { base.install?.(ctx); ctx.engine.survivalRounds = ctx.engine.zombieOrchard?.survivalRounds; }, metadata: { version: SURVIVAL_ROUND_KIT_VERSION, domain: "survival", purpose: "Generic survival wave state, spawn budgets, caps, intensity, elite waves, boss waves, and breathing windows." } };
 }
 
-export function createThreatRosterKit(nexusRealtime = {}, config = {}) {
-  const base = createLegacyMonsterRosterKit(nexusRealtime, config);
+export function createThreatRosterKit(nexusEngine = {}, config = {}) {
+  const base = createLegacyMonsterRosterKit(nexusEngine, config);
   return {
     ...base,
     id: config.kitId ?? "threat-roster-kit",
@@ -132,29 +132,29 @@ export function createThreatRosterKit(nexusRealtime = {}, config = {}) {
   };
 }
 
-export function createPressureHordeDirectorKit(nexusRealtime = {}, config = {}) {
-  const base = createLegacyHordeDirectorKit(nexusRealtime, config);
+export function createPressureHordeDirectorKit(nexusEngine = {}, config = {}) {
+  const base = createLegacyHordeDirectorKit(nexusEngine, config);
   return { ...base, id: config.kitId ?? "pressure-horde-director-kit", provides: ["survival:horde-director"], requires: ["survival:rounds", "layout:row-field", "survival:threat-roster", "spawn:lanes"], install(ctx) { base.install?.(ctx); ctx.engine.hordeDirector = ctx.engine.zombieOrchard?.hordeDirector; }, metadata: { version: PRESSURE_HORDE_DIRECTOR_KIT_VERSION, domain: "survival", purpose: "Adaptive survival pressure, offscreen spawn requests, near misses, and fairness backoff." } };
 }
 
-export function createFoundGearKit(nexusRealtime = {}, config = {}) {
+export function createFoundGearKit(nexusEngine = {}, config = {}) {
   const mapped = { ...config, weapons: config.weapons ?? config.gear, pickups: (config.pickups ?? []).map((p) => ({ ...p, weaponId: p.weaponId ?? p.gearId })) };
-  const base = createLegacyFoundWeaponKit(nexusRealtime, mapped);
+  const base = createLegacyFoundWeaponKit(nexusEngine, mapped);
   return { ...base, id: config.kitId ?? "found-gear-kit", resources: { FoundGearState: base.resources?.FoundWeaponState, FoundGearInput: base.resources?.FoundWeaponInput }, events: { GearPickedUp: base.events?.WeaponPickedUp, GearSwapped: base.events?.WeaponSwapped, GearUsed: base.events?.WeaponUsed, GearBroken: base.events?.WeaponBroken, GearDropped: base.events?.WeaponDropped, AmmoChanged: base.events?.AmmoChanged }, provides: ["survival:found-gear"], install(ctx) { base.install?.(ctx); ctx.engine.foundGear = ctx.engine.zombieOrchard?.foundWeapons; }, metadata: { version: FOUND_GEAR_KIT_VERSION, domain: "survival", purpose: "Scavenged gear, ammo, durability, rarity, swapping, replacement, temporary gear, and breakage." } };
 }
 
-export function createGenericSurvivalDomainKits(nexusRealtime = {}, config = {}) {
+export function createGenericSurvivalDomainKits(nexusEngine = {}, config = {}) {
   return [
-    createGenericGridLayoutKit(nexusRealtime, config.gridLayout ?? config.grid ?? {}),
-    createGenericRowFieldLayoutKit(nexusRealtime, config.rowFieldLayout ?? config.rowField ?? {}),
-    createGenericPlacementReservationKit(nexusRealtime, config.placementReservations ?? config.placement ?? {}),
-    createGenericWalkabilityFieldKit(nexusRealtime, config.walkabilityField ?? config.walkability ?? {}),
-    createGenericSpawnLaneKit(nexusRealtime, config.spawnLanes ?? config.spawn ?? {}),
-    createGenericNavigationGridAdapterKit(nexusRealtime, config.navigationGrid ?? config.navigation ?? {}),
-    createSurvivalRoundKit(nexusRealtime, config.survivalRounds ?? config.rounds ?? {}),
-    createThreatRosterKit(nexusRealtime, config.threatRoster ?? config.threats ?? {}),
-    createPressureHordeDirectorKit(nexusRealtime, config.pressureHorde ?? config.horde ?? {}),
-    createFoundGearKit(nexusRealtime, config.foundGear ?? config.gear ?? {})
+    createGenericGridLayoutKit(nexusEngine, config.gridLayout ?? config.grid ?? {}),
+    createGenericRowFieldLayoutKit(nexusEngine, config.rowFieldLayout ?? config.rowField ?? {}),
+    createGenericPlacementReservationKit(nexusEngine, config.placementReservations ?? config.placement ?? {}),
+    createGenericWalkabilityFieldKit(nexusEngine, config.walkabilityField ?? config.walkability ?? {}),
+    createGenericSpawnLaneKit(nexusEngine, config.spawnLanes ?? config.spawn ?? {}),
+    createGenericNavigationGridAdapterKit(nexusEngine, config.navigationGrid ?? config.navigation ?? {}),
+    createSurvivalRoundKit(nexusEngine, config.survivalRounds ?? config.rounds ?? {}),
+    createThreatRosterKit(nexusEngine, config.threatRoster ?? config.threats ?? {}),
+    createPressureHordeDirectorKit(nexusEngine, config.pressureHorde ?? config.horde ?? {}),
+    createFoundGearKit(nexusEngine, config.foundGear ?? config.gear ?? {})
   ];
 }
 

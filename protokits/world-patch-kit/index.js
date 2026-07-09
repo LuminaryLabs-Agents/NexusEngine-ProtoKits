@@ -26,14 +26,14 @@ export function computeVisiblePatchKeys(position = {}, state = {}) {
   return { center: { px: cx, pz: cz }, keys };
 }
 
-export function createWorldPatchKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createWorldPatchKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const WorldPatchState = resource(options.resourceName ?? "worldPatch.state");
   const WorldPatchLoaded = event("worldPatch.loaded");
   const WorldPatchUnloaded = event("worldPatch.unloaded");
   const WorldPatchCenterChanged = event("worldPatch.centerChanged");
 
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "world-patch-kit",
     resources: { WorldPatchState },
     events: { WorldPatchLoaded, WorldPatchUnloaded, WorldPatchCenterChanged },

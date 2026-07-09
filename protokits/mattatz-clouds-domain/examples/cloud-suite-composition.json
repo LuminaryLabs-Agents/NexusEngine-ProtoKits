@@ -2,7 +2,7 @@
   "id": "mattatz-cloud-suite-demo-v1",
   "domain": "mattatz-clouds",
   "purpose": "Example host composition for a small terrain scene with three cloud layers and 1 to 20 drifting cloud descriptors.",
-  "import": "@luminarylabs/nexusrealtime-protokits/mattatz-clouds-domain",
+  "import": "@luminarylabs/nexusengine-protokits/mattatz-clouds-domain",
   "kits": [
     "mattatz-cloud-core-kit",
     "mattatz-cloud-layer-kit",

@@ -204,11 +204,11 @@ export function createIslandFoliageState(options = {}) {
   return { id: options.id ?? "island-foliage-domain", version: ISLAND_FOLIAGE_DOMAIN_VERSION, preset: clone(DENSE_COZY_200M_ISLAND_PRESET), lastGraph: null };
 }
 
-export function createIslandFoliageDomainKit(nexusRealtime = {}, options = {}) {
-  const defs = createDefinitionFactory(nexusRealtime);
+export function createIslandFoliageDomainKit(nexusEngine = {}, options = {}) {
+  const defs = createDefinitionFactory(nexusEngine);
   const State = defs.resource(options.resourceName ?? "islandFoliage.state");
   const initial = () => createIslandFoliageState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.kitId ?? "island-foliage-domain",
     resources: { State },
     provides: ["island:foliage-density", "island:central-grove", "island:path-clearance", "island:foliage-object-placement"],

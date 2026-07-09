@@ -21,7 +21,7 @@ function createMiniRuntime() {
   };
 }
 
-const NexusRealtime = createMiniRuntime();
+const NexusEngine = createMiniRuntime();
 const factories = [
   createGenericDefenseFoundationKit,
   createGenericDefenseAuthoringQaKit,
@@ -39,7 +39,7 @@ const factories = [
 
 assert.equal(GENERIC_DEFENSE_AAA_KITS_VERSION, "0.2.0");
 for (const factory of factories) {
-  const kit = factory(NexusRealtime, {});
+  const kit = factory(NexusEngine, {});
   assert.ok(kit.id, "kit has id");
   assert.ok(Array.isArray(kit.provides), `${kit.id} has provides`);
   assert.equal(typeof kit.install, "function", `${kit.id} has install`);

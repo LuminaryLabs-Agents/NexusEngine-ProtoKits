@@ -1,5 +1,5 @@
 {
-  "name": "@luminarylabs/nexusrealtime-protokits-banded-infinite-terrain-kit",
+  "name": "@luminarylabs/nexusengine-protokits-banded-infinite-terrain-kit",
   "version": "0.1.0",
   "type": "module",
   "main": "index.js",

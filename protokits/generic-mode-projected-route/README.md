@@ -11,9 +11,9 @@ It does not know about climbing, racing, grappling, roads, rivers, tutorials, st
 ```js
 import { createGenericModeProjectedRoute } from "./index.js";
 
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createGenericModeProjectedRoute(NexusRealtime, {
+    createGenericModeProjectedRoute(NexusEngine, {
       routeId: "route-main",
       path: {
         type: "bezier",

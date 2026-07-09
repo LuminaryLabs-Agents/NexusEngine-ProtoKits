@@ -1,6 +1,6 @@
 # DSK Composition Upgrade Plan
 
-This document captures the final composition-first upgrade plan for NexusRealtime ProtoKits.
+This document captures the final composition-first upgrade plan for NexusEngine ProtoKits.
 
 The goal is not to create object-specific kits such as `banana-kit`, `coin-kit`, or `potion-kit`.
 
@@ -758,5 +758,5 @@ Do build:
 ## Final Architecture Sentence
 
 ```txt
-NexusRealtime object proofs should be packet-driven compositions of bounded DSK containers, where each kit owns one replaceable capability and emits stable descriptors consumed by the next kit or by the renderer.
+NexusEngine object proofs should be packet-driven compositions of bounded DSK containers, where each kit owns one replaceable capability and emits stable descriptors consumed by the next kit or by the renderer.
 ```

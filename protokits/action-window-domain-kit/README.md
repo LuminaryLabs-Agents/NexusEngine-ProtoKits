@@ -29,7 +29,7 @@ one-game tutorial timing
 Extends:
 
 ```txt
-NexusRealtime DomainServiceKit shape through defineRuntimeKit
+NexusEngine DomainServiceKit shape through defineRuntimeKit
 ```
 
 Composes:
@@ -60,5 +60,5 @@ restart-reset
 Smoke signature:
 
 ```txt
-NexusRealtime-AAA-domain-spine-batch-01::action-window-domain-kit::2026-06-20
+NexusEngine-AAA-domain-spine-batch-01::action-window-domain-kit::2026-06-20
 ```

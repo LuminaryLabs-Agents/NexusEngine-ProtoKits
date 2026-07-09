@@ -107,16 +107,16 @@ function clone(value) {
   return value == null ? value : JSON.parse(JSON.stringify(value));
 }
 
-function defineResource(NexusRealtime, name) {
-  return typeof NexusRealtime.defineResource === "function" ? NexusRealtime.defineResource(name) : `resource:${name}`;
+function defineResource(NexusEngine, name) {
+  return typeof NexusEngine.defineResource === "function" ? NexusEngine.defineResource(name) : `resource:${name}`;
 }
 
-function defineEvent(NexusRealtime, name) {
-  return typeof NexusRealtime.defineEvent === "function" ? NexusRealtime.defineEvent(name) : `event:${name}`;
+function defineEvent(NexusEngine, name) {
+  return typeof NexusEngine.defineEvent === "function" ? NexusEngine.defineEvent(name) : `event:${name}`;
 }
 
-function runtimeKit(NexusRealtime, config) {
-  return defineInjectedRuntimeKit(NexusRealtime, config);
+function runtimeKit(NexusEngine, config) {
+  return defineInjectedRuntimeKit(NexusEngine, config);
 }
 
 function vec2(value = {}, fallback = {}) {
@@ -344,10 +344,10 @@ export function validateGpuTerrainPlan(plan = {}) {
   };
 }
 
-export function createGpuTerrainPerformanceCircleKit(NexusRealtime = {}, config = {}) {
-  const State = defineResource(NexusRealtime, config.resourceName ?? "gpuTerrainPerformanceCircle.state");
-  const FrameUpdated = defineEvent(NexusRealtime, "gpuTerrainPerformanceCircle.frameUpdated");
-  const PolicyChanged = defineEvent(NexusRealtime, "gpuTerrainPerformanceCircle.policyChanged");
+export function createGpuTerrainPerformanceCircleKit(NexusEngine = {}, config = {}) {
+  const State = defineResource(NexusEngine, config.resourceName ?? "gpuTerrainPerformanceCircle.state");
+  const FrameUpdated = defineEvent(NexusEngine, "gpuTerrainPerformanceCircle.frameUpdated");
+  const PolicyChanged = defineEvent(NexusEngine, "gpuTerrainPerformanceCircle.policyChanged");
 
   function initialState(overrides = {}) {
     const context = {
@@ -402,7 +402,7 @@ export function createGpuTerrainPerformanceCircleKit(NexusRealtime = {}, config 
     world.setResource(State, state);
   }
 
-  return runtimeKit(NexusRealtime, {
+  return runtimeKit(NexusEngine, {
     id: config.kitId ?? "gpu-terrain-performance-circle-kit",
     requires: config.requires ?? [],
     provides: [

@@ -25,12 +25,12 @@ export function createProceduralSkyboxDescriptor(state = createProceduralSkyboxS
   return { version: PROCEDURAL_SKYBOX_KIT_VERSION, timeOfDay, phase: timeDescriptor?.phase ?? "sky", daylight, sunDirection, moonDirection, colors: clone(state.colors), haze: state.haze, starIntensity: state.starIntensity * (1 - daylight), exposure: state.exposure, cloudNoise: clone(state.cloudNoise) };
 }
 
-export function createProceduralSkyboxKit(nexusRealtime = {}, options = {}) {
-  const { resource, event } = createDefinitionFactory(nexusRealtime);
+export function createProceduralSkyboxKit(nexusEngine = {}, options = {}) {
+  const { resource, event } = createDefinitionFactory(nexusEngine);
   const ProceduralSkyboxState = resource(options.resourceName ?? "proceduralSkybox.state");
   const ProceduralSkyboxUpdated = event("proceduralSkybox.updated");
   const initial = () => createProceduralSkyboxState(options);
-  return defineInjectedRuntimeKit(nexusRealtime, {
+  return defineInjectedRuntimeKit(nexusEngine, {
     id: options.id ?? "procedural-skybox-kit",
     resources: { ProceduralSkyboxState },
     events: { ProceduralSkyboxUpdated },

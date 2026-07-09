@@ -40,8 +40,8 @@ function disturbanceAt(state, position = {}) {
   }, 0);
 }
 
-export function createWaterSurfaceKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createWaterSurfaceKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: WATER_SURFACE_KIT_VERSION,
     factoryName: "createWaterSurfaceKit",
     kitId: "water-surface-kit",

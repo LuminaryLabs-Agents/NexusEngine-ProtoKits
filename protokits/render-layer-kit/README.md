@@ -1,6 +1,6 @@
 # Render Layer Kit
 
-`render-layer-kit` is a NexusRealtime ProtoKit for renderer-agnostic visual composition.
+`render-layer-kit` is a NexusEngine ProtoKit for renderer-agnostic visual composition.
 
 It does **not** draw to Canvas, WebGL, or Three.js. It turns scene descriptors, material descriptors, fog definitions, dynamic visual signals, and optional scatter resources into stable render buckets and visual pipeline resources that a renderer host can consume.
 
@@ -26,27 +26,27 @@ import {
   createRenderLayerKit,
   createVisualPipelineKit,
   createFoglineVisualPreset
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/render-layer-kit/index.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/render-layer-kit/index.js";
 ```
 
 ## Install
 
 ```js
-const realismKit = NexusRealtime.createRealismKit({
+const realismKit = NexusEngine.createRealismKit({
   quality: "adaptive",
   preset: createFoglineVisualPreset()
 });
 
-const renderLayerKit = createRenderLayerKit(NexusRealtime, {
-  renderDescriptorResource: NexusRealtime.RenderDescriptorState,
+const renderLayerKit = createRenderLayerKit(NexusEngine, {
+  renderDescriptorResource: NexusEngine.RenderDescriptorState,
   realismSnapshotResource: realismKit.definitions.resources.RealismSnapshot,
   extraObjectResources: [forestKit.resources.ForestPlacementSnapshot],
   preset: createFoglineVisualPreset()
 });
 
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    NexusRealtime.createRenderDescriptorKit(level),
+    NexusEngine.createRenderDescriptorKit(level),
     realismKit,
     forestKit,
     renderLayerKit

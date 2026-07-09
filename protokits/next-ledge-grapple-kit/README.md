@@ -1,6 +1,6 @@
 # Next Ledge Grapple Kit
 
-Experimental NexusRealtime ProtoKit for a vertical grapple-climb game.
+Experimental NexusEngine ProtoKit for a vertical grapple-climb game.
 
 ## Purpose
 
@@ -20,19 +20,19 @@ The kit does **not** own DOM, Canvas, Three.js, Web Audio, keyboard listeners, p
 ## Import
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
 import {
   createNextLedgeGrappleKit,
   createDefaultNextLedgeGrappleLevel
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/next-ledge-grapple-kit/index.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/next-ledge-grapple-kit/index.js";
 ```
 
 ## Install
 
 ```js
 const level = createDefaultNextLedgeGrappleLevel({ seed: "demo" });
-const engine = NexusRealtime.createRealtimeGame({
-  kits: [createNextLedgeGrappleKit(NexusRealtime, { level })]
+const engine = NexusEngine.createRealtimeGame({
+  kits: [createNextLedgeGrappleKit(NexusEngine, { level })]
 });
 ```
 

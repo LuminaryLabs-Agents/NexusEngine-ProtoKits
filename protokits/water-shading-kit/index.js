@@ -23,8 +23,8 @@ function createInitial(config = {}) {
   return { materials, materialsById: Object.fromEntries(materials.map((material) => [material.id, material])), quality: config.quality ?? "medium", post: cloneFluidValue(config.post ?? { underwaterTint: true, shorelineFade: true }) };
 }
 
-export function createWaterShadingKit(NexusRealtime, config = {}) {
-  return createFluidServiceKit(NexusRealtime, {
+export function createWaterShadingKit(NexusEngine, config = {}) {
+  return createFluidServiceKit(NexusEngine, {
     version: WATER_SHADING_KIT_VERSION,
     factoryName: "createWaterShadingKit",
     kitId: "water-shading-kit",

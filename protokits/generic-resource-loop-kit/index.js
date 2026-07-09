@@ -5,10 +5,10 @@ const clone = (value) => value == null ? value : JSON.parse(JSON.stringify(value
 const toNumber = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 const asArray = (value) => Array.isArray(value) ? value : value == null ? [] : [value];
 
-function requireNexus(NexusRealtime) {
+function requireNexus(NexusEngine) {
   for (const key of ["defineRuntimeKit", "defineResource", "defineEvent"]) {
-    if (typeof NexusRealtime?.[key] !== "function") {
-      throw new TypeError(`createGenericResourceLoopKit requires NexusRealtime.${key}.`);
+    if (typeof NexusEngine?.[key] !== "function") {
+      throw new TypeError(`createGenericResourceLoopKit requires NexusEngine.${key}.`);
     }
   }
 }
@@ -124,9 +124,9 @@ function applyValue(resource, nextValue, reason, clamp = true) {
   };
 }
 
-export function createGenericResourceLoopKit(NexusRealtime, config = {}) {
-  requireNexus(NexusRealtime);
-  const { defineRuntimeKit, defineResource, defineEvent } = NexusRealtime;
+export function createGenericResourceLoopKit(NexusEngine, config = {}) {
+  requireNexus(NexusEngine);
+  const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
 
   const ResourceLoopState = defineResource(config.resourceName ?? "genericResourceLoop.state");
   const SpendRequested = defineEvent("genericResource.spendRequested");

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Guided kit authoring is the mainline workflow for creating new NexusRealtime ProtoKits without drifting into one-off game code.
+Guided kit authoring is the mainline workflow for creating new NexusEngine ProtoKits without drifting into one-off game code.
 
 Use this flow with `guided-kit-authoring-kit`, `kit-manifest-domain-kit`, `kit-boundary-lint-kit`, and `promotion-readiness-harness`.
 

@@ -1,6 +1,6 @@
 # Domain Foundation ProtoKits
 
-`protokits/domain-foundation/` provides the first shared domain-kit foundation for high-fidelity NexusRealtime experiments. The kits are runtime-kit compatible factories: they accept a `NexusRealtime` dependency object, define resources/events/systems with injected helpers, declare `requires` / `provides` tokens, install small public engine APIs, and keep reusable logic renderer-independent.
+`protokits/domain-foundation/` provides the first shared domain-kit foundation for high-fidelity NexusEngine experiments. The kits are runtime-kit compatible factories: they accept a `NexusEngine` dependency object, define resources/events/systems with injected helpers, declare `requires` / `provides` tokens, install small public engine APIs, and keep reusable logic renderer-independent.
 
 ## Included factories
 
@@ -26,20 +26,20 @@
 ## Import
 
 ```js
-import * as NexusRealtime from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusRealtime@main/src/index.js";
+import * as NexusEngine from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusEngine@main/src/index.js";
 import {
   createTimedPressureDirectorKit,
   createZoneFieldKit,
   createScanSurveyKit,
   createFoglineSurveyPressureBridgeKit
-} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusRealtime-ProtoKits@main/protokits/domain-kits/index.js";
+} from "https://cdn.jsdelivr.net/gh/LuminaryLabs-Agents/NexusEngine-ProtoKits@main/protokits/domain-kits/index.js";
 
-const engine = NexusRealtime.createRealtimeGame({
+const engine = NexusEngine.createRealtimeGame({
   kits: [
-    createTimedPressureDirectorKit(NexusRealtime),
-    createZoneFieldKit(NexusRealtime),
-    createScanSurveyKit(NexusRealtime),
-    createFoglineSurveyPressureBridgeKit(NexusRealtime)
+    createTimedPressureDirectorKit(NexusEngine),
+    createZoneFieldKit(NexusEngine),
+    createScanSurveyKit(NexusEngine),
+    createFoglineSurveyPressureBridgeKit(NexusEngine)
   ]
 });
 ```
@@ -92,4 +92,4 @@ Use this pattern for experiment-specific bridges: generic kits own reusable stat
 
 ## Promotion notes
 
-These are first-pass ProtoKits. They should remain in `NexusRealtime-ProtoKits` until multiple experiments prove the API surfaces, event names, reset behavior, replay behavior, and token contracts are stable.
+These are first-pass ProtoKits. They should remain in `NexusEngine-ProtoKits` until multiple experiments prove the API surfaces, event names, reset behavior, replay behavior, and token contracts are stable.

@@ -5,10 +5,10 @@ import {
   createNextLedgeGrappleKit
 } from "../index.js";
 
-const NexusRealtime = createMiniNexusRuntime();
+const NexusEngine = createMiniNexusRuntime();
 const level = createDefaultNextLedgeGrappleLevel({ seed: "kit-test", sector: 1 });
-const engine = NexusRealtime.createRealtimeGame({
-  kits: [createNextLedgeGrappleKit(NexusRealtime, { level, seed: level.seed })]
+const engine = NexusEngine.createRealtimeGame({
+  kits: [createNextLedgeGrappleKit(NexusEngine, { level, seed: level.seed })]
 });
 
 let snapshot = engine.nextLedgeGrapple.getSnapshot();
