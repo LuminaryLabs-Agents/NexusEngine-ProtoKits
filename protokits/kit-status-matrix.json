@@ -66,6 +66,17 @@
       "purgeDecision": "Keep utility compatibility behavior, replace runtime/math/random/serialization ownership claims with NexusEngine contracts, and prevent default installation."
     },
     {
+      "id": "generic-seed-kit",
+      "classification": "atomic-dsk",
+      "promotionStatus": "promotion-ready-for-kits",
+      "targetId": "seed-kit",
+      "targetStatus": "official",
+      "currentAction": "Use as the canonical world-seed and bounded named deterministic stream owner under engine.n.seedStream.",
+      "nextLedge": "Promote the validated service as seed-kit while preserving the generic factory and API aliases for compatibility.",
+      "doNotDoNext": "Do not absorb procedural generation, loot policy, encounter policy, content, rendering, persistence transport, networking, or entropy.",
+      "purgeDecision": "Replace the generic catch-all runtime with a native demand-driven DSK composed over NexusEngine seeded-random primitives."
+    },
+    {
       "id": "capability-graph-domain-kit",
       "classification": "atomic-dsk",
       "promotionStatus": "promotion-ready-for-kits",

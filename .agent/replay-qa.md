@@ -23,6 +23,16 @@ Track scenario QA and deterministic replay coverage.
 
 ## Covered scenarios
 
+### 2026-07-09 - Seed stream replay
+
+- Scenario: demand-driven deterministic named streams from one world seed.
+- Kit: `generic-seed-kit`, promoted through `createSeedKit`.
+- Seed: fixed world seeds plus scoped stream IDs.
+- Inputs: next values, ranges, integers, booleans, choices, shuffles, forks, world-seed replacement, reset, snapshot, and load.
+- Expected snapshots: sorted stream IDs with exact scoped seed, draw count, and NexusEngine RNG state.
+- Nondeterminism risks: wall-clock, unseeded random, browser globals, renderer state, persistence transport, and host objects are excluded.
+- Status: 1,000-value parity and 1,000-stream restore pass through real NexusEngine; promotion determinism guard includes the source.
+
 ### 2026-06-23 — Generic promotion replay pack
 
 - Scenario: fixed-tick rendererless replay for generic pressure/resource/action-window/affordance DSK candidates.

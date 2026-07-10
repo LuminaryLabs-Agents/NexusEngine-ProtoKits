@@ -734,6 +734,7 @@ NexusEngine grows by turning repeated gameplay needs into clean domain services,
 
 ## Recent Incubating DSKs
 
+- `generic-seed-kit`: native world-seed and bounded named deterministic stream service under `engine.n.seedStream`, promoted through `createSeedKit` while preserving generic compatibility aliases.
 - `kit-registry-domain-kit`: canonical repository and manifest metadata registry with strict collisions, indexes, search, progress, and snapshots.
 - `capability-graph-domain-kit`: registry-fed requires/provides/composes graph with missing dependencies, cycles, clusters, and deterministic ordering.
 - `composition-planning-domain-kit`: kit/domain/bundle recipe expansion and status-gated install-plan validation without installation side effects.

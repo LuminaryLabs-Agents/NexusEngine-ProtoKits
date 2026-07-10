@@ -1,0 +1,53 @@
+{
+  "id": "generic-seed-kit",
+  "promotionTargetId": "seed-kit",
+  "domain": "seed-stream",
+  "parentDomain": "foundation",
+  "type": "domain-service-kit",
+  "status": "promotion-ready",
+  "scope": "feature-domain",
+  "extendsBase": "nexusengine/foundation/seeded-random",
+  "composes": [],
+  "requires": [],
+  "provides": ["seed:world", "random:seeded", "random:stream"],
+  "resources": [],
+  "events": [],
+  "publicApi": ["createSeedKit", "createGenericSeedKit", "engine.n.seedStream.getWorldSeed", "engine.n.seedStream.setWorldSeed", "engine.n.seedStream.createStream", "engine.n.seedStream.hasStream", "engine.n.seedStream.getStream", "engine.n.seedStream.listStreams", "engine.n.seedStream.deleteStream", "engine.n.seedStream.nextUint32", "engine.n.seedStream.next", "engine.n.seedStream.range", "engine.n.seedStream.int", "engine.n.seedStream.bool", "engine.n.seedStream.choose", "engine.n.seedStream.shuffle", "engine.n.seedStream.fork", "engine.n.seedStream.getState", "engine.n.seedStream.configure", "engine.n.seedStream.command", "engine.n.seedStream.getSnapshot", "engine.n.seedStream.loadSnapshot", "engine.n.seedStream.reset", "engine.genericSeed compatibility alias"],
+  "descriptors": ["seed-stream"],
+  "boundary": "Own deterministic world-seed and bounded named-stream lifecycle while NexusEngine owns the random primitive and consumers own procedural meaning.",
+  "rendererBoundary": {
+    "ownsRenderer": false,
+    "ownsDom": false,
+    "ownsCanvas": false,
+    "ownsThreeObjects": false,
+    "forbidden": ["DOM", "Canvas", "WebGL", "Three.js", "browser input", "asset loading", "wall-clock time", "unseeded random"]
+  },
+  "performance": {
+    "tickCost": "none; service is demand-driven",
+    "lookupCost": "O(1) by stable stream id",
+    "historyPolicy": "no history; one bounded record per named stream",
+    "scaleProof": "1,000 named streams with snapshot and restore in the real NexusEngine headless test",
+    "scalesWith": ["streamCount", "snapshotStreamCount", "shuffleItemCount"],
+    "telemetry": ["streamCount", "drawCount", "maxStreams", "worldSeed"],
+    "degradationModes": ["lowerMaxStreams", "deleteUnusedStreams", "partitionIndependentSeedServices"]
+  },
+  "snapshot": {
+    "stable": true,
+    "version": "1.0.0",
+    "fields": ["worldSeed", "maxStreams", "streams", "draws", "lastUint32", "random state"],
+    "loadPolicy": "require the same stream limit, validate every stream, reject duplicates and overflow, then atomically replace state"
+  },
+  "resetPolicy": "restore the configured world seed and configured preload streams",
+  "exportPath": "./seed-kit",
+  "sourcePath": "protokits/generic-seed-kit/index.js",
+  "testPaths": ["protokits/generic-seed-kit/tests/generic-seed-kit.test.mjs", "tests/promotion-determinism-guard-smoke.test.mjs"],
+  "metadata": {
+    "boundary": "foundation/seed-stream",
+    "purpose": "Canonical named deterministic stream service above the NexusEngine seeded-random primitive.",
+    "sourceRepositories": ["LuminaryLabs-Dev/NexusEngine", "LuminaryLabs-Agents/NexusEngine-ProtoKits"],
+    "sourceRevisions": {
+      "LuminaryLabs-Dev/NexusEngine": "851372d29fece5ad7d9a6253fb1a74730ae24047"
+    },
+    "doesNotOwn": ["procedural generation", "loot policy", "encounter policy", "world content", "simulation ticks", "persistence transport", "networking", "rendering", "input", "entropy"]
+  }
+}

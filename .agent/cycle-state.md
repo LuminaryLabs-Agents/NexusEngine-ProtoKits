@@ -22,7 +22,9 @@ Grow reusable DSK-based ProtoKits while shrinking local experiment JavaScript.
 
 ## Current expansion focus
 
-Registry control-plane promotion focus: the repository/kit registry, capability graph, and composition planner are now separate native DSK owners with real NexusEngine composition, exact snapshot/reset, strict collision, missing/cycle, deterministic ordering, bundle/domain expansion, and 1,000-manifest proof. Stable Kits installer adapters are the next ledge.
+Seed-stream promotion focus: `generic-seed-kit` now wraps NexusEngine's deterministic primitive with one bounded world-seed/named-stream DSK. The canonical stable target is `seed-kit`; generic factory and API names remain compatibility aliases.
+
+Registry control-plane promotion focus: the repository/kit registry, capability graph, and composition planner are separate native DSK owners with real NexusEngine composition, exact snapshot/reset, strict collision, missing/cycle, deterministic ordering, bundle/domain expansion, and 1,000-manifest proof. Their stable registry, installer, lockfile, and integrity adapters are promoted in NexusEngine-Kits.
 
 ProtoKit-core compatibility focus: the complete old utility API is now wrapped as a native stateless DSK. Its stable fate is deprecated compatibility, while NexusEngine remains the canonical runtime/math/random/serialization owner.
 

@@ -2,6 +2,15 @@
 
 Record reusable behavior that should move into ProtoKits.
 
+## 2026-07-09 - Seed stream service promotion
+
+`generic-seed-kit` is ready to promote as official `seed-kit`. The old generic catch-all runtime has been purged in favor of a native demand-driven DSK over NexusEngine seeded-random primitives.
+
+- Own: world seed, bounded named streams, deterministic derivation, stream lifecycle, draw counts, reset, and exact snapshot restore.
+- Preserve: `createGenericSeedKit` injected-runtime signature and generic engine aliases.
+- Promote: `createSeedKit` at `n:foundation:seed-stream` and `engine.n.seedStream`.
+- Exclude: procedural generation, loot/encounter policy, world content, simulation loops, persistence transport, rendering, networking, and entropy.
+
 ## 2026-07-09 - ProtoKit core compatibility resolution
 
 `protokit-core` is ready only for a deprecated NexusEngine-Kits promotion. Its full utility API and deterministic semantics remain available through a native stateless compatibility DSK, but canonical ownership belongs to NexusEngine runtime definitions, core utility math, foundation seeded random, and serializable state.
