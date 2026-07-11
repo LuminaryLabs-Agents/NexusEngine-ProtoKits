@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "nexusengine.protokit-manifest.v1",
+  "id": "disk-world-surface-kit",
+  "version": "0.1.0",
+  "status": "experimental",
+  "scope": "feature-domain",
+  "domain": "world",
+  "domainPath": "n:world:disk-surface",
+  "parentDomainPath": "n:world",
+  "factory": "createDiskWorldSurfaceKit",
+  "entry": "./index.js",
+  "requires": [],
+  "provides": [
+    "world:surface:disk",
+    "world:boundary:circle",
+    "world:coordinate-transform:disk"
+  ],
+  "snapshotPolicy": "portable",
+  "resetPolicy": "restore-initial-descriptor",
+  "rendererAgnostic": true,
+  "testPaths": [
+    "./tests/disk-world-surface-kit.test.mjs"
+  ]
+}
