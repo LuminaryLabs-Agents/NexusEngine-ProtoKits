@@ -1,1 +1,174 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nexus Procedural Tree ProtoKit</title><script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.184.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.184.0/examples/jsm/"}}</script><style>*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#dbe9ee;font-family:system-ui,sans-serif}canvas{display:block}aside{position:fixed;z-index:2;top:12px;left:12px;width:230px;padding:11px;border:1px solid #ffffff28;border-radius:13px;background:#0a1116dc;color:#fff;backdrop-filter:blur(12px)}h1{margin:0 0 9px;font-size:14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}label{display:grid;gap:4px;color:#aeb9ae;font-size:9px;text-transform:uppercase;letter-spacing:.07em}input,select,button{width:100%;min-width:0;padding:8px;border:1px solid #ffffff22;border-radius:8px;background:#ffffff12;color:#fff}button{margin-top:8px;font-weight:700;cursor:pointer}#status{position:fixed;left:12px;bottom:12px;padding:7px 9px;border-radius:999px;background:#0a1116bf;color:#e9f2e9;font-size:10px}</style></head><body><aside><h1>Procedural Tree ProtoKit</h1><div class="grid"><label>Seed<input id="seed" type="number" value="1737"></label><label>Crown<select id="crown"><option>round</option><option>conical</option><option>umbrella</option><option>columnar</option></select></label><label>LOD<select id="lod"><option value="auto">auto</option><option value="0">LOD0</option><option value="1">LOD1</option><option value="2">LOD2</option><option value="3">impostor</option></select></label><label>Leaves<select id="leaves"><option value="9">dense</option><option value="6" selected>balanced</option><option value="3">sparse</option><option value="0">none</option></select></label></div><button id="build">Generate</button><button id="export">Export asset</button></aside><div id="status">starting…</div><script type="module">import * as THREE from"three";import{OrbitControls}from"three/addons/controls/OrbitControls.js";import{createProceduralTreeSuite}from"../../protokits/procedural-tree-kits/index.js";const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;renderer.shadowMap.enabled=true;document.body.prepend(renderer.domElement);const scene=new THREE.Scene;scene.background=new THREE.Color(0xdbe9ee);const camera=new THREE.PerspectiveCamera(46,innerWidth/innerHeight,.1,400);camera.position.set(17,11,21);const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,7,0);controls.enableDamping=true;controls.maxDistance=180;scene.add(new THREE.HemisphereLight(0xffffff,0x5f714f,2.7));const sun=new THREE.DirectionalLight(0xfff0cc,3.5);sun.position.set(16,29,14);sun.castShadow=true;sun.shadow.mapSize.set(1536,1536);scene.add(sun);const ground=new THREE.Mesh(new THREE.CircleGeometry(34,96),new THREE.MeshStandardMaterial({color:0x6f9159,roughness:.95}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);const suite=createProceduralTreeSuite({three:{THREE,renderer}}),status=document.querySelector("#status");let built=null;function request(){return{id:`tree-${document.querySelector("#seed").value}`,seed:document.querySelector("#seed").value,preset:{species:"procedural-oak",morphology:{crownShape:document.querySelector("#crown").value,leafDensity:Number(document.querySelector("#leaves").value)},materials:{textureSize:256}}}}function build(){if(built){suite.render.disposeAsset(built.renderAsset);built=null}const started=performance.now();built=suite.buildThreeAsset(request());scene.add(built.renderAsset.root);controls.target.set(0,built.treeDescriptor.preset.morphology.height*.46,0);status.textContent=`${built.treeDescriptor.stats.branchCount} branches · ${built.treeDescriptor.stats.leafCount} leaves · ${Math.round(performance.now()-started)} ms`}async function exportAsset(){if(!built)return;const output=await suite.render.exportAsset(built.renderAsset),metadata=suite.snapshots.package({id:built.treeDescriptor.id,treeDescriptor:built.treeDescriptor,pbrFields:built.pbrFields,lodDescriptor:built.lodDescriptor,render:output.metadata});download(new Blob([JSON.stringify(metadata,null,2)],{type:"application/json"}),`${built.treeDescriptor.id}.tree-asset.json`);if(output.atlasBlob)download(output.atlasBlob,`${built.treeDescriptor.id}-impostor.png`)}function download(blob,filename){const url=URL.createObjectURL(blob),anchor=document.createElement("a");anchor.href=url;anchor.download=filename;anchor.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}document.querySelector("#build").onclick=build;document.querySelector("#export").onclick=exportAsset;build();function frame(){controls.update();if(built){const state=suite.render.updateAsset(built.renderAsset,camera,document.querySelector("#lod").value);status.textContent=`LOD${state.activeLevel} · ${state.distance.toFixed(1)} m`}renderer.render(scene,camera);requestAnimationFrame(frame)}frame();addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)})</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nexus Procedural Tree ProtoKit</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.184.0/examples/jsm/"
+      }
+    }
+  </script>
+  <style>
+    *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#dbe9ee;font-family:system-ui,sans-serif}canvas{display:block}
+    aside{position:fixed;z-index:2;top:12px;left:12px;width:230px;padding:11px;border:1px solid #ffffff28;border-radius:13px;background:#0a1116dc;color:#fff;backdrop-filter:blur(12px)}
+    h1{margin:0 0 9px;font-size:14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}label{display:grid;gap:4px;color:#aeb9ae;font-size:9px;text-transform:uppercase;letter-spacing:.07em}
+    input,select,button{width:100%;min-width:0;padding:8px;border:1px solid #ffffff22;border-radius:8px;background:#ffffff12;color:#fff}button{margin-top:8px;font-weight:700;cursor:pointer}
+    #status{position:fixed;left:12px;bottom:12px;padding:7px 9px;border-radius:999px;background:#0a1116bf;color:#e9f2e9;font-size:10px}
+  </style>
+</head>
+<body>
+  <aside>
+    <h1>Procedural Tree ProtoKit</h1>
+    <div class="grid">
+      <label>Seed<input id="seed" type="number" value="1737"></label>
+      <label>Crown<select id="crown"><option>round</option><option>conical</option><option>umbrella</option><option>columnar</option></select></label>
+      <label>LOD<select id="lod"><option value="0" selected>LOD0</option><option value="auto">auto</option><option value="1">LOD1</option><option value="2">LOD2</option><option value="3">impostor</option></select></label>
+      <label>Leaves<select id="leaves"><option value="9">dense</option><option value="6" selected>balanced</option><option value="3">sparse</option><option value="0">none</option></select></label>
+    </div>
+    <button id="build">Generate</button>
+    <button id="export">Export asset</button>
+  </aside>
+  <div id="status">starting…</div>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { createProceduralTreeSuite } from "../../protokits/procedural-tree-kits/index.js";
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    renderer.shadowMap.enabled = true;
+    document.body.prepend(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xdbe9ee);
+    const camera = new THREE.PerspectiveCamera(46, innerWidth / innerHeight, .1, 400);
+    camera.position.set(17, 11, 21);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 7, 0);
+    controls.enableDamping = true;
+    controls.maxDistance = 60;
+
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x5f714f, 2.7));
+    const sun = new THREE.DirectionalLight(0xfff0cc, 3.5);
+    sun.position.set(16, 29, 14);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(1536, 1536);
+    scene.add(sun);
+    const ground = new THREE.Mesh(
+      new THREE.CircleGeometry(1, 96),
+      new THREE.MeshStandardMaterial({ color: 0x6f9159, roughness: .95 })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    const suite = createProceduralTreeSuite({ three: { THREE, renderer } });
+    const status = document.querySelector("#status");
+    let built = null;
+
+    function request() {
+      return {
+        id: `tree-${document.querySelector("#seed").value}`,
+        seed: document.querySelector("#seed").value,
+        preset: {
+          species: "procedural-oak",
+          morphology: {
+            crownShape: document.querySelector("#crown").value,
+            leafDensity: Number(document.querySelector("#leaves").value)
+          },
+          materials: { textureSize: 256 }
+        }
+      };
+    }
+
+    function build() {
+      if (built) {
+        suite.render.disposeAsset(built.renderAsset);
+        built = null;
+      }
+      const started = performance.now();
+      built = suite.buildThreeAsset(request());
+      scene.add(built.renderAsset.root);
+
+      const bounds = new THREE.Box3().setFromObject(built.renderAsset.levels[0], true);
+      const sphere = bounds.getBoundingSphere(new THREE.Sphere());
+      const viewDirection = new THREE.Vector3(1, 0.42, 1).normalize();
+      const cameraDistance = Math.max(8, sphere.radius * 2.8);
+
+      controls.target.copy(sphere.center);
+      camera.position.copy(sphere.center).addScaledVector(viewDirection, cameraDistance);
+      controls.minDistance = Math.max(2, sphere.radius * 0.9);
+      controls.maxDistance = Math.max(20, sphere.radius * 5);
+      camera.near = Math.max(0.05, sphere.radius / 100);
+      camera.far = Math.max(200, sphere.radius * 30);
+      camera.updateProjectionMatrix();
+
+      ground.position.y = bounds.min.y - 0.02;
+      ground.scale.setScalar(Math.max(7, sphere.radius * 1.9));
+      controls.update();
+
+      status.textContent =
+        `${built.treeDescriptor.stats.branchCount} branches · ` +
+        `${built.treeDescriptor.stats.leafCount} leaves · ` +
+        `${Math.round(performance.now() - started)} ms`;
+    }
+
+    async function exportAsset() {
+      if (!built) return;
+      const output = await suite.render.exportAsset(built.renderAsset);
+      const metadata = suite.snapshots.package({
+        id: built.treeDescriptor.id,
+        treeDescriptor: built.treeDescriptor,
+        pbrFields: built.pbrFields,
+        lodDescriptor: built.lodDescriptor,
+        render: output.metadata
+      });
+      download(new Blob([JSON.stringify(metadata, null, 2)], { type: "application/json" }), `${built.treeDescriptor.id}.tree-asset.json`);
+      if (output.atlasBlob) download(output.atlasBlob, `${built.treeDescriptor.id}-impostor.png`);
+    }
+
+    function download(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = filename;
+      anchor.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    document.querySelector("#build").onclick = build;
+    document.querySelector("#export").onclick = exportAsset;
+    build();
+
+    function frame() {
+      controls.update();
+      if (built) {
+        const state = suite.render.updateAsset(
+          built.renderAsset,
+          camera,
+          document.querySelector("#lod").value
+        );
+        status.textContent = `LOD${state.activeLevel} · ${state.distance.toFixed(1)} m`;
+      }
+      renderer.render(scene, camera);
+      requestAnimationFrame(frame);
+    }
+    frame();
+
+    addEventListener("resize", () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  </script>
+</body>
+</html>

@@ -1,1 +1,180 @@
-import{add3 as e,length3 as t,mul3 as r,normalize3 as a,stableFrame as o,sub3 as n}from"../../internal.js";import{selectImpostorFrame as s,weightsAtDistance as i}from"../tree-lod-domain-kit/index.js";export const THREE_TREE_RENDER_ADAPTER_KIT_VERSION="0.1.0";function l(e,t,r=!1){const a=new e.DataTexture(t.data,t.width,t.height,e.RGBAFormat,e.UnsignedByteType);return a.colorSpace="srgb"===t.colorSpace?e.SRGBColorSpace:e.NoColorSpace,a.flipY=!0,a.wrapS=a.wrapT=r?e.RepeatWrapping:e.ClampToEdgeWrapping,a.minFilter=e.LinearMipmapLinearFilter,a.magFilter=e.LinearFilter,a.generateMipmaps=!0,a.needsUpdate=!0,a}function c(e){const t={value:1};return e.userData.fadeUniform=t,e.dithering=!0,e.onBeforeCompile=e=>{e.uniforms.uNexusFade=t,e.fragmentShader=`uniform float uNexusFade;\n${e.fragmentShader}`.replace("#include <dithering_fragment>","float nd=fract(52.9829189*fract(.06711056*gl_FragCoord.x+.00583715*gl_FragCoord.y));if(uNexusFade<nd)discard;#include <dithering_fragment>")},e.customProgramCacheKey=()=>"nexus-tree-lod-fade-v1",e}function p(e,t){e.visible=t>.001,e.traverse(e=>{if(e.material)for(const r of Array.isArray(e.material)?e.material:[e.material])r.userData?.fadeUniform&&(r.userData.fadeUniform.value=t)})}function d(e,t){const r=[],a=[];for(let o=0;o<e.points.length;o+=Math.max(1,t))r.push(e.points[o]),a.push(e.radii[o]);return r.at(-1)!==e.points.at(-1)&&(r.push(e.points.at(-1)),a.push(e.radii.at(-1))),{points:r,radii:a}}function u(s,i,l){const c=Math.max(4,Math.round(12*l.radialScale)),p=[],u=[],m=[],f=[];let h=0;for(const s of i.branches){if(s.level>l.branchLevelLimit)continue;const i=d(s,l.ringStride||1),g=[0];for(let e=1;e<i.points.length;e++)g.push(g[e-1]+t(n(i.points[e],i.points[e-1])));for(let t=0;t<i.points.length;t++){const s=0===t?a(n(i.points[1],i.points[0])):t===i.points.length-1?a(n(i.points[t],i.points[t-1])):a(n(i.points[t+1],i.points[t-1])),l=o(s),d=Math.max(.012,i.radii[t]);for(let o=0;o<c;o++){const n=o/c*Math.PI*2,s=a(e(r(l.normal,Math.cos(n)),r(l.binormal,Math.sin(n)))),f=e(i.points[t],r(s,d));p.push(...f),u.push(...s),m.push(o/c,g[t]/1.6)}}for(let e=0;e<i.points.length-1;e++)for(let t=0;t<c;t++){const r=(t+1)%c,a=h+e*c+t,o=h+e*c+r,n=h+(e+1)*c+t,s=h+(e+1)*c+r;f.push(a,n,o,o,n,s)}h+=i.points.length*c}const g=new s.BufferGeometry;return g.setAttribute("position",new s.Float32BufferAttribute(p,3)),g.setAttribute("normal",new s.Float32BufferAttribute(u,3)),g.setAttribute("uv",new s.Float32BufferAttribute(m,2)),g.setAttribute("uv2",new s.Float32BufferAttribute(m,2)),g.setIndex(f),g.computeBoundingSphere(),g}function m(e,t,r,a){const o=t.leaves.filter((e,t)=>r.leafKeep>=1||(2654435761*(t+1)>>>0)/4294967295<r.leafKeep),n=new e.InstancedMesh(function(e){const t=[],r=[],a=[];for(let e=0;e<=5;e++){const a=e/5,o=Math.pow(Math.sin(Math.PI*a),.72),n=.1*Math.sin(Math.PI*a);for(let e=0;e<=2;e++){const s=e/2;t.push((s-.5)*o,a,n+.05*Math.pow(2*Math.abs(s-.5),1.8)),r.push(s,a)}}for(let e=0;e<5;e++)for(let t=0;t<2;t++){const r=3*e+t,o=r+1,n=r+3,s=n+1;a.push(r,n,o,o,n,s)}const o=new e.BufferGeometry;return o.setAttribute("position",new e.Float32BufferAttribute(t,3)),o.setAttribute("uv",new e.Float32BufferAttribute(r,2)),o.setIndex(a),o.computeVertexNormals(),o}(e),a,o.length),s=new e.Matrix4,i=new e.Quaternion,l=new e.Quaternion,c=new e.Vector3,p=new e.Vector3(0,1,0);return o.forEach((t,r)=>{const a=new e.Vector3(...t.direction).normalize();i.setFromUnitVectors(p,a),l.setFromAxisAngle(a,t.roll),i.premultiply(l),c.set(.72*t.scale,1.55*t.scale,.72*t.scale),s.compose(new e.Vector3(...t.position),i,c),n.setMatrixAt(r,s)}),n.instanceMatrix.needsUpdate=!0,n}function f(e,t,r){const a=t.branches.filter(e=>e.level===t.stats.maxBranchLevel),o=new e.InstancedMesh(function(e){const t=new e.BufferGeometry;return t.setAttribute("position",new e.Float32BufferAttribute([-.5,-.5,0,.5,-.5,0,.5,.5,0,-.5,.5,0,0,-.5,-.5,0,-.5,.5,0,.5,.5,0,.5,-.5],3)),t.setAttribute("uv",new e.Float32BufferAttribute([0,0,1,0,1,1,0,1,0,0,1,0,1,1,0,1],2)),t.setIndex([0,1,2,0,2,3,4,5,6,4,6,7]),t.computeVertexNormals(),t}(e),r,a.length),n=new e.Matrix4,s=new e.Quaternion,i=new e.Vector3;return a.forEach((r,l)=>{const c=r.points.at(-1),p=1.2+.25*Math.sqrt(t.preset.morphology.leafDensity);s.setFromAxisAngle(new e.Vector3(0,1,0),l/Math.max(1,a.length)*Math.PI*2),i.set(1.35*p,p,1.35*p),n.compose(new e.Vector3(...c),s,i),o.setMatrixAt(l,n)}),o.instanceMatrix.needsUpdate=!0,o}function h(e,t,r,a){const o=a.impostor,n=o.columns*o.frameSize,s=new e.Scene,i=r.clone(!0);s.add(i),s.add(new e.HemisphereLight(16777215,5398602,2));const l=new e.DirectionalLight(16773846,3);l.position.set(10,18,12),s.add(l);const c=(new e.Box3).setFromObject(i),p=c.getSize(new e.Vector3),d=c.getCenter(new e.Vector3),u=Math.max(.68*Math.max(p.x,p.z),.58*p.y),m=2.2*Math.max(p.x,p.y,p.z),f=new e.OrthographicCamera(-u,u,u,-u,.1,3*m),h=new e.WebGLRenderTarget(n,n,{format:e.RGBAFormat,type:e.UnsignedByteType,depthBuffer:!0}),g=t.getRenderTarget(),w=t.getClearColor(new e.Color),M=t.getClearAlpha(),b=t.getScissorTest(),x=t.getViewport(new e.Vector4),A=t.getScissor(new e.Vector4);t.setRenderTarget(h),t.setClearColor(0,0),t.setScissorTest(!0);let S=0;for(const r of o.elevationDegrees){const a=r*Math.PI/180;for(let r=0;r<o.azimuthFrames;r++){const n=r/o.azimuthFrames*Math.PI*2,i=new e.Vector3(Math.sin(n)*Math.cos(a),Math.sin(a),Math.cos(n)*Math.cos(a));f.position.copy(d).addScaledVector(i,m),f.lookAt(d);const l=S%o.columns,c=o.rows-1-Math.floor(S/o.columns),p=l*o.frameSize,u=c*o.frameSize;t.setViewport(p,u,o.frameSize,o.frameSize),t.setScissor(p,u,o.frameSize,o.frameSize),t.clear(!0,!0,!0),t.render(s,f),S++}}const T=new Uint8Array(n*n*4);t.readRenderTargetPixels(h,0,0,n,n,T),t.setRenderTarget(g),t.setClearColor(w,M),t.setScissorTest(b),t.setViewport(x),t.setScissor(A),h.dispose();const v=document.createElement("canvas");v.width=v.height=n;const y=v.getContext("2d"),F=y.createImageData(n,n);for(let e=0;e<n;e++)for(let t=0;t<n;t++){const r=4*((n-1-e)*n+t),a=4*(e*n+t);F.data.set(T.subarray(r,r+4),a)}y.putImageData(F,0,0);const D=new e.CanvasTexture(v);return D.colorSpace=e.SRGBColorSpace,D.repeat.set(1/o.columns,1/o.rows),D.wrapS=D.wrapT=e.ClampToEdgeWrapping,D.needsUpdate=!0,{canvas:v,texture:D,bounds:c,dimensions:p,center:d}}export function createThreeTreeRenderAdapter({THREE:e,renderer:t}){if(!e||!t)throw new TypeError("Three tree adapter requires THREE and renderer.");return Object.freeze({buildAsset({treeDescriptor:r,pbrFields:a,lodDescriptor:o,id:n=r.id}){const s=Object.fromEntries(Object.entries(a.maps).map(([t,r])=>[t,l(e,r,t.startsWith("bark"))])),i=()=>c(new e.MeshStandardMaterial({map:s.barkAlbedo,normalMap:s.barkNormal,roughnessMap:s.barkRoughness,aoMap:s.barkAo,roughness:.92})),d=()=>c(new e.MeshStandardMaterial({map:s.leafAlbedoAlpha,normalMap:s.leafNormal,roughnessMap:s.leafRoughness,alphaTest:.32,side:e.DoubleSide})),g=()=>c(new e.MeshStandardMaterial({map:s.clusterAlbedoAlpha,normalMap:s.clusterNormal,roughnessMap:s.clusterRoughness,alphaTest:.1,side:e.DoubleSide})),w=new e.Group,M=[];for(const t of o.recipes.slice(0,3)){const a=new e.Group;a.add(new e.Mesh(u(e,r,t),i())),t.useFoliageClusters?a.add(f(e,r,g())):t.leafKeep>0&&a.add(m(e,r,t,d())),a.userData={lodLevel:t.level,triangleCount:o.estimatedTriangles[t.level].triangles},w.add(a),M.push(a),p(a,0===t.level?1:0)}const b=h(e,t,M[0],o),x=1.12*Math.max(b.dimensions.x,b.dimensions.z),A=1.08*b.dimensions.y,S=new e.Mesh(new e.PlaneGeometry(x,A),c(new e.MeshBasicMaterial({map:b.texture,alphaTest:.05,side:e.DoubleSide,toneMapped:!1}))),T=new e.Group;return S.position.set(b.center.x,b.bounds.min.y+.5*A,b.center.z),T.add(S),T.userData={lodLevel:3,triangleCount:2},w.add(T),M.push(T),p(T,0),{id:n,root:w,levels:M,billboard:S,maps:s,atlas:b,treeDescriptor:r,lodDescriptor:o,currentLevel:0}},updateAsset(t,r,a="auto"){const o=t.root.getWorldPosition(new e.Vector3),n=r.position.clone().sub(o),l=n.length(),c="auto"===a?i(t.lodDescriptor,l):[0,0,0,0].map((e,t)=>t===Number(a)?1:0);c.forEach((e,r)=>p(t.levels[r],e));const d=s(t.lodDescriptor,[n.x,n.y,n.z]),u=t.lodDescriptor.impostor;return t.atlas.texture.offset.set(d.column/u.columns,(u.rows-1-d.row)/u.rows),t.billboard.quaternion.copy(r.quaternion),t.currentLevel=c.indexOf(Math.max(...c)),{distance:l,weights:c,activeLevel:t.currentLevel,frameIndex:d.frameIndex}},async exportAsset(e){const t=await new Promise(t=>e.atlas.canvas.toBlob(t,"image/png"));return{metadata:{schema:"nexus-three-tree-render-export/1",id:e.id,atlas:{columns:e.lodDescriptor.impostor.columns,rows:e.lodDescriptor.impostor.rows,frameSize:e.lodDescriptor.impostor.frameSize}},atlasBlob:t}},disposeAsset(e){e.root.traverse(e=>{e.geometry?.dispose?.();for(const t of e.material?Array.isArray(e.material)?e.material:[e.material]:[])t.dispose?.()}),Object.values(e.maps).forEach(e=>e.dispose()),e.atlas.texture.dispose(),e.root.removeFromParent()}})}export function createThreeTreeRenderAdapterKit(e={}){return Object.freeze({id:e.id??"three-tree-render-adapter-kit",type:"renderer-adapter",createApi:()=>createThreeTreeRenderAdapter(e)})}export default createThreeTreeRenderAdapterKit;
+import {
+  createThreeTreeRenderAdapter as createLegacyThreeTreeRenderAdapter,
+  createThreeTreeRenderAdapterKit as createLegacyThreeTreeRenderAdapterKit
+} from "./legacy.js";
+
+export const THREE_TREE_RENDER_ADAPTER_KIT_VERSION = "0.1.1";
+
+export function evaluateIndexedFacing(geometry, options = {}) {
+  const position = geometry?.getAttribute?.("position");
+  const normal = geometry?.getAttribute?.("normal");
+  const index = geometry?.getIndex?.();
+  const indices = index?.array ?? index;
+  const triangleCount = Math.floor((indices?.length ?? 0) / 3);
+  const maxSamples = Math.max(1, Math.floor(options.maxSamples ?? 4096));
+
+  if (!position || !normal || !indices || triangleCount === 0) {
+    return {
+      valid: false,
+      triangleCount,
+      sampledTriangles: 0,
+      outward: 0,
+      inward: 0,
+      degenerate: 0,
+      averageDot: 0,
+      reason: "indexed position and normal attributes are required"
+    };
+  }
+
+  const stride = Math.max(1, Math.floor(triangleCount / maxSamples));
+  let sampledTriangles = 0;
+  let outward = 0;
+  let inward = 0;
+  let degenerate = 0;
+  let dotTotal = 0;
+
+  for (let triangle = 0; triangle < triangleCount; triangle += stride) {
+    const offset = triangle * 3;
+    const ia = indices[offset];
+    const ib = indices[offset + 1];
+    const ic = indices[offset + 2];
+
+    const ax = position.getX(ia);
+    const ay = position.getY(ia);
+    const az = position.getZ(ia);
+    const abx = position.getX(ib) - ax;
+    const aby = position.getY(ib) - ay;
+    const abz = position.getZ(ib) - az;
+    const acx = position.getX(ic) - ax;
+    const acy = position.getY(ic) - ay;
+    const acz = position.getZ(ic) - az;
+
+    let fx = aby * acz - abz * acy;
+    let fy = abz * acx - abx * acz;
+    let fz = abx * acy - aby * acx;
+    const faceLength = Math.hypot(fx, fy, fz);
+
+    if (faceLength <= 1e-10) {
+      degenerate += 1;
+      continue;
+    }
+
+    fx /= faceLength;
+    fy /= faceLength;
+    fz /= faceLength;
+
+    let nx = normal.getX(ia) + normal.getX(ib) + normal.getX(ic);
+    let ny = normal.getY(ia) + normal.getY(ib) + normal.getY(ic);
+    let nz = normal.getZ(ia) + normal.getZ(ib) + normal.getZ(ic);
+    const normalLength = Math.hypot(nx, ny, nz) || 1;
+    nx /= normalLength;
+    ny /= normalLength;
+    nz /= normalLength;
+
+    const facingDot = fx * nx + fy * ny + fz * nz;
+    dotTotal += facingDot;
+    sampledTriangles += 1;
+
+    if (facingDot >= -1e-5) outward += 1;
+    else inward += 1;
+  }
+
+  const averageDot = sampledTriangles ? dotTotal / sampledTriangles : 0;
+  return {
+    valid: sampledTriangles > 0 && inward === 0 && averageDot > 0,
+    triangleCount,
+    sampledTriangles,
+    outward,
+    inward,
+    degenerate,
+    averageDot,
+    reason: inward
+      ? `${inward} sampled triangles face inward`
+      : sampledTriangles
+        ? null
+        : "all sampled triangles were degenerate"
+  };
+}
+
+function correctedIndex(index) {
+  const source = index?.array ?? index;
+  if (!source || typeof source.length !== "number") return index;
+
+  const next = ArrayBuffer.isView(source)
+    ? new source.constructor(source)
+    : Array.from(source);
+
+  for (let offset = 0; offset + 2 < next.length; offset += 3) {
+    const second = next[offset + 1];
+    next[offset + 1] = next[offset + 2];
+    next[offset + 2] = second;
+  }
+
+  return next;
+}
+
+function buildWithCorrectedBranchWinding(config, build) {
+  const prototype = config.THREE.BufferGeometry.prototype;
+  const originalSetIndex = prototype.setIndex;
+
+  prototype.setIndex = function setCorrectedTreeIndex(index) {
+    const isSweptBranchGeometry = Boolean(
+      this.getAttribute?.("normal") &&
+      this.getAttribute?.("uv2")
+    );
+
+    const result = originalSetIndex.call(
+      this,
+      isSweptBranchGeometry ? correctedIndex(index) : index
+    );
+
+    if (isSweptBranchGeometry) {
+      const facing = evaluateIndexedFacing(this);
+      this.userData.facing = facing;
+      if (!facing.valid) {
+        throw new Error(
+          `Generated branch geometry has invalid face orientation: ${facing.reason ?? "unknown error"}.`
+        );
+      }
+    }
+
+    return result;
+  };
+
+  try {
+    return build();
+  } finally {
+    prototype.setIndex = originalSetIndex;
+  }
+}
+
+export function createThreeTreeRenderAdapter(config = {}) {
+  if (!config.THREE || !config.renderer) {
+    throw new TypeError("Three tree adapter requires injected THREE and renderer values.");
+  }
+
+  const legacy = createLegacyThreeTreeRenderAdapter(config);
+
+  return Object.freeze({
+    ...legacy,
+    buildAsset(input = {}) {
+      return buildWithCorrectedBranchWinding(
+        config,
+        () => legacy.buildAsset(input)
+      );
+    }
+  });
+}
+
+export function createThreeTreeRenderAdapterKit(config = {}) {
+  const legacyKit = createLegacyThreeTreeRenderAdapterKit(config);
+  return Object.freeze({
+    ...legacyKit,
+    version: THREE_TREE_RENDER_ADAPTER_KIT_VERSION,
+    createApi() {
+      return createThreeTreeRenderAdapter(config);
+    }
+  });
+}
+
+export default createThreeTreeRenderAdapterKit;
