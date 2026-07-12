@@ -1,1 +1,165 @@
-import{TAU as e,add3 as r,boundsFromPoints as t,clamp as a,clone as n,createSeededRandom as o,curvePoint as s,curveTangent as i,definePortableDomainServiceKit as l,hashObject as h,mul3 as c,normalize3 as p,number as d,stableFrame as g,stableText as u}from"../../internal.js";export const PROCEDURAL_TREE_DOMAIN_KIT_VERSION="0.1.0";export const DEFAULT_TREE_PRESET=Object.freeze({schema:"nexus-tree-preset/1",species:"procedural-oak",morphology:{height:15,trunkRadius:.68,crownShape:"round",crownStart:.24,levels:3,branchCounts:[8,4,2,2],branchLengthRatio:[.42,.62,.58,.52],branchAngleDegrees:[48,56],taper:.68,gnarl:.24,upwardBias:.24,gravity:.11,leafDensity:6,leafSize:[.48,.82],trunkSegments:22,branchSegmentsPerMeter:1.42},materials:{textureSize:256,bark:{baseColor:"#76543b",ridgeScale:11,ridgeStrength:.68,crackStrength:.25,roughness:.84},leaf:{baseColor:"#3f813b",tipColor:"#82ad50",veinStrength:.7,roughness:.7,translucency:.18}}});function m(e,r,t,a,n){const o=d(e,r);if(!Number.isFinite(o)||o<t||o>a)throw new RangeError(`${n} must be between ${t} and ${a}.`);return o}function b(e,r,t,a){const n=Array.isArray(e)?e:r;return Array.from({length:t},(e,t)=>a(n[t]??n[n.length-1]??r[t]??r[0],t))}export function normalizeTreePreset(e={}){const r=e??{},t=DEFAULT_TREE_PRESET,a=r.morphology??{},n=r.materials??{},o=n.bark??{},s=n.leaf??{},i=Math.round(m(a.levels,t.morphology.levels,1,5,"morphology.levels")),l=u(a.crownShape,t.morphology.crownShape,"morphology.crownShape");if(!["round","conical","umbrella","columnar"].includes(l))throw new TypeError("morphology.crownShape must be round, conical, umbrella, or columnar.");return{schema:"nexus-tree-preset/1",species:u(r.species,t.species,"species"),morphology:{height:m(a.height,t.morphology.height,1,80,"morphology.height"),trunkRadius:m(a.trunkRadius,t.morphology.trunkRadius,.03,5,"morphology.trunkRadius"),crownShape:l,crownStart:m(a.crownStart,t.morphology.crownStart,.05,.9,"morphology.crownStart"),levels:i,branchCounts:b(a.branchCounts,t.morphology.branchCounts,Math.max(4,i+1),(e,r)=>Math.round(m(e,t.morphology.branchCounts[r]??2,0,24,`branchCounts[${r}]`))),branchLengthRatio:b(a.branchLengthRatio,t.morphology.branchLengthRatio,Math.max(4,i+1),(e,r)=>m(e,t.morphology.branchLengthRatio[r]??.5,.05,1.4,`branchLengthRatio[${r}]`)),branchAngleDegrees:b(a.branchAngleDegrees,t.morphology.branchAngleDegrees,2,(e,r)=>m(e,t.morphology.branchAngleDegrees[r],0,175,`branchAngleDegrees[${r}]`)).sort((e,r)=>e-r),taper:m(a.taper,t.morphology.taper,.1,3,"morphology.taper"),gnarl:m(a.gnarl,t.morphology.gnarl,0,1.5,"morphology.gnarl"),upwardBias:m(a.upwardBias,t.morphology.upwardBias,-1,1,"morphology.upwardBias"),gravity:m(a.gravity,t.morphology.gravity,-1,1,"morphology.gravity"),leafDensity:Math.round(m(a.leafDensity,t.morphology.leafDensity,0,64,"morphology.leafDensity")),leafSize:b(a.leafSize,t.morphology.leafSize,2,(e,r)=>m(e,t.morphology.leafSize[r],.02,8,`leafSize[${r}]`)).sort((e,r)=>e-r),trunkSegments:Math.round(m(a.trunkSegments,t.morphology.trunkSegments,4,256,"morphology.trunkSegments")),branchSegmentsPerMeter:m(a.branchSegmentsPerMeter,t.morphology.branchSegmentsPerMeter,.15,12,"morphology.branchSegmentsPerMeter")},materials:{textureSize:Math.round(m(n.textureSize,t.materials.textureSize,32,2048,"materials.textureSize")),bark:{baseColor:u(o.baseColor,t.materials.bark.baseColor,"bark.baseColor"),ridgeScale:m(o.ridgeScale,t.materials.bark.ridgeScale,1,64,"bark.ridgeScale"),ridgeStrength:m(o.ridgeStrength,t.materials.bark.ridgeStrength,0,2,"bark.ridgeStrength"),crackStrength:m(o.crackStrength,t.materials.bark.crackStrength,0,2,"bark.crackStrength"),roughness:m(o.roughness,t.materials.bark.roughness,0,1,"bark.roughness")},leaf:{baseColor:u(s.baseColor,t.materials.leaf.baseColor,"leaf.baseColor"),tipColor:u(s.tipColor,t.materials.leaf.tipColor,"leaf.tipColor"),veinStrength:m(s.veinStrength,t.materials.leaf.veinStrength,0,2,"leaf.veinStrength"),roughness:m(s.roughness,t.materials.leaf.roughness,0,1,"leaf.roughness"),translucency:m(s.translucency,t.materials.leaf.translucency,0,1,"leaf.translucency")}}}}function f(e,r){return"conical"===r?1.1-.58*e:"umbrella"===r?.5+.72*Math.sin(e*Math.PI):"columnar"===r?.58+.18*Math.sin(e*Math.PI):.66+.42*Math.sin(e*Math.PI)}export function generateTreeDescriptor(n={},l={}){const d=normalizeTreePreset(n.preset??n),m=u(n.seed,`${d.species}:default`,"tree seed"),b=u(n.id,`${d.species}:${m}`,"tree id"),S=function(e,r){if(r&&"function"==typeof r.range){const t=`tree:${e}`;return"function"==typeof r.createStream&&r.createStream(t,{seed:String(e)}),{range:(e,a)=>r.range(t,e,a)}}return o(e)}(m,l.seedStream),y=d.morphology,v=[],M=[];let w=0,k=0;!function t({start:n,direction:o,length:l,radius:h,level:d,parentId:u=null,segmentOverride:m=null}){const b=m??Math.max(4,Math.round(l*y.branchSegmentsPerMeter)),x=[[...n]],D=[h];let C=[...n],T=p(o);for(let e=1;e<=b;e+=1){const t=e/b,a=c([S.range(-1,1),S.range(-.4,.7),S.range(-1,1)],y.gnarl*(.18+.08*d)),n=[0,y.upwardBias*(1-t)-y.gravity*d*t,0];T=p(r(r(T,a),n),T),C=r(C,c(T,l/b)),x.push(C),D.push(h*Math.pow(Math.max(.025,1-t),y.taper))}const A={id:"branch-"+w++,parentId:u,level:d,points:x,radii:D,length:l,radius:h};if(v.push(A),d>=y.levels)return void function(t){for(let a=0;a<y.leafDensity;a+=1){const n=.34+a/Math.max(1,y.leafDensity-1)*.64,o=s(t.points,Math.min(.999,n+S.range(-.04,.04))),l=i(t.points,n),h=g(l),d=S.range(0,e),u=r(c(h.normal,Math.cos(d)),c(h.binormal,Math.sin(d))),m=p(r(r(c(l,.46),c(u,.86)),[0,.2,0]),l);M.push({id:"leaf-"+k++,branchId:t.id,position:o,direction:m,roll:S.range(0,e),scale:S.range(y.leafSize[0],y.leafSize[1])})}}(A);const P=y.branchCounts[Math.min(d,y.branchCounts.length-1)],[R,$]=y.branchAngleDegrees;for(let n=0;n<P;n+=1){const o=0===d?y.crownStart+(n+.5)/Math.max(1,P)*(.93-y.crownStart):.28+(n+.5)/Math.max(1,P)*.62,u=a(o+S.range(-.035,.035),.08,.96),m=s(x,u),b=i(x,u),v=g(b),M=n/Math.max(1,P)*e+S.range(-.42,.42),w=p(r(c(v.normal,Math.cos(M)),c(v.binormal,Math.sin(M))),v.normal),k=S.range(R,$)*Math.PI/180;t({start:m,direction:p(r(r(c(b,Math.cos(k)),c(w,Math.sin(k))),[0,.42*y.upwardBias,0]),b),length:l*y.branchLengthRatio[Math.min(d,y.branchLengthRatio.length-1)]*(0===d?f(u,y.crownShape):1)*S.range(.82,1.16),radius:Math.max(.16*h,.52*h*S.range(.86,1.08)),level:d+1,parentId:A.id})}}({start:[0,0,0],direction:p([S.range(-.025,.025),1,S.range(-.025,.025)]),length:y.height,radius:y.trunkRadius,level:0,segmentOverride:y.trunkSegments});const x=v.flatMap(e=>e.points);for(const e of M){const t=.9*e.scale;x.push(r(e.position,[t,t,t]),r(e.position,[-t,-t,-t]))}const D=t(x),C={schema:"nexus-tree-descriptor/1",version:"0.1.0",id:b,species:d.species,seed:m,preset:d,branches:v,leaves:M,bounds:D,stats:{branchCount:v.length,leafCount:M.length,pointCount:v.reduce((e,r)=>e+r.points.length,0),maxBranchLevel:y.levels}};return C.hash=h(C),C}export function validateTreeDescriptor(e){const r=[];if(!e||"nexus-tree-descriptor/1"!==e.schema)return r.push("schema must be nexus-tree-descriptor/1"),{valid:!1,errors:r};const t=new Set;for(const a of e.branches??[]){a.id&&!t.has(a.id)||r.push(`invalid or duplicate branch id ${a.id}`),t.add(a.id),(!Array.isArray(a.points)||a.points.length<2)&&r.push(`${a.id} requires at least two points`),Array.isArray(a.radii)&&a.radii.length===a.points?.length||r.push(`${a.id} radii must match points`);for(const e of a.points??[])if(!Array.isArray(e)||3!==e.length||e.some(e=>!Number.isFinite(e))){r.push(`${a.id} contains an invalid point`);break}(a.radii??[]).some(e=>!Number.isFinite(e)||e<=0)&&r.push(`${a.id} contains an invalid radius`)}for(const a of e.branches??[])null==a.parentId||t.has(a.parentId)||r.push(`${a.id} references missing parent ${a.parentId}`);for(const a of e.leaves??[])t.has(a.branchId)||r.push(`${a.id} references missing branch ${a.branchId}`),[...a.position??[],...a.direction??[],a.roll,a.scale].every(Number.isFinite)||r.push(`${a.id} contains invalid numeric data`);return{valid:0===r.length,errors:r}}export function createProceduralTreeApi(e={}){const r=n(e);let t=new Map,a=e.seedStream??null;const o={generate(e={}){const r=generateTreeDescriptor(e,{seedStream:a}),o=validateTreeDescriptor(r);if(!o.valid)throw new TypeError(`Generated tree descriptor is invalid: ${o.errors.join("; ")}`);return t.set(r.id,r),n(r)},get(e){const r=u(e,null,"tree id");return n(t.get(r)??null)},has:e=>t.has(u(e,null,"tree id")),list:()=>[...t.values()].sort((e,r)=>e.id.localeCompare(r.id)).map(n),remove:e=>t.delete(u(e,null,"tree id")),validate:validateTreeDescriptor,normalizePreset:normalizeTreePreset,setSeedStream:e=>(a=e??null,o.getSnapshot()),getSnapshot:()=>({version:"0.1.0",status:"ready",config:n(r),descriptors:o.list()}),loadSnapshot(e={}){if("0.1.0"!==e.version||"ready"!==e.status)throw new TypeError("Unsupported procedural tree snapshot.");const r=new Map;for(const t of e.descriptors??[]){const e=validateTreeDescriptor(t);if(!e.valid)throw new TypeError(`Invalid tree snapshot descriptor: ${e.errors.join("; ")}`);r.set(t.id,n(t))}return t=r,o.getSnapshot()},reset:()=>(t=new Map,o.getSnapshot())};return Object.freeze(o)}export function createProceduralTreeDomainKit(e={},r={}){const t="function"==typeof e?.defineDomainServiceKit?e:{},a=t===e?r:e;return l(t,{id:a.id??"procedural-tree-domain-kit",domain:"procedural-tree",domainPath:"n:natural-world:tree:procedural",parentDomainPath:"n:natural-world:tree",apiName:"proceduralTree",stability:"experimental",version:"0.1.0",services:["preset-normalization","tree-generation","validation","snapshot","reset"],requires:["random:seeded","random:stream"],provides:["tree:procedural-descriptor","tree:branch-hierarchy","tree:leaf-anchor-descriptor"],createApi:()=>createProceduralTreeApi(a),install({engine:e,api:r}){const t=r??e.n.proceduralTree;e.n?.seedStream&&t?.setSeedStream&&t.setSeedStream(e.n.seedStream),e.proceduralTree=t},metadata:{scope:"renderer-agnostic-procedural-tree-domain",ownsLoop:!1,boundary:"Owns deterministic tree presets, branch curves, radii, leaf anchors, validation, reset, and snapshots. It does not own renderer objects, textures, placement, collision, or DOM state."}})}export default createProceduralTreeDomainKit;
+import { createObjectDescriptor } from "nexusengine";
+import {
+  DEFAULT_TREE_PRESET,
+  PROCEDURAL_TREE_DOMAIN_KIT_VERSION as LEGACY_PROCEDURAL_TREE_DOMAIN_KIT_VERSION,
+  createProceduralTreeApi as createLegacyProceduralTreeApi,
+  createProceduralTreeDomainKit as createLegacyProceduralTreeDomainKit,
+  generateTreeDescriptor as generateLegacyTreeDescriptor,
+  normalizeTreePreset,
+  validateTreeDescriptor as validateLegacyTreeDescriptor
+} from "./legacy.js";
+
+export {
+  DEFAULT_TREE_PRESET,
+  normalizeTreePreset
+};
+
+export const PROCEDURAL_TREE_DOMAIN_KIT_VERSION = "0.2.0";
+const clone = (value) => value === undefined ? undefined : structuredClone(value);
+
+export function createTreeObjectDescriptor(treeDescriptor) {
+  if (!treeDescriptor || treeDescriptor.schema !== "nexus-tree-descriptor/1") {
+    throw new TypeError("Tree object conversion requires nexus-tree-descriptor/1.");
+  }
+  const bounds = treeDescriptor.bounds;
+  const parts = [
+    {
+      id: "trunk",
+      kind: "tree-trunk",
+      geometry: {
+        provider: "procedural-tree-domain-kit",
+        descriptorId: `${treeDescriptor.id}:branches`
+      }
+    },
+    {
+      id: "crown",
+      parentId: "trunk",
+      kind: "tree-crown",
+      geometry: {
+        provider: "procedural-tree-domain-kit",
+        descriptorId: `${treeDescriptor.id}:leaves`
+      }
+    }
+  ];
+  return createObjectDescriptor({
+    id: treeDescriptor.id,
+    objectType: "procedural-tree",
+    transform: {
+      position: [0, 0, 0],
+      rotation: [0, 0, 0, 1],
+      scale: [1, 1, 1]
+    },
+    parts,
+    bounds: {
+      min: bounds.min,
+      max: bounds.max
+    },
+    pivot: bounds.center,
+    groundAnchor: [0, bounds.min[1], 0],
+    geometry: {
+      provider: "procedural-tree-domain-kit",
+      descriptorId: `${treeDescriptor.id}:geometry`,
+      contentHash: treeDescriptor.hash,
+      metadata: {
+        branchCount: treeDescriptor.stats.branchCount,
+        leafCount: treeDescriptor.stats.leafCount,
+        pointCount: treeDescriptor.stats.pointCount
+      }
+    },
+    material: {
+      provider: "procedural-object-material-kit",
+      descriptorId: `${treeDescriptor.id}:material`
+    },
+    collision: {
+      provider: "tree-collision-adapter",
+      descriptorId: `${treeDescriptor.id}:collision`
+    },
+    lod: {
+      provider: "procedural-object-lod-kit",
+      descriptorId: `${treeDescriptor.id}:lod`
+    },
+    capture: {
+      provider: "procedural-object-capture-profile-kit",
+      descriptorId: `${treeDescriptor.id}:capture`
+    },
+    metadata: {
+      sourceDomain: "procedural-tree",
+      species: treeDescriptor.species,
+      seed: treeDescriptor.seed,
+      sourceDescriptorSchema: treeDescriptor.schema,
+      legacyVersion: LEGACY_PROCEDURAL_TREE_DOMAIN_KIT_VERSION
+    }
+  });
+}
+
+function decorateTreeDescriptor(value) {
+  if (!value) return value;
+  if (value.objectDescriptor?.schema === "nexus-object-descriptor/1") return clone(value);
+  return {
+    ...clone(value),
+    objectDescriptor: createTreeObjectDescriptor(value)
+  };
+}
+
+export function generateTreeDescriptor(input = {}, options = {}) {
+  return decorateTreeDescriptor(generateLegacyTreeDescriptor(input, options));
+}
+
+export function validateTreeDescriptor(value) {
+  const legacy = validateLegacyTreeDescriptor(value);
+  const errors = [...legacy.errors];
+  if (value?.objectDescriptor) {
+    if (value.objectDescriptor.schema !== "nexus-object-descriptor/1") {
+      errors.push("objectDescriptor must use nexus-object-descriptor/1");
+    }
+    if (value.objectDescriptor.id !== value.id) {
+      errors.push("objectDescriptor id must match tree id");
+    }
+  }
+  return { valid: errors.length === 0, errors };
+}
+
+export function createProceduralTreeApi(config = {}) {
+  const legacy = createLegacyProceduralTreeApi(config);
+  return Object.freeze({
+    ...legacy,
+    generate(input = {}) {
+      return decorateTreeDescriptor(legacy.generate(input));
+    },
+    get(id) {
+      return decorateTreeDescriptor(legacy.get(id));
+    },
+    list() {
+      return legacy.list().map(decorateTreeDescriptor);
+    },
+    getObjectDescriptor(id) {
+      return decorateTreeDescriptor(legacy.get(id))?.objectDescriptor ?? null;
+    },
+    validate: validateTreeDescriptor
+  });
+}
+
+export function createProceduralTreeDomainKit(NexusEngine = {}, config = {}) {
+  const runtime = typeof NexusEngine?.defineDomainServiceKit === "function" ? NexusEngine : {};
+  const options = runtime === NexusEngine ? config : NexusEngine;
+  const legacy = createLegacyProceduralTreeDomainKit(runtime, options);
+  return Object.freeze({
+    ...legacy,
+    version: PROCEDURAL_TREE_DOMAIN_KIT_VERSION,
+    provides: [
+      ...(legacy.provides ?? []),
+      "object:descriptor"
+    ],
+    createApi() {
+      return createProceduralTreeApi(options);
+    },
+    metadata: {
+      ...(legacy.metadata ?? {}),
+      objectContract: "nexus-object-descriptor/1",
+      objectContractProvider: "core-object-kit",
+      boundary: "Owns deterministic tree morphology and emits the universal object contract. Renderer objects, GPU capture, placement, and physics remain adapters or separate domains."
+    }
+  });
+}
+
+export default createProceduralTreeDomainKit;

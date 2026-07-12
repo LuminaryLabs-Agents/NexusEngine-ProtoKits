@@ -1,1 +1,100 @@
-import e from"node:assert/strict";import{createProceduralTreeApi as t,createProceduralTreePbrFieldApi as s,createTreeAssetSnapshotApi as a,createTreeLodApi as o,generateTreeDescriptor as r,selectImpostorFrame as n,validatePbrFieldSet as l,validateTreeDescriptor as i,validateTreeLodDescriptor as h,weightsAtDistance as d}from"../protokits/procedural-tree-kits/index.js";const u={id:"oak-1737",seed:"1737",preset:{species:"test-oak",morphology:{height:12,levels:3,branchCounts:[6,3,2,1],leafDensity:5},materials:{textureSize:64}}},m=r(u),c=r(u),g=r({...u,id:"oak-1738",seed:"1738"});e.equal(m.hash,c.hash,"same seed and preset must reproduce the descriptor"),e.notEqual(m.hash,g.hash,"different seeds must change the descriptor"),e.deepEqual(i(m),{valid:!0,errors:[]}),e.ok(m.branches.length>1),e.ok(m.leaves.length>0),e.ok(m.bounds.radius>0);const p=new Set(m.branches.map(e=>e.id));for(const t of m.branches)null!=t.parentId&&e.ok(p.has(t.parentId)),e.equal(t.points.length,t.radii.length),e.ok(t.radii.every(e=>e>0&&Number.isFinite(e))),e.ok(t.points.flat().every(Number.isFinite));const k=t();k.generate(u);const b=k.getSnapshot();k.reset(),e.equal(k.list().length,0),k.loadSnapshot(b),e.equal(k.get("oak-1737").hash,m.hash);const f=s({textureSize:64}).generate(m),q=s({textureSize:64}).generate(m);e.equal(f.hash,q.hash,"procedural PBR fields must reproduce"),e.deepEqual(l(f),{valid:!0,errors:[]}),e.equal(Object.keys(f.maps).length,11);for(const t of Object.values(f.maps))e.equal(t.data.length,t.width*t.height*4),e.ok(t.data.some(e=>0!==e),`${t.id} must not be all black/zero`);const v=f.maps.barkNormal.data;let S=0;for(let e=2;e<v.length;e+=4)S+=v[e];e.ok(S/(v.length/4)>128,"normal blue channel must point outward");const T=o().register(m,{impostor:{frameSize:128}});e.deepEqual(h(T),{valid:!0,errors:[]}),e.equal(T.estimatedTriangles.length,4),e.ok(T.estimatedTriangles[0].triangles>T.estimatedTriangles[1].triangles),e.ok(T.estimatedTriangles[1].triangles>T.estimatedTriangles[2].triangles),e.ok(T.estimatedTriangles[2].triangles>=T.estimatedTriangles[3].triangles);for(const t of[0,T.distances.lod1,T.distances.lod2,T.distances.impostor,1e4]){const s=d(T,t),a=s.reduce((e,t)=>e+t,0);e.ok(Math.abs(a-1)<1e-8,`LOD weights must sum to one at ${t}`),e.ok(s.every(e=>e>=0&&e<=1))}const w=n(T,[3,2,8]);e.ok(w.frameIndex>=0),e.ok(w.frameIndex<T.impostor.azimuthFrames*T.impostor.elevationDegrees.length),e.ok(w.column>=0&&w.column<T.impostor.columns),e.ok(w.row>=0&&w.row<T.impostor.rows);const x=a(),y=x.package({id:"oak-asset",treeDescriptor:m,pbrFields:f,lodDescriptor:T});e.equal(y.schema,"nexus-tree-asset/1"),e.equal(y.tree.id,y.pbr.treeId),e.equal(y.tree.id,y.lod.treeId);const z=x.getSnapshot();x.reset(),x.loadSnapshot(z),e.equal(x.get("oak-asset").hash,y.hash),console.log(JSON.stringify({ok:!0,treeHash:m.hash,pbrHash:f.hash,lodHash:T.hash,branches:m.stats.branchCount,leaves:m.stats.leafCount,lodTriangles:T.estimatedTriangles},null,2));
+import assert from "node:assert/strict";
+import {
+  createProceduralTreeApi,
+  createProceduralTreePbrFieldApi,
+  createTreeAssetSnapshotApi,
+  createTreeLodApi,
+  generateTreeDescriptor,
+  selectImpostorFrame,
+  validatePbrFieldSet,
+  validateTreeDescriptor,
+  validateTreeLodDescriptor,
+  weightsAtDistance
+} from "../protokits/procedural-tree-kits/index.js";
+
+const request = {
+  id: "oak-1737",
+  seed: "1737",
+  preset: {
+    species: "test-oak",
+    morphology: {
+      height: 12,
+      levels: 3,
+      branchCounts: [6, 3, 2, 1],
+      leafDensity: 5
+    },
+    materials: {
+      textureSize: 64
+    }
+  }
+};
+
+const first = generateTreeDescriptor(request);
+const replay = generateTreeDescriptor(request);
+const different = generateTreeDescriptor({
+  ...request,
+  id: "oak-1738",
+  seed: "1738"
+});
+
+assert.equal(first.hash, replay.hash);
+assert.notEqual(first.hash, different.hash);
+assert.deepEqual(validateTreeDescriptor(first), { valid: true, errors: [] });
+assert.equal(first.objectDescriptor.schema, "nexus-object-descriptor/1");
+assert.equal(first.objectDescriptor.id, first.id);
+assert.equal(first.objectDescriptor.objectType, "procedural-tree");
+assert.deepEqual(first.objectDescriptor.pivot, first.bounds.center);
+assert.equal(first.objectDescriptor.groundAnchor[1], first.bounds.min[1]);
+assert.equal(first.objectDescriptor.capture.provider, "procedural-object-capture-profile-kit");
+
+const branchIds = new Set(first.branches.map((branch) => branch.id));
+for (const branch of first.branches) {
+  if (branch.parentId !== null) assert.ok(branchIds.has(branch.parentId));
+  assert.equal(branch.points.length, branch.radii.length);
+}
+
+const treeApi = createProceduralTreeApi();
+treeApi.generate(request);
+assert.equal(
+  treeApi.getObjectDescriptor("oak-1737").contentHash,
+  first.objectDescriptor.contentHash
+);
+const treeSnapshot = treeApi.getSnapshot();
+treeApi.reset();
+treeApi.loadSnapshot(treeSnapshot);
+assert.equal(treeApi.get("oak-1737").hash, first.hash);
+
+const pbrApi = createProceduralTreePbrFieldApi({ textureSize: 64 });
+const pbr = pbrApi.generate(first);
+assert.deepEqual(validatePbrFieldSet(pbr), { valid: true, errors: [] });
+
+const lod = createTreeLodApi().register(first, {
+  impostor: { frameSize: 128 }
+});
+assert.deepEqual(validateTreeLodDescriptor(lod), { valid: true, errors: [] });
+for (const distance of [0, lod.distances.lod1, lod.distances.lod2, lod.distances.impostor, 10000]) {
+  const weights = weightsAtDistance(lod, distance);
+  assert.ok(Math.abs(weights.reduce((sum, value) => sum + value, 0) - 1) < 1e-8);
+}
+const frame = selectImpostorFrame(lod, [3, 2, 8]);
+assert.ok(frame.frameIndex >= 0);
+
+const snapshots = createTreeAssetSnapshotApi();
+const asset = snapshots.package({
+  id: "oak-asset",
+  treeDescriptor: first,
+  pbrFields: pbr,
+  lodDescriptor: lod,
+  render: {
+    objectDescriptor: first.objectDescriptor
+  }
+});
+assert.equal(asset.schema, "nexus-tree-asset/1");
+
+console.log(JSON.stringify({
+  ok: true,
+  treeHash: first.hash,
+  objectHash: first.objectDescriptor.contentHash,
+  branches: first.stats.branchCount,
+  leaves: first.stats.leafCount
+}, null, 2));
