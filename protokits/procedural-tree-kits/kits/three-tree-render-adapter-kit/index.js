@@ -3,7 +3,10 @@ import {
   createThreeTreeRenderAdapterKit as createLegacyThreeTreeRenderAdapterKit
 } from "./legacy.js";
 
-export const THREE_TREE_RENDER_ADAPTER_KIT_VERSION = "0.1.1";
+export const THREE_TREE_RENDER_ADAPTER_KIT_VERSION = "0.1.2";
+
+const NOOP_SHADER_HOOK = () => {};
+const HARD_LOD_CACHE_KEY = () => "nexus-tree-hard-lod-v1";
 
 export function evaluateIndexedFacing(geometry, options = {}) {
   const position = geometry?.getAttribute?.("position");
@@ -148,6 +151,101 @@ function buildWithCorrectedBranchWinding(config, build) {
   }
 }
 
+function buildWithoutLegacyShaderInjection(config, build) {
+  const prototype = config.THREE.Material.prototype;
+  const onBeforeCompileDescriptor = Object.getOwnPropertyDescriptor(
+    prototype,
+    "onBeforeCompile"
+  );
+  const cacheKeyDescriptor = Object.getOwnPropertyDescriptor(
+    prototype,
+    "customProgramCacheKey"
+  );
+
+  Object.defineProperty(prototype, "onBeforeCompile", {
+    configurable: true,
+    get() {
+      return NOOP_SHADER_HOOK;
+    },
+    set() {
+      // Ignore the legacy malformed shader hook while the asset and atlas are built.
+    }
+  });
+
+  Object.defineProperty(prototype, "customProgramCacheKey", {
+    configurable: true,
+    get() {
+      return HARD_LOD_CACHE_KEY;
+    },
+    set() {
+      // Ignore the legacy shader-specific program cache key.
+    }
+  });
+
+  try {
+    return build();
+  } finally {
+    if (onBeforeCompileDescriptor) {
+      Object.defineProperty(
+        prototype,
+        "onBeforeCompile",
+        onBeforeCompileDescriptor
+      );
+    } else {
+      delete prototype.onBeforeCompile;
+    }
+
+    if (cacheKeyDescriptor) {
+      Object.defineProperty(
+        prototype,
+        "customProgramCacheKey",
+        cacheKeyDescriptor
+      );
+    } else {
+      delete prototype.customProgramCacheKey;
+    }
+  }
+}
+
+function removeLegacyFadeState(asset) {
+  asset.root.traverse((object) => {
+    const materials = object.material
+      ? Array.isArray(object.material)
+        ? object.material
+        : [object.material]
+      : [];
+
+    for (const material of materials) {
+      if (Object.prototype.hasOwnProperty.call(material, "onBeforeCompile")) {
+        delete material.onBeforeCompile;
+      }
+      if (Object.prototype.hasOwnProperty.call(material, "customProgramCacheKey")) {
+        delete material.customProgramCacheKey;
+      }
+      if (material.userData?.fadeUniform) {
+        delete material.userData.fadeUniform;
+      }
+      material.needsUpdate = true;
+    }
+  });
+
+  return asset;
+}
+
+function applyHardLod(asset, level) {
+  const activeLevel = Math.max(
+    0,
+    Math.min(asset.levels.length - 1, Number(level) || 0)
+  );
+
+  asset.levels.forEach((group, index) => {
+    group.visible = index === activeLevel;
+  });
+
+  asset.currentLevel = activeLevel;
+  return activeLevel;
+}
+
 export function createThreeTreeRenderAdapter(config = {}) {
   if (!config.THREE || !config.renderer) {
     throw new TypeError("Three tree adapter requires injected THREE and renderer values.");
@@ -158,10 +256,24 @@ export function createThreeTreeRenderAdapter(config = {}) {
   return Object.freeze({
     ...legacy,
     buildAsset(input = {}) {
-      return buildWithCorrectedBranchWinding(
+      const asset = buildWithoutLegacyShaderInjection(
         config,
-        () => legacy.buildAsset(input)
+        () => buildWithCorrectedBranchWinding(
+          config,
+          () => legacy.buildAsset(input)
+        )
       );
+
+      return removeLegacyFadeState(asset);
+    },
+    updateAsset(asset, camera, mode = "auto") {
+      const state = legacy.updateAsset(asset, camera, mode);
+      const activeLevel = applyHardLod(asset, state.activeLevel);
+      return {
+        ...state,
+        activeLevel,
+        weights: asset.levels.map((_, index) => index === activeLevel ? 1 : 0)
+      };
     }
   });
 }
