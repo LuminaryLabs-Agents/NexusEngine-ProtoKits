@@ -1,0 +1,12 @@
+{
+  "id": "gaussian-splat-domain-kit",
+  "domain": "gaussian-splat",
+  "domainPath": "n:gaussian-splat",
+  "version": "0.1.0",
+  "stability": "protokit",
+  "entry": "index.js",
+  "provides": ["n:gaussian-splat", "asset:gaussian-splat", "render:gaussian-splat-descriptors"],
+  "rendererAgnostic": true,
+  "snapshot": "required",
+  "reset": "required"
+}
