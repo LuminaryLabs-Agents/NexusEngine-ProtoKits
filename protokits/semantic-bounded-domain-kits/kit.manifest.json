@@ -1,5 +1,8 @@
 {
   "id": "semantic-bounded-domain-kits",
+  "domain": "semantic-bounded-domains",
+  "type": "domain-service-kit-bundle",
+  "status": "experimental",
   "version": "0.1.0",
   "stability": "protokit",
   "entry": "./index.js",
@@ -22,6 +25,53 @@
     "n:knowledge:investigation",
     "n:composition:experience"
   ],
+  "requires": [],
+  "provides": [
+    "mobility:traversal",
+    "infrastructure:restoration",
+    "conflict:defense",
+    "world:environment",
+    "agency:character",
+    "knowledge:investigation",
+    "composition:experience"
+  ],
+  "resources": [
+    "mobility.traversal.state",
+    "infrastructure.restoration.state",
+    "conflict.defense.state",
+    "world.environment.state",
+    "agency.character.state",
+    "knowledge.investigation.state",
+    "composition.experience.state"
+  ],
+  "events": [
+    "traversal.*",
+    "restoration.*",
+    "defense.*",
+    "environment.*",
+    "character.*",
+    "investigation.*",
+    "experience-composition.*"
+  ],
+  "publicApi": [
+    "engine.n.traversal",
+    "engine.n.restoration",
+    "engine.n.defense",
+    "engine.n.environment",
+    "engine.n.character",
+    "engine.n.investigation",
+    "engine.n.experienceComposition"
+  ],
+  "descriptors": [
+    "mobility-journey",
+    "restoration-asset",
+    "environment-region",
+    "character",
+    "investigation-case",
+    "defense semantic read model",
+    "experience composition read model"
+  ],
+  "boundary": "Owns portable bounded-domain meaning, semantic services, snapshots, descriptors, and composition read models while leaving low-level mechanics, providers, renderers, and product fiction outside.",
   "owns": [
     "portable bounded-domain state",
     "semantic domain services",
@@ -37,5 +87,37 @@
     "GPU buffers",
     "asset loading",
     "product-specific fiction"
-  ]
+  ],
+  "rendererBoundary": {
+    "ownsDom": false,
+    "ownsCanvas": false,
+    "ownsThreeObjects": false,
+    "rendererNeutralDescriptorsOnly": true
+  },
+  "snapshot": {
+    "required": true,
+    "portable": true,
+    "resetRequired": true
+  },
+  "performance": {
+    "scalesWith": [
+      "registered routes and journeys",
+      "restoration assets and plans",
+      "environment regions and fields",
+      "characters",
+      "investigation cases",
+      "composition domains"
+    ],
+    "telemetry": [
+      "resource revision",
+      "journal length",
+      "descriptor count",
+      "composition validation"
+    ],
+    "degradationModes": [
+      "reduce journal retention",
+      "reduce descriptor refresh frequency",
+      "move heavy environment and defense state into providers"
+    ]
+  }
 }
