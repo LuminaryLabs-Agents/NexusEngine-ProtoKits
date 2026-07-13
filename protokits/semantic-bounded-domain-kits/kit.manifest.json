@@ -1,0 +1,41 @@
+{
+  "id": "semantic-bounded-domain-kits",
+  "version": "0.1.0",
+  "stability": "protokit",
+  "entry": "./index.js",
+  "purpose": "Semantic bounded DSKs and a composition root for extracting reusable meaning from NexusEngine experiments.",
+  "families": [
+    "production",
+    "mobility",
+    "infrastructure",
+    "conflict",
+    "world",
+    "agency",
+    "knowledge"
+  ],
+  "domainPaths": [
+    "n:mobility:traversal",
+    "n:infrastructure:restoration",
+    "n:conflict:defense",
+    "n:world:environment",
+    "n:agency:character",
+    "n:knowledge:investigation",
+    "n:composition:experience"
+  ],
+  "owns": [
+    "portable bounded-domain state",
+    "semantic domain services",
+    "domain events",
+    "domain snapshots",
+    "renderer-neutral descriptors",
+    "composition graph read models"
+  ],
+  "doesNotOwn": [
+    "renderer implementation",
+    "DOM or browser input",
+    "physics backend objects",
+    "GPU buffers",
+    "asset loading",
+    "product-specific fiction"
+  ]
+}
