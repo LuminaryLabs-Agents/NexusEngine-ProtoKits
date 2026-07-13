@@ -1,0 +1,27 @@
+import assert from "node:assert/strict";
+import * as NexusEngine from "nexusengine";
+import { createGaussianSplatKits, createManualGaussianSplatProviderAdapter } from "../index.js";
+
+const engine = NexusEngine.createRealtimeGame({ kits: createGaussianSplatKits(NexusEngine, { source: { minimumImages: 2 }, validation: { minimumImages: 2 } }) });
+const project = engine.n.gaussianSplat.createProject({ id: "room-1" });
+assert.equal(project.id, "room-1");
+engine.n.gaussianSplat.registerSourceSet({ id: "sources-1", projectId: project.id });
+engine.n.gaussianSplatSource.registerSource("sources-1", { id: "image-1", uri: "project://input/1.png", mediaType: "image/png", width: 1024, height: 1024 });
+let report = engine.n.gaussianSplat.validateSourceSet("sources-1");
+assert.equal(report.passed, false);
+engine.n.gaussianSplatSource.registerSource("sources-1", { id: "image-2", uri: "project://input/2.png", mediaType: "image/png", width: 1024, height: 1024 });
+report = engine.n.gaussianSplat.validateSourceSet("sources-1");
+assert.equal(report.passed, true);
+const provider = createManualGaussianSplatProviderAdapter({ providerId: "polycam-web" });
+const job = engine.n.gaussianSplat.requestReconstruction(provider.createJobDescriptor({ id: "job-1", projectId: project.id, sourceSetId: "sources-1" }));
+assert.equal(job.status, "handoff-required");
+const asset = engine.n.gaussianSplat.importAsset(provider.normalizeImportedAsset({ id: "asset-1", format: "ply", uri: "project://output/scene.ply", reconstructionJobId: job.id }));
+assert.equal(asset.kind, "gaussian-splat");
+engine.n.gaussianSplat.createInstance({ id: "instance-1", assetId: asset.id });
+const snapshot = engine.n.gaussianSplat.getSnapshot();
+engine.n.gaussianSplat.reset();
+assert.equal(engine.n.gaussianSplatAsset.listAssets().length, 0);
+engine.n.gaussianSplat.loadSnapshot(snapshot);
+assert.equal(engine.n.gaussianSplatAsset.listAssets().length, 1);
+assert.doesNotThrow(() => structuredClone(engine.n.gaussianSplat.getSnapshot()));
+console.log("gaussian-splat-domain smoke passed");
