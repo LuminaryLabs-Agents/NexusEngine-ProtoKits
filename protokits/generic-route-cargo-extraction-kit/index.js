@@ -162,6 +162,7 @@ function pressureConfigFor(config = {}) {
 export function createGenericRouteCargoExtractionKit(NexusEngine, config = {}) {
   requireNexus(NexusEngine);
   const { defineRuntimeKit, defineResource, defineEvent } = NexusEngine;
+  let installedEngine = null;
 
   const RouteCargoExtractionState = defineResource(config.resourceName ?? "genericRouteCargoExtraction.state");
   const SnapshotUpdated = defineEvent("genericRouteCargoExtraction.snapshot.updated");
@@ -190,14 +191,12 @@ export function createGenericRouteCargoExtractionKit(NexusEngine, config = {}) {
   }
 
   function system(world) {
-    const engine = world.__genericRouteCargoExtractionEngine;
-    if (engine) refresh(world, engine, "tick");
+    if (installedEngine) refresh(world, installedEngine, "tick");
   }
 
   return defineRuntimeKit({
     id: config.kitId ?? config.id ?? "generic-route-cargo-extraction-kit",
     provides: ["route-cargo:extraction", "route:progress", "cargo:resource-ledger", "pressure:extraction"],
-    requires: ["generic-route-progress-kit", "generic-resource-loop-kit", "generic-pressure-loop-kit"],
     resources: { RouteCargoExtractionState },
     events: { SnapshotUpdated, CargoChanged, PressureChanged, Completed, Rejected },
     systems: [
@@ -220,7 +219,7 @@ export function createGenericRouteCargoExtractionKit(NexusEngine, config = {}) {
     },
     install({ engine, world }) {
       for (const kit of childKits) kit.install?.({ engine, world });
-      world.__genericRouteCargoExtractionEngine = engine;
+      installedEngine = engine;
 
       const namespace = ensureNamespace(engine);
       const facade = {

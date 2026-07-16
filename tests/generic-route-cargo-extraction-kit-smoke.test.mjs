@@ -1,5 +1,18 @@
 import { assert, installKit } from "./aaa-domain-spine-smoke-harness.mjs";
+import * as NexusEngine from "nexusengine";
 import { createGenericRouteCargoExtractionKit } from "../protokits/generic-route-cargo-extraction-kit/index.js";
+
+const composedEngine = NexusEngine.createRealtimeGame({
+  kits: [createGenericRouteCargoExtractionKit(NexusEngine, {
+    routeId: "real-composer-route",
+    checkpoints: [{ id: "start", label: "Start" }, { id: "extract", label: "Extract" }],
+    cargoResources: [{ id: "cargo", label: "Cargo", min: 0, max: 2, initial: 0 }],
+    pressureChannels: [{ id: "storm", label: "Storm", min: 0, max: 100, value: 0, warningAt: 60, failAt: 100 }]
+  })]
+});
+composedEngine.tick(0);
+assert.equal(Boolean(composedEngine.n?.genericRouteCargoExtraction), true, "real NexusEngine composer installs the self-contained composite");
+assert.deepEqual(composedEngine.game?.installOrder, ["generic-route-cargo-extraction-kit"], "composite has no unresolved external child-kit requirements");
 
 const { kit, engine, world, tick } = installKit(createGenericRouteCargoExtractionKit, {
   routeId: "harbor-salvage-extraction",
