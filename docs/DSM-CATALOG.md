@@ -75,6 +75,19 @@ Games and experiments compose kits through data. A kit should be named after reu
 - **Damage health domain** — implementation: `damage-health-kit`; services: health, damage, healing, defeat, invulnerability windows.
 - **Encounter director domain** — implementation: `encounter-director-kit`; services: encounter pacing, spawn budgets, waves, escalation.
 
+## Ecology, society, and rescue feature domains
+
+- **Contagion transmission domain** — implementation: `contagion-transmission-domain-kit`; services: authored contagions, exposure chains, infection stages, treatment acceleration, recovery, and immunity windows.
+- **Ecosystem population cycle domain** — implementation: `ecosystem-population-cycle-domain-kit`; services: aggregate cohorts, trophic links, capacity, migration, births, mortality, and seeded cycle advancement.
+- **Structural support network domain** — implementation: `structural-support-network-domain-kit`; services: support graphs, semantic loads, capacity margins, failure propagation, and repair state.
+- **Collective resolve domain** — implementation: `collective-resolve-domain-kit`; services: weighted member readiness, leaders, shocks, recovery, breaks, and rallies.
+- **Territory influence domain** — implementation: `territory-influence-domain-kit`; services: faction contributions, contest locks, decay, neutralization, and control transitions.
+- **Rumor propagation domain** — implementation: `rumor-propagation-domain-kit`; services: authored claims, witness lineage, configured distortion, credibility, correction, and retirement.
+- **Navigation knowledge domain** — implementation: `navigation-knowledge-domain-kit`; services: observer-specific place/link/hazard/closure facts, confidence, provenance, sharing, and staleness.
+- **Rescue triage domain** — implementation: `rescue-triage-domain-kit`; services: fictional severity, priority, treatment stages, deterioration, stabilization, transport readiness, and outcomes; never clinical guidance.
+- **Negotiation commitment domain** — implementation: `negotiation-commitment-domain-kit`; services: offers, accepted terms, obligations, deadlines, fulfillment, breach, release, and settlement.
+- **Habitat suitability domain** — implementation: `habitat-suitability-domain-kit`; services: ecological requirement profiles, regional observations, weighted suitability, limiting factors, and occupancy eligibility.
+
 ## Resource/economy/build domains
 
 - **Resource pressure domain** — implementation: `resource-pressure-kit`; services: health, oxygen, signal, corruption, stamina, fuel meters.
