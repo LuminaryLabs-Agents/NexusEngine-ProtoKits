@@ -111,4 +111,22 @@ snapshot = engine.genericDefense.getSnapshot();
 assert.equal(Object.keys(snapshot.structures.structures).length, 2, "occupied slot should not duplicate structures");
 assert.equal(snapshot.economy.currency, beforeDuplicate, "rejected duplicate/occupied build should not spend");
 
+const lossEngine = createGenericDefenseGame(NexusEngine, {
+  level: {
+    vital: { maxHealth: 1 },
+    waves: [{ id: "terminal-loss", reward: 50, groups: [{ archetype: "runner", count: 2, cadence: 0 }] }],
+    archetypes: {
+      runner: { id: "runner", label: "Runner", maxHealth: 1, speed: 100000, reward: 0, coreDamage: 1, radius: 1, color: "#fff" }
+    }
+  }
+});
+lossEngine.tick(0);
+lossEngine.genericDefense.startWave({ commandId: "terminal-loss" });
+for (let i = 0; i < 12; i += 1) lossEngine.tick(1 / 30);
+const lossSnapshot = lossEngine.genericDefense.getSnapshot();
+assert.equal(lossSnapshot.map.vital.health, 0, "loss slice should breach the core");
+assert.equal(lossSnapshot.session.lost, true, "core breach should mark the session lost");
+assert.equal(lossSnapshot.session.status, "lost", "wave completion must not overwrite terminal defeat");
+assert.equal(lossSnapshot.session.waveIndex, 0, "defeated waves must not advance progression");
+
 console.log("generic-defense-kits test passed");

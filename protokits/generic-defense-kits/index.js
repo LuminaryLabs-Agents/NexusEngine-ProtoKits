@@ -814,8 +814,12 @@ function createSessionFacadeKit(NexusEngine, defs, config = {}) {
     for (const event of world.readEvents(StartWave)) {
       if (!state.won && !state.lost) state = { ...state, phase: "combat", status: "combat", message: `Wave ${state.waveIndex + 1} incoming.` };
     }
+    const vital = world.getResource(MapState)?.vital;
+    if (!state.lost && vital && n(vital.health, vital.maxHealth) <= 0) {
+      state = { ...state, lost: true, phase: "failed", status: "lost", message: "Core breached. Press R to rebuild the run." };
+    }
     for (const event of world.readEvents(WaveCompleted)) {
-      if (!state.completedWaveIds.includes(event.waveId)) {
+      if (!state.lost && !state.completedWaveIds.includes(event.waveId)) {
         const completedWaveIds = [...state.completedWaveIds, event.waveId];
         const nextWaveIndex = Math.max(state.waveIndex + 1, n(event.waveNumber, state.waveIndex + 1));
         const won = nextWaveIndex >= level.waves.length;
@@ -830,10 +834,6 @@ function createSessionFacadeKit(NexusEngine, defs, config = {}) {
         };
         if (event.reward) world.emit(EconomyCredit, { amount: event.reward, commandId: `wave-reward:${event.waveId}`, reason: "wave-complete" });
       }
-    }
-    const vital = world.getResource(MapState)?.vital;
-    if (!state.lost && vital && n(vital.health, vital.maxHealth) <= 0) {
-      state = { ...state, lost: true, phase: "failed", status: "lost", message: "Core breached. Press R to rebuild the run." };
     }
     for (const event of world.readEvents(Rejected)) {
       state = { ...state, message: `Blocked: ${event.reason ?? "invalid command"}` };

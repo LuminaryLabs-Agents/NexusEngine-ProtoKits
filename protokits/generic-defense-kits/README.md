@@ -50,6 +50,8 @@ long tutorial copy
 
 A host should map input into `engine.genericDefense` and draw `engine.defenseRender.getSnapshot()`.
 
+Core breach is terminal for the active run: later wave-completion events cannot restore planning state or advance rewards. Hosts recover through `engine.genericDefense.restart()`.
+
 ## Import
 
 ```js
