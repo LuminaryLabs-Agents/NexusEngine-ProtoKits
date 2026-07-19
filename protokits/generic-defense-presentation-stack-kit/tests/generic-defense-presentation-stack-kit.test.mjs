@@ -5,6 +5,7 @@ import {
   createGenericStylizedViewRigKit,
   createGenericCelMaterialKit,
   createGenericInkOutlineKit,
+  createGenericUpgradeTreePanelKit,
   createGenericDefensePresentationStackKit
 } from "../index.js";
 
@@ -45,5 +46,23 @@ assert.ok(createGenericStylizedViewRigKit(NexusEngine).provides.includes("camera
 assert.ok(createGenericCelMaterialKit(NexusEngine).provides.includes("style:cel-materials"));
 assert.ok(createGenericInkOutlineKit(NexusEngine).provides.includes("style:outline"));
 assert.ok(createGenericDefensePresentationStackKit(NexusEngine).provides.includes("presentation:stack"));
+
+const upgradeSnapshot = {
+  economy: { currency: 87 },
+  session: { selectedId: "structure-1", selectedKind: "structure" },
+  structures: {
+    structures: { "structure-1": { id: "structure-1", blueprintId: "bolt", level: 1 } },
+    blueprints: { bolt: { id: "bolt", cost: 45, upgradeCost: 38, maxLevel: 5 } }
+  }
+};
+const upgradeEngine = {
+  n: { genericDefense: { sessionFacade: { getSnapshot: () => upgradeSnapshot } } }
+};
+createGenericUpgradeTreePanelKit(NexusEngine).install({ engine: upgradeEngine });
+const upgradeDescriptor = upgradeEngine.upgradeTreePanel.getDescriptor();
+assert.equal(upgradeDescriptor.branches.length, 1, "presentation should expose the one implemented upgrade command");
+assert.equal(upgradeDescriptor.branches[0].id, "upgrade");
+assert.equal(upgradeDescriptor.branches[0].cost, 38, "presentation cost should match the structure DSK command");
+assert.equal(upgradeDescriptor.branches[0].affordable, true);
 
 console.log("generic-defense-presentation-stack-kit smoke passed");

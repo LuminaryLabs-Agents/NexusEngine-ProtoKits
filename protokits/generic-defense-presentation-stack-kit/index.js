@@ -447,13 +447,18 @@ export function createGenericUpgradeTreePanelKit(NexusEngine, config = {}) {
           const selected = getSelected(snapshot);
           if (!selected || !selected.blueprintId) return { kind: "ui-upgrade-tree", empty: true, structureId: null };
           const blueprint = snapshot?.structures?.blueprints?.[selected.blueprintId] ?? {};
-          const cost = Math.round(n(blueprint.upgradeCost, 40) * (1 + n(selected.level, 1) * 0.32));
+          const cost = Math.ceil(n(blueprint.upgradeCost, n(blueprint.cost) * 0.75) * n(selected.level, 1));
           const affordable = n(snapshot?.economy?.currency) >= cost;
-          return { kind: "ui-upgrade-tree", empty: false, structureId: selected.id, currentLevel: selected.level, maxLevel: blueprint.maxLevel ?? 1, branches: [
-            { id: "damage", label: "Sharpen", cost, statDeltas: { damage: `+${Math.ceil(n(blueprint.damage, 0) * 0.25)}` }, affordable },
-            { id: "tempo", label: "Tempo", cost: Math.ceil(cost * 0.92), statDeltas: { fireRate: "+12%" }, affordable: n(snapshot?.economy?.currency) >= Math.ceil(cost * 0.92) },
-            { id: "reach", label: "Reach", cost: Math.ceil(cost * 0.84), statDeltas: { range: "+10" }, affordable: n(snapshot?.economy?.currency) >= Math.ceil(cost * 0.84) }
-          ], sell: { refund: Math.round(n(blueprint.cost, 0) * 0.65) } };
+          const atMaxLevel = n(selected.level, 1) >= n(blueprint.maxLevel, 1);
+          return { kind: "ui-upgrade-tree", empty: false, structureId: selected.id, currentLevel: selected.level, maxLevel: blueprint.maxLevel ?? 1, branches: atMaxLevel ? [] : [
+            {
+              id: "upgrade",
+              label: "Upgrade · U",
+              cost,
+              statDeltas: { damage: "+34%", fireRate: "+8%", range: "+10" },
+              affordable
+            }
+          ], atMaxLevel, sell: { refund: Math.round(n(blueprint.cost, 0) * 0.65) } };
         },
         getSnapshot() { return clone(state); }
       };

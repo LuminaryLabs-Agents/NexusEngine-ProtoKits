@@ -41,3 +41,5 @@ The renderer should not inspect simulation resources directly except as a fallba
 ## UI rule
 
 The stat strip and panels emit gameplay information only. Controls tutorial text should live outside the gameplay HUD or in docs, not inside the in-game UI.
+
+The upgrade-tree descriptor mirrors the generic structure command: one upgrade action, the exact level-scaled cost, and the deterministic damage, fire-rate, and range gains applied by the structure DSK.
