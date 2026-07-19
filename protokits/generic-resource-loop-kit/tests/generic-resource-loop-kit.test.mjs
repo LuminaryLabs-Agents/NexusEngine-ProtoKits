@@ -51,11 +51,11 @@ function runSourceScenario() {
 
   engine.n.resourceMeter.restore("gold", 24, "goldrush-mine-seam");
   engine.n.resourceMeter.spend("gold", 9, "goldrush-cashout-proof");
-  engine.tick(1);
+  for (let frame = 0; frame < 60; frame += 1) engine.tick(1 / 60);
   engine.n.resourceMeter.adjust("heat", 25, { source: "nexusengine-core-shape" });
 
   assert.equal(engine.n.resourceMeter.get("gold").value, 15);
-  assert.equal(engine.n.resourceMeter.get("heat").value, 73);
+  assert.ok(Math.abs(engine.n.resourceMeter.get("heat").value - 73) < 1e-9);
   assert.equal(engine.n.resourceMeter.getDescriptors().find((entry) => entry.id === "gold").normalized, 0.125);
   return { engine, snapshot: engine.n.resourceMeter.getSnapshot() };
 }
@@ -68,12 +68,12 @@ first.engine.n.resourceMeter.register({ id: "oxygen", start: 10, max: 10, rate: 
 first.engine.n.resourceMeter.register({ id: "oxygen", start: 8, max: 10, rate: -2 });
 assert.equal(first.engine.n.resourceMeter.getState().resources.filter((entry) => entry.id === "oxygen").length, 1, "registration is idempotent by id");
 assert.equal(first.engine.n.resourceMeter.get("oxygen").value, 8);
-first.engine.tick(1);
-assert.equal(first.engine.n.resourceMeter.get("oxygen").value, 6);
+for (let frame = 0; frame < 60; frame += 1) first.engine.tick(1 / 60);
+assert.ok(Math.abs(first.engine.n.resourceMeter.get("oxygen").value - 6) < 1e-9);
 
 first.engine.n.resourceMeter.setLocked("oxygen", true, "freeze");
 first.engine.n.resourceMeter.spend("oxygen", 2, "blocked");
-assert.equal(first.engine.n.resourceMeter.get("oxygen").value, 6);
+assert.ok(Math.abs(first.engine.n.resourceMeter.get("oxygen").value - 6) < 1e-9);
 first.engine.n.resourceMeter.setLocked("oxygen", false, "resume");
 assert.equal(first.engine.n.resourceMeter.remove("oxygen"), true);
 assert.equal(first.engine.n.resourceMeter.get("oxygen"), null);

@@ -1,4 +1,4 @@
-import { createObjectDescriptor } from "nexusengine";
+import { createObjectDescriptor } from "nexusengine/core-object";
 import {
   DEFAULT_TREE_PRESET,
   PROCEDURAL_TREE_DOMAIN_KIT_VERSION as LEGACY_PROCEDURAL_TREE_DOMAIN_KIT_VERSION,
