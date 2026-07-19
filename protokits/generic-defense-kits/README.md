@@ -83,6 +83,8 @@ External durable mutations accept `commandId`.
 
 Duplicate build/upgrade/wave/restart commands are guarded so repeated commands do not double-spend, double-build, or double-start.
 
+Economy commands settle during cleanup after all resolve-phase producers. This keeps build debits, combat kill credits, and session wave-completion rewards deterministic within the same engine tick.
+
 ## Test
 
 ```bash

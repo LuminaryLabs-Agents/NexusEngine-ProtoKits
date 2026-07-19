@@ -101,6 +101,10 @@ snapshot = engine.genericDefense.getSnapshot();
 assert.ok(snapshot.session.waveIndex >= 1, "first wave should complete");
 assert.ok(snapshot.map.vital.health > 0, "core should survive the test slice");
 assert.ok(snapshot.render.descriptors.length > 0, "render descriptors should exist");
+const waveReward = snapshot.economy.transactions.find((transaction) => transaction.commandId === "wave-reward:wave-1");
+assert.equal(waveReward?.kind, "credit", "wave completion should create a credit transaction");
+assert.equal(waveReward?.amount, 24, "wave completion should credit the authored reward");
+assert.equal(waveReward?.reason, "wave-complete", "wave completion should retain its economy reason");
 
 const beforeDuplicate = snapshot.economy.currency;
 engine.genericDefense.build("slot-a", "bolt", { commandId: "duplicate-occupied" });
@@ -128,5 +132,10 @@ assert.equal(lossSnapshot.map.vital.health, 0, "loss slice should breach the cor
 assert.equal(lossSnapshot.session.lost, true, "core breach should mark the session lost");
 assert.equal(lossSnapshot.session.status, "lost", "wave completion must not overwrite terminal defeat");
 assert.equal(lossSnapshot.session.waveIndex, 0, "defeated waves must not advance progression");
+assert.equal(
+  lossSnapshot.economy.transactions.some((transaction) => transaction.commandId === "wave-reward:terminal-loss"),
+  false,
+  "terminal defeats must not award the failed wave"
+);
 
 console.log("generic-defense-kits test passed");

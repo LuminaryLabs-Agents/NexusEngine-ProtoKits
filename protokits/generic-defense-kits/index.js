@@ -384,7 +384,7 @@ function createEconomyKit(NexusEngine, defs, config = {}) {
     provides: ["economy:wallet", "economy:costs"],
     resources: { EconomyState },
     events: { EconomyCredit, EconomyDebit, Rejected },
-    systems: [{ phase: "resolve", name: "genericDefenseEconomySystem", system }],
+    systems: [{ phase: "cleanup", name: "genericDefenseEconomySystem", system }],
     initWorld({ world }) { world.setResource(EconomyState, initialEconomy(level)); },
     install({ engine, world }) {
       engine.defenseEconomy = {
